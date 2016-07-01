@@ -1,0 +1,9 @@
+/nbproject/
+_log/
+_temp/
+libs/
+
+*.neon
+*.config
+*.htaccess
+*.sql
