@@ -4,23 +4,23 @@
 	<li class="list-group-item">
 		<strong>{$cinema->getName()}</strong>
 		
-		{? $address = $cinema->getAddress().", ".$cinema->getCity();}
-		<a href="https://www.google.cz/maps/place/{$address}"><i class="fa fa-map-marker fa-lg"></i>{$address}</a>
+		{php $address = $cinema->getAddress().", ".$cinema->getCity();}
+		<a href="https://www.google.cz/maps/place/{$address}"><i class="fa fa-map-marker fa-lg"></i> {$address}</a>
 		
-		{? $url = $cinema->getUrl();}
-		<a href="{$url}"><i class="fa fa-link fa-lg"></i>{$url}</a>
+		{php $url = $cinema->getUrl();}
+		<a href="{$url}"><i class="fa fa-link fa-lg"></i> {$url}</a>
 		
 		<div class="pull-right">
 		<a href="{$cinema->getProgramme()}"><i class="fa fa-list fa-lg"></i> Program</a>
-		{? $facebook = $cinema->getFacebook();}
+		{php $facebook = $cinema->getFacebook();}
 		{ifset $facebook}
 			<a href="'{$facebook}"><i class="fa fa-facebook-official fa-2x"></i></a>
 		{/ifset}
-		{? $twitter = $cinema->getTwitter();}
+		{php $twitter = $cinema->getTwitter();}
 		{ifset $twitter}
 			<a href="{$twitter}"><i class="fa fa-twitter-official fa-2x"></i></a>
 		{/ifset}
-		{? $googleplus = $cinema->getGoogleplus();}
+		{php $googleplus = $cinema->getGoogleplus();}
 		{ifset $googleplus}
 			<a href="{$googleplus}"><i class="fa fa-google-plus fa-2x"></i></a>
 		{/ifset}
@@ -30,7 +30,7 @@
 
 {block #content}
 <h1 class="page-header">{$title}</h1>
-{? $cinemas = new Cinemas(); }
+{php $cinemas = new Cinemas(); }
 
 <h2>Letní <small>(<a href="http://letnaky.zitbrno.cz" title="Celkový program letních kin."><i class="fa fa-list"></i> program</a>)</small></h2>
 <ul class="list-group">

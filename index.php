@@ -25,8 +25,8 @@ $configurator->createRobotLoader()
         ->register();
 
 // Create Dependency Injection container from config.neon file
-$configurator->addConfig(__DIR__ . '/app/config.neon', $configurator::AUTO);
-//$configurator->addConfig(__DIR__ . '/app/config.local.neon', $configurator::NONE); // none section
+$configurator->addConfig(__DIR__ . '/app/config.neon');
+//$configurator->addConfig(__DIR__ . '/app/config.local.neon'); // none section
 $container = $configurator->createContainer();
 
 // Run application.
