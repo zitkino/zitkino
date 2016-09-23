@@ -7,7 +7,7 @@
 <ul class="list-group">
 	{import "../components/list.latte"}
 	{foreach $cinemas->getClassic() as $cinema}
-		{include #cinemasList, cinema => $cinema}
+		{include #cinemaList, cinema => $cinema}
 	{/foreach}
 </ul>
 {/block}

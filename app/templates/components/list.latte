@@ -1,4 +1,4 @@
-{define cinemasList}
+{define cinemaList}
 	{ifset $cinema}
 	<li class="list-group-item">
 		<strong>{$cinema->getName()}</strong>
@@ -13,7 +13,7 @@
 		<a href="{$cinema->getProgramme()}"><i class="fa fa-list fa-lg"></i> Program</a>
 		{php $facebook = $cinema->getFacebook();}
 		{ifset $facebook}
-			<a href="'{$facebook}"><i class="fa fa-facebook-official fa-2x"></i></a>
+			<a href="{$facebook}"><i class="fa fa-facebook-official fa-2x"></i></a>
 		{/ifset}
 		{php $twitter = $cinema->getTwitter();}
 		{ifset $twitter}
