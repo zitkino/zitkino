@@ -7,3 +7,4 @@ libs/
 *.config
 *.htaccess
 *.sql
+*.lock
