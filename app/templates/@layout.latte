@@ -5,8 +5,7 @@
 <head>
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-    <meta name="author" content="https://plus.google.com/104351140441692946387?rel=author">
+	<meta name="description" content="List of Brno's cinemas">
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
     
 	<title>{ifset $title}{$title}{else}Žít kino{/ifset} - Žít kino</title>
@@ -24,7 +23,7 @@
 
 <body>
 <div id="wrap">
-  {includeblock 'header.latte'}
+  {include 'header.latte'}
   <div class="container-fluid">
     <div class="row">
               {*if $menuExists==true*}
@@ -41,7 +40,7 @@
     </div>
   </div>
 </div>
-{*includeblock 'footer.latte'*}
+{*include 'footer.latte'*}
 
 <script src="{$wwwdir}/libs/jquery/jquery.min.js"></script>
 <script src="{$wwwdir}/libs/bootstrap/js/bootstrap.min.js"></script>
