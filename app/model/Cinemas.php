@@ -15,7 +15,7 @@ class Cinemas {
 	}
 
 	public function __construct() {
-		for($id=1; $id<12; $id++) {
+		for($id=1; $id<14; $id++) {
 			$cinema = new \zitkino\Cinema($id);
 			switch($cinema->getType()) {
 				case "classic":
