@@ -1,36 +1,44 @@
 <?php
-namespace zitkino;
-
-//require_once __DIR__ . '/../../libs/nette/nette.phar';
-//use Nette\Database\Connection;
-
-require_once "Database.php";
-use lib\Net\Database;
+namespace Zitkino;
+use \Lib\Net\Database;
 
 /**
  * Description of Cinema
  */
 class Cinema {
-	private $id, $name, $shortName, $type, $address, $city, $url, $programme, $facebook, $twitter, $googleplus;
-	
+	private $id, $name, $shortName, $type, $address, $city, $gmaps, $url, $programme, $facebook, $twitter, $googleplus;
+
 	public function __construct($id) {
-//		$connection = new Connection("mysql:host=localhost;dbname=zitkino", "root", "");
-//		$co=$connection->query('SELECT * FROM cinemas WHERE id=?', "1")->dump();
-//		var_dump($co);		
+		$db = new Database(__DIR__."/../database.ini");
 		
-		$db = new Database("localhost", "root", "", "zitkino");
-		
-		$this->id = $id;
-		$this->name = $db->returning("SELECT `name` FROM `cinemas` WHERE id=$this->id");
-		$this->shortName = $db->returning("SELECT `short_name` FROM `cinemas` WHERE id=$this->id");
-		$this->type = $db->returning("SELECT `type` FROM `cinemas` WHERE id=$this->id");
-		$this->address = $db->returning("SELECT `address` FROM `cinemas` WHERE id=$this->id");
-		$this->city = $db->returning("SELECT `city` FROM `cinemas` WHERE id=$this->id");
-		$this->url = $db->returning("SELECT `url` FROM `cinemas` WHERE id=$this->id");
-		$this->programme = $db->returning("SELECT `programme` FROM `cinemas` WHERE id=$this->id");
-		$this->facebook = $db->returning("SELECT `facebook` FROM `cinemas` WHERE id=$this->id");
-		$this->twitter = $db->returning("SELECT `twitter` FROM `cinemas` WHERE id=$this->id");
-		$this->googleplus = $db->returning("SELECT `google+` FROM `cinemas` WHERE id=$this->id");
+		if(is_numeric($id)) {
+			$this->id = $id;
+			$this->name = $db->returning("SELECT `name` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->shortName = $db->returning("SELECT `shortName` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->type = $db->returning("SELECT `type` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->address = $db->returning("SELECT `address` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->city = $db->returning("SELECT `city` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->gmaps = $db->returning("SELECT `gmaps` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->url = $db->returning("SELECT `url` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->programme = $db->returning("SELECT `programme` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->facebook = $db->returning("SELECT `facebook` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->twitter = $db->returning("SELECT `twitter` FROM `cinemas` WHERE id='".$this->id."'");
+			$this->googleplus = $db->returning("SELECT `google+` FROM `cinemas` WHERE id='".$this->id."'");
+		}
+		else {
+			$this->id = $db->returning("SELECT `id` FROM `cinemas` WHERE `shortName`='".$id."'");
+			$this->name = $db->returning("SELECT `name` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->shortName = $id;
+			$this->type = $db->returning("SELECT `type` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->address = $db->returning("SELECT `address` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->city = $db->returning("SELECT `city` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->gmaps = $db->returning("SELECT `gmaps` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->url = $db->returning("SELECT `url` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->programme = $db->returning("SELECT `programme` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->facebook = $db->returning("SELECT `facebook` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->twitter = $db->returning("SELECT `twitter` FROM `cinemas` WHERE shortName='".$id."'");
+			$this->googleplus = $db->returning("SELECT `google+` FROM `cinemas` WHERE shortName='".$id."'");
+		}
 	}
 	
 	function getId() {
@@ -56,6 +64,10 @@ class Cinema {
 	function getCity() {
 		return $this->city;
 	}
+	
+	function getGmaps() {
+		return $this->gmaps;
+	}
 
 	function getUrl() {
 		return $this->url;
@@ -76,6 +88,4 @@ class Cinema {
 	function getGoogleplus() {
 		return $this->googleplus;
 	}
-
-
 }

@@ -2,12 +2,12 @@
 
 {block #content}
 <h1 class="page-header">{$title} <small>(<a href="http://letnaky.zitbrno.cz" title="Celkový program letních kin."><i class="fa fa-list"></i> program</a>)</small></h1>
-{php $cinemas = new Cinemas(); }
+{php $cinemas = new \Zitkino\Cinemas(); }
 
 <ul class="list-group">
 	{import "../components/list.latte"}
-	{foreach $cinemas->getSummer() as $cinema}
-		{include #cinemaList, cinema => $cinema}
+	{foreach $cinemas->getSummer() as $cinemaItem}
+		{include #cinemaList, cinemaItem => $cinemaItem}
 	{/foreach}
 </ul>
 {/block}

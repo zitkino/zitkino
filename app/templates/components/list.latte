@@ -1,25 +1,25 @@
 {define cinemaList}
-	{ifset $cinema}
+	{ifset $cinemaItem}
 	<li class="list-group-item">
-		<strong>{$cinema->getName()}</strong>
+		<strong>{$cinemaItem->getName()}</strong>
 
-		{php $address = $cinema->getAddress().", ".$cinema->getCity();}
+		{php $address = $cinemaItem->getAddress().", ".$cinemaItem->getCity();}
 		<a href="https://www.google.cz/maps/place/{$address|url}"><i class="fa fa-map-marker fa-lg"></i> {$address}</a>
 
-		{php $url = $cinema->getUrl();}
+		{php $url = $cinemaItem->getUrl();}
 		<a href="{$url}"><i class="fa fa-link fa-lg"></i> {$url}</a>
 
 		<div class="pull-right">
-		<a href="{$cinema->getProgramme()}"><i class="fa fa-list fa-lg"></i> Program</a>
-		{php $facebook = $cinema->getFacebook();}
+		<a href="{$cinemaItem->getProgramme()}"><i class="fa fa-list fa-lg"></i> Program</a>
+		{php $facebook = $cinemaItem->getFacebook();}
 		{ifset $facebook}
 			<a href="{$facebook}"><i class="fa fa-facebook-official fa-2x"></i></a>
 		{/ifset}
-		{php $twitter = $cinema->getTwitter();}
+		{php $twitter = $cinemaItem->getTwitter();}
 		{ifset $twitter}
 			<a href="{$twitter}"><i class="fa fa-twitter-official fa-2x"></i></a>
 		{/ifset}
-		{php $googleplus = $cinema->getGoogleplus();}
+		{php $googleplus = $cinemaItem->getGoogleplus();}
 		{ifset $googleplus}
 			<a href="{$googleplus}"><i class="fa fa-google-plus fa-2x"></i></a>
 		{/ifset}

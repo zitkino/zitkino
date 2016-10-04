@@ -1,0 +1,39 @@
+{var $title=$cinema->getName()}
+
+{block content}
+<h1 class="page-header">{$cinema->getName()}</h1>
+
+<ul class="list-group">
+	<li class="list-group-item">
+		<a href="{$cinema->getProgramme()}"><i class="fa fa-list fa-lg"></i> Program</a>
+	</li>
+</ul>
+
+<div>
+	<div class="pull-right">
+		{php $facebook = $cinema->getFacebook();}
+		{ifset $facebook}
+			<a href="{$facebook}"><i class="fa fa-facebook-official fa-2x"></i></a>
+		{/ifset}
+		{php $twitter = $cinema->getTwitter();}
+		{ifset $twitter}
+			<a href="{$twitter}"><i class="fa fa-twitter-official fa-2x"></i></a>
+		{/ifset}
+		{php $googleplus = $cinema->getGoogleplus();}
+		{ifset $googleplus}
+			<a href="{$googleplus}"><i class="fa fa-google-plus fa-2x"></i></a>
+		{/ifset}
+	</div>
+	<address>
+		<strong>{$cinema->getName()}</strong><br>
+		{$cinema->getAddress()}<br>
+		{$cinema->getCity()}<br>
+		{*<abbr title="Telefon">tel.:</abbr> (123) 456-7890*}
+		{php $url = $cinema->getUrl();}
+		<a href="{$url}">{$url}</a>
+	</address>
+</div>
+
+<div class="embed-responsive embed-responsive-16by9" style="min-height: 400px;">
+	<iframe class="embed-responsive-item" src="https://www.google.com/maps/embed{$gmap}&key=AIzaSyC6zSdM-L1w8ObLqeUf9alzs4NI5z5hULw" allowfullscreen></iframe>
+</div>
