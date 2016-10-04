@@ -1,0 +1,9 @@
+{
+	"dependencies": {
+		"jquery": "^3.1.1"
+	},
+	"scripts": {
+		"postinstall": 
+			"xcopy /Y /I /E \"node_modules\\jquery\\dist\" \"libs\\jquery\" && rmdir /S /Q \"node_modules\""
+	}
+}

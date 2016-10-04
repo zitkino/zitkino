@@ -3,6 +3,7 @@ _log/
 _temp/
 libs/
 
+*.ini
 *.neon
 *.config
 *.htaccess

@@ -1,4 +1,6 @@
 <?php
+namespace Zitkino;
+
 /**
  * Description of Cinemas
  */
@@ -16,7 +18,7 @@ class Cinemas {
 
 	public function __construct() {
 		for($id=1; $id<14; $id++) {
-			$cinema = new \zitkino\Cinema($id);
+			$cinema = new \Zitkino\Cinema($id);
 			switch($cinema->getType()) {
 				case "classic":
 					array_push($this->classic, $cinema);

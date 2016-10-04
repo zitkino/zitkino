@@ -11,6 +11,7 @@
 },
 
 "require": {
+	"hermajan/lib": "dev-master@dev",
 	"fortawesome/font-awesome": "^4.6",
 	"nette/nette-minified": "^2.4",
 	"twbs/bootstrap": "^3.3"
