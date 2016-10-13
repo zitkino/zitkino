@@ -16,6 +16,15 @@ class CinemaPresenter extends BasePresenter {
 		$cinema = new \Zitkino\Cinema($id);
 		$this->template->cinema = $cinema;
 		
+		$parser = "\Zitkino\parsers\\".ucfirst($cinema->getShortName())."Parser";
+		if(class_exists($parser)) {
+			$pa = new $parser();
+			$this->template->movies = $pa->getMovies();
+		}
+		else {
+			$this->template->movies = null;
+		}
+		
 		$gmaps = $cinema->getGmaps();
 		if(is_null($gmaps)) {
 			$address = $cinema->getAddress().", ".$cinema->getCity();

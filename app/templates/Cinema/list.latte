@@ -1,0 +1,18 @@
+{define cinemaList}
+	{ifset $cinemaItem}
+	<li class="list-group-item">
+		<strong>{$cinemaItem->getName()}</strong>
+
+		{php $address = $cinemaItem->getAddress().", ".$cinemaItem->getCity();}
+		<a href="https://www.google.cz/maps/place/{$address|url}"><i class="fa fa-map-marker fa-lg"></i> {$address}</a>
+
+		{php $url = $cinemaItem->getUrl();}
+		<a href="{$url}"><i class="fa fa-link fa-lg"></i> {$url}</a>
+
+		<div class="pull-right">
+			{*<a href="{$cinemaItem->getProgramme()}"><i class="fa fa-list fa-lg"></i> Program</a>*}
+			<a n:href="Cinema:profile, $id = $cinemaItem->getShortName()"><i class="fa fa-list fa-lg"></i> informace a program</a>
+		<div>
+	</li>
+	{/ifset}
+{/define}

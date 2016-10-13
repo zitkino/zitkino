@@ -5,7 +5,7 @@
 {php $cinemas = new \Zitkino\Cinemas(); }
 
 <ul class="list-group">
-	{import "../components/list.latte"}
+	{import "list.latte"}
 	{foreach $cinemas->getSummer() as $cinemaItem}
 		{include #cinemaList, cinemaItem => $cinemaItem}
 	{/foreach}

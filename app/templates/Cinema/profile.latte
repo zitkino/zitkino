@@ -3,14 +3,21 @@
 {block content}
 <h1 class="page-header">{$cinema->getName()}</h1>
 
-<ul class="list-group">
-	<li class="list-group-item">
-		<a href="{$cinema->getProgramme()}"><i class="fa fa-list fa-lg"></i> Program</a>
-	</li>
-</ul>
+<table class="table table-hover" n:if="$movies">
+	<tbody>
+		{foreach $movies as $movie}
+		<tr>
+			<td><i class="fa fa-film" aria-hidden="true"></i> {$movie->getName()}</td>
+			<td><i class="fa fa-clock-o" aria-hidden="true"></i> {$movie->getDatetime()}</td>
+		</tr>
+		{/foreach}
+	</tbody>
+</table>
 
 <div>
 	<div class="pull-right">
+		<a href="{$cinema->getProgramme()}" title="Program na webu kina."><i class="fa fa-list fa-2x"></i> Program</a><br>
+		<span class="pull-right">
 		{php $facebook = $cinema->getFacebook();}
 		{ifset $facebook}
 			<a href="{$facebook}"><i class="fa fa-facebook-official fa-2x"></i></a>
@@ -23,6 +30,7 @@
 		{ifset $googleplus}
 			<a href="{$googleplus}"><i class="fa fa-google-plus fa-2x"></i></a>
 		{/ifset}
+		</span>
 	</div>
 	<address>
 		<strong>{$cinema->getName()}</strong><br>
