@@ -7,7 +7,13 @@
 	<tbody>
 		{foreach $movies as $movie}
 		<tr>
-			<td><i class="fa fa-film" aria-hidden="true"></i> {$movie->getName()}</td>
+			<td><i class="fa fa-film" aria-hidden="true"></i> 
+				{php $movieLink=$movie->getLink()}
+				{ifset $movieLink}
+					<a href="{$movieLink}">
+				{/ifset}
+				{$movie->getName()}</a>
+			</td>
 			<td><i class="fa fa-clock-o" aria-hidden="true"></i> {$movie->getDatetime()}</td>
 		</tr>
 		{/foreach}
@@ -16,7 +22,7 @@
 
 <div>
 	<div class="pull-right">
-		<a href="{$cinema->getProgramme()}" title="Program na webu kina."><i class="fa fa-list fa-2x"></i> Program</a><br>
+		<a href="{$cinema->getProgramme()}" title="Program na webu kina."><i class="fa fa-list"></i> podrobný program</a><br>
 		<span class="pull-right">
 		{php $facebook = $cinema->getFacebook();}
 		{ifset $facebook}
