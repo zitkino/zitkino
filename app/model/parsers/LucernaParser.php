@@ -3,7 +3,7 @@ namespace Zitkino\parsers;
 use DOMDocument, DOMXPath;
 
 /**
- * Description of LucernaParser
+ * Lucerna Parser.
  */
 class LucernaParser extends Parser {
 	private $url = "http://www.kinolucerna.info/index.php/program";
@@ -55,7 +55,7 @@ class LucernaParser extends Parser {
 			$date = str_replace($cz, $en, $datetext[1]);
 			$datetime = \DateTime::createFromFormat(" j. F Y H:i", $date);
 			
-			$this->movies[] = new \Zitkino\Movie($nameQuery->item($i)->nodeValue, $datetime->format('d.m.Y H:i'));
+			$this->movies[] = new \Zitkino\Movie($nameQuery->item($i)->nodeValue, $datetime);
 			$this->movies[count($this->movies)-1]->setLink($link);
 			$i++;
 		}

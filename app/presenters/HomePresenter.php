@@ -6,14 +6,15 @@ use Nette;
 /**
  * Homepage presenter.
  */
-class HomePresenter extends BasePresenter {    
+class HomePresenter extends BasePresenter {
 	public function beforeRender() {
-        BasePresenter::beforeRender();
-        
-        $this->template->menuExists=false;
-        //$this->template->menuURL='Home/menu.latte';
+		BasePresenter::beforeRender();
+		
+		$this->template->menuExists=false;
+		//$this->template->menuURL='Home/menu.latte';
 	}
-	public function renderDefault()	{
-		$this->template->anyVariable = 'any value';
-	}    
+	public function renderDefault() {
+		$cinemas = new \Zitkino\Cinemas();
+		$this->template->cinemas = $cinemas->getClassic();
+	}
 }

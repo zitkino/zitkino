@@ -44,48 +44,71 @@ class Cinema {
 	function getId() {
 		return $this->id;
 	}
-
 	function getName() {
 		return $this->name;
 	}
-
 	function getShortName() {
 		return $this->shortName;
 	}
-
 	function getType() {
 		return $this->type;
 	}
-
 	function getAddress() {
 		return $this->address;
 	}
-
 	function getCity() {
 		return $this->city;
 	}
-	
 	function getGmaps() {
 		return $this->gmaps;
 	}
-
 	function getUrl() {
 		return $this->url;
 	}
-
 	function getProgramme() {
 		return $this->programme;
 	}
-
 	function getFacebook() {
 		return $this->facebook;
 	}
-
 	function getTwitter() {
 		return $this->twitter;
 	}
-
 	function getGoogleplus() {
 		return $this->googleplus;
+	}
+	
+	public function getMovies() {
+		$parser = "\Zitkino\parsers\\".ucfirst($this->getShortName())."Parser";
+		if(class_exists($parser)) {
+			$pa = new $parser();
+			return $pa->getMovies();
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public function getSoonestMovies() {
+		$movies = $this->getMovies();
+		$soonest = [];
+		
+		if(!is_null($movies)) {
+			foreach($movies as $movie) {
+				$currentDate = new \DateTime();
+				
+				$diff = $currentDate->diff($movie->getDatetime());
+				// checks if movie is played from now to +1 day
+				if($diff->format("%a") === "0") {
+					array_push($soonest, $movie);
+				}
+			}
+		}
+		
+		if(empty($soonest)) {
+			$soonest = null;
+		}
+		
+		return $soonest;
 	}
 }

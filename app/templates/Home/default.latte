@@ -1,5 +1,18 @@
 {var $title="Brněnská kina"}
 
 {block #content}
-{include "../Cinema/default.latte"}
+<h1 class="page-header">{$title}</h1>
+{import "../Cinema/list.latte"}
+
+<h2>Nejdřívější promítání</h2>
+{foreach $cinemas as $cinemaItem}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		{include #cinemaListContent, cinema => $cinemaItem}
+	</div>
+	
+	{var $movies = $cinemaItem->getSoonestMovies();}
+	{include #movieList, movies => $movies, cinema => $cinemaItem}
+</div>
+{/foreach}
 {/block}

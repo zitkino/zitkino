@@ -3,7 +3,7 @@ namespace Zitkino\parsers;
 use DOMDocument, DOMXPath;
 
 /**
- * KinokavarnaParser
+ * Kinokavarna Parser.
  */
 class KinokavarnaParser extends Parser {
 	private $url = "http://www.kinokavarna.cz/program.html";
@@ -54,7 +54,9 @@ class KinokavarnaParser extends Parser {
 				$timeQuery = $xpath->query($movieQuery."//p[@class='start']", $event);
 				$time = mb_substr($timeQuery->item($i)->nodeValue, 9, 5);
 				$time = str_replace(".", ":", $time);
-				$datetime = $date->item($i)->nodeValue." ".$time;
+				
+				$datetime = \DateTime::createFromFormat("j.n.Y", $date->item($i)->nodeValue);
+				$datetime->setTime(intval(substr($time, 0, 2)), intval(substr($time, 3, 2)));
 				
 				$this->movies[] = new \Zitkino\Movie($name, $datetime);
 				$this->movies[count($this->movies)-1]->setLink($this->url);
