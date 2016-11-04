@@ -32,8 +32,33 @@
 		{php $url = $cinema->getUrl();}
 		<a href="{$url}">{$url}</a>
 	</address>
+	
+	<a href="#cinemaMap" onClick="showCinemaMap();" id="cinemaMapButton" class="btn btn-danger collapsed" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cinemaMap">
+		<i class="fa fa-map-o" aria-hidden="true"></i> <span id="cinemaMapButtonText">Zobrazit</span> kino na mapě
+	</a><br><br>
 </div>
 
-<div class="embed-responsive embed-responsive-16by9" style="min-height: 400px;">
-	<iframe class="embed-responsive-item" src="https://www.google.com/maps/embed{$gmap}&key=AIzaSyC6zSdM-L1w8ObLqeUf9alzs4NI5z5hULw" allowfullscreen></iframe>
+<div id="cinemaMap" class="embed-responsive embed-responsive-16by9 collapse">
+	<iframe id="cinemaMapIframe" class="embed-responsive-item" src="" allowfullscreen></iframe>
 </div>
+
+<div id="desktopTest" class="hidden-md hidden-lg"></div>
+<script>
+	// shows map on load on desktops only
+	if($("#desktopTest").is(":hidden")) {
+		$("#cinemaMapButton").click();
+	}
+	
+	function showCinemaMap() {
+		if($("#cinemaMap").css("display") === "block") {
+			$("#cinemaMap").css("display", "none");
+			$("#cinemaMapButtonText").text("Zobrazit");
+			$("#cinemaMapIframe").attr("src", "");
+		}
+		else {
+			$("#cinemaMap").css("display", "block");
+			$("#cinemaMapButtonText").text("Skrýt");
+			$("#cinemaMapIframe").attr("src", "https://www.google.com/maps/embed{$gmap|noescape}&key=AIzaSyC6zSdM-L1w8ObLqeUf9alzs4NI5z5hULw");
+		}
+	}
+</script>

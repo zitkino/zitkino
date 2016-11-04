@@ -4,21 +4,22 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="List of Brno's cinemas">
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
-    
+	
 	<title>{ifset $title}{$title}{else}Žít kino{/ifset} - Žít kino</title>
-    
+	
 	<link rel="shortcut icon" href="{$wwwdir}/favicon.ico">
 	<link rel="stylesheet" href="{$wwwdir}/libs/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" media="screen" href="{$wwwdir}/style.css">
-	{*<link rel="stylesheet" media="print" href="{$wwwdir}/print.css">*}	
+	{*<link rel="stylesheet" media="print" href="{$wwwdir}/print.css">*}
 	
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
 	  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+	<script src="{$wwwdir}/libs/jquery/jquery.min.js"></script>
 </head>
 
 <body>
@@ -42,7 +43,6 @@
 </div>
 {*include 'footer.latte'*}
 
-<script src="{$wwwdir}/libs/jquery/jquery.min.js"></script>
 <script src="{$wwwdir}/libs/bootstrap/js/bootstrap.min.js"></script>
 {*<script src="{$wwwdir}/libs/nette/netteForms.js"></script>*}
 <script type="text/javascript">
