@@ -97,7 +97,7 @@ class Cinema {
 			foreach($movies as $movie) {
 				$currentDate = new \DateTime();
 				
-				$diff = $currentDate->diff($movie->getDatetime());
+				$diff = $currentDate->diff($movie->getDatetime()[0]);
 				// checks if movie is played from now to +1 day
 				if($diff->format("%a") === "0") {
 					array_push($soonest, $movie);
@@ -106,7 +106,12 @@ class Cinema {
 		}
 		
 		if(empty($soonest)) {
-			$soonest = null;
+			if(is_null($movies)) {
+				$soonest = null;
+			}
+			else {
+				$soonest = [$movies[0]];
+			}
 		}
 		
 		return $soonest;

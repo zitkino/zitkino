@@ -19,6 +19,8 @@ class ScalaParser extends Parser {
 		$days = 0;
 		$movieItems = 0;
 		foreach($events as $event) {
+			$datetimeArray = [];
+			
 			if($event->getAttribute("class") === "day") {
 				$dateQuery = $xpath->query("//tr[@class='day']//h2", $event);
 				$dateFullString = explode(",", $dateQuery->item($days)->nodeValue);
@@ -44,10 +46,11 @@ class ScalaParser extends Parser {
 				
 				$datetime = \DateTime::createFromFormat("j.n.Y", $date);
 				$datetime->setTime(intval($time[0]), intval($time[1]));
+				$datetimeArray[] = $datetime;
 				
 				$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->getAttribute("href");
 				
-				$this->movies[] = new \Zitkino\Movie($nameQuery->item($movieItems)->nodeValue, $datetime);
+				$this->movies[] = new \Zitkino\Movie($nameQuery->item($movieItems)->nodeValue, $datetimeArray);
 				$this->movies[count($this->movies)-1]->setLink($link);
 				$movieItems++;
 			}

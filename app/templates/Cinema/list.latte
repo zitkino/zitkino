@@ -40,7 +40,14 @@
 				{/ifset}
 				{$movie->getName()}</a>
 			</td>
-			<td><i class="fa fa-clock-o" aria-hidden="true"></i> {$movie->getDatetime()->format('d.m.Y H:i')}</td>
+			<td><i class="fa fa-calendar-o" aria-hidden="true"></i>
+				{foreach $movie->getDatetime() as $datetime}
+					{if $iterator->first}
+						{$datetime->format('d.m.Y')} <i class="fa fa-clock-o" aria-hidden="true"></i> 
+					{/if}
+					{$datetime->format('H:i')}{sep}, {/sep}
+				{/foreach}
+			</td>
 		</tr>
 		{/foreach}
 		</tbody>
