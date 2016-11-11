@@ -40,9 +40,10 @@ abstract class Parser {
 	public function downloadData() {
 		$handle = curl_init($this->url);
 		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($handle, CURLOPT_ENCODING, "UTF-8");
 		$html = curl_exec($handle);
 		libxml_use_internal_errors(true); // Prevent HTML errors from displaying
-		$this->document->loadHTML($html);
+		$this->document->loadHTML(mb_convert_encoding($html, "HTML-ENTITIES", "UTF-8"));
 		$xpath = new DOMXPath($this->document);
 		
 		return $xpath;
