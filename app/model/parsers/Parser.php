@@ -8,7 +8,7 @@ use DOMDocument, DOMXPath;
 abstract class Parser {
 	private $url = "";
 	private $document;
-	private $movies = [];
+	protected $movies = [];
 	
 	public function getUrl() {
 		return $this->url;

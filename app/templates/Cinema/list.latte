@@ -41,7 +41,7 @@
 				{$movie->getName()}</a>
 			</td>
 			<td><i class="fa fa-calendar-o" aria-hidden="true"></i>
-				{foreach $movie->getDatetime() as $datetime}
+				{foreach $movie->getDatetimes() as $datetime}
 					{if $iterator->first}
 						{$datetime->format('d.m.Y')} <i class="fa fa-clock-o" aria-hidden="true"></i> 
 					{/if}

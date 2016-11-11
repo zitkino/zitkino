@@ -20,7 +20,7 @@ class KinokavarnaParser extends Parser {
 		
 		$movieItems = 0;
 		foreach($events as $event) {
-			$datetimeArray = [];
+			$datetimes = [];
 			
 			$movieEvent = $xpath->query("//p[@class='MsoNormal']", $event);
 			if($movieEvent->length>4) {
@@ -42,9 +42,9 @@ class KinokavarnaParser extends Parser {
 				
 				$datetime = \DateTime::createFromFormat("j.n.Y", $dateQuery->item($movieItems)->nodeValue);
 				$datetime->setTime(intval(substr($time, 0, 2)), intval(substr($time, 3, 2)));
-				$datetimeArray[] = $datetime;
+				$datetimes[] = $datetime;
 				
-				$this->movies[] = new \Zitkino\Movie($name, $datetimeArray);
+				$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 				$this->movies[count($this->movies)-1]->setLink($link);
 			}
 			$movieItems++;

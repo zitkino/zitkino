@@ -44,14 +44,12 @@ abstract class CinemaCityParser extends Parser {
 		$movieItems = 0;
 		foreach($events as $event) {
 			$nameQuery = $xpath->query("//td[@class='featureName']//a", $event);
-			$badEncoding = ["Ã¡", "Ä", "Ã©", "Ä", "Ã­", "Å", "Ãº", "Å¾"];
-			$goodEncoding = ["á", "č", "é", "ě", "í", "ř", "ú", "ž"];
-			$name = str_replace($badEncoding, $goodEncoding, $nameQuery->item($movieItems)->nodeValue);
+			$name = $nameQuery->item($movieItems)->nodeValue;
 			
 			$link = "http://cinemacity.cz/".$nameQuery->item($movieItems)->getAttribute("href");
 			
-			$timeQuery = $xpath->query(".//td[@class='prsnt']/a", $event);			
-			$datetimeArray = [];
+			$timeQuery = $xpath->query(".//td[@class='prsnt']/a", $event);
+			$datetimes = [];
 			$i = 0;
 			foreach($timeQuery as $timeElement) {
 				$time = explode(":", trim($timeElement->textContent));
@@ -59,11 +57,11 @@ abstract class CinemaCityParser extends Parser {
 				$datetime = \DateTime::createFromFormat("j/m/Y", $this->date);
 				$datetime->setTime(intval($time[0]), intval($time[1]));
 				
-				$datetimeArray[] = $datetime;
+				$datetimes[] = $datetime;
 				$i++;
 			}	
 			
-			$this->movies[] = new \Zitkino\Movie($name, $datetimeArray);
+			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
 			$movieItems++;
 		}

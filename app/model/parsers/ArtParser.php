@@ -40,11 +40,11 @@ class ArtParser extends Parser {
 			$datetime = \DateTime::createFromFormat("j.m.H:i", $date);
 			$datetimes[] = $datetime;
 			
-			$movies[] = new \Zitkino\Movie($name, $datetimes);
-			$movies[count($movies)-1]->setLink($link);
+			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
+			$this->movies[count($this->movies)-1]->setLink($link);
 			$movieItems++;
 		}
 		
-		$this->setMovies($movies);
+		$this->setMovies($this->movies);
 	}
 }

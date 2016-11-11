@@ -18,7 +18,7 @@ class LucernaParser extends Parser {
 		$events = $xpath->query("//div[@id='icagenda']//div[@class='event']");
 		$movieItems = 0;
 		foreach($events as $event) {
-			$datetimeArray = [];
+			$datetimes = [];
 			
 			$nameQuery = $xpath->query("//div[@class='eventtitle']//a", $event);
 			
@@ -32,9 +32,9 @@ class LucernaParser extends Parser {
 			$date = str_replace($cz, $en, $datetext[1]);
 			
 			$datetime = \DateTime::createFromFormat(" j. F Y H:i", $date);
-			$datetimeArray[] = $datetime;
+			$datetimes[] = $datetime;
 			
-			$this->movies[] = new \Zitkino\Movie($nameQuery->item($movieItems)->nodeValue, $datetimeArray);
+			$this->movies[] = new \Zitkino\Movie($nameQuery->item($movieItems)->nodeValue, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
 			$movieItems++;
 		}
