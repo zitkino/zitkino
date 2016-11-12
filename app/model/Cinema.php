@@ -99,9 +99,17 @@ class Cinema {
 				
 				$nextDate = new \DateTime();
 				$nextDate->modify("+1 days");
-
-				// checks if movie is played from now to +1 day
-				if($currentDate < $movie->getDatetimes()[0] and $movie->getDatetimes()[0] < $nextDate) {
+				
+				$datetimes = [];
+				foreach($movie->getDatetimes() as $datetime) {
+					// checks if movie is played from now to +1 day
+					if ($currentDate < $datetime and $datetime < $nextDate) {
+						array_push($datetimes, $datetime);
+					}
+				}
+				
+				if(!empty($datetimes)) {
+					$movie->setDatetimes($datetimes);
 					array_push($soonest, $movie);
 				}
 			}
