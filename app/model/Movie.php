@@ -6,7 +6,8 @@ namespace Zitkino;
  */
 class Movie {
 	private $name, $link;
-	private $type, $language, $subtitles;
+	private $type;
+	private $language, $subtitles;
 	private $datetimes;
 	private $price;
 	

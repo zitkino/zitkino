@@ -18,11 +18,21 @@ class LucernaParser extends Parser {
 		$events = $xpath->query("//div[@id='icagenda']//div[@class='event']");
 		$movieItems = 0;
 		foreach($events as $event) {
-			$datetimes = [];
-			
 			$nameQuery = $xpath->query("//div[@class='eventtitle']//a", $event);
 			
 			$link = "http://www.kinolucerna.info".$nameQuery->item($movieItems)->getAttribute("href");
+			
+			$languageQuery = $xpath->query(".//div[@class='descshort']", $event);
+			$languageString = $languageQuery->item(0)->nodeValue;
+			$language = "česky";
+			$subtitles = null;
+			if(strpos(strtolower($languageString), "dabing") !== false) {
+				$language = "česky";
+			}
+			if(strpos($languageString, "Titulky") !== false) {
+				$language = "anglicky";
+				$subtitles = "české";
+			}
 			
 			$dateQuery = $xpath->query("//div[@class='nextdate']//strong", $event);
 			$datetext = explode(",", $dateQuery->item($movieItems)->nodeValue);
@@ -31,11 +41,14 @@ class LucernaParser extends Parser {
 			$en = array("January","February","March","April","May","June","July","August","September","October","November","December");
 			$date = str_replace($cz, $en, $datetext[1]);
 			
+			$datetimes =[];
 			$datetime = \DateTime::createFromFormat(" j. F Y H:i", $date);
 			$datetimes[] = $datetime;
 			
 			$this->movies[] = new \Zitkino\Movie($nameQuery->item($movieItems)->nodeValue, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
+			$this->movies[count($this->movies)-1]->setLanguage($language);
+			$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
 			$movieItems++;
 		}
 		

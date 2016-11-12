@@ -134,3 +134,13 @@ body {
 #cinemaMapButton {
 	background-color: #b10;
 }
+
+.label-type {
+	background-color: #1a9709;
+}
+.label-language {
+	background-color: #01a;
+}
+.label-subtitles {
+	background-color: #2162a6;
+}

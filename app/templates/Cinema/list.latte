@@ -27,6 +27,8 @@
 		<thead>
 		<tr>
 			<th>Film</th>
+			<th></th>
+			<th></th>
 			<th>Promítání</th>
 		</tr>
 		</thead>
@@ -40,6 +42,23 @@
 				{/ifset}
 				{$movie->getName()}</a>
 			</td>
+			<td>
+				{php $movieType=$movie->getType()}
+				{ifset $movieType}
+					<span class="label label-type">{$movieType}</span>
+				{/ifset}
+			</td>
+			<td>
+				{php $movieLanguage=$movie->getLanguage()}
+				{ifset $movieLanguage}
+					<span class="label label-language"><i class="fa fa-language" aria-hidden="true"></i> {$movieLanguage}</span>
+				{/ifset}
+
+				{php $movieSubtitles=$movie->getSubtitles()}
+				{ifset $movieSubtitles}
+					<span class="label label-subtitles"><i class="fa fa-paragraph" aria-hidden="true"></i> {$movieSubtitles}</span>
+				{/ifset}
+			</td>
 			<td><i class="fa fa-calendar-o" aria-hidden="true"></i>
 				{foreach $movie->getDatetimes() as $datetime}
 					{if $iterator->first}
@@ -52,8 +71,14 @@
 		{/foreach}
 		</tbody>
 	</table>
-	
+
 	<div class="panel-body">
+		<p>Legenda:
+			<span class="label label-type">typ filmu</span>
+			<span class="label label-language"><i class="fa fa-language" aria-hidden="true"></i> jazyk dabingu</span>
+			<span class="label label-subtitles"><i class="fa fa-paragraph" aria-hidden="true"></i> jazyk titulků</span>
+		</p>
+
 	{if is_null($movies)}
 		{*<p>Dnes kino asi nepromítá. &#9785;</p>*}
 		<p><i class="fa fa-calendar"></i> Podrobný program na webu kina:

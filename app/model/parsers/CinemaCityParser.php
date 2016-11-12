@@ -48,6 +48,31 @@ abstract class CinemaCityParser extends Parser {
 			
 			$link = "http://cinemacity.cz/".$nameQuery->item($movieItems)->getAttribute("href");
 			
+			$type = null;
+			if(strpos($name, "3D") !== false) {
+				$type = "3D";
+				$name = str_replace(" 3D", "", $name);
+			}
+			
+			$languageQuery = $xpath->query(".//td[4]", $event);
+			$language = $languageQuery->item(0)->nodeValue;
+			if(strpos($language, "CZ") !== false) {
+				$language = "česky";
+			}
+			if(strpos($language, "EN") !== false) {
+				$language = "anglicky";
+			}
+			
+			$subtitlesQuery = $xpath->query(".//td[3]", $event);
+			$subtitles = $subtitlesQuery->item(0)->nodeValue;
+			if(strpos($subtitles, "ČT") !== false) {
+				$subtitles = "české";
+			}
+			if((strpos($subtitles, "DAB") !== false) or (strpos($subtitles, "CZ") !== false)) {
+				$subtitles = null;
+				$language = "česky";
+			}
+			
 			$timeQuery = $xpath->query(".//td[@class='prsnt']/a", $event);
 			$datetimes = [];
 			$i = 0;
@@ -63,6 +88,9 @@ abstract class CinemaCityParser extends Parser {
 			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
+			$this->movies[count($this->movies)-1]->setType($type);
+			$this->movies[count($this->movies)-1]->setLanguage($language);
+			$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
 			$movieItems++;
 		}
 		
