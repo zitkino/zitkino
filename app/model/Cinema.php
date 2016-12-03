@@ -1,5 +1,6 @@
 <?php
 namespace Zitkino;
+use \Lib\Database\Doctrine as DB;
 
 /**
  * Cinema.
@@ -8,17 +9,8 @@ class Cinema {
 	private $id, $name, $shortName, $type, $address, $city, $gmaps, $url, $programme, $facebook, $twitter, $googleplus;
 
 	public function __construct($id) {
-		$ini = parse_ini_file(__DIR__."/../database.ini");
-		$connectionParams = array(
-			"dbname" => $ini["database"],
-			"user" => $ini["user"], "password" => $ini["password"],
-			"host" => $ini["server"],
-			"driver" => "pdo_mysql", "charset"  => "utf8",
-			"driverOptions" => array(1002 => "SET NAMES utf8")
-		);
-		$config = new \Doctrine\DBAL\Configuration();
-		
-		$connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+		$db = new DB(__DIR__."/../database.ini");
+		$connection = $db->getConnection();
 		
 		if(is_numeric($id)) {
 			$statement = $connection->executeQuery("SELECT * FROM cinemas WHERE id = ?", array($id));
