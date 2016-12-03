@@ -1,8 +1,9 @@
 <?php
 namespace Zitkino;
+use \Lib\Database\Doctrine as DB;
 
 /**
- * Description of Cinemas
+ * Cinemas.
  */
 class Cinemas {
 	private $classic = [];
@@ -17,8 +18,12 @@ class Cinemas {
 	}
 
 	public function __construct() {
-		for($id=1; $id<14; $id++) {
-			$cinema = new \Zitkino\Cinema($id);
+		$db = new DB(__DIR__."/../database.ini");
+		$connection = $db->getConnection();
+		
+		$statement = $connection->executeQuery("SELECT id FROM cinemas");
+		while($row = $statement->fetch()) {
+			$cinema = new \Zitkino\Cinema($row["id"]);
 			switch($cinema->getType()) {
 				case "classic":
 					array_push($this->classic, $cinema);
@@ -26,7 +31,7 @@ class Cinemas {
 				case "summer":
 					array_push($this->summer, $cinema);
 					break;
-
+				
 				default:
 					break;
 			}
