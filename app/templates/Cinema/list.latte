@@ -35,7 +35,7 @@
 		<tbody>
 		{foreach $movies as $movie}
 		<tr>
-			<td><i class="fa fa-film" aria-hidden="true"></i> 
+			<td><i class="fa fa-film" aria-hidden="true" title="Název filmu"></i>
 				{php $movieLink=$movie->getLink()}
 				{ifset $movieLink}
 					<a href="{$movieLink}">
@@ -45,24 +45,24 @@
 			<td>
 				{php $movieType=$movie->getType()}
 				{ifset $movieType}
-					<span class="label label-type">{$movieType}</span>
+					<span class="label label-type" title="Typ filmu">{$movieType}</span>
 				{/ifset}
 			</td>
 			<td>
 				{php $movieLanguage=$movie->getLanguage()}
 				{ifset $movieLanguage}
-					<span class="label label-language"><i class="fa fa-language" aria-hidden="true"></i> {$movieLanguage}</span>
+					<span class="label label-language"><i class="fa fa-language" aria-hidden="true" title="Dabing"></i> {$movieLanguage}</span>
 				{/ifset}
 
 				{php $movieSubtitles=$movie->getSubtitles()}
 				{ifset $movieSubtitles}
-					<span class="label label-subtitles"><i class="fa fa-paragraph" aria-hidden="true"></i> {$movieSubtitles}</span>
+					<span class="label label-subtitles"><i class="fa fa-paragraph" aria-hidden="true" title="Titulky"></i> {$movieSubtitles}</span>
 				{/ifset}
 			</td>
-			<td><i class="fa fa-calendar-o" aria-hidden="true"></i>
+			<td><i class="fa fa-calendar-o" aria-hidden="true" title="Datum"></i>
 				{foreach $movie->getDatetimes() as $datetime}
 					{if $iterator->first}
-						{$datetime->format('d.m.Y')} <i class="fa fa-clock-o" aria-hidden="true"></i> 
+						{$datetime->format('d.m.Y')} <i class="fa fa-clock-o" aria-hidden="true" title="Čas"></i>
 					{/if}
 					{$datetime->format('H:i')}{sep}, {/sep}
 				{/foreach}

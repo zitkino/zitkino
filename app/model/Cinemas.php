@@ -21,7 +21,7 @@ class Cinemas {
 		$db = new DB(__DIR__."/../database.ini");
 		$connection = $db->getConnection();
 		
-		$statement = $connection->executeQuery("SELECT id FROM cinemas");
+		$statement = $connection->executeQuery("SELECT id FROM cinemas ORDER BY shortName");
 		while($row = $statement->fetch()) {
 			$cinema = new \Zitkino\Cinema($row["id"]);
 			switch($cinema->getType()) {

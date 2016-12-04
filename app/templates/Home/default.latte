@@ -1,10 +1,9 @@
-{var $title="Brněnská kina"}
+{var $title="Program brněnských kin"}
 
 {block #content}
 <h1 class="page-header">{$title}</h1>
 {import "../Cinema/list.latte"}
 
-<h2>Nejdřívější promítání</h2>
 {foreach $cinemas as $cinemaItem}
 <div class="panel panel-default">
 	<div class="panel-heading">
