@@ -19,6 +19,13 @@ class LucernaParser extends Parser {
 		$movieItems = 0;
 		foreach($events as $event) {
 			$nameQuery = $xpath->query("//div[@class='eventtitle']//a", $event);
+			$name = $nameQuery->item($movieItems)->nodeValue;
+			
+			$badNames = array("KINO NEHRAJE – Vánoční prázdniny", "KINO NEHRAJE – Novoroční prázdniny");
+			if(in_array($name, $badNames)) {
+				$movieItems++;
+				continue;
+			}
 			
 			$link = "http://www.kinolucerna.info".$nameQuery->item($movieItems)->getAttribute("href");
 			
@@ -45,7 +52,7 @@ class LucernaParser extends Parser {
 			$datetime = \DateTime::createFromFormat(" j. F Y H:i", $date);
 			$datetimes[] = $datetime;
 			
-			$this->movies[] = new \Zitkino\Movie($nameQuery->item($movieItems)->nodeValue, $datetimes);
+			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
 			$this->movies[count($this->movies)-1]->setLanguage($language);
 			$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
