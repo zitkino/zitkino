@@ -33,10 +33,10 @@ class LucernaParser extends Parser {
 			$languageString = $languageQuery->item(0)->nodeValue;
 			$language = "česky";
 			$subtitles = null;
-			if(strpos(strtolower($languageString), "dabing") !== false) {
+			if(stripos(strtolower($languageString), "dabing") !== false) {
 				$language = "česky";
 			}
-			if(strpos($languageString, "Titulky") !== false) {
+			if(stripos($languageString, "titulky") !== false) {
 				$language = "anglicky";
 				$subtitles = "české";
 			}
