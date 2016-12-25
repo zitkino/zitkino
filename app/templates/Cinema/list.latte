@@ -34,6 +34,7 @@
 		</thead>
 		<tbody>
 		{foreach $movies as $movie}
+			{if !empty($movie)}
 		<tr>
 			<td><i class="fa fa-film" aria-hidden="true" title="Název filmu"></i>
 				{php $movieLink=$movie->getLink()}
@@ -68,31 +69,32 @@
 				{/foreach}
 			</td>
 		</tr>
+			{/if}
 		{/foreach}
 		</tbody>
 	</table>
 
 	<div class="panel-body">
+	{if is_null($movies) or empty($movies)}
+		<p>Dnes kino asi nepromítá. &#9785;</p>
+		<p><i class="fa fa-calendar" aria-hidden="true"></i> Program na další dny je na webu kina:
+			<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
+		</p>
+	{else}
 		<p>Legenda:
 			<span class="label label-type">typ filmu</span>
 			<span class="label label-language"><i class="fa fa-language" aria-hidden="true"></i> jazyk dabingu</span>
 			<span class="label label-subtitles"><i class="fa fa-paragraph" aria-hidden="true"></i> jazyk titulků</span>
 		</p>
-
-	{if is_null($movies)}
-		{*<p>Dnes kino asi nepromítá. &#9785;</p>*}
-		<p><i class="fa fa-calendar"></i> Podrobný program na webu kina:
-			<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
-		</p>
-		{elseif basename($_SERVER['REQUEST_URI']) == $cinema->getShortName()}
-			<p><i class="fa fa-calendar"></i> Další program a podrobné informace o filmech jsou na webu kina: 
+		{if basename($_SERVER['REQUEST_URI']) == $cinema->getShortName()}
+			<p><i class="fa fa-calendar" aria-hidden="true"></i> Další program a podrobné informace o filmech jsou na webu kina:
 				<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 			</p>
-			
-			{else}
-				<p><i class="fa fa-calendar"></i> Další promítání jsou na stránce 
-					<a n:href="Cinema:profile, $id = $cinema->getShortName()"><i class="fa fa-list-alt"></i> profilu kina</a>.
-				</p>
-	{/if}
+		{else}
+			<p><i class="fa fa-calendar" aria-hidden="true"></i> Další promítání jsou na stránce
+				<a n:href="Cinema:profile, $id = $cinema->getShortName()"><i class="fa fa-list-alt"></i> profilu kina</a>.
+			</p>
+		{/if}
 	</div>
+	{/if}
 {/define}
