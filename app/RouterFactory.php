@@ -22,6 +22,17 @@ class RouterFactory {
 		$router[] = new Route('kino[/]', 'Cinema:default');
 		$router[] = new Route('kino/<id>', 'Cinema:profile');
 
+		// old zitkino addresses
+		$oldCinemas = ["kino-art-brno", "kinokavarna-brno", "kino-lucerna-brno", "kino-scala-brno", "cinema-city-olympia-brno", "cinema-city-velky-spalicek-brno", "letni-kino-na-dvore-mdb-brno"];
+		$newCinemas = ["art", "kinokavarna", "lucerna", "scala", "olympia", "velkySpalicek", "mdb"];
+		$i = 0;
+		foreach($oldCinemas as $cinema) {
+			$router[] = new Route('cinema/'.$cinema, ['presenter' => 'Cinema', 'action' => 'profile', 'id' => $newCinemas[$i],], Route::ONE_WAY);
+			$i++;
+		}
+		$router[] = new Route('cinema[/]', 'Cinema:default', Route::ONE_WAY);
+		$router[] = new Route('film[/<f=>]', 'Home:default', Route::ONE_WAY);
+
 		$router[] = new Route('<action>', 'Home:default');
 		$router[] = new Route('[<presenter>/]<action>', 'Home:default');
 
