@@ -40,6 +40,13 @@ class ScalaParser extends Parser {
 			}
 			else {
 				$nameQuery = $xpath->query("//td[@class='col_movie_name']//a", $event);
+				$name = $nameQuery->item($movieItems)->nodeValue;
+
+				$language = null;
+				if(\Lib\Strings::endsWith($name, "- cz dabing")) {
+					$language = "česky";
+					$name = str_replace(" - cz dabing", "", $name);
+				}
 				
 				$timeQuery = $xpath->query("//td[@class='col_time_reservation']", $event);
 				$time = explode(":", $timeQuery->item($movieItems)->nodeValue);
@@ -50,8 +57,9 @@ class ScalaParser extends Parser {
 				
 				$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->getAttribute("href");
 				
-				$this->movies[] = new \Zitkino\Movie($nameQuery->item($movieItems)->nodeValue, $datetimes);
+				$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 				$this->movies[count($this->movies)-1]->setLink($link);
+				$this->movies[count($this->movies) - 1]->setLanguage($language);
 				$movieItems++;
 			}
 		}
