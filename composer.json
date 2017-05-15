@@ -12,28 +12,9 @@
 
 "require": {
 	"doctrine/dbal": "^2.5",
-	"fortawesome/font-awesome": "^4.6",
+	"fortawesome/font-awesome": "^4.7",
 	"hermajan/lib": "dev-master",
 	"nette/nette-minified": "^2.4",
 	"twbs/bootstrap": "^3.3"
-},
-
-"scripts": {
-	"pre-update-cmd": [
-		"composer self-update"
-	],
-	"post-update-cmd": [
-		"xcopy /Y /I /E \"libs\\fortawesome\\font-awesome\\css\" \"libs\\font-awesome\\css\"",
-		"xcopy /Y /I /E \"libs\\fortawesome\\font-awesome\\fonts\" \"libs\\font-awesome\\fonts\"",
-		"rmdir /S /Q \"libs\\fortawesome\"",
-		
-		"xcopy /Y /I /E \"libs\\nette\\nette-minified\" \"libs\\nette\"",
-		"rmdir /S /Q \"libs\\nette\\nette-minified\"",
-
-		"xcopy /Y /I /E \"libs\\twbs\\bootstrap\\dist\" \"libs\\bootstrap\"",
-		"rmdir /S /Q \"libs\\twbs\"",
-
-		"composer dump-autoload --optimize"
-	]
 }
 }

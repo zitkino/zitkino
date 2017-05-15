@@ -1,6 +1,6 @@
 <?php
 namespace Zitkino;
-use \Lib\Database\Doctrine as DB;
+use \Lib\database\Doctrine as DB;
 
 /**
  * Cinemas.
