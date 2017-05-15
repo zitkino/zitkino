@@ -5,8 +5,7 @@ _temp/
 libs/
 
 *.ini
-*.neon
+config*.neon
 *.config
-*.htaccess
-*.sql
+*-data.sql
 *.lock

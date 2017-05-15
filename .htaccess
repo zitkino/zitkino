@@ -1,0 +1,54 @@
+# Apache configuration file (see httpd.apache.org/docs/2.2/mod/quickreference.html)
+
+# htaccess rules for subdomains and aliases
+# to create new subdomain, create a folder subdom/(subdomain name)
+# to create web for alias, create a folder domains/(whole domain name)
+# more information and examples: http://kb.wedos.com/r/32/webhosting-htaccess.html
+
+RewriteEngine On
+
+# domains (aliases)
+RewriteCond %{REQUEST_URI} !^domains/
+RewriteCond %{REQUEST_URI} !^/domains/
+RewriteCond %{HTTP_HOST} ^(www\.)?(.*)$
+RewriteCond %{DOCUMENT_ROOT}/domains/%2 -d
+RewriteRule (.*) domains/%2/$1 [DPI]
+
+# subdomains (with or without www on beginning)
+RewriteCond %{REQUEST_URI} !^subdom/
+RewriteCond %{REQUEST_URI} !^/subdom/
+RewriteCond %{HTTP_HOST} ^(www\.)?(.*)\.([^\.]*)\.([^\.]*)$
+RewriteCond %{DOCUMENT_ROOT}/subdom/%2 -d
+RewriteRule (.*) subdom/%2/$1 [DPI]
+
+# aliases - correct redirection with missing /
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^domains/[^/]+/(.+[^/])$ /$1/ [R]
+
+# subdomains - correct redirection with missing /
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^subdom/[^/]+/(.+[^/])$ /$1/ [R]
+
+# disable directory listing
+Options -Indexes
+
+# enable cool URL
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	# prevents files starting with dot to be viewed by browser
+	RewriteRule /\.|^\. - [F]
+
+	# front controller
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz)$ index.php [L]
+</IfModule>
+
+# enable gzip compression
+<IfModule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/x-javascript text/javascript application/javascript application/json
+</IfModule>
+
+# A+ on HTTPS certificate
+Header set Strict-Transport-Security "max-age=31536000" env=HTTPS
