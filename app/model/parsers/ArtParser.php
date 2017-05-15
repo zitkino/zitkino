@@ -15,8 +15,8 @@ class ArtParser extends Parser {
 	public function getContent() {
 		$xpath = $this->downloadData();
 		
-		$this->getHall($xpath, "leftcol");
-		$this->getHall($xpath, "rightcol");
+		$this->getHall($xpath, "leftcol distillery");
+		//$this->getHall($xpath, "rightcol");
 	}
 	
 	/**

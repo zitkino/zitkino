@@ -5,13 +5,16 @@
 {import "../Cinema/list.latte"}
 
 {foreach $cinemas as $cinemaItem}
-<div class="panel panel-default">
-	<div class="panel-heading">
-		{include #cinemaListContent, cinema => $cinemaItem->getData()}
-	</div>
-	
-	{var $movies = $cinemaItem->getSoonestMovies();}
-	{include #movieList, movies => $movies, cinema => $cinemaItem->getData()}
-</div>
+	{var $data = $cinemaItem->getData()}
+	<section class="panel panel-default">
+		<header class="panel-heading" data-toggle="collapse" data-target="#{$data['shortName']}">
+			{include #cinemaListContent, cinema => $data}
+		</header>
+		
+		<article id="{$data['shortName']}" class="panel-collapse collapse in">
+			{var $movies = $cinemaItem->getSoonestMovies();}
+			{include #movieList, movies => $movies, cinema => $data}
+		</article>
+	</section>
 {/foreach}
 {/block}
