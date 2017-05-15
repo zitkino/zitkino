@@ -1,36 +1,43 @@
-{var $title=$cinema->getName()}
+{var $title=$cinema["name"]}
 
 {block content}
-<h1 class="page-header">{$cinema->getName()}</h1>
+<h1 class="page-header">{$cinema["name"]}</h1>
 {import "list.latte"}
 
 {include #movieList, movies => $movies}
 
 <div>
 	<div class="pull-right">
-		<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{fa calendar} podrobný program</a><br>
+		<a href="{$cinema["programme"]}" title="Program na webu kina.">{fa calendar} podrobný program</a><br>
 		<span class="pull-right">
-		{php $facebook = $cinema->getFacebook();}
+		{php $facebook = $cinema["facebook"];}
 		{ifset $facebook}
 			<a href="{$facebook}">{fa facebook-official, "2x"}</a>
 		{/ifset}
-		{php $twitter = $cinema->getTwitter();}
-		{ifset $twitter}
-			<a href="{$twitter}">{fa twitter-official, "2x"}</a>
-		{/ifset}
-		{php $googleplus = $cinema->getGoogleplus();}
+		{php $googleplus = $cinema["google+"];}
 		{ifset $googleplus}
 			<a href="{$googleplus}">{fa google-plus, "2x"}</a>
+		{/ifset}
+		{php $instagram = $cinema["instagram"];}
+		{ifset $instagram}
+			<a href="{$instagram}">{fa instagram, "2x"}</a>
+		{/ifset}
+		{php $twitter = $cinema["twitter"];}
+		{ifset $twitter}
+			<a href="{$twitter}">{fa twitter-official, "2x"}</a>
 		{/ifset}
 		</span>
 	</div>
 	<address>
-		<strong>{$cinema->getName()}</strong><br>
-		{$cinema->getAddress()}<br>
-		{$cinema->getCity()}<br>
-		{*<abbr title="Telefon">tel.:</abbr> (123) 456-7890*}
-		{php $url = $cinema->getUrl();}
-		<a href="{$url}">{$url}</a>
+		<strong>{$cinema["name"]}</strong><br>
+		{fa map-marker} {$cinema["address"]}, {$cinema["city"]}<br>
+		{ifset $cinema["phone"]}
+			{fa phone} <a href="tel:{$cinema['phone']|replace:' ',''}">{$cinema["phone"]}</a><br>
+		{/ifset}
+		{ifset $cinema["email"]}
+			{fa envelope-o} <a href="mailto:{$cinema['email']}">{$cinema["email"]}</a><br>
+		{/ifset}
+		{fa link} <a href="{$cinema['url']}">{$cinema["url"]}</a>
 	</address>
 	
 	<a href="#cinemaMap" onClick="showCinemaMap();" id="cinemaMapButton" class="btn btn-danger collapsed" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cinemaMap">

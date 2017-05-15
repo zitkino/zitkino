@@ -7,11 +7,11 @@
 {foreach $cinemas as $cinemaItem}
 <div class="panel panel-default">
 	<div class="panel-heading">
-		{include #cinemaListContent, cinema => $cinemaItem}
+		{include #cinemaListContent, cinema => $cinemaItem->getData()}
 	</div>
 	
 	{var $movies = $cinemaItem->getSoonestMovies();}
-	{include #movieList, movies => $movies, cinema => $cinemaItem}
+	{include #movieList, movies => $movies, cinema => $cinemaItem->getData()}
 </div>
 {/foreach}
 {/block}

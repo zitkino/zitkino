@@ -7,18 +7,18 @@
 {/define}
 
 {define cinemaListContent}
-	<strong>{$cinema->getName()}</strong>
+	<strong>{$cinema["name"]}</strong>
 
 	&nbsp;&nbsp;
-	{var $address = $cinema->getAddress().", ".$cinema->getCity();}
+	{var $address = $cinema["address"].", ".$cinema["city"];}
 	<a href="https://www.google.cz/maps/place/{$address|escapeurl}">{fa map-marker} {$address}</a>
 
 	&nbsp;&nbsp;
-	{php $url = $cinema->getUrl();}
+	{php $url = $cinema["url"];}
 	<a href="{$url}">{fa link} {$url}</a>
 
 	<div class="pull-right">
-		<a n:href="Cinema:profile, $id = $cinema->getShortName()">{fa list-alt, "lg"} program a informace</a>
+		<a n:href="Cinema:profile, $id = $cinema['shortName']">{fa list-alt, "lg"} program a informace</a>
 	</div>
 {/define}
 
@@ -83,8 +83,8 @@
 	<div class="panel-body">
 	{if is_null($movies) or empty($movies)}
 		<p>Dnes kino asi nepromítá. &#9785;</p>
-		<p>{fa calendar} Program na další dny je na webu kina:
-			<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
+		<p>Program na další dny je na webu kina:
+			<a href="{$cinema['programme']}" title="Program na webu kina.">{$cinema["programme"]}</a>
 		</p>
 	{else}
 		<p>Legenda:
@@ -92,13 +92,13 @@
 			<span class="label label-language">{fa language} jazyk dabingu</span>
 			<span class="label label-subtitles">{fa paragraph} jazyk titulků</span>
 		</p>
-		{if basename($_SERVER['REQUEST_URI']) == $cinema->getShortName()}
-			<p>{fa calendar} Další program a podrobné informace o filmech jsou na webu kina:
-				<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
+		{if basename($_SERVER["REQUEST_URI"]) == $cinema["shortName"]}
+			<p>Další program a podrobné informace o filmech jsou na webu kina:
+				<a href="{$cinema['programme']}" title="Program na webu kina.">{$cinema["programme"]}</a>
 			</p>
 		{else}
-			<p>{fa calendar} Další promítání jsou na stránce
-				<a n:href="Cinema:profile, $id = $cinema->getShortName()"><i class="fa fa-list-alt"></i> profilu kina</a>.
+			<p>Další promítání jsou na stránce
+				<a n:href="Cinema:profile, $id = $cinema['shortName']"><i class="fa fa-list-alt"></i> profilu kina</a>.
 			</p>
 		{/if}
 	</div>

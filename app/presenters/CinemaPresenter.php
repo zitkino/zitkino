@@ -14,18 +14,16 @@ class CinemaPresenter extends BasePresenter {
 	}
 	public function renderProfile($id)	{
 		$cinema = new \Zitkino\Cinema($id);
-		$this->template->cinema = $cinema;
+		$data = $cinema->getData();
+		$this->template->cinema = $data;
 		
 		$this->template->movies = $cinema->getMovies();
 		
-		$gmaps = $cinema->getGmaps();
+		$gmaps = $data["gmaps"];
 		if(is_null($gmaps)) {
-			$address = $cinema->getAddress().", ".$cinema->getCity();
+			$address = $data["address"].", ".$data["city"];
 			$param = "/v1/place?q=".urlencode($address);
-		}
-		else {
-			$param = "?pb=".$gmaps;
-		}
+		} else { $param = "?pb=".$gmaps; }
 		$this->template->gmap = $param;
 	}
 }

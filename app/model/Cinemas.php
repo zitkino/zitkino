@@ -24,7 +24,8 @@ class Cinemas {
 		$statement = $connection->executeQuery("SELECT id FROM cinemas ORDER BY shortName");
 		while($row = $statement->fetch()) {
 			$cinema = new \Zitkino\Cinema($row["id"]);
-			switch($cinema->getType()) {
+			$data = $cinema->getData();
+			switch($data["type"]) {
 				case "classic":
 					array_push($this->classic, $cinema);
 					break;

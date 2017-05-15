@@ -6,101 +6,32 @@ use \Lib\database\Doctrine as DB;
  * Cinema.
  */
 class Cinema {
-	private $id, $name, $shortName, $type, $address, $city, $gmaps, $url, $programme, $facebook, $twitter, $googleplus;
+	private $id, $data;
 
 	public function __construct($id) {
 		$db = new DB(__DIR__."/../database.ini");
 		$connection = $db->getConnection();
 		
-		if(is_numeric($id)) {
-			$statement = $connection->executeQuery("SELECT * FROM cinemas WHERE id = ?", array($id));
-			while($row = $statement->fetch()) {
-				$this->id = $id;
-				$this->name = $row["name"];
-				$this->shortName = $row["shortName"];
-				$this->type = $row["type"];
-				$this->address = $row["address"];
-				$this->city = $row["city"];
-				$this->gmaps = $row["gmaps"];
-				$this->url = $row["url"];
-				$this->programme = $row["programme"];
-				$this->facebook = $row["facebook"];
-				$this->twitter = $row["twitter"];
-				$this->googleplus = $row["google+"];
-			}
-		}
-		else {
-			$statement = $connection->executeQuery("SELECT * FROM cinemas WHERE shortName = ?", array($id));
-			while($row = $statement->fetch()) {
-				$this->id = $row["id"];
-				$this->name = $row["name"];
-				$this->shortName = $id;
-				$this->type = $row["type"];
-				$this->address = $row["address"];
-				$this->city = $row["city"];
-				$this->gmaps = $row["gmaps"];
-				$this->url = $row["url"];
-				$this->programme = $row["programme"];
-				$this->facebook = $row["facebook"];
-				$this->twitter = $row["twitter"];
-				$this->googleplus = $row["google+"];
-			}
-		}
+		if(is_numeric($id)) { $this->data = $connection->fetchAssoc("SELECT * FROM cinemas WHERE id = ?", array($id)); }
+		else { $this->data = $connection->fetchAssoc("SELECT * FROM cinemas WHERE shortName = ?", array($id)); }
 	}
 	
-	function getId() {
-		return $this->id;
-	}
-	function getName() {
-		return $this->name;
-	}
-	function getShortName() {
-		return $this->shortName;
-	}
-	function getType() {
-		return $this->type;
-	}
-	function getAddress() {
-		return $this->address;
-	}
-	function getCity() {
-		return $this->city;
-	}
-	function getGmaps() {
-		return $this->gmaps;
-	}
-	function getUrl() {
-		return $this->url;
-	}
-	function getProgramme() {
-		return $this->programme;
-	}
-	function getFacebook() {
-		return $this->facebook;
-	}
-	function getTwitter() {
-		return $this->twitter;
-	}
-	function getGoogleplus() {
-		return $this->googleplus;
-	}
+	function getId() { return $this->id; }
+	function getData() { return $this->data; }
 	
 	public function getMovies() {
-		$parser = "\Zitkino\parsers\\".ucfirst($this->getShortName())."Parser";
+		$parser = "\Zitkino\parsers\\".ucfirst($this->data["shortName"])."Parser";
 		if(class_exists($parser)) {
 			$pa = new $parser();
 			return $pa->getMovies();
-		}
-		else {
-			return null;
-		}
+		} else { return null; }
 	}
 	
 	public function getSoonestMovies() {
 		$movies = $this->getMovies();
 		$soonest = [];
 		
-		if(!is_null($movies)) {
+		if(isset($movies)) {
 			foreach($movies as $movie) {
 				$currentDate = new \DateTime();
 				
@@ -110,7 +41,7 @@ class Cinema {
 				$datetimes = [];
 				foreach($movie->getDatetimes() as $datetime) {
 					// checks if movie is played from now to +1 day
-					if ($currentDate < $datetime and $datetime < $nextDate) {
+					if($currentDate < $datetime and $datetime < $nextDate) {
 						array_push($datetimes, $datetime);
 					}
 				}
@@ -123,12 +54,8 @@ class Cinema {
 		}
 		
 		if(empty($soonest)) {
-			if(is_null($movies)) {
-				$soonest = null;
-			}
-			else {
-				$soonest = [$movies[0]];
-			}
+			if(is_null($movies) or empty($movies)) { $soonest = null; }
+			else { $soonest = [$movies[0]]; }
 		}
 		
 		return $soonest;
