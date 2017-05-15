@@ -11,14 +11,14 @@
 
 	&nbsp;&nbsp;
 	{var $address = $cinema->getAddress().", ".$cinema->getCity();}
-	<a href="https://www.google.cz/maps/place/{$address|escapeurl}"><i class="fa fa-map-marker"></i> {$address}</a>
+	<a href="https://www.google.cz/maps/place/{$address|escapeurl}">{fa map-marker} {$address}</a>
 
 	&nbsp;&nbsp;
 	{php $url = $cinema->getUrl();}
-	<a href="{$url}"><i class="fa fa-link"></i> {$url}</a>
+	<a href="{$url}">{fa link} {$url}</a>
 
 	<div class="pull-right">
-		<a n:href="Cinema:profile, $id = $cinema->getShortName()"><i class="fa fa-list-alt fa-lg"></i> program a informace</a>
+		<a n:href="Cinema:profile, $id = $cinema->getShortName()">{fa list-alt, "lg"} program a informace</a>
 	</div>
 {/define}
 
@@ -26,50 +26,50 @@
 	<table class="table table-hover" n:if="$movies">
 		<thead>
 		<tr>
-			<th>Film</th>
+			<th>{fa film} Film</th>
 			<th></th>
 			<th></th>
 			<th></th>
-			<th>Promítání</th>
+			<th>{fa calendar} Promítání</th>
 		</tr>
 		</thead>
 		<tbody>
 		{foreach $movies as $movie}
 			{if !empty($movie)}
 		<tr>
-			<td><i class="fa fa-film" aria-hidden="true" title="Název filmu"></i>
+			<td title="Název filmu">
 				{php $movieLink=$movie->getLink()}
 				{ifset $movieLink}
 					<a href="{$movieLink}">
 				{/ifset}
 				{$movie->getName()}</a>
 			</td>
-			<td>
+			<td title="Databáze">
 				{var $movieLinkDB = urlencode($movie->getName())}
 				<a href="http://www.csfd.cz/hledat/?q={$movieLinkDB}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="16"></a>
-				<a href="http://www.imdb.com/find?s=tt&q={$movieLinkDB}" title="IMDb"><i class="fa fa-imdb" aria-hidden="true"></i></a>
+				<a href="http://www.imdb.com/find?s=tt&q={$movieLinkDB}" title="IMDb">{fa imdb}</a>
 			</td>
-			<td>
+			<td title="Typ">
 				{php $movieType=$movie->getType()}
 				{ifset $movieType}
 					<span class="label label-type" title="Typ filmu">{$movieType}</span>
 				{/ifset}
 			</td>
-			<td>
+			<td title="Jazyk">
 				{php $movieLanguage=$movie->getLanguage()}
 				{ifset $movieLanguage}
-					<span class="label label-language"><i class="fa fa-language" aria-hidden="true" title="Dabing"></i> {$movieLanguage}</span>
+					<span class="label label-language" title="Dabing">{fa language} {$movieLanguage}</span>
 				{/ifset}
 
 				{php $movieSubtitles=$movie->getSubtitles()}
 				{ifset $movieSubtitles}
-					<span class="label label-subtitles"><i class="fa fa-paragraph" aria-hidden="true" title="Titulky"></i> {$movieSubtitles}</span>
+					<span class="label label-subtitles" title="Titulky">{fa paragraph} {$movieSubtitles}</span>
 				{/ifset}
 			</td>
-			<td><i class="fa fa-calendar-o" aria-hidden="true" title="Datum"></i>
+			<td title="Datum a čas">{fa calendar-o}
 				{foreach $movie->getDatetimes() as $datetime}
 					{if $iterator->first}
-						{$datetime->format('d.m.Y')} <i class="fa fa-clock-o" aria-hidden="true" title="Čas"></i>
+						{$datetime->format('d.m.Y')} {fa clock-o}
 					{/if}
 					{$datetime->format('H:i')}{sep}, {/sep}
 				{/foreach}
@@ -83,21 +83,21 @@
 	<div class="panel-body">
 	{if is_null($movies) or empty($movies)}
 		<p>Dnes kino asi nepromítá. &#9785;</p>
-		<p><i class="fa fa-calendar" aria-hidden="true"></i> Program na další dny je na webu kina:
+		<p>{fa calendar} Program na další dny je na webu kina:
 			<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 		</p>
 	{else}
 		<p>Legenda:
 			<span class="label label-type">typ filmu</span>
-			<span class="label label-language"><i class="fa fa-language" aria-hidden="true"></i> jazyk dabingu</span>
-			<span class="label label-subtitles"><i class="fa fa-paragraph" aria-hidden="true"></i> jazyk titulků</span>
+			<span class="label label-language">{fa language} jazyk dabingu</span>
+			<span class="label label-subtitles">{fa paragraph} jazyk titulků</span>
 		</p>
 		{if basename($_SERVER['REQUEST_URI']) == $cinema->getShortName()}
-			<p><i class="fa fa-calendar" aria-hidden="true"></i> Další program a podrobné informace o filmech jsou na webu kina:
+			<p>{fa calendar} Další program a podrobné informace o filmech jsou na webu kina:
 				<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 			</p>
 		{else}
-			<p><i class="fa fa-calendar" aria-hidden="true"></i> Další promítání jsou na stránce
+			<p>{fa calendar} Další promítání jsou na stránce
 				<a n:href="Cinema:profile, $id = $cinema->getShortName()"><i class="fa fa-list-alt"></i> profilu kina</a>.
 			</p>
 		{/if}

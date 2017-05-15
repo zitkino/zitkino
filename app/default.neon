@@ -16,6 +16,10 @@ application:
 di:
 	accessors: true
 
+latte:
+	macros:
+		- Lib\fontAwesome\LatteMacro
+
 services:
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter

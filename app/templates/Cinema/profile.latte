@@ -8,19 +8,19 @@
 
 <div>
 	<div class="pull-right">
-		<a href="{$cinema->getProgramme()}" title="Program na webu kina."><i class="fa fa-calendar"></i> podrobný program</a><br>
+		<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{fa calendar} podrobný program</a><br>
 		<span class="pull-right">
 		{php $facebook = $cinema->getFacebook();}
 		{ifset $facebook}
-			<a href="{$facebook}"><i class="fa fa-facebook-official fa-2x"></i></a>
+			<a href="{$facebook}">{fa facebook-official, "2x"}</a>
 		{/ifset}
 		{php $twitter = $cinema->getTwitter();}
 		{ifset $twitter}
-			<a href="{$twitter}"><i class="fa fa-twitter-official fa-2x"></i></a>
+			<a href="{$twitter}">{fa twitter-official, "2x"}</a>
 		{/ifset}
 		{php $googleplus = $cinema->getGoogleplus();}
 		{ifset $googleplus}
-			<a href="{$googleplus}"><i class="fa fa-google-plus fa-2x"></i></a>
+			<a href="{$googleplus}">{fa google-plus, "2x"}</a>
 		{/ifset}
 		</span>
 	</div>
@@ -34,7 +34,7 @@
 	</address>
 	
 	<a href="#cinemaMap" onClick="showCinemaMap();" id="cinemaMapButton" class="btn btn-danger collapsed" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cinemaMap">
-		<i class="fa fa-map-o" aria-hidden="true"></i> <span id="cinemaMapButtonText">Zobrazit</span> kino na mapě
+		{fa map-o} <span id="cinemaMapButtonText">Zobrazit</span> kino na mapě
 	</a><br><br>
 </div>
 
