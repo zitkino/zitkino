@@ -2,9 +2,9 @@
 namespace Zitkino\parsers;
 
 /**
- * Olympia Parser.
+ * Olympia parser.
  */
-class OlympiaParser extends CinemaCityParser {
+class Olympia extends CinemaCity {
 	public function __construct() {
 		$this->setCinemaId("1010103");
 		

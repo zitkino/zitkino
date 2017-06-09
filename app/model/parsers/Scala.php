@@ -2,9 +2,9 @@
 namespace Zitkino\parsers;
 
 /**
- * Scala Parser.
+ * Scala parser.
  */
-class ScalaParser extends Parser {
+class Scala extends Parser {
 	public function __construct() {
 		$this->setUrl("http://www.kinoscala.cz/cz/program");
 		$this->initiateDocument();

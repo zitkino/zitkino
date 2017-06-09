@@ -3,12 +3,11 @@ namespace Zitkino\parsers;
 use DOMDocument, DOMXPath;
 
 /**
- * Parser
+ * Parser.
  */
 abstract class Parser {
-	private $url = "";
-	private $document;
-	protected $movies = [];
+	private $url = "", $document;
+	protected $movies = [], $connection;
 	
 	public function getUrl() {
 		return $this->url;
@@ -47,6 +46,11 @@ abstract class Parser {
 		$xpath = new DOMXPath($this->document);
 		
 		return $xpath;
+	}
+	
+	public function getConnection() {
+		$db = new \Lib\database\Doctrine(__DIR__."/../../database.ini");
+		$this->connection = $db->getConnection();
 	}
 
 	/**

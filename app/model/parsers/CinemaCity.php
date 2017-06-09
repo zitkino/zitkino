@@ -2,9 +2,9 @@
 namespace Zitkino\parsers;
 
 /**
- * Cinema City Parser.
+ * Cinema City parser.
  */
-abstract class CinemaCityParser extends Parser {
+abstract class CinemaCity extends Parser {
 	private $cinemaId;
 	private $date;
 	

@@ -2,9 +2,9 @@
 namespace Zitkino\parsers;
 
 /**
- * Velky Spalicek Parser.
+ * Velky Spalicek parser.
  */
-class VelkySpalicekParser extends CinemaCityParser {
+class VelkySpalicek extends CinemaCity {
 	public function __construct() {
 		$this->setCinemaId("1010107");
 		

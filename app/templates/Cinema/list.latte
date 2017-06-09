@@ -38,32 +38,32 @@
 			{if !empty($movie)}
 		<tr>
 			<td title="Název filmu">
-				{php $movieLink=$movie->getLink()}
-				{ifset $movieLink}
-					<a href="{$movieLink}">
+				{php $link = $movie->getLink()}
+				{ifset $link}
+					<a href="{$link}">
 				{/ifset}
 				{$movie->getName()}</a>
 			</td>
 			<td title="Databáze">
-				{var $movieLinkDB = urlencode($movie->getName())}
-				<a href="http://www.csfd.cz/hledat/?q={$movieLinkDB}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="16"></a>
-				<a href="http://www.imdb.com/find?s=tt&q={$movieLinkDB}" title="IMDb">{fa imdb}</a>
+				{var $databases = $movie->getDatabases()}
+				<a href="{$databases['csfd']}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="16"></a>
+				<a href="{$databases['imdb']}" title="IMDb">{fa imdb}</a>
 			</td>
 			<td title="Typ">
-				{php $movieType=$movie->getType()}
-				{ifset $movieType}
-					<span class="label label-type" title="Typ filmu">{$movieType}</span>
+				{php $type = $movie->getType()}
+				{ifset $type}
+					<span class="label label-type" title="Typ filmu">{$type}</span>
 				{/ifset}
 			</td>
 			<td title="Jazyk">
-				{php $movieLanguage=$movie->getLanguage()}
-				{ifset $movieLanguage}
-					<span class="label label-language" title="Dabing">{fa language} {$movieLanguage}</span>
+				{php $language = $movie->getLanguage()}
+				{ifset $language}
+					<span class="label label-language" title="Dabing">{fa language} {$language}</span>
 				{/ifset}
 
-				{php $movieSubtitles=$movie->getSubtitles()}
-				{ifset $movieSubtitles}
-					<span class="label label-subtitles" title="Titulky">{fa paragraph} {$movieSubtitles}</span>
+				{php $subtitles = $movie->getSubtitles()}
+				{ifset $subtitles}
+					<span class="label label-subtitles" title="Titulky">{fa paragraph} {$subtitles}</span>
 				{/ifset}
 			</td>
 			<td title="Datum a čas">{fa calendar-o}

@@ -2,9 +2,9 @@
 namespace Zitkino\parsers;
 
 /**
- * Art Parser.
+ * Art parser.
  */
-class ArtParser extends Parser {
+class Art extends Parser {
 	public function __construct() {
 		$this->setUrl("http://kinoart.cz/program/");
 		$this->initiateDocument();

@@ -2,9 +2,9 @@
 namespace Zitkino\parsers;
 
 /**
- * Kinokavarna Parser.
+ * Kinokavarna parser.
  */
-class KinokavarnaParser extends Parser {
+class Kinokavarna extends Parser {
 	public function __construct() {
 		$this->setUrl("http://www.kinokavarna.cz/program.html");
 		$this->initiateDocument();

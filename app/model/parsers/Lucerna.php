@@ -2,9 +2,9 @@
 namespace Zitkino\parsers;
 
 /**
- * Lucerna Parser.
+ * Lucerna parser.
  */
-class LucernaParser extends Parser {
+class Lucerna extends Parser {
 	public function __construct() {
 		$this->setUrl("http://www.kinolucerna.info/index.php/program");
 		$this->initiateDocument();

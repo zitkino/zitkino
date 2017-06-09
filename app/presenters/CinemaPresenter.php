@@ -9,14 +9,16 @@ class CinemaPresenter extends BasePresenter {
 	public function beforeRender() {
 		BasePresenter::beforeRender();
 		
-		$this->template->menuExists=false;
+		$this->template->menuExists = false;
 		//$this->template->menuURL='Home/menu.latte';
 	}
+	
 	public function renderProfile($id)	{
 		$cinema = new \Zitkino\Cinema($id);
 		$data = $cinema->getData();
 		$this->template->cinema = $data;
 		
+		$cinema->setMovies();
 		$this->template->movies = $cinema->getMovies();
 		
 		$gmaps = $data["gmaps"];

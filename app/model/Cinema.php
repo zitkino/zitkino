@@ -6,7 +6,7 @@ use \Lib\database\Doctrine as DB;
  * Cinema.
  */
 class Cinema {
-	private $id, $data;
+	private $id, $data, $movies;
 
 	public function __construct($id) {
 		$db = new DB(__DIR__."/../database.ini");
@@ -20,19 +20,25 @@ class Cinema {
 	function getData() { return $this->data; }
 	
 	public function getMovies() {
-		$parser = "\Zitkino\parsers\\".ucfirst($this->data["shortName"])."Parser";
+		return $this->movies;
+	}
+	public function setMovies() {
+		$parser = "\Zitkino\parsers\\".ucfirst($this->data["shortName"]);
 		if(class_exists($parser)) {
 			$pa = new $parser();
-			return $pa->getMovies();
-		} else { return null; }
+			$this->movies = $pa->getMovies();
+		} else { $this->movies = null; }
+	}
+	
+	public function hasMovies() {
+		if(isset($this->movies) and !empty($this->movies)) { return true; }
+		else { return false; }
 	}
 	
 	public function getSoonestMovies() {
-		$movies = $this->getMovies();
 		$soonest = [];
-		
-		if(isset($movies)) {
-			foreach($movies as $movie) {
+		if(isset($this->movies)) {
+			foreach($this->movies as $movie) {
 				$currentDate = new \DateTime();
 				
 				$nextDate = new \DateTime();
@@ -54,10 +60,9 @@ class Cinema {
 		}
 		
 		if(empty($soonest)) {
-			if(is_null($movies) or empty($movies)) { $soonest = null; }
-			else { $soonest = [$movies[0]]; }
+			if(is_null($this->movies) or empty($this->movies)) { $soonest = null; }
+			else { $soonest = [$this->movies[0]]; }
 		}
-		
 		return $soonest;
 	}
 }
