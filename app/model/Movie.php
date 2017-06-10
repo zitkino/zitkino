@@ -85,7 +85,7 @@ class Movie {
 	}
 	
 	public function fixDatabases() {
-		$csfdUrl = "http://www.csfd.cz";
+		$csfdUrl = "https://www.csfd.cz";
 		if(isset($this->csfd)) {
 			$this->databases["csfd"] = $csfdUrl."/film/".$this->csfd;
 		} else { $this->databases["csfd"] = $csfdUrl."/hledat/?q=".urlencode($this->name); }
