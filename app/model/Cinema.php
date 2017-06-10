@@ -13,7 +13,7 @@ class Cinema {
 		$connection = $db->getConnection();
 		
 		if(is_numeric($id)) { $this->data = $connection->fetchAssoc("SELECT * FROM cinemas WHERE id = ?", array($id)); }
-		else { $this->data = $connection->fetchAssoc("SELECT * FROM cinemas WHERE shortName = ?", array($id)); }
+		else { $this->data = $connection->fetchAssoc("SELECT * FROM cinemas WHERE short_name = ?", array($id)); }
 	}
 	
 	function getId() { return $this->id; }
@@ -23,7 +23,7 @@ class Cinema {
 		return $this->movies;
 	}
 	public function setMovies() {
-		$parser = "\Zitkino\parsers\\".ucfirst($this->data["shortName"]);
+		$parser = "\Zitkino\parsers\\".ucfirst($this->data["short_name"]);
 		if(class_exists($parser)) {
 			$pa = new $parser();
 			$this->movies = $pa->getMovies();

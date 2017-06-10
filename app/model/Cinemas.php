@@ -33,7 +33,7 @@ class Cinemas {
 		$db = new DB(__DIR__."/../database.ini");
 		$connection = $db->getConnection();
 		
-		$cinemas = $connection->fetchAll("SELECT id FROM cinemas ORDER BY shortName");
+		$cinemas = $connection->fetchAll("SELECT id FROM cinemas WHERE active_until IS null ORDER BY short_name");
 		foreach($cinemas as $c) {
 			$cinema = new \Zitkino\Cinema($c["id"]);
 			array_push($this->all, $cinema);

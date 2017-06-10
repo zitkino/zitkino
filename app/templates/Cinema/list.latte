@@ -18,7 +18,7 @@
 	<a href="{$url}">{fa link} {$url}</a>
 
 	<div class="pull-right">
-		<a n:href="Cinema:profile, $id = $cinema['shortName']">{fa list-alt, "lg"} program a informace</a>
+		<a n:href="Cinema:profile, $id = $cinema['short_name']">{fa list-alt, "lg"} program a informace</a>
 	</div>
 {/define}
 
@@ -92,13 +92,13 @@
 			<span class="label label-language">{fa language} jazyk dabingu</span>
 			<span class="label label-subtitles">{fa paragraph} jazyk titulků</span>
 		</p>
-		{if basename($_SERVER["REQUEST_URI"]) == $cinema["shortName"]}
+		{if basename($_SERVER["REQUEST_URI"]) == $cinema["short_name"]}
 			<p>Další program a podrobné informace o filmech jsou na webu kina:
 				<a href="{$cinema['programme']}" title="Program na webu kina.">{$cinema["programme"]}</a>
 			</p>
 		{else}
 			<p>Další promítání jsou na stránce
-				<a n:href="Cinema:profile, $id = $cinema['shortName']"><i class="fa fa-list-alt"></i> profilu kina</a>.
+				<a n:href="Cinema:profile, $id = $cinema['short_name']"><i class="fa fa-list-alt"></i> profilu kina</a>.
 			</p>
 		{/if}
 	</div>

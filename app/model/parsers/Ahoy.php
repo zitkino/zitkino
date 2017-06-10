@@ -2,15 +2,15 @@
 namespace Zitkino\parsers;
 
 /**
- * Certova rokle parser.
+ * Ahoy parser.
  */
-class CertovaRokle extends Parser {
+class Ahoy extends Parser {
 	public function __construct() {
 		$this->getConnection();
 		$this->getContent();
 	}
 	
 	public function getContent() {
-		$this->getContentFromDB(10);
+		$this->getContentFromDB(11);
 	}
 }

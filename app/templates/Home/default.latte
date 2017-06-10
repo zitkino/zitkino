@@ -7,11 +7,11 @@
 {foreach $cinemas as $cinemaItem}
 	{var $data = $cinemaItem->getData()}
 	<section class="panel panel-default">
-		<header class="panel-heading" data-toggle="collapse" data-target="#{$data['shortName']}">
+		<header class="panel-heading" data-toggle="collapse" data-target="#{$data['short_name']}">
 			{include #cinemaListContent, cinema => $data}
 		</header>
 		
-		<article id="{$data['shortName']}" class="panel-collapse collapse in">
+		<article id="{$data['short_name']}" class="panel-collapse collapse in">
 			{var $movies = $cinemaItem->getSoonestMovies();}
 			{include #movieList, movies => $movies, cinema => $data}
 		</article>
