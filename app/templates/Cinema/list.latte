@@ -18,19 +18,38 @@
 	<a href="{$url}">{fa link} {$url}</a>
 
 	<div class="pull-right">
-		<a n:href="Cinema:profile, $id = $cinema['short_name']">{fa list-alt, "lg"} program a informace</a>
+		<a n:href="Cinema:profile, $id = $cinema['short_name']">{fa list-alt, "lg"} profil kina</a>
 	</div>
 {/define}
 
 {define movieList}
+<div class="table-responsive">
 	<table class="table table-hover" n:if="$movies">
 		<thead>
 		<tr>
 			<th>{fa film} Film</th>
-			<th></th>
-			<th></th>
-			<th></th>
+			{var $films = new \Zitkino\Movies($movies)}
+			
+			{if $films->hasTypes()}
+				<th><abbr title="Typ filmu">{fa video-camera}</abbr> <span class="hidden-xs hidden-sm">Typ</span></th>
+			{/if}
+			
+			{if $films->hasLanguages()}
+				<th><abbr title="Dabing">{fa language}</abbr> <span class="hidden-xs hidden-sm">Dabing</span> a 
+					<abbr title="Titulky">{fa paragraph}</abbr> <span class="hidden-xs hidden-sm">titulky</span></th>
+			{/if}
+			
 			<th>{fa calendar} Promítání</th>
+			
+			{if $films->hasLengths()}
+				<th><abbr title="Délka">{fa hourglass-end}</abbr> <span class="hidden-xs hidden-sm">Délka</span></th>
+			{/if}
+			
+			{if $films->hasPrices()}
+				<th><abbr title="Cena">{fa money}</abbr> <span class="hidden-xs hidden-sm">Cena</span></th>
+			{/if}
+			
+			<th><abbr title="Filmové databáze">{fa database}</abbr> <span class="hidden-xs hidden-sm">Databáze</span></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -44,41 +63,59 @@
 				{/ifset}
 				{$movie->getName()}</a>
 			</td>
-			<td title="Databáze">
-				{var $databases = $movie->getDatabases()}
-				<a href="{$databases['csfd']}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="16"></a>
-				<a href="{$databases['imdb']}" title="IMDb">{fa imdb}</a>
-			</td>
-			<td title="Typ">
-				{php $type = $movie->getType()}
-				{ifset $type}
-					<span class="label label-type" title="Typ filmu">{$type}</span>
-				{/ifset}
-			</td>
-			<td title="Jazyk">
-				{php $language = $movie->getLanguage()}
-				{ifset $language}
-					<span class="label label-language" title="Dabing">{fa language} {$language}</span>
-				{/ifset}
-
-				{php $subtitles = $movie->getSubtitles()}
-				{ifset $subtitles}
-					<span class="label label-subtitles" title="Titulky">{fa paragraph} {$subtitles}</span>
-				{/ifset}
-			</td>
+			
+			{if $films->hasTypes()}
+				<td title="Typ filmu">
+					{php $type = $movie->getType()}
+					{ifset $type}
+						<span class="label label-type" title="Typ">{$type}</span>
+					{/ifset}
+				</td>
+			{/if}
+			
+			{if $films->hasLanguages()}
+				<td title="Jazyk">
+					{php $language = $movie->getLanguage()}
+					{ifset $language}
+						<span class="label label-language" title="Dabing">{fa language}&nbsp;{$language}</span>
+					{/ifset}
+					<br class="hidden-md hidden-lg">
+					{php $subtitles = $movie->getSubtitles()}
+					{ifset $subtitles}
+						<span class="label label-subtitles" title="Titulky">{fa paragraph}&nbsp;{$subtitles}</span>
+					{/ifset}
+				</td>
+			{/if}
+			
 			<td title="Datum a čas">{fa calendar-o}
 				{foreach $movie->getDatetimes() as $datetime}
 					{if $iterator->first}
-						{$datetime->format('d.m.Y')} {fa clock-o}
+						{$datetime->format('d.m.Y')} <br class="hidden-md hidden-lg">{fa clock-o}
 					{/if}
 					{$datetime->format('H:i')}{sep}, {/sep}
 				{/foreach}
+			</td>
+			
+			{if $films->hasLengths()}
+				<td title="Délka"></td>
+			{/if}
+			
+			{if $films->hasPrices()}
+				<td title="Cena"></td>
+			{/if}
+			
+			<td title="Databáze">
+				{var $databases = $movie->getDatabases()}
+				<a href="{$databases['csfd']}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="20"></a>
+				<br class="hidden-md hidden-lg">
+				<a href="{$databases['imdb']}" title="IMDb">{fa imdb, "lg"}</a>
 			</td>
 		</tr>
 			{/if}
 		{/foreach}
 		</tbody>
 	</table>
+</div>
 
 	<div class="panel-body">
 	{if is_null($movies) or empty($movies)}
@@ -87,20 +124,15 @@
 			<a href="{$cinema['programme']}" title="Program na webu kina.">{$cinema["programme"]}</a>
 		</p>
 	{else}
-		<p>Legenda:
-			<span class="label label-type">typ filmu</span>
-			<span class="label label-language">{fa language} jazyk dabingu</span>
-			<span class="label label-subtitles">{fa paragraph} jazyk titulků</span>
-		</p>
 		{if basename($_SERVER["REQUEST_URI"]) == $cinema["short_name"]}
 			<p>Další program a podrobné informace o filmech jsou na webu kina:
 				<a href="{$cinema['programme']}" title="Program na webu kina.">{$cinema["programme"]}</a>
 			</p>
 		{else}
-			<p>Další promítání jsou na stránce
-				<a n:href="Cinema:profile, $id = $cinema['short_name']"><i class="fa fa-list-alt"></i> profilu kina</a>.
-			</p>
+			{*<p>Další promítání jsou na stránce*}
+				{*<a n:href="Cinema:profile, $id = $cinema['short_name']"><i class="fa fa-list-alt"></i> profilu kina</a>.*}
+			{*</p>*}
 		{/if}
-	</div>
 	{/if}
+	</div>
 {/define}

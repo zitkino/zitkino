@@ -99,6 +99,10 @@ body {
 	content: "\e080"; /* symbol for "collapsed" panels */
 }
 
+.panel-body {
+	padding: 0px 15px;
+}
+
 .anchor, .anchor > small {
 	color: transparent;
 }
@@ -137,11 +141,15 @@ body {
 }
 
 .label-type {
-	background-color: #1a9709;
+	background-color: #3d3d3d;
 }
 .label-language {
 	background-color: #01a;
 }
 .label-subtitles {
 	background-color: #2162a6;
+}
+
+td {
+	vertical-align: middle!important;
 }

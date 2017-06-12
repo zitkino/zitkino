@@ -5,7 +5,7 @@ namespace Zitkino;
  * Movie.
  */
 class Movie {
-	private $name, $link, $csfd, $imdb, $databases, $type, $language, $subtitles, $datetimes, $price;
+	private $name, $link, $type, $language, $subtitles, $datetimes, $length, $price, $csfd, $imdb, $databases;
 	
 	public function getName() {
 		return $this->name;
@@ -19,28 +19,6 @@ class Movie {
 	}
 	public function setLink($link) {
 		$this->link = $link;
-	}
-	
-	public function getCsfd() {
-		return $this->csfd;
-	}
-	public function setCsfd($csfd) {
-		$this->csfd = $csfd;
-	}
-	
-	public function getImdb() {
-		return $this->imdb;
-	}
-	public function setImdb($imdb) {
-		$this->imdb = $imdb;
-	}
-	
-	public function getDatabases() {
-		$this->fixDatabases();
-		return $this->databases;
-	}
-	public function setDatabases($databases) {
-		$this->databases = $databases;
 	}
 	
 	public function getType() {
@@ -71,11 +49,40 @@ class Movie {
 		$this->datetimes = $datetimes;
 	}
 	
+	public function getLength() {
+		return $this->length;
+	}
+	public function setLength($length) {
+		$this->length = $length;
+	}
+	
 	public function getPrice() {
 		return $this->price;
 	}
 	public function setPrice($price) {
 		$this->price = $price;
+	}
+	
+	public function getCsfd() {
+		return $this->csfd;
+	}
+	public function setCsfd($csfd) {
+		$this->csfd = $csfd;
+	}
+	
+	public function getImdb() {
+		return $this->imdb;
+	}
+	public function setImdb($imdb) {
+		$this->imdb = $imdb;
+	}
+	
+	public function getDatabases() {
+		$this->fixDatabases();
+		return $this->databases;
+	}
+	public function setDatabases($databases) {
+		$this->databases = $databases;
 	}
 	
 	public function __construct($name, $datetimes) {
