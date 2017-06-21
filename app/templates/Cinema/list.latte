@@ -97,11 +97,17 @@
 			</td>
 			
 			{if $films->hasLengths()}
-				<td title="Délka"></td>
+				<td title="Délka">
+					{php $length = $movie->getLength()}
+					{ifset $length}{$length|trim}{/ifset}
+				</td>
 			{/if}
 			
 			{if $films->hasPrices()}
-				<td title="Cena"></td>
+				<td title="Cena">
+					{php $price = $movie->getPrice()}
+					{ifset $price}{$price|trim}{/ifset}
+				</td>
 			{/if}
 			
 			<td title="Databáze">
