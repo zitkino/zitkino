@@ -58,7 +58,8 @@ class Mdb extends Parser {
 			
 			$length = null;
 			if(strpos($infoString, "min.") !== false) {
-				$length = str_replace("...více", "", $info[count($info)-1]);
+				$lengthString = str_replace("...více", "", $info[count($info)-1]);
+				$length = str_replace("min.", "", $lengthString);
 			}
 			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
@@ -75,7 +76,13 @@ class Mdb extends Parser {
 		foreach($prices as $price) {
 			$priceQuery = $xpath->query(".", $price); 
 			$priceString = $priceQuery->item(0)->nodeValue;
-			$price = str_replace("ZDARMA", "zdarma", $priceString);
+			
+			if(strpos($priceString, "ZDARMA") !== false) {
+				$price = str_replace("ZDARMA", 0, $priceString);
+			} else {
+				$price = str_replace("Kč", "", $priceString);
+			}
+			
 			$this->movies[$movieItems]->setPrice($price);
 			$movieItems++;
 		}

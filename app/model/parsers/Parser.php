@@ -70,11 +70,13 @@ abstract class Parser {
 			
 			$this->movies[] = new \Zitkino\Movie($event["name"], $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($event["link"]);
-			$this->movies[count($this->movies)-1]->setCsfd($event["csfd"]);
-			$this->movies[count($this->movies)-1]->setImdb($event["imdb"]);
 			$this->movies[count($this->movies)-1]->setType($event["type"]);
 			$this->movies[count($this->movies)-1]->setLanguage($event["language"]);
 			$this->movies[count($this->movies)-1]->setSubtitles($event["subtitles"]);
+			$this->movies[count($this->movies)-1]->setLength($event["length"]);
+			$this->movies[count($this->movies)-1]->setPrice($event["price"]);
+			$this->movies[count($this->movies)-1]->setCsfd($event["csfd"]);
+			$this->movies[count($this->movies)-1]->setImdb($event["imdb"]);
 		}
 		
 		$this->setMovies($this->movies);

@@ -44,8 +44,8 @@ class Lucerna extends Parser {
 			$dateQuery = $xpath->query("//div[@class='nextdate']//strong", $event);
 			$datetext = explode(",", $dateQuery->item($movieItems)->nodeValue);
 			
-			$cz = array("leden","únor","březen","duben","květen","červen","červenec","srpen","září","říjen","listopad","prosinec");
-			$en = array("January","February","March","April","May","June","July","August","September","October","November","December");
+			$cz = array("leden","únor","březen","duben","květen","červenec","červen","srpen","září","říjen","listopad","prosinec");
+			$en = array("January","February","March","April","May","July","June","August","September","October","November","December");
 			$date = str_replace($cz, $en, $datetext[1]);
 			
 			$datetimes =[];

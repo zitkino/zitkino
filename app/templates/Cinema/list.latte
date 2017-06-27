@@ -99,13 +99,13 @@
 			{if $films->hasLengths()}
 				<td title="Délka">
 					{php $length = $movie->getLength()}
-					{ifset $length}{$length|trim}{/ifset}
+					{ifset $length}{$length|trim} min.{/ifset}
 				</td>
 			{/if}
 			
 			{if $films->hasPrices()}
 				<td title="Cena">
-					{php $price = $movie->getPrice()}
+					{php $price = $movie->fixPrice()}
 					{ifset $price}{$price|trim}{/ifset}
 				</td>
 			{/if}
@@ -131,7 +131,7 @@
 		</p>
 	{else}
 		{if basename($_SERVER["REQUEST_URI"]) == $cinema["short_name"]}
-			<p>Další program a podrobné informace o filmech jsou na webu kina:
+			<p>Další program a podrobné informace o filmech:
 				<a href="{$cinema['programme']}" title="Program na webu kina.">{$cinema["programme"]}</a>
 			</p>
 		{else}

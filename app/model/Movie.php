@@ -62,6 +62,13 @@ class Movie {
 	public function setPrice($price) {
 		$this->price = $price;
 	}
+	public function fixPrice() {
+		if($this->price == 0) {
+			return "zdarma";
+		} else {
+			return $this->price." Kč";
+		}
+	}
 	
 	public function getCsfd() {
 		return $this->csfd;
