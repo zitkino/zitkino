@@ -1,0 +1,14 @@
+{var $title="Program multiplexů"}
+
+{block #content}
+<h1 class="page-header">{$title}</h1>
+{import "list.latte"}
+
+{include #cinemaMovieList}
+
+<nav>
+	<ul class="pager">
+		<li class="previous"><a n:href="Cinema:multiplex"><span aria-hidden="true">&larr;</span> {fa list} seznam multiplexů</a></li>
+	</ul>
+</nav>
+{/block}

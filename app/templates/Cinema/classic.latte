@@ -1,4 +1,4 @@
-{var $title="Letní kina"}
+{var $title="Klasická kina"}
 
 {block #content}
 <h1 class="page-header">{$title}</h1>
@@ -6,14 +6,14 @@
 
 <ul class="list-group">
 	{import "list.latte"}
-	{foreach $cinemas->getSummer() as $cinemaItem}
+	{foreach $cinemas->getClassic() as $cinemaItem}
 		{include #cinemaList, cinema => $cinemaItem->getData()}
 	{/foreach}
 </ul>
 
 <nav>
 	<ul class="pager">
-		<li class="next"><a n:href="Cinema:summer_programme">{fa calendar} program letních kin <span aria-hidden="true">&rarr;</span></a></li>
+		<li class="next"><a n:href="Cinema:multiplex_programme">{fa calendar} program klasických kin <span aria-hidden="true">&rarr;</span></a></li>
 	</ul>
 </nav>
 {/block}

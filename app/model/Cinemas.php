@@ -6,27 +6,30 @@ use \Lib\database\Doctrine as DB;
  * Cinemas.
  */
 class Cinemas {
-	private $all = [], $classic = [], $summer = [];
+	private $all = [], $classic = [], $multiplex = [], $summer = [];
 	
 	function getAll() {
 		return $this->all;
 	}
-	function getAllWithMovies() {
+	function getClassic() {
+		return $this->classic;
+	}
+	function getMultiplex() {
+		return $this->multiplex;
+	}
+	function getSummer() {
+		return $this->summer;
+	}
+	
+	function getWithMovies($type="all") {
 		$cinemas = [];
-		foreach($this->all as $cinema) {
+		foreach($this->{$type} as $cinema) {
 			$cinema->setMovies();
 			if($cinema->hasMovies()) {
 				$cinemas[] = $cinema;
 			}
 		}
 		return $cinemas;
-	}
-	
-	function getClassic() {
-		return $this->classic;
-	}
-	function getSummer() {
-		return $this->summer;
 	}
 
 	public function __construct() {
@@ -40,14 +43,10 @@ class Cinemas {
 			
 			$data = $cinema->getData();
 			switch($data["type"]) {
-				case "classic":
-					array_push($this->classic, $cinema);
-					break;
-				case "summer":
-					array_push($this->summer, $cinema);
-					break;
-				default:
-					break;
+				case "classic": array_push($this->classic, $cinema); break;
+				case "multiplex": array_push($this->multiplex, $cinema); break;
+				case "summer": array_push($this->summer, $cinema); break;
+				default: break;
 			}
 		}
 	}

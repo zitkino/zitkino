@@ -6,14 +6,17 @@ use Nette;
  * Cinema presenter.
  */
 class CinemaPresenter extends BasePresenter {
+	private $cinemas;
+	
 	public function beforeRender() {
 		BasePresenter::beforeRender();
+		$this->cinemas = new \Zitkino\Cinemas();
 		
 		$this->template->menuExists = false;
 		//$this->template->menuURL='Home/menu.latte';
 	}
 	
-	public function renderProfile($id)	{
+	public function renderProfile($id) {
 		$cinema = new \Zitkino\Cinema($id);
 		$data = $cinema->getData();
 		$this->template->cinema = $data;
@@ -27,5 +30,15 @@ class CinemaPresenter extends BasePresenter {
 			$param = "/v1/place?q=".urlencode($address);
 		} else { $param = "?pb=".$gmaps; }
 		$this->template->gmap = $param;
+	}
+	
+	public function renderClassic_programme($id) {
+		$this->template->cinemas = $this->cinemas->getWithMovies("classic");
+	}
+	public function renderMultiplex_programme($id) {
+		$this->template->cinemas = $this->cinemas->getWithMovies("multiplex");
+	}
+	public function renderSummer_programme($id) {
+		$this->template->cinemas = $this->cinemas->getWithMovies("summer");
 	}
 }

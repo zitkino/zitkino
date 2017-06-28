@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `screenings` (
   `subtitles` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   `date` date DEFAULT NULL,
   `time` time DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
   `link` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

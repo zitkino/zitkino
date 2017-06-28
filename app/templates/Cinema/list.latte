@@ -22,6 +22,22 @@
 	</div>
 {/define}
 
+{define cinemaMovieList}
+	{foreach $cinemas as $cinemaItem}
+		{var $data = $cinemaItem->getData()}
+		<section class="panel panel-default">
+			<header class="panel-heading" data-toggle="collapse" data-target="#{$data['short_name']}">
+				{include #cinemaListContent, cinema => $data}
+			</header>
+			
+			<article id="{$data['short_name']}" class="panel-collapse collapse in">
+				{var $movies = $cinemaItem->getSoonestMovies();}
+				{include #movieList, movies => $movies, cinema => $data}
+			</article>
+		</section>
+	{/foreach}
+{/define}
+
 {define movieList}
 <div class="table-responsive">
 	<table class="table table-hover" n:if="$movies">

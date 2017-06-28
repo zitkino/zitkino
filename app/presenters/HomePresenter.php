@@ -15,6 +15,6 @@ class HomePresenter extends BasePresenter {
 	}
 	public function renderDefault() {
 		$cinemas = new \Zitkino\Cinemas();
-		$this->template->cinemas = $cinemas->getAllWithMovies();
+		$this->template->cinemas = $cinemas->getWithMovies();
 	}
 }
