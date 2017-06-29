@@ -57,6 +57,14 @@ class Cinema {
 					array_push($soonest, $movie);
 				}
 			}
+			
+			if(count($soonest) < 5) {
+				for($i=count($soonest); $i<=4; $i++) {
+					if(isset($this->movies[$i])) {
+						array_push($soonest, $this->movies[$i]);
+					}
+				}
+			}
 		}
 		
 		if(empty($soonest)) {
