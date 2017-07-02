@@ -20,7 +20,8 @@ class ScalaLetni extends Parser {
 		$movieItems = 0;
 		foreach($events as $event) {
 			$nameQuery = $xpath->query("//td[@class='col_movie_name']//a", $event);
-			$name = $nameQuery->item($movieItems)->nodeValue;
+			$nameString = $nameQuery->item($movieItems)->nodeValue;
+			$name = str_replace("feat. Kmeny90/BU2R", "", $nameString);
 
 			$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->getAttribute("href");
 			
@@ -40,9 +41,15 @@ class ScalaLetni extends Parser {
 			$datetime->setTime(intval($time[0]), intval($time[1]));
 			$datetimes = [$datetime];
 			
+			$priceQuery = $xpath->query("//td[@class='col_price']", $event);
+			$priceItem = $priceQuery->item($movieItems)->nodeValue;
+			$priceString = htmlentities($priceItem, null, "utf-8");
+			$price = trim(str_replace("&nbsp;Kč", "", $priceString));
+			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
-			$this->movies[count($this->movies) - 1]->setLanguage($language);
+			$this->movies[count($this->movies)-1]->setLanguage($language);
+			$this->movies[count($this->movies)-1]->setPrice($price);
 			$movieItems++;
 			$days++;
 		}

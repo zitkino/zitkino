@@ -40,7 +40,8 @@ class Scala extends Parser {
 			}
 			else {
 				$nameQuery = $xpath->query("//td[@class='col_movie_name']//a", $event);
-				$name = $nameQuery->item($movieItems)->nodeValue;
+				$nameString = $nameQuery->item($movieItems)->nodeValue;
+				$name = str_replace("feat. Kmeny90/BU2R", "", $nameString);
 
 				$language = null;
 				if(\Lib\Strings::endsWith($name, "- cz dabing")) {
@@ -57,9 +58,15 @@ class Scala extends Parser {
 				
 				$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->getAttribute("href");
 				
+				$priceQuery = $xpath->query("//td[@class='col_price']", $event);
+				$priceItem = $priceQuery->item($movieItems)->nodeValue;
+				$priceString = htmlentities($priceItem, null, "utf-8");
+				$price = trim(str_replace("&nbsp;Kč", "", $priceString));
+				
 				$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 				$this->movies[count($this->movies)-1]->setLink($link);
-				$this->movies[count($this->movies) - 1]->setLanguage($language);
+				$this->movies[count($this->movies)-1]->setLanguage($language);
+				$this->movies[count($this->movies)-1]->setPrice($price);
 				$movieItems++;
 			}
 		}

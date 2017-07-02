@@ -21,7 +21,7 @@ class Art extends Parser {
 	
 	/**
 	 * Parses data for selected hall.
-	 * @param DOMXPath $xpath XPath document for parsing.
+	 * @param \DOMXPath $xpath XPath document for parsing.
 	 * @param string $which ID which hall to parse.
 	 */
 	public function getHall($xpath, $which) {
@@ -88,10 +88,14 @@ class Art extends Parser {
 			}
 			$this->setUrl($programmeUrl);*/
 			
+			$priceQuery = $xpath->query(".//td[@class='price']//a", $event);
+			$price = $priceQuery->item(0)->nodeValue;
+			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
 			//$this->movies[count($this->movies)-1]->setLanguage($language);
 			//$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
+			$this->movies[count($this->movies)-1]->setPrice($price);
 			$movieItems++;
 			/*if($movieItems == 10) {
 				break;

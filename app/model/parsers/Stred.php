@@ -7,12 +7,13 @@ use ICal\ICal;
  */
 class Stred extends Parser {
 	public function __construct() {
+		$this->setUrl("https://calendar.google.com/calendar/ical/n6a7pqdcgeprq9v7pf84dk3djo%40group.calendar.google.com/public/basic.ics");
 		$this->getContent();
 	}
 	
 	public function getContent() {
 		$ical = new ICal();
-		$ical->initUrl("https://calendar.google.com/calendar/ical/n6a7pqdcgeprq9v7pf84dk3djo%40group.calendar.google.com/public/basic.ics");
+		$ical->initUrl($this->getUrl());
 		
 		$events = $ical->eventsFromInterval("2 month");
 		$movieItems = 0;
@@ -50,6 +51,9 @@ class Stred extends Parser {
 			}
 			
 			$price = 90;
+			if(strpos($name, "Swingový večer") !== false) {
+				$price = 50;
+			}
 			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLanguage($language);

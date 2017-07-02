@@ -24,13 +24,15 @@ class Spilberk extends Parser {
 
 			$csfdQuery = $xpath->query("//a[@class='vice']", $event);
 			$csfdString = $csfdQuery->item($movieItems)->getAttribute("href");
-			$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);
+			$csfd = str_replace(["https://www.csfd.cz/film/", "/prehled/"], "", $csfdString);
 			
-//			$language = null;
-//			if(\Lib\Strings::endsWith($name, "- cz dabing")) {
-//				$language = "česky";
-//				$name = str_replace(" - cz dabing", "", $name);
-//			}
+			$itemsQuery = $xpath->query("//div[@class='right']//p[@class='popisek']", $event);
+			$itemString = $itemsQuery->item($movieItems)->nodeValue;
+			
+			$language = null;
+			if(strpos($itemString, "Česko") !== false) {
+				$language = "český";
+			}
 			
 			$dateQuery = $xpath->query("//div[@class='left']//p", $event);
 			$dateString = $dateQuery->item($movieItems)->nodeValue;
@@ -43,9 +45,16 @@ class Spilberk extends Parser {
 			$datetime->setTime(intval($time[0]), intval($time[1]));
 			$datetimes = [$datetime];
 			
+			$lengthString = explode("min", $itemString);
+			$length = $lengthString[0];
+			
+			$price = 90;
+			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
+			$this->movies[count($this->movies)-1]->setLanguage($language);
+			$this->movies[count($this->movies)-1]->setLength($length);
+			$this->movies[count($this->movies)-1]->setPrice($price);
 			$this->movies[count($this->movies)-1]->setCsfd($csfd);
-			//$this->movies[count($this->movies) - 1]->setLanguage($language);
 			$movieItems++;
 			$days++;
 		}

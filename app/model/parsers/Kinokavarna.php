@@ -44,7 +44,7 @@ class Kinokavarna extends Parser {
 				$date = $dateQuery->item($movieItems)->nodeValue;
 				
 				$name = mb_substr($name, strlen($date));
-				$badNames = array("", "ZAVŘENO");
+				$badNames = array("", "ZAVŘENO", "STÁTNÍ SVÁTEK- ZAVŘENO");
 				if(in_array($name, $badNames)) {
 					$movieItems++;
 					continue;
