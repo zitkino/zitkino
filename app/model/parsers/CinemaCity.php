@@ -62,11 +62,10 @@ abstract class CinemaCity extends Parser {
 				
 				$languageQuery = $xpath->query(".//td[4]", $event);
 				$language = $languageQuery->item(0)->nodeValue;
-				if(strpos($language, "CZ") !== false) {
-					$language = "česky";
-				}
-				if(strpos($language, "EN") !== false) {
-					$language = "anglicky";
+				switch($language) {
+					case "CZ": $language = "česky"; break;
+					case "EN": $language = "anglicky"; break;
+					case "FR": $language = "francouzsky"; break;
 				}
 				
 				$subtitlesQuery = $xpath->query(".//td[3]", $event);

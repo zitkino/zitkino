@@ -23,7 +23,11 @@ class Cinema {
 		return $this->movies;
 	}
 	public function setMovies() {
-		$parser = "\Zitkino\parsers\\".ucfirst($this->data["short_name"]);
+		try {
+			$parser = "\Zitkino\parsers\\".ucfirst($this->data["short_name"]);	
+		} catch(\Error $e) {
+			\Tracy\Debugger::log($e);
+		}
 		if(class_exists($parser)) {
 			$pa = new $parser();
 			$this->movies = $pa->getMovies();
@@ -38,9 +42,9 @@ class Cinema {
 	public function getSoonestMovies() {
 		$soonest = [];
 		if(isset($this->movies)) {
+			$currentDate = new \DateTime();
+			
 			foreach($this->movies as $movie) {
-				$currentDate = new \DateTime();
-				
 				$nextDate = new \DateTime();
 				$nextDate->modify("+1 days");
 				
@@ -59,9 +63,18 @@ class Cinema {
 			}
 			
 			if(count($soonest) < 5) {
-				for($i=count($soonest); $i<=4; $i++) {
+				$soonest = [];
+				for($i=0; $i<count($this->movies); $i++) {
 					if(isset($this->movies[$i])) {
-						array_push($soonest, $this->movies[$i]);
+						foreach($this->movies[$i]->getDatetimes() as $datetime) {
+							if($currentDate < $datetime) {
+								array_push($soonest, $this->movies[$i]);
+							}
+						}
+					}
+					
+					if(count($soonest) == 5) {
+						break;
 					}
 				}
 			}

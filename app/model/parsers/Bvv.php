@@ -6,7 +6,7 @@ namespace Zitkino\parsers;
  */
 class Bvv extends Parser {
 	public function __construct() {
-		$this->setUrl("http://www.bvv.cz/letni-kino/#Program");
+		$this->setUrl("http://www.bvv.cz/letni-kino/");
 		$this->initiateDocument();
 		
 		$this->getContent();
@@ -14,17 +14,36 @@ class Bvv extends Parser {
 	
 	public function getContent() {
 		$xpath = $this->downloadData();
-		$events = "//div[@id='content']//div[@class='mainCol']//div[@class='documentText'][position()=2]";
+		$events = "//*[@id='content']/div[1]/div[2]";
 		
+		$movieItems = 0;
 		$titles = $xpath->query($events."//h2");
 		foreach($titles as $title) {
-			$items = explode(" ", $title->nodeValue, 4);
+			if(!isset($title->nodeValue) or empty(trim($title->nodeValue))) {
+				continue;
+			}
 			
-			$name = trim($items[3]);
+			$value = str_replace(["&nbsp;", "  ", " "]," ", $title->nodeValue);
+			$items = preg_split("/\s+/", $value, 4); //explode(" ", $title->nodeValue, 4);
 			
-			$date = $items[2]."2017";
-			$datetime = \DateTime::createFromFormat("j.m.Y", $date);
-			$datetime->setTime(20, 0);
+			$nameQuery = $xpath->query($events."//h2//a", $title);
+			$name = $nameQuery->item($movieItems)->nodeValue;
+			
+			$dateString = "";
+			foreach($items as $item) {
+				$dateString = trim($item, "\xC2\xA0");
+				$date = \DateTime::createFromFormat("j.m.", $dateString);
+				
+				if($date !== false) {
+					$dateString = $dateString."2017";
+					break;
+				}
+			}
+			
+			$datetime = \DateTime::createFromFormat("j.m.Y", $dateString);
+			if($datetime !== false) {
+				$datetime->setTime(20, 0);
+			}
 			$datetimes = [$datetime];
 			
 			$price = 50;
@@ -33,20 +52,30 @@ class Bvv extends Parser {
 				$price = 0;
 			}
 			
+			$csfdString = $nameQuery->item($movieItems)->getAttribute("href");
+			$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);
+			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setPrice($price);
+			$this->movies[count($this->movies)-1]->setCsfd($csfd);
+			
+			$movieItems++;
 		}
 		
 		$movieItems = 0;
 		$informations = $xpath->query($events."//p");
 		foreach($informations as $info) {
+			if(!isset($info->nodeValue) or empty(trim($info->nodeValue))) {
+				continue;
+			}
+			
 			$language = null;
 			if((strpos($info->nodeValue, ", ČR,") !== false) or (strpos($info->nodeValue, "Česko") !== false)) {
 				$language = "česky";
 			}
 			
 			$items = explode(", ", $info->nodeValue);
-				
+			
 			$length = null;
 			if(count($items) > 2) {
 				$lengthItems = [1, 2, 3, 4, 5];

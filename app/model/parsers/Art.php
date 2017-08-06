@@ -89,7 +89,11 @@ class Art extends Parser {
 			$this->setUrl($programmeUrl);*/
 			
 			$priceQuery = $xpath->query(".//td[@class='price']//a", $event);
-			$price = $priceQuery->item(0)->nodeValue;
+			$priceItem = $priceQuery->item(0);
+			if(!isset($priceItem)) {
+				$priceQuery = $xpath->query(".//td[@class='price']", $event);
+				$price = $priceQuery->item(0)->nodeValue;	
+			} else { $price = $priceItem->nodeValue; }
 			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
