@@ -24,14 +24,15 @@ class Cinema {
 	}
 	public function setMovies() {
 		try {
-			$parser = "\Zitkino\parsers\\".ucfirst($this->data["short_name"]);	
+			$parser = "\Zitkino\parsers\\".ucfirst($this->data["short_name"]);
+			if(class_exists($parser)) {
+				$pa = new $parser();
+				$this->movies = $pa->getMovies();
+			} else { $this->movies = null; }
 		} catch(\Error $e) {
+			\Tracy\Debugger::barDump($e);
 			\Tracy\Debugger::log($e);
 		}
-		if(class_exists($parser)) {
-			$pa = new $parser();
-			$this->movies = $pa->getMovies();
-		} else { $this->movies = null; }
 	}
 	
 	public function hasMovies() {
