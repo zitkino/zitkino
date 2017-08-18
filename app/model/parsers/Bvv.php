@@ -26,8 +26,11 @@ class Bvv extends Parser {
 			$value = str_replace(["&nbsp;", "  ", " "]," ", $title->nodeValue);
 			$items = preg_split("/\s+/", $value, 4); //explode(" ", $title->nodeValue, 4);
 			
-			$nameQuery = $xpath->query($events."//h2//a", $title);
-			$name = $nameQuery->item($movieItems)->nodeValue;
+			$nameQuery = $xpath->query(".//a", $title);
+			$nameItem = $nameQuery->item(0);
+			if(isset($nameItem)) {
+				$name = $nameItem->nodeValue;
+			} else { $name = null; continue; }
 			
 			$dateString = "";
 			foreach($items as $item) {
@@ -52,8 +55,11 @@ class Bvv extends Parser {
 				$price = 0;
 			}
 			
-			$csfdString = $nameQuery->item($movieItems)->getAttribute("href");
-			$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);
+			$csfdItem = $nameQuery->item(0);
+			if(isset($csfdItem)) {
+				$csfdString = $csfdItem->getAttribute("href");
+				$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);	
+			} else { $csfd = null; }
 			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setPrice($price);
