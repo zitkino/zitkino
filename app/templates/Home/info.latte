@@ -3,27 +3,29 @@
 {block #content}
 <h2 class="page-header">{$title}</h2>
 
-<div class="col-md-8">
-	<p>Inspirováno původním <a href="https://github.com/zitkino/zitkino.cz" title="Původní Žít kino">zitkino.cz</a> a seznamem letňáků od <a href="https://www.online.muni.cz/student/7854-brnenska-letni-kina-oteviraji-zvou-na-klasiky-i-oscarove-hity" title="Letní kina Muni">Muni</a> a <a href="http://letnaky.zitbrno.cz" title="Žít Brno letňáky">Žít Brna</a>.</p>
+<div class="row">
+	<div class="col-md-8">
+		<p>Inspirováno původním <a href="https://github.com/zitkino/zitkino.cz" title="Původní Žít kino">zitkino.cz</a> a seznamem letňáků od <a href="https://www.online.muni.cz/student/7854-brnenska-letni-kina-oteviraji-zvou-na-klasiky-i-oscarove-hity" title="Letní kina Muni">Muni</a> a <a href="http://letnaky.zitbrno.cz" title="Žít Brno letňáky">Žít Brna</a>.</p>
+		
+		<p>Vytvořeno přispěvateli v <a href="https://github.com/zitkino/zitkino/graphs/contributors" title="Žít kino GitHub">{fa github, "lg"} GitHubovém repozitáři</a>.</p>
+		
+		<p>{fa facebook-official} Facebook profil: <a href="https://www.facebook.com/zitkino.cz" title="Facebook profil">https://www.facebook.com/zitkino.cz</a></p>	
+	</div>
 	
-	<p>Vytvořeno přispěvateli v <a href="https://github.com/zitkino/zitkino/graphs/contributors" title="Žít kino GitHub">{fa github, "lg"} GitHubovém repozitáři</a>.</p>
-	
-	<p>{fa facebook-official} Facebook profil: <a href="https://www.facebook.com/zitkino.cz" title="Facebook profil">https://www.facebook.com/zitkino.cz</a></p>	
-</div>
-
-<div class="col-md-4">
-	<div id="fb-root"></div>
-	<script>
-		(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if(d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = "//connect.facebook.net/cs_CZ/sdk.js#xfbml=1&version=v2.9&appId=1776529785992658";
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, "script", "facebook-jssdk"));
-	</script>
-	<div class="fb-page" data-href="https://www.facebook.com/zitkino.cz/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
-		<blockquote cite="https://www.facebook.com/zitkino.cz/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/zitkino.cz/">Žít kino</a></blockquote>
+	<div class="col-md-4">
+		<div id="fb-root"></div>
+		<script>
+			(function(d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if(d.getElementById(id)) return;
+				js = d.createElement(s); js.id = id;
+				js.src = "//connect.facebook.net/cs_CZ/sdk.js#xfbml=1&version=v2.9&appId=1776529785992658";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, "script", "facebook-jssdk"));
+		</script>
+		<div class="fb-page" data-href="https://www.facebook.com/zitkino.cz/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+			<blockquote cite="https://www.facebook.com/zitkino.cz/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/zitkino.cz/">Žít kino</a></blockquote>
+		</div>
 	</div>
 </div>
 {/block}

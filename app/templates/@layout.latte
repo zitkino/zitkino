@@ -12,7 +12,8 @@
 	
 	<link rel="shortcut icon" href="{$wwwdir}/favicon.ico">
 	<link rel="stylesheet" href="{$wwwdir}/libs/fortawesome/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" media="screen" href="{$wwwdir}/style.css">
+	<link rel="stylesheet" href="{$wwwdir}/libs/twbs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" media="screen" href="{$wwwdir}/css/booty.css">
 	<link rel="stylesheet" media="screen" href="{$wwwdir}/libs/hermajan/lib/src/fontAwesome/facolors.css">
 	{*<link rel="stylesheet" media="print" href="{$wwwdir}/print.css">*}
 	
@@ -20,25 +21,27 @@
 </head>
 
 <body>
-<div id="wrap">
-  {include 'header.latte'}
-  <div class="container-fluid">
-    <div class="row">
-              {*if $menuExists==true*}
-      <!--<div class="col-md-2 hidden-print col-md-push-10" id="menu">-->
-          {*includeblock $menuURL*}
-      <!--</div>
-      
-      <div class="col-md-10 col-md-pull-2">-->
-      {*else*}
-      <!--<div class="col-md-12">-->
-      {*/if*}
-      {block #content}{/block}
-      <!--</div>-->
-    </div>
-  </div>
-</div>
-{*include 'footer.latte'*}
+<header id="header" class="navbar navbar-default navbar-static-top navbar-inverse">
+	<div class="container-fluid">
+		{include 'header.latte'}
+	</div>
+</header>
+
+<article id="content">
+	<div class="container-fluid">
+		<div class="row">
+			<section class="col-xs-12">
+				{block #content}{/block}
+			</section>
+		</div>
+	</div>
+</article>
+
+{*<footer id="footer">*}
+	{*<div class="container-fluid">*}
+		{*include 'footer.latte'*}
+	{*</div>*}
+{*</footer>*}
 
 <script src="{$wwwdir}/libs/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript">

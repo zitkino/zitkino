@@ -1,15 +1,14 @@
 <?php
-namespace App\Presenters;
-use Nette;
+namespace App\presenters;
 
 /**
  * Cinema presenter.
  */
-class CinemaPresenter extends BasePresenter {
+class Cinema extends Base {
 	private $cinemas;
 	
 	public function beforeRender() {
-		BasePresenter::beforeRender();
+		Base::beforeRender();
 		$this->cinemas = new \Zitkino\Cinemas();
 		
 		$this->template->menuExists = false;
