@@ -7,7 +7,8 @@ use ICal\ICal;
  */
 class Stred extends Parser {
 	public function __construct() {
-		$this->setUrl("https://calendar.google.com/calendar/ical/n6a7pqdcgeprq9v7pf84dk3djo%40group.calendar.google.com/public/basic.ics");
+//		$this->setUrl("https://calendar.google.com/calendar/ical/n6a7pqdcgeprq9v7pf84dk3djo%40group.calendar.google.com/public/basic.ics");
+		$this->setUrl("http://www.kinobude.cz");
 		$this->getContent();
 	}
 	

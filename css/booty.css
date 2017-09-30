@@ -39,6 +39,9 @@
 .label-subtitles {
   background-color: #2162a6; }
 
+.panel-body {
+  padding: 0 15px; }
+
 /* Navbar */
 .navbar-inverse {
   background-color: #ba1b0a;

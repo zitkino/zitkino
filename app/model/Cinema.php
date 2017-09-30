@@ -27,7 +27,13 @@ class Cinema {
 			$parser = "\Zitkino\parsers\\".ucfirst($this->data["short_name"]);
 			if(class_exists($parser)) {
 				$pa = new $parser();
-				$this->movies = $pa->getMovies();
+				
+				$films = $pa->getMovies();
+				foreach($films as $film) {
+					if($this->checkActualMovie($film)) {
+						$this->movies[] = $film;
+					}
+				}
 			} else { $this->movies = null; }
 		} catch(\Error $e) {
 			\Tracy\Debugger::barDump($e);
@@ -53,13 +59,13 @@ class Cinema {
 				foreach($movie->getDatetimes() as $datetime) {
 					// checks if movie is played from now to +1 day
 					if($currentDate < $datetime and $datetime < $nextDate) {
-						array_push($datetimes, $datetime);
+						$datetimes[] = $datetime;
 					}
 				}
 				
 				if(!empty($datetimes)) {
 					$movie->setDatetimes($datetimes);
-					array_push($soonest, $movie);
+					$soonest[] = $movie;
 				}
 			}
 			
@@ -69,7 +75,7 @@ class Cinema {
 					if(isset($this->movies[$i])) {
 						foreach($this->movies[$i]->getDatetimes() as $datetime) {
 							if($currentDate < $datetime) {
-								array_push($soonest, $this->movies[$i]);
+								$soonest[] = $this->movies[$i];
 							}
 						}
 					}
@@ -83,8 +89,24 @@ class Cinema {
 		
 		if(empty($soonest)) {
 			if(is_null($this->movies) or empty($this->movies)) { $soonest = null; }
-			else { $soonest = [$this->movies[0]]; }
+			else {
+				if($this->checkActualMovie($this->movies[0])) {
+					$soonest = [$this->movies[0]];
+				} else {
+					$soonest = null;
+				}
+			}
 		}
+		
 		return $soonest;
+	}
+	
+	public function checkActualMovie(\Zitkino\Movie $movie) {
+		$datetime = $movie->getDatetimes()[0];
+		if($datetime > new \DateTime()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

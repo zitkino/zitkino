@@ -1,10 +1,4 @@
 
--- --------------------------------------------------------
-
---
--- Struktura tabulky `cinemas`
---
-
 DROP TABLE IF EXISTS `cinemas`;
 CREATE TABLE IF NOT EXISTS `cinemas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -26,4 +20,4 @@ CREATE TABLE IF NOT EXISTS `cinemas` (
   `active_until` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

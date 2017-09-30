@@ -1,10 +1,4 @@
 
--- --------------------------------------------------------
-
---
--- Struktura tabulky `languages`
---
-
 DROP TABLE IF EXISTS `languages`;
 CREATE TABLE IF NOT EXISTS `languages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

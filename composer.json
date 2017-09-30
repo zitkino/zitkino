@@ -1,16 +1,17 @@
 {
-"name": "zitkino/zitkino",
-"description": "Brno's cinemas",
-"type": "project",
+	"name": "zitkino/zitkino",
+	"description": "Brno's cinemas",
+	"type": "project",
 
-"config": {
-	"vendor-dir": "libs",
-	"preferred-install": "dist",
-	"sort-packages": true,
-	"optimize-autoloader": true
-},
+	"config": {
+		"vendor-dir": "libs",
+		"preferred-install": "dist",
+		"sort-packages": true,
+		"optimize-autoloader": true
+	},
 
-"require": {
+	"require": {
+		"php": "^7.0",
 		"doctrine/dbal": "^2.5",
 		"fortawesome/font-awesome": "^4.7",
 		"hermajan/fazette": "dev-master",

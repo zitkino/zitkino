@@ -15,8 +15,8 @@ class Art extends Parser {
 	public function getContent() {
 		$xpath = $this->downloadData();
 		
-		$this->getHall($xpath, "leftcol distillery");
-		//$this->getHall($xpath, "rightcol");
+		$this->getHall($xpath, "leftcol");
+		$this->getHall($xpath, "rightcol");
 	}
 	
 	/**
@@ -35,8 +35,8 @@ class Art extends Parser {
 			
 			$link = $nameQuery->item(0)->getAttribute("href");
 			
-			$dateQuery = $xpath->query("//td[@class='date']", $event);
-			$date = mb_substr($dateQuery->item($movieItems)->nodeValue, 3);
+			$dateQuery = $xpath->query(".//td[@class='date']", $event);
+			$date = mb_substr($dateQuery->item(0)->nodeValue, 3);
 			$datetime = \DateTime::createFromFormat("j.m.H:i", $date);
 			$datetimes[] = $datetime;
 			
@@ -91,8 +91,12 @@ class Art extends Parser {
 			$priceQuery = $xpath->query(".//td[@class='price']//a", $event);
 			$priceItem = $priceQuery->item(0);
 			if(!isset($priceItem)) {
+				$spanQuery = $xpath->query(".//td[@class='price']//span", $event);
+				$span = $spanQuery->item(0)->nodeValue;
+				
 				$priceQuery = $xpath->query(".//td[@class='price']", $event);
-				$price = $priceQuery->item(0)->nodeValue;	
+				$priceString = $priceQuery->item(0)->nodeValue;
+				$price = str_replace($span, "", $priceString);
 			} else { $price = $priceItem->nodeValue; }
 			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);

@@ -26,8 +26,8 @@ class Cinema extends Base {
 		$gmaps = $data["gmaps"];
 		if(is_null($gmaps)) {
 			$address = $data["address"].", ".$data["city"];
-			$param = "/v1/place?q=".urlencode($address);
-		} else { $param = "?pb=".$gmaps; }
+			$param = urlencode($address);
+		} else { $param = "place_id:".$gmaps; }
 		$this->template->gmap = $param;
 	}
 	
