@@ -98,6 +98,7 @@ class Art extends Parser {
 				$priceString = $priceQuery->item(0)->nodeValue;
 				$price = str_replace($span, "", $priceString);
 			} else { $price = $priceItem->nodeValue; }
+			$price = trim(str_replace(["akreditace celý festival", "Kč"], "", $price));
 			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);

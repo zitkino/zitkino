@@ -63,7 +63,9 @@ class Movie {
 		$this->price = $price;
 	}
 	public function fixPrice() {
-		if($this->price == 0) {
+		if(!isset($this->price) or !is_numeric($this->price)) {
+			return null;
+		} elseif($this->price == 0) {
 			return "zdarma";
 		} else {
 			return $this->price." Kč";
