@@ -15,8 +15,7 @@ class Art extends Parser {
 	public function getContent() {
 		$xpath = $this->downloadData();
 		
-		$this->getHall($xpath, "leftcol");
-		$this->getHall($xpath, "rightcol");
+		$this->getHall($xpath, "program");
 	}
 	
 	/**
@@ -88,17 +87,24 @@ class Art extends Parser {
 			}
 			$this->setUrl($programmeUrl);*/
 			
+			$priceReplace = ["akreditace celý festival", "Kč"];
 			$priceQuery = $xpath->query(".//td[@class='price']//a", $event);
 			$priceItem = $priceQuery->item(0);
 			if(!isset($priceItem)) {
 				$spanQuery = $xpath->query(".//td[@class='price']//span", $event);
-				$span = $spanQuery->item(0)->nodeValue;
+				if($spanQuery->length > 0) {
+					$priceReplace[] = $spanQuery->item(0)->nodeValue;
+				}
 				
 				$priceQuery = $xpath->query(".//td[@class='price']", $event);
 				$priceString = $priceQuery->item(0)->nodeValue;
-				$price = str_replace($span, "", $priceString);
-			} else { $price = $priceItem->nodeValue; }
-			$price = trim(str_replace(["akreditace celý festival", "Kč"], "", $price));
+			} else { $priceString = $priceItem->nodeValue; }
+			
+			if(strpos($priceString, "/") !== false) {
+				$priceString = explode("/", $priceString)[0];
+			}
+			
+			$price = trim(str_replace($priceReplace, "", $priceString));
 			
 			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
 			$this->movies[count($this->movies)-1]->setLink($link);
