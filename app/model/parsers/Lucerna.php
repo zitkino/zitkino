@@ -34,6 +34,14 @@ class Lucerna extends Parser {
 				$lengthString = $lengthQuery->item(0)->nodeValue;
 				$length = str_replace("&nbsp;min", "", htmlentities($lengthString, null, "utf-8"));
 				
+				$typeQuery = $xpath->query($info."//div[@class='left']/div/span[1]", $event);
+				$typeString = $typeQuery->item(0)->nodeValue;
+				if($typeString == "3D") {
+					$type = $typeString;
+				} else {
+					$type = null;
+				}
+				
 				$languageQuery = $xpath->query($info."//div[@class='left']/div/span[2]", $event);
 				$languageString = $languageQuery->item(0)->nodeValue;
 				
@@ -41,31 +49,40 @@ class Lucerna extends Parser {
 					case stripos($languageString, "ČV") !== false: $language = "česky"; $subtitles = null; break;
 					case stripos($languageString, "ČT") !== false: $language = null; $subtitles = "české"; break;
 					case stripos($languageString, "ČD") !== false: $language = "česky"; $subtitles = null; break;
+					case stripos($languageString, "anglicka_verzia_ceske_titulky") !== false: $language = "anglicky"; $subtitles = "české"; break;
 					default: $language = null; $subtitles = null;
 				}
 				
-				$timesQuery = $xpath->query("./div[@class='times']/div[@class='right']/span/a", $event);
-				
-				if($timesQuery->length == 1) {
-					$priceString = $timesQuery->item(0)->getAttribute("title");
-					$price = str_replace(["Rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
-				} else {
-					$timesQuery = $xpath->query("./div[@class='times']/div/span/span", $event);
-					$price = null;
+				$datetimes = [];
+				$timesQuery = $xpath->query("./div[@class='times']/div[@class='right']/span", $event);
+				/** @var \DOMElement $timeElement */
+				foreach($timesQuery as $timeElement) {
+					$timeString = $timeElement->nodeValue;
+					$time = explode(":", $timeString);
+					
+					$datetime = \DateTime::createFromFormat("j.m.", $dayString);
+					$datetime->setTime((int)$time[0], (int)$time[1]);
+					$datetimes[] = $datetime;
+					
+					$a = $timeElement->getElementsByTagName("a");
+					if($a->length == 1) {
+						if($a->item(0)->hasAttribute("title")) {
+							$priceString = $a->item(0)->getAttribute("title");
+							$price = str_replace(["Rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
+						}
+					} else {
+						$price = null;
+					}
 				}
 				
-				$timeString = $timesQuery->item(0)->nodeValue;
-				$time = explode(":", $timeString);
-				
-				$datetime = \DateTime::createFromFormat("j.m.", $dayString);
-				$datetimes = [$datetime->setTime($time[0], $time[1])];
-				
-				$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-				$this->movies[count($this->movies)-1]->setLink($link);
-				$this->movies[count($this->movies)-1]->setLanguage($language);
-				$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
-				$this->movies[count($this->movies)-1]->setLength($length);
-				$this->movies[count($this->movies)-1]->setPrice($price);
+				$movie = new \Zitkino\Movie($name, $datetimes);
+				$movie->setLink($link);
+				$movie->setType($type);
+				$movie->setLanguage($language);
+				$movie->setSubtitles($subtitles);
+				$movie->setLength($length);
+				$movie->setPrice($price);
+				$this->movies[] = $movie;
 			}
 		}
 		

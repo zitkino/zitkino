@@ -48,6 +48,16 @@ class Movie {
 	public function setDatetimes($datetimes) {
 		$this->datetimes = $datetimes;
 	}
+	public function fixDatetimes() {
+		/** @var \DateTime $datetime */
+		foreach($this->datetimes as $datetime) {
+			$currentDate = new \DateTime();
+			if($currentDate->format("m") == "12" and $datetime->format("m") == "01") {
+				$year = (int)$datetime->format("Y") + 1;
+				$datetime->setDate($year, $datetime->format("m"), $datetime->format("d"));
+			}
+		}
+	}
 	
 	public function getLength() {
 		return $this->length;
@@ -98,6 +108,7 @@ class Movie {
 		$this->name = $name;
 		$this->fixDatabases();
 		$this->datetimes = $datetimes;
+		$this->fixDatetimes();
 	}
 	
 	public function fixDatabases() {
