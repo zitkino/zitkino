@@ -5,6 +5,7 @@ namespace Zitkino;
  * Movies.
  */
 class Movies {
+	/** @var \Zitkino\Movie[] */
 	private $movies;
 	
 	public function __construct($movies) {

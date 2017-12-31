@@ -5,7 +5,11 @@ namespace Zitkino;
  * Movie.
  */
 class Movie {
-	private $name, $link, $type, $language, $subtitles, $datetimes, $length, $price, $csfd, $imdb, $databases;
+	private $name, $link, $type, $language, $subtitles, $length, $price, $csfd, $imdb;
+	/** @var \DateTime[] $datetimes */
+	private $datetimes;
+	/** @var string[] $databases */
+	private $databases;
 	
 	public function getName() {
 		return $this->name;
@@ -49,11 +53,14 @@ class Movie {
 		$this->datetimes = $datetimes;
 	}
 	public function fixDatetimes() {
-		/** @var \DateTime $datetime */
 		foreach($this->datetimes as $datetime) {
 			$currentDate = new \DateTime();
 			if($currentDate->format("m") == "12" and $datetime->format("m") == "01") {
-				$year = (int)$datetime->format("Y") + 1;
+				$year = (int)$datetime->format("Y");
+				$nextYear = (int)$currentDate->format("Y") + 1;
+				if($year < $nextYear) {
+					$year++;
+				}
 				$datetime->setDate($year, $datetime->format("m"), $datetime->format("d"));
 			}
 		}

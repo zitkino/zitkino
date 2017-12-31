@@ -24,7 +24,7 @@ abstract class CinemaCity extends Parser {
 		$this->getOneDay($datetime);
 	}
 	
-	public function getOneDay($datetime) {
+	public function getOneDay(\DateTime $datetime) {
 		$this->date = $datetime->format("j/m/Y");
 		
 		$dateUrl = str_replace("/", "%2F", $this->date);
@@ -41,18 +41,15 @@ abstract class CinemaCity extends Parser {
 		$dateString = $dateQuery->item(0)->nodeValue;*/
 		
 		$events = $xpath->query("//table[@id[starts-with(.,'scheduleTable_')]]/tbody/tr");
-		$movieItems = 0;
 		foreach($events as $event) {
 			$emptyQuery = $xpath->query(".//td[@class='empty']", $event);
 			if($emptyQuery->length !== 0) {
-				$this->movies = null;
 				break;
-			}
-			else {
-				$nameQuery = $xpath->query("//td[@class='featureName']//a", $event);
-				$name = $nameQuery->item($movieItems)->nodeValue;
+			} else {
+				$nameQuery = $xpath->query(".//td[@class='featureName']//a", $event);
+				$name = $nameQuery->item(0)->nodeValue;
 				
-				$link = "http://cinemacity.cz/" . $nameQuery->item($movieItems)->getAttribute("href");
+				$link = "http://cinemacity.cz/" . $nameQuery->item(0)->getAttribute("href");
 				
 				$type = null;
 				if(strpos($name, "3D") !== false) {
@@ -77,10 +74,12 @@ abstract class CinemaCity extends Parser {
 					$subtitles = null;
 					$language = "česky";
 				}
+				if(strpos($subtitles, "---") !== false) {
+					$subtitles = null;
+				}
 				
 				$timeQuery = $xpath->query(".//td[@class='prsnt']/a", $event);
 				$datetimes = [];
-				$i = 0;
 				foreach($timeQuery as $timeElement) {
 					$time = explode(":", trim($timeElement->textContent));
 					
@@ -88,7 +87,6 @@ abstract class CinemaCity extends Parser {
 					$datetime->setTime(intval($time[0]), intval($time[1]));
 					
 					$datetimes[] = $datetime;
-					$i++;
 				}
 				
 				$lengthQuery = $xpath->query(".//td[5]", $event);
@@ -103,14 +101,14 @@ abstract class CinemaCity extends Parser {
 					if($type == "3D") { $price = 229; }
 				}
 				
-				$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-				$this->movies[count($this->movies)-1]->setLink($link);
-				$this->movies[count($this->movies)-1]->setType($type);
-				$this->movies[count($this->movies)-1]->setLanguage($language);
-				$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
-				$this->movies[count($this->movies)-1]->setLength($length);
-				$this->movies[count($this->movies)-1]->setPrice($price);
-				$movieItems++;
+				$movie = new \Zitkino\Movie($name, $datetimes);
+				$movie->setLink($link);
+				$movie->setType($type);
+				$movie->setLanguage($language);
+				$movie->setSubtitles($subtitles);
+				$movie->setLength($length);
+				$movie->setPrice($price);
+				$this->movies[] = $movie;
 			}
 		}
 		

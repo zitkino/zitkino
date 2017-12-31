@@ -6,14 +6,21 @@ use \Lib\database\Doctrine as DB;
  * Cinema.
  */
 class Cinema {
-	private $id, $data, $movies;
+	private $id, $data;
+	/** @var \Zitkino\Movie[] */
+	private $movies;
 
 	public function __construct($id) {
 		$db = new DB(__DIR__."/../database.ini");
+		/** @var \Doctrine\DBAL\Connection $connection */
 		$connection = $db->getConnection();
 		
-		if(is_numeric($id)) { $this->data = $connection->fetchAssoc("SELECT * FROM cinemas WHERE id = ?", array($id)); }
-		else { $this->data = $connection->fetchAssoc("SELECT * FROM cinemas WHERE short_name = ?", array($id)); }
+		if(is_numeric($id)) {
+			$column = "id";
+		} else {
+			$column = "short_name";
+		}
+		$this->data = $connection->fetchAssoc("SELECT * FROM cinemas WHERE $column = ?", [$id]);
 	}
 	
 	function getId() { return $this->id; }
@@ -22,22 +29,29 @@ class Cinema {
 	public function getMovies() {
 		return $this->movies;
 	}
+	
 	public function setMovies() {
 		try {
-			$parser = "\Zitkino\parsers\\".ucfirst($this->data["short_name"]);
-			if(class_exists($parser)) {
-				$pa = new $parser();
+			$parserClass = "\Zitkino\parsers\\".ucfirst($this->data["short_name"]);
+			if(class_exists($parserClass)) {
+				/** @var \Zitkino\parsers\Parser $parser */
+				$parser = new $parserClass();
 				
-				$films = $pa->getMovies();
-				foreach($films as $film) {
-					if($this->checkActualMovie($film)) {
-						$this->movies[] = $film;
+				$films = $parser->getMovies();
+				if(isset($films)) {
+					foreach($films as $film) {
+						if($this->checkActualMovie($film)) {
+							$this->movies[] = $film;
+						}
 					}
 				}
 			} else { $this->movies = null; }
-		} catch(\Error $e) {
-			\Tracy\Debugger::barDump($e);
-			\Tracy\Debugger::log($e);
+		} catch(\Error $error) {
+			\Tracy\Debugger::barDump($error);
+			\Tracy\Debugger::log($error, \Tracy\Debugger::ERROR);
+		} catch(\Exception $exception) {
+			\Tracy\Debugger::barDump($exception);
+			\Tracy\Debugger::log($exception, \Tracy\Debugger::EXCEPTION);
 		}
 	}
 	
