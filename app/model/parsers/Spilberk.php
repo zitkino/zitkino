@@ -31,9 +31,9 @@ class Spilberk extends Parser {
 			$itemsQuery = $xpath->query(".//div[@class='right']//p[@class='popisek']", $event);
 			$itemString = $itemsQuery->item(0)->nodeValue;
 			
-			$language = null;
+			$dubbing = null;
 			if(strpos($itemString, "Česko") !== false) {
-				$language = "český";
+				$dubbing = "český";
 			}
 			
 			$dateQuery = $xpath->query(".//div[@class='left']//p", $event);
@@ -54,11 +54,12 @@ class Spilberk extends Parser {
 			$priceString = $priceQuery->item(0)->nodeValue;
 			$price = str_replace([",- Kč"], "", $priceString);
 			
-			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-			$this->movies[count($this->movies)-1]->setLanguage($language);
-			$this->movies[count($this->movies)-1]->setLength($length);
-			$this->movies[count($this->movies)-1]->setPrice($price);
-			$this->movies[count($this->movies)-1]->setCsfd($csfd);
+			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie->setDubbing($dubbing);
+			$movie->setLength($length);
+			$movie->setPrice($price);
+			$movie->setCsfd($csfd);
+			$this->movies[] = $movie;
 		}
 		
 		$this->setMovies($this->movies);

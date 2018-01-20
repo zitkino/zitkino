@@ -22,7 +22,7 @@ class Delnak extends Parser {
 			$itemString = $itemQuery->item($movieItems)->nodeValue;
 			
 			if($itemString == "Židenické letní kino na Dělňáku") {
-				$name = $language = $length = $csfd = null;
+				$name = $dubbing = $length = $csfd = null;
 				
 				$details = $xpath->query(".//div//p", $event);
 				foreach($details as $detail) {
@@ -36,7 +36,7 @@ class Delnak extends Parser {
 						$data = explode(",", $matches[1][0]);
 						
 						if(strpos($data[0], "CZ") !== false) {
-							$language = "česky";
+							$dubbing = "česky";
 						}
 						
 						$length = str_replace("min.", "", $data[2]);
@@ -63,12 +63,13 @@ class Delnak extends Parser {
 				$priceString = $priceQuery->item($movieItems)->nodeValue;
 				$price = str_replace(["Vstupné: ", "Kč"], "", $priceString);
 				
-				$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-				$this->movies[count($this->movies)-1]->setLink($link);
-				$this->movies[count($this->movies)-1]->setLanguage($language);
-				$this->movies[count($this->movies)-1]->setLength($length);
-				$this->movies[count($this->movies)-1]->setPrice($price);
-				$this->movies[count($this->movies)-1]->setCsfd($csfd);
+				$movie = new \Zitkino\Movie($name, $datetimes);
+				$movie->setLink($link);
+				$movie->setDubbing($dubbing);
+				$movie->setLength($length);
+				$movie->setPrice($price);
+				$movie->setCsfd($csfd);
+				$this->movies[] = $movie;
 			}
 			
 			$movieItems++;

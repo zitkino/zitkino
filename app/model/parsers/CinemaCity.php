@@ -58,11 +58,11 @@ abstract class CinemaCity extends Parser {
 				}
 				
 				$languageQuery = $xpath->query(".//td[4]", $event);
-				$language = $languageQuery->item(0)->nodeValue;
-				switch($language) {
-					case "CZ": $language = "česky"; break;
-					case "EN": $language = "anglicky"; break;
-					case "FR": $language = "francouzsky"; break;
+				$dubbing = $languageQuery->item(0)->nodeValue;
+				switch($dubbing) {
+					case "CZ": $dubbing = "česky"; break;
+					case "EN": $dubbing = "anglicky"; break;
+					case "FR": $dubbing = "francouzsky"; break;
 				}
 				
 				$subtitlesQuery = $xpath->query(".//td[3]", $event);
@@ -72,7 +72,7 @@ abstract class CinemaCity extends Parser {
 				}
 				if((strpos($subtitles, "DAB") !== false) or (strpos($subtitles, "CZ") !== false)) {
 					$subtitles = null;
-					$language = "česky";
+					$dubbing = "česky";
 				}
 				if(strpos($subtitles, "---") !== false) {
 					$subtitles = null;
@@ -104,7 +104,7 @@ abstract class CinemaCity extends Parser {
 				$movie = new \Zitkino\Movie($name, $datetimes);
 				$movie->setLink($link);
 				$movie->setType($type);
-				$movie->setLanguage($language);
+				$movie->setDubbing($dubbing);
 				$movie->setSubtitles($subtitles);
 				$movie->setLength($length);
 				$movie->setPrice($price);

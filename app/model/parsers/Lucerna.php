@@ -35,22 +35,25 @@ class Lucerna extends Parser {
 				$length = str_replace("&nbsp;min", "", htmlentities($lengthString, null, "utf-8"));
 				
 				$typeQuery = $xpath->query($info."//div[@class='left']/div/span[1]", $event);
-				$typeString = $typeQuery->item(0)->nodeValue;
-				if($typeString == "3D") {
-					$type = $typeString;
-				} else {
-					$type = null;
+				if($typeQuery->length >= 1) {
+					$typeString = $typeQuery->item(0)->nodeValue;
+					if($typeString == "3D") {
+						$type = $typeString;
+					} else {
+						$type = null;
+					}	
 				}
 				
 				$languageQuery = $xpath->query($info."//div[@class='left']/div/span[2]", $event);
-				$languageString = $languageQuery->item(0)->nodeValue;
-				
-				switch(true) {
-					case stripos($languageString, "ČV") !== false: $language = "česky"; $subtitles = null; break;
-					case stripos($languageString, "ČT") !== false: $language = null; $subtitles = "české"; break;
-					case stripos($languageString, "ČD") !== false: $language = "česky"; $subtitles = null; break;
-					case stripos($languageString, "anglicka_verzia_ceske_titulky") !== false: $language = "anglicky"; $subtitles = "české"; break;
-					default: $language = null; $subtitles = null;
+				if($languageQuery->length >= 1) {
+					$languageString = $languageQuery->item(0)->nodeValue;
+					switch(true) {
+						case stripos($languageString, "ČV") !== false: $dubbing = "česky"; $subtitles = null; break;
+						case stripos($languageString, "ČT") !== false: $dubbing = null; $subtitles = "české"; break;
+						case stripos($languageString, "ČD") !== false: $dubbing = "česky"; $subtitles = null; break;
+						case stripos($languageString, "anglicka_verzia_ceske_titulky") !== false: $dubbing = "anglicky"; $subtitles = "české"; break;
+						default: $dubbing = null; $subtitles = null;
+					}
 				}
 				
 				$datetimes = [];
@@ -78,7 +81,7 @@ class Lucerna extends Parser {
 				$movie = new \Zitkino\Movie($name, $datetimes);
 				$movie->setLink($link);
 				$movie->setType($type);
-				$movie->setLanguage($language);
+				$movie->setDubbing($dubbing);
 				$movie->setSubtitles($subtitles);
 				$movie->setLength($length);
 				$movie->setPrice($price);

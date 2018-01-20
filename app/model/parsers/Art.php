@@ -106,11 +106,13 @@ class Art extends Parser {
 			
 			$price = trim(str_replace($priceReplace, "", $priceString));
 			
-			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-			$this->movies[count($this->movies)-1]->setLink($link);
-			//$this->movies[count($this->movies)-1]->setLanguage($language);
-			//$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
-			$this->movies[count($this->movies)-1]->setPrice($price);
+			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie->setLink($link);
+			//$movie->setDubbing($language);
+			//$movie->setSubtitles($subtitles);
+			$movie->setPrice($price);
+			$this->movies[] = $movie;
+			
 			$movieItems++;
 			/*if($movieItems == 10) {
 				break;

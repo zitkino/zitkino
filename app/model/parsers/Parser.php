@@ -6,8 +6,13 @@ use DOMDocument, DOMXPath;
  * Parser.
  */
 abstract class Parser {
-	private $url = "", $document;
-	protected $movies = [], $connection;
+	private $url = "";
+	/** @var \DOMDocument */
+	private $document;
+	
+	protected $movies = [];
+	/** @var \Doctrine\DBAL\Connection */
+	protected $connection;
 	
 	public function getUrl() {
 		return $this->url;
@@ -60,23 +65,24 @@ abstract class Parser {
 	
 	public function getContentFromDB($cinema) {
 		$today = date("Y-m-d", strtotime("now"));
-		$events = $this->connection->fetchAll("SELECT s.*, m.*, l.czech AS language, ls.czech AS subtitles FROM screenings AS s JOIN movies AS m ON s.movie = m.id
-			 LEFT JOIN languages AS l ON s.language = l.id LEFT JOIN languages AS ls ON s.subtitles = ls.id WHERE s.cinema = ? AND date >= ?", [$cinema, $today]);
+		$events = $this->connection->fetchAll("SELECT s.*, m.*, l.czech AS dubbing, ls.czech AS subtitles FROM screenings AS s JOIN movies AS m ON s.movie = m.id
+			 LEFT JOIN languages AS l ON s.dubbing = l.id LEFT JOIN languages AS ls ON s.subtitles = ls.id WHERE s.cinema = ? AND date >= ?", [$cinema, $today]);
 		
 		foreach($events as $event) {
 			$datetimes = [];
 			$datetime = \DateTime::createFromFormat("Y-m-d H:i:s", $event["date"]." ".$event["time"]);
 			$datetimes[] = $datetime;
 			
-			$this->movies[] = new \Zitkino\Movie($event["name"], $datetimes);
-			$this->movies[count($this->movies)-1]->setLink($event["link"]);
-			$this->movies[count($this->movies)-1]->setType($event["type"]);
-			$this->movies[count($this->movies)-1]->setLanguage($event["language"]);
-			$this->movies[count($this->movies)-1]->setSubtitles($event["subtitles"]);
-			$this->movies[count($this->movies)-1]->setLength($event["length"]);
-			$this->movies[count($this->movies)-1]->setPrice($event["price"]);
-			$this->movies[count($this->movies)-1]->setCsfd($event["csfd"]);
-			$this->movies[count($this->movies)-1]->setImdb($event["imdb"]);
+			$movie = new \Zitkino\Movie($event["name"], $datetimes);
+			$movie->setLink($event["link"]);
+			$movie->setType($event["type"]);
+			$movie->setDubbing($event["dubbing"]);
+			$movie->setSubtitles($event["subtitles"]);
+			$movie->setLength($event["length"]);
+			$movie->setPrice($event["price"]);
+			$movie->setCsfd($event["csfd"]);
+			$movie->setImdb($event["imdb"]);
+			$this->movies[] = $movie;
 		}
 		
 		$this->setMovies($this->movies);

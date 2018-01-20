@@ -61,9 +61,10 @@ class Bvv extends Parser {
 				$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);	
 			} else { $csfd = null; }
 			
-			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-			$this->movies[count($this->movies)-1]->setPrice($price);
-			$this->movies[count($this->movies)-1]->setCsfd($csfd);
+			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie->setPrice($price);
+			$movie->setCsfd($csfd);
+			$this->movies[] = $movie;
 			
 			$movieItems++;
 		}
@@ -75,9 +76,9 @@ class Bvv extends Parser {
 				continue;
 			}
 			
-			$language = null;
+			$dubbing = null;
 			if((strpos($info->nodeValue, ", ČR,") !== false) or (strpos($info->nodeValue, "Česko") !== false)) {
-				$language = "česky";
+				$dubbing = "česky";
 			}
 			
 			$items = explode(", ", $info->nodeValue);
@@ -97,7 +98,7 @@ class Bvv extends Parser {
 					}
 				}
 				
-				$this->movies[$movieItems]->setLanguage($language);
+				$this->movies[$movieItems]->setDubbing($dubbing);
 				$this->movies[$movieItems]->setLength($length);
 			}
 			

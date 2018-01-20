@@ -6,7 +6,7 @@ namespace Zitkino\parsers;
  */
 class Scala extends Parser {
 	public function __construct() {
-		$this->setUrl("http://www.kinoscala.cz/cz/program");
+		$this->setUrl("https://www.kinoscala.cz/cz/program");
 		$this->initiateDocument();
 		
 		$this->getContent();
@@ -43,9 +43,9 @@ class Scala extends Parser {
 				$nameString = $nameQuery->item($movieItems)->nodeValue;
 				$name = str_replace("feat. Kmeny90/BU2R", "", $nameString);
 
-				$language = null;
+				$dubbing = null;
 				if(\Lib\Strings::endsWith($name, "- cz dabing")) {
-					$language = "česky";
+					$dubbing = "česky";
 					$name = str_replace(" - cz dabing", "", $name);
 				}
 				
@@ -63,10 +63,12 @@ class Scala extends Parser {
 				$priceString = htmlentities($priceItem, null, "utf-8");
 				$price = trim(str_replace("&nbsp;Kč", "", $priceString));
 				
-				$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-				$this->movies[count($this->movies)-1]->setLink($link);
-				$this->movies[count($this->movies)-1]->setLanguage($language);
-				$this->movies[count($this->movies)-1]->setPrice($price);
+				$movie = new \Zitkino\Movie($name, $datetimes);
+				$movie->setLink($link);
+				$movie->setDubbing($dubbing);
+				$movie->setPrice($price);
+				$this->movies[] = $movie;
+				
 				$movieItems++;
 			}
 		}

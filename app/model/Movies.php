@@ -22,9 +22,9 @@ class Movies {
 	
 	public function hasLanguages() {
 		foreach($this->movies as $movie) {
-			$language = $movie->getLanguage();
+			$dubbing = $movie->getDubbing();
 			$subtitles = $movie->getSubtitles();
-			if(isset($language) or isset($subtitles)) { return true; }
+			if(isset($dubbing) or isset($subtitles)) { return true; }
 		}
 		return false;
 	}

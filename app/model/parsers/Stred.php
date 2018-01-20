@@ -23,9 +23,9 @@ class Stred extends Parser {
 			
 			$items = explode(", ", $event->description);
 			
-			$language = null;
+			$dubbing = null;
 			if(strpos($items[1], "Česko") !== false) {
-				$language = "česky";
+				$dubbing = "česky";
 			}
 			
 			$subtitles = null;
@@ -56,11 +56,13 @@ class Stred extends Parser {
 				$price = 50;
 			}
 			
-			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-			$this->movies[count($this->movies)-1]->setLanguage($language);
-			$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
-			$this->movies[count($this->movies)-1]->setLength($length);
-			$this->movies[count($this->movies)-1]->setPrice($price);
+			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie->setDubbing($dubbing);
+			$movie->setSubtitles($subtitles);
+			$movie->setLength($length);
+			$movie->setPrice($price);
+			$this->movies[] = $movie;
+			
 			$movieItems++;
 		}
 		

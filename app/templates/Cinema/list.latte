@@ -91,9 +91,9 @@
 			
 			{if $films->hasLanguages()}
 				<td title="Jazyk">
-					{php $language = $movie->getLanguage()}
-					{ifset $language}
-						<span class="label label-language" title="Dabing">{fa language}&nbsp;{$language}</span>
+					{php $dubbing = $movie->getDubbing()}
+					{ifset $dubbing}
+						<span class="label label-language" title="Dabing">{fa language}&nbsp;{$dubbing}</span>
 					{/ifset}
 					<br class="hidden-md hidden-lg">
 					{php $subtitles = $movie->getSubtitles()}

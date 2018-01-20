@@ -6,7 +6,6 @@ Here is the code for the web [https://www.zitkino.cz](https://www.zitkino.cz).
 
 ## Installation
 * Install this via [Composer](https://getcomposer.org): `composer create-project zitkino/zitkino:dev-master`
-* Delete Doctrine tests in folder `libs\doctrine\cache` and `libs\doctrine\inflector`
 * Rename in folder `app` file `default.neon` to `config.neon`
 * Setup your database connection in file `app/database.ini` ([example of this file](https://github.com/hermajan/lib/blob/master/src/database/database.ini))
 * Create tables in your database with SQL expressions in folder `db`

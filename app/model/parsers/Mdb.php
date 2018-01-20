@@ -29,9 +29,9 @@ class Mdb extends Parser {
 			$infoString = $infoQuery->item($movieItems)->nodeValue;
 			$info = explode(",", $infoString);
 			
-			$language = null;
+			$dubbing = null;
 			if(strpos($infoString, "CZ znění") !== false) {
-				$language = "česky";
+				$dubbing = "česky";
 			}
 			
 			$subtitles = null;
@@ -62,11 +62,13 @@ class Mdb extends Parser {
 				$length = str_replace("min.", "", $lengthString);
 			}
 			
-			$this->movies[] = new \Zitkino\Movie($name, $datetimes);
-			$this->movies[count($this->movies)-1]->setLink($link);
-			$this->movies[count($this->movies)-1]->setLanguage($language);
-			$this->movies[count($this->movies)-1]->setSubtitles($subtitles);
-			$this->movies[count($this->movies)-1]->setLength($length);
+			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie->setLink($link);
+			$movie->setDubbing($dubbing);
+			$movie->setSubtitles($subtitles);
+			$movie->setLength($length);
+			$this->movies[] = $movie;
+			
 			$movieItems++;
 			$days++;
 		}

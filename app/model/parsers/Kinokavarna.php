@@ -39,13 +39,17 @@ class Kinokavarna extends Parser {
 			$infoQuery = $xpath->query(".//p[2]", $event);
 			$info = explode(",", $infoQuery->item(0)->nodeValue);
 			
-			$length = (int)str_replace(" min.", "", $info[3]);
+			if(isset($info[3])) {
+				$length = (int)str_replace(" min.", "", $info[3]);
+			} else {
+				$length = null;
+			}
 			
-			$language = null;
+			$dubbing = null;
 			$subtitles = null;
 			foreach($infoQuery as $lang) {
 				if(strpos($lang->nodeValue, ", ČR,") !== false) {
-					$language = "česky";
+					$dubbing = "česky";
 					break;
 				}
 				if(strpos($lang->nodeValue, "čes. tit") !== false) {
@@ -60,11 +64,15 @@ class Kinokavarna extends Parser {
 			$datetimes[] = $datetime;
 			
 			$priceString = mb_substr($timeString, 6, 11);
-			$price = (int)str_replace("Vstupné: ", "", $priceString);
+			if(!empty($priceString)) {
+				$price = (int)str_replace("Vstupné: ", "", $priceString);
+			} else {
+				$price = null;
+			}
 			
 			$movie = new \Zitkino\Movie($name, $datetimes);
 			$movie->setLink($link);
-			$movie->setLanguage($language);
+			$movie->setDubbing($dubbing);
 			$movie->setSubtitles($subtitles);
 			$movie->setLength($length);
 			$movie->setPrice($price);

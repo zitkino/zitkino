@@ -16,6 +16,8 @@ class RouterFactory {
 		
 		$router[] = new Route("index[.php]", "Home:default", Route::ONE_WAY);
 		$router[] = new Route("mapa[/]", "Home:map");
+		$router[] = new Route("kontakt[/]", "Home:contact");
+		$router[] = new Route("info[/]", "Home:about");
 		
 		$router[] = new Route("kina[/]", "Cinema:default");
 		$router[] = new Route("kino[/]", "Cinema:default");

@@ -5,7 +5,7 @@ namespace Zitkino;
  * Movie.
  */
 class Movie {
-	private $name, $link, $type, $language, $subtitles, $length, $price, $csfd, $imdb;
+	private $name, $link, $type, $dubbing, $subtitles, $length, $price, $csfd, $imdb;
 	/** @var \DateTime[] $datetimes */
 	private $datetimes;
 	/** @var string[] $databases */
@@ -32,11 +32,11 @@ class Movie {
 		$this->type = $type;
 	}
 	
-	public function getLanguage() {
-		return $this->language;
+	public function getDubbing() {
+		return $this->dubbing;
 	}
-	public function setLanguage($language) {
-		$this->language = $language;
+	public function setDubbing($dubbing) {
+		$this->dubbing = $dubbing;
 	}
 	
 	public function getSubtitles() {
