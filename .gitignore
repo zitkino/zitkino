@@ -3,10 +3,10 @@
 _log/
 .temp/
 domains/
-libs/
+node_modules/
+vendor/
 
 *.ini
 config*.neon
 *.config
 *-data.sql
-*.lock

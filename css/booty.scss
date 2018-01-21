@@ -1,11 +1,7 @@
-@import url("../libs/twbs/bootstrap/dist/css/bootstrap.min.css");
-@import url("../libs/fortawesome/font-awesome/css/font-awesome.min.css");
+@import "colors";
 
 $header-height: 50px;
 $footer-height: 40px;
-
-@import "zitkino";
-@import "colors";
 
 html, body {
 	height: 100%;

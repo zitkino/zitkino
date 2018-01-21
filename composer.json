@@ -4,7 +4,7 @@
 	"type": "project",
 
 	"config": {
-		"vendor-dir": "libs",
+		"vendor-dir": "vendor",
 		"preferred-install": "dist",
 		"sort-packages": true,
 		"optimize-autoloader": true
@@ -13,7 +13,6 @@
 	"require": {
 		"php": "^7.0",
 		"doctrine/dbal": "^2.5",
-		"fortawesome/font-awesome": "^4.7",
 		"hermajan/fazette": "dev-master",
 		"hermajan/lib": "dev-master",
 		"johngrogg/ics-parser": "^2.0",

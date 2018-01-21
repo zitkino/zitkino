@@ -8,40 +8,44 @@
 
 <div>
 	<div class="pull-right">
-		<a href="{$cinema["programme"]}" title="Program na webu kina.">{fa calendar} podrobný program</a><br>
+		<a href="{$cinema["programme"]}" title="Program na webu kina.">{fa book} podrobný program</a><br>
+		
 		<span class="pull-right">
-		{php $facebook = $cinema["facebook"];}
-		{ifset $facebook}
-			<a href="https://www.facebook.com/{$facebook}">{fa facebook-official, "2x"}</a>
-		{/ifset}
-		{php $googleplus = $cinema["google+"];}
-		{ifset $googleplus}
-			<a href="https://plus.google.com/{$googleplus}">{fa google-plus, "2x"}</a>
-		{/ifset}
-		{php $instagram = $cinema["instagram"];}
-		{ifset $instagram}
-			<a href="https://www.instagram.com/{$instagram}">{fa instagram, "2x"}</a>
-		{/ifset}
-		{php $twitter = $cinema["twitter"];}
-		{ifset $twitter}
-			<a href="https://twitter.com/{$twitter}">{fa twitter-official, "2x"}</a>
-		{/ifset}
+			{php $facebook = $cinema["facebook"];}
+			{ifset $facebook}
+				<a href="https://www.facebook.com/{$facebook}">{fa b, facebook, "2x"}</a>
+			{/ifset}
+			
+			{php $googleplus = $cinema["google+"];}
+			{ifset $googleplus}
+				<a href="https://plus.google.com/{$googleplus}">{fa b, google-plus-g, "2x"}</a>
+			{/ifset}
+			
+			{php $instagram = $cinema["instagram"];}
+			{ifset $instagram}
+				<a href="https://www.instagram.com/{$instagram}">{fa b, instagram, "2x"}</a>
+			{/ifset}
+			
+			{php $twitter = $cinema["twitter"];}
+			{ifset $twitter}
+				<a href="https://twitter.com/{$twitter}">{fa b, twitter, "2x"}</a>
+			{/ifset}
 		</span>
 	</div>
 	<address>
 		<strong>{$cinema["name"]}</strong><br>
-		{fa map-marker} {$cinema["address"]}, {$cinema["city"]}<br>
+		{fa map-marker-alt} {$cinema["address"]}, {$cinema["city"]}<br>
 		{ifset $cinema["phone"]}
 			{fa phone} <a href="tel:{$cinema['phone']|replace:' ',''}">{$cinema["phone"]}</a><br>
 		{/ifset}
 		{ifset $cinema["email"]}
-			{fa envelope-o} <a href="mailto:{$cinema['email']}">{$cinema["email"]}</a><br>
+			{fa r, envelope} <a href="mailto:{$cinema['email']}">{$cinema["email"]}</a><br>
 		{/ifset}
 		{fa link} <a href="{$cinema['url']}">{$cinema["url"]}</a>
 	</address>
 	
 	<a href="#cinemaMap" onClick="showCinemaMap();" id="cinemaMapButton" class="btn btn-danger collapsed" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cinemaMap">
-		{fa map-o} <span id="cinemaMapButtonText">Zobrazit</span> kino na mapě
+		{fa r, map} <span id="cinemaMapButtonText">Zobrazit</span> kino na mapě
 	</a><br><br>
 </div>
 

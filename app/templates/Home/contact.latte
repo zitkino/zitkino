@@ -6,9 +6,19 @@
 <div class="row">
 	<div class="col-md-8">
 		<ul class="list-unstyled">
-			<li><a href="https://github.com/zitkino/zitkino" title="GitHub">{fa github, "lg"} GitHub</a></li>
-			<li><a href="https://www.facebook.com/zitkino.cz" title="Facebook profil">{fa facebook-official, "lg"} Facebook</a></li>
-			<li><a href="https://m.me/zitkino.cz" title="Messenger">Messenger</a></li>
+			<li><a href="https://github.com/zitkino/zitkino" title="GitHub">{fa b, github, "lg"} GitHub</a></li>
+			<li><a href="https://www.facebook.com/zitkino.cz" title="Facebook profil">{fa b, facebook, "lg"} Facebook</a></li>
+			<li>
+				<span class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMessenger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 4px;">
+						{fa b, facebook-messenger, "lg"}&nbsp;<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMessenger">
+						<li><img src="{$wwwdir}/img/messenger_code.png" width="200"></li>
+					</ul>
+				</span>
+				<a href="https://m.me/zitkino.cz" title="Messenger">Messenger</a>
+			</li>
 		</ul>
 	</div>
 	

@@ -1,9 +1,13 @@
 {
+	"name": "zitkino",
+	
 	"dependencies": {
-		"jquery": "^3.1.1"
+		"@fortawesome/fontawesome-free-webfonts": "^1.0.1",
+		"jquery": "3.2.1"
 	},
+	"devDependencies": {},
+	
 	"scripts": {
-		"postinstall": 
-			"xcopy /Y /I /E \"node_modules\\jquery\\dist\" \"libs\\jquery\" && rmdir /S /Q \"node_modules\""
+		"postinstall": "yarn autoclean --force"
 	}
 }

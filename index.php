@@ -8,7 +8,7 @@ if(isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO
 // require ".maintenance.php";
 
 // Add Nette
-require_once __DIR__."/libs/autoload.php";
+require_once __DIR__."/vendor/autoload.php";
 
 // Let bootstrap create Dependency Injection container.
 $configurator = new Nette\Configurator;

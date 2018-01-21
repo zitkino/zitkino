@@ -11,14 +11,14 @@
 
 	&nbsp;&nbsp;
 	{var $address = $cinema["address"].", ".$cinema["city"];}
-	<a href="https://www.google.cz/maps/place/{$address|escapeurl}">{fa map-marker} {$address}</a>
+	<a href="https://www.google.cz/maps/place/{$address|escapeurl}">{fa map-marker-alt} {$address}</a>
 
 	&nbsp;&nbsp;
 	{php $url = $cinema["url"];}
 	<a href="{$url}">{fa link} {$url}</a>
 
 	<div class="pull-right">
-		<a n:href="Cinema:profile, $id = $cinema['short_name']">{fa list-alt, "lg"} profil kina</a>
+		<a n:href="Cinema:profile, $id = $cinema['short_name']">{fa r, list-alt, "lg"} profil kina</a>
 	</div>
 {/define}
 
@@ -47,22 +47,22 @@
 			{var $films = new \Zitkino\Movies($movies)}
 			
 			{if $films->hasTypes()}
-				<th><abbr title="Typ filmu">{fa video-camera}</abbr> <span class="hidden-xs hidden-sm">Typ</span></th>
+				<th><abbr title="Typ filmu">{fa video}</abbr> <span class="hidden-xs hidden-sm">Typ</span></th>
 			{/if}
 			
 			{if $films->hasLanguages()}
-				<th><abbr title="Dabing">{fa language}</abbr> <span class="hidden-xs hidden-sm">Dabing</span> a 
+				<th><abbr title="Dabing">{fa headphones}</abbr> <span class="hidden-xs hidden-sm">Dabing</span> a 
 					<abbr title="Titulky">{fa paragraph}</abbr> <span class="hidden-xs hidden-sm">titulky</span></th>
 			{/if}
 			
-			<th>{fa calendar} Promítání</th>
+			<th>{fa r, calendar-alt} Promítání</th>
 			
 			{if $films->hasLengths()}
 				<th><abbr title="Délka">{fa hourglass-end}</abbr> <span class="hidden-xs hidden-sm">Délka</span></th>
 			{/if}
 			
 			{if $films->hasPrices()}
-				<th><abbr title="Cena">{fa money}</abbr> <span class="hidden-xs hidden-sm">Cena</span></th>
+				<th><abbr title="Cena">{fa r, money-bill-alt}</abbr> <span class="hidden-xs hidden-sm">Cena</span></th>
 			{/if}
 			
 			<th><abbr title="Filmové databáze">{fa database}</abbr> <span class="hidden-xs hidden-sm">Databáze</span></th>
@@ -93,7 +93,7 @@
 				<td title="Jazyk">
 					{php $dubbing = $movie->getDubbing()}
 					{ifset $dubbing}
-						<span class="label label-language" title="Dabing">{fa language}&nbsp;{$dubbing}</span>
+						<span class="label label-language" title="Dabing">{fa headphones}&nbsp;{$dubbing}</span>
 					{/ifset}
 					<br class="hidden-md hidden-lg">
 					{php $subtitles = $movie->getSubtitles()}
@@ -103,10 +103,10 @@
 				</td>
 			{/if}
 			
-			<td title="Datum a čas">{fa calendar-o}
+			<td title="Datum a čas">{fa r, calendar}
 				{foreach $movie->getDatetimes() as $datetime}
 					{if $iterator->first}
-						{$datetime->format('d.m.Y')} <br class="hidden-md hidden-lg">{fa clock-o}
+						{$datetime->format('d.m.Y')} <br class="hidden-md hidden-lg">{fa r, clock}
 					{/if}
 					{$datetime->format('H:i')}{sep}, {/sep}
 				{/foreach}
@@ -130,7 +130,7 @@
 				{var $databases = $movie->getDatabases()}
 				<a href="{$databases['csfd']}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="20"></a>
 				<br class="hidden-md hidden-lg">
-				<a href="{$databases['imdb']}" title="IMDb">{fa imdb, "lg"}</a>
+				<a href="{$databases['imdb']}" title="IMDb">{fa b, imdb, "lg"}</a>
 			</td>
 		</tr>
 			{/if}
