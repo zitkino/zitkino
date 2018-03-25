@@ -52,6 +52,7 @@ class Lucerna extends Parser {
 						case stripos($languageString, "ČT") !== false: $dubbing = null; $subtitles = "české"; break;
 						case stripos($languageString, "ČD") !== false: $dubbing = "česky"; $subtitles = null; break;
 						case stripos($languageString, "anglicka_verzia_ceske_titulky") !== false: $dubbing = "anglicky"; $subtitles = "české"; break;
+						case stripos($languageString, "Anglická verze s českými titulky") !== false: $dubbing = "anglicky"; $subtitles = "české"; break;
 						default: $dubbing = null; $subtitles = null;
 					}
 				}
@@ -71,7 +72,7 @@ class Lucerna extends Parser {
 					if($a->length == 1) {
 						if($a->item(0)->hasAttribute("title")) {
 							$priceString = $a->item(0)->getAttribute("title");
-							$price = str_replace(["Rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
+							$price = str_replace(["Koupit / rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
 						}
 					} else {
 						$price = null;
