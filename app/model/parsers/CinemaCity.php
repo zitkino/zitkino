@@ -94,11 +94,11 @@ abstract class CinemaCity extends Parser {
 				
 				$dayOfWeek = $datetime->format("w");
 				if($dayOfWeek == 1) {
-					$price = 154;
-					if($type == "3D") { $price = 199; }
+					$price = 164;
+					if($type == "3D") { $price = 209; }
 				} else {
-					$price = 184;
-					if($type == "3D") { $price = 229; }
+					$price = 194;
+					if($type == "3D") { $price = 239; }
 				}
 				
 				$movie = new \Zitkino\Movie($name, $datetimes);
