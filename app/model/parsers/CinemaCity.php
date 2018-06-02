@@ -28,7 +28,7 @@ abstract class CinemaCity extends Parser {
 		$this->date = $datetime->format("j/m/Y");
 		
 		$dateUrl = str_replace("/", "%2F", $this->date);
-		$this->setUrl("http://www.cinemacity.cz/scheduleInfo?locationId=".$this->cinemaId."&date=".$dateUrl."&venueTypeId=1&hideSite=true&openedFromPopup=1&newwin=1");
+		$this->setUrl("https://www.cinemacity.cz/scheduleInfo?locationId=".$this->cinemaId."&date=".$dateUrl."&venueTypeId=1&hideSite=true&openedFromPopup=1&newwin=1");
 		$this->initiateDocument();
 		
 		$this->getContent();
