@@ -8,7 +8,6 @@ class Delnak extends Parser {
 	public function __construct() {
 		$this->setUrl("http://www.delnickydumbrno.cz/cely-program.html");
 		$this->initiateDocument();
-		
 		$this->getContent();
 	}
 	
@@ -21,29 +20,30 @@ class Delnak extends Parser {
 			$itemQuery = $xpath->query("//h4//a", $event);
 			$itemString = $itemQuery->item($movieItems)->nodeValue;
 			
-			if($itemString == "Židenické letní kino na Dělňáku") {
-				$name = $dubbing = $length = $csfd = null;
+			if(strpos($itemString, "Letní kino") !== false) {
+				$name = str_replace("Letní kino - ", "", $itemString);
+				$dubbing = $length = $csfd = null;
 				
 				$details = $xpath->query(".//div//p", $event);
 				foreach($details as $detail) {
 					if(strpos($detail->nodeValue, "min.") !== false) {
-						$nameQuery = $xpath->query(".//strong", $detail);
-						$nameString = $nameQuery->item($nameQuery->length-1)->nodeValue;
-						$name = str_replace(["film ", "21:00"], "", $nameString);
-						
 						$matches = [];
 						preg_match_all("/\((.*?)\)/", $detail->nodeValue, $matches);
 						$data = explode(",", $matches[1][0]);
 						
+						$dubbing = null;
 						if(strpos($data[0], "CZ") !== false) {
 							$dubbing = "česky";
 						}
 						
-						$length = str_replace("min.", "", $data[2]);
+						$subtitles = null;
+						if(isset($data[3])) {
+							if(strpos($data[3], "české titulky") !== false) {
+								$subtitles = "české";
+							}
+						}
 						
-						$csfdQuery = $xpath->query(".//a", $detail);
-						$csfdString = $csfdQuery->item(0)->getAttribute("href");
-						$csfd = str_replace(["https://www.csfd.cz/film/", "/prehled/", "/komentare/"], "", $csfdString);
+						$length = str_replace("min.", "", $data[2]);
 					}
 				}
 				
@@ -61,14 +61,14 @@ class Delnak extends Parser {
 				
 				$priceQuery = $xpath->query("//p[@class='entry']", $event);
 				$priceString = $priceQuery->item($movieItems)->nodeValue;
-				$price = str_replace(["Vstupné: ", "Kč"], "", $priceString);
+				$price = str_replace(["Vstupné: ", " Kč"], "", $priceString);
 				
 				$movie = new \Zitkino\Movie($name, $datetimes);
 				$movie->setLink($link);
 				$movie->setDubbing($dubbing);
+				$movie->setSubtitles($subtitles);
 				$movie->setLength($length);
 				$movie->setPrice($price);
-				$movie->setCsfd($csfd);
 				$this->movies[] = $movie;
 			}
 			

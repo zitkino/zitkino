@@ -7,48 +7,62 @@ use ICal\ICal;
  */
 class Stred extends Parser {
 	public function __construct() {
-//		$this->setUrl("https://calendar.google.com/calendar/ical/n6a7pqdcgeprq9v7pf84dk3djo%40group.calendar.google.com/public/basic.ics");
-		$this->setUrl("http://www.kinobude.cz");
+		$this->setUrl("http://kinobude.cz/program/");
+		$this->initiateDocument();
 		$this->getContent();
 	}
 	
 	public function getContent() {
-		$ical = new ICal();
-		$ical->initUrl($this->getUrl());
+		$xpath = $this->downloadData();
 		
-		$events = $ical->eventsFromInterval("2 month");
-		$movieItems = 0;
+		$events = $xpath->query("//div[@class='contentContent']//a[@class='programPolozka row']");
 		foreach($events as $event) {
-			$name = $event->summary;
+			$linkQuery = $xpath->query(".", $event);
+			$link = $linkQuery->item(0)->getAttribute("href");
 			
-			$items = explode(", ", $event->description);
+			$timeQuery = $xpath->query(".//div[@class='datetime col-xs-1']//small", $event);
+			$days = ["po, ", "út, ", "st, ", "čt, ", "pá, ", "so, ", "ne, "];
+			$timeString = str_replace($days, "", $timeQuery->item(0)->nodeValue);
+			$time = explode(":", $timeString);
+			
+			$dateQuery = $xpath->query(".//div[@class='datetime col-xs-1']//div[@class='date']", $event);
+			$dateString = $dateQuery->item(0)->nodeValue;
+			
+			$date = \DateTime::createFromFormat("d. m.", $dateString);
+			$date->setTime(intval($time[0]), intval($time[1]));
+			$datetimes = [$date];
+			
+			$nameQuery = $xpath->query(".//div[@class='title col-xs-7']//h2", $event);
+			$name = $nameQuery->item(0)->nodeValue;
+			
+			$metaQuery = $xpath->query(".//div[@class='title col-xs-7']//div[@class='meta_info']", $event);
+			$metaString = $metaQuery->item(0)->nodeValue;
+			$meta = explode(",", $metaString);
+			
+			$length = $meta[3];
+			
+			$language = explode(" / ", $meta[4]);
 			
 			$dubbing = null;
-			if(strpos($items[1], "Česko") !== false) {
-				$dubbing = "česky";
+			switch (true) {
+				case (strpos($language[0], "CZ") !== false): $dubbing = "česky"; break;
+				case (strpos($language[0], "DA") !== false): $dubbing = "dánsky"; break;
+				case (strpos($language[0], "DE") !== false): $dubbing = "německy"; break;
+				case (strpos($language[0], "DN") !== false): $dubbing = "dánsky"; break;
+				case (strpos($language[0], "EN") !== false): $dubbing = "anglicky"; break;
+				case (strpos($language[0], "ES") !== false): $dubbing = "španělsky"; break;
+				case (strpos($language[0], "FA") !== false): $dubbing = "persky"; break;
+				case (strpos($language[0], "FR") !== false): $dubbing = "francouzsky"; break;
+				case (strpos($language[0], "HE") !== false): $dubbing = "hebrejsky"; break;
+				case (strpos($language[0], "NO") !== false): $dubbing = "norsky"; break;
+				case (strpos($language[0], "HU") !== false): $dubbing = "maďarsky"; break;
+				case (strpos($language[0], "IT") !== false): $dubbing = "italsky"; break;
+				case (strpos($language[0], "SW") !== false): $dubbing = "švédsky"; break;
 			}
 			
 			$subtitles = null;
-			if(strpos($event->description, "čes. tit.") !== false) {
+			if(isset($language[1]) and (strpos($language[1], "CZ tit") !== false or strpos($language[1], "CZE tit") !== false)) {
 				$subtitles = "české";
-			}
-			
-			$datetime = $ical->iCalDateToDateTime($event->dtstart, true);
-			$datetime->setTimezone(new \DateTimeZone("Europe/Prague"));
-			$datetimes = [$datetime];
-			
-			$length = null;
-			if(isset($items[3])) {
-				$replacing = ["min", ".", ",", "čes tit"];
-				
-				$lengthQuery = [""];
-				if(strpos($items[2], "min") !== false) {
-					$lengthQuery = explode("R:", $items[2]);
-				}
-				if(strpos($items[3], "min") !== false) {
-					$lengthQuery = explode("R:", $items[3]);
-				}
-				$length = str_replace($replacing, "", $lengthQuery[0]);
 			}
 			
 			$price = 90;
@@ -57,13 +71,12 @@ class Stred extends Parser {
 			}
 			
 			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie->setLink($link);
 			$movie->setDubbing($dubbing);
 			$movie->setSubtitles($subtitles);
 			$movie->setLength($length);
 			$movie->setPrice($price);
 			$this->movies[] = $movie;
-			
-			$movieItems++;
 		}
 		
 		$this->setMovies($this->movies);

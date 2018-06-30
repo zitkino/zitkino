@@ -6,87 +6,50 @@ namespace Zitkino\parsers;
  */
 class Mdb extends Parser {
 	public function __construct() {
-		$this->setUrl("http://www.letnikinobrno.cz/program-kina/");
+		$this->setUrl("https://www.letnikinobrno.cz/program-kina/");
 		$this->initiateDocument();
-		
 		$this->getContent();
 	}
 	
 	public function getContent() {
 		$xpath = $this->downloadData();
 		
-		$events = $xpath->query("//div[@id='right']//div[@class='program-item']");
-		$days = 0;
-		$movieItems = 0;
+		$events = $xpath->query("//div[@class='wpb_wrapper']//div[@class='table-events-content']");
 		foreach($events as $event) {
-			$nameQuery = $xpath->query("//div[@class='program-title']//a", $event);
-			$nameString = $nameQuery->item($movieItems)->nodeValue;
-			$name = str_replace("(VSTUP ZDARMA)", "", $nameString);
+			$nameQuery = $xpath->query(".//div[@class='events-text1 events-text']//p[1]", $event);
+			$name = $nameQuery->item(0)->nodeValue;
 			
-			$link = "http://www.letnikinobrno.cz/program-kina/".$nameQuery->item($movieItems)->getAttribute("href");
-			
-			$infoQuery = $xpath->query("//div[@class='program-info']", $event);
-			$infoString = $infoQuery->item($movieItems)->nodeValue;
-			$info = explode(",", $infoString);
-			
-			$dubbing = null;
-			if(strpos($infoString, "CZ znění") !== false) {
-				$dubbing = "česky";
+			$linkQuery = $xpath->query(".//div[@class='events-text1 events-text']//p[2]/a", $event);
+			$linkItem = $linkQuery->item(0);
+			$link = null;
+			if($linkItem != null) {
+				$link = $linkQuery->item(0)->getAttribute("href");
 			}
 			
-			$subtitles = null;
-			if(strpos($infoString, "CZ titulky") !== false) {
-				$subtitles = "české";
-			} elseif(strpos($infoString, "AN titulky") !== false) {
-				$subtitles = "anglické";
-			}
+			$dateQuery = $xpath->query(".//div[@class='events-text2 events-text']", $event);
+			$days = ["PONDĚLÍ", "ÚTERÝ", "STŘEDA", "ČTVRTEK", "PÁTEK", "SOBOTA", "NEDĚLE"];
+			$dateString = str_replace($days, "", $dateQuery->item(0)->nodeValue);
 			
-			$dateQuery = $xpath->query("//span[@class='program-date']", $event);
-			$dateString = explode(", ", $dateQuery->item($days)->nodeValue);
-			$datetimeString = explode(" ve ", $dateString[1]);
+			$months = ["července", "červen", "srpna", "září"];
+			$monthsNumbers = [7, 6, 8, 9];
+			$date = trim(str_replace($months, $monthsNumbers, $dateString));
 			
-			$date = $datetimeString[0];
-			$time = explode(":", $datetimeString[1]);
-			
-			$datetime = \DateTime::createFromFormat("d. m. Y", $date);
-			if(isset($time[1])) {
-				$datetime->setTime(intval($time[0]), intval($time[1]));
-			} else {
-				$datetime->setTime(21, 0);
+			$datetime = \DateTime::createFromFormat("d. m Y", $date);
+			if($datetime != false) {
+				$month = $datetime->format("m");
+				switch ($month) {
+					case "6": case "7": $datetime->setTime(21, 30); break;
+					case "8": case "9": $datetime->setTime(21, 0); break;
+				}
 			}
 			$datetimes = [$datetime];
 			
-			$length = null;
-			if(strpos($infoString, "min.") !== false) {
-				$lengthString = str_replace("...více", "", $info[count($info)-1]);
-				$length = str_replace("min.", "", $lengthString);
-			}
+			$price = 99;
 			
 			$movie = new \Zitkino\Movie($name, $datetimes);
 			$movie->setLink($link);
-			$movie->setDubbing($dubbing);
-			$movie->setSubtitles($subtitles);
-			$movie->setLength($length);
+			$movie->setPrice($price);
 			$this->movies[] = $movie;
-			
-			$movieItems++;
-			$days++;
-		}
-		
-		$movieItems = 0;
-		$prices = $xpath->query("//div[@id='right']//div[@class='price']");
-		foreach($prices as $price) {
-			$priceQuery = $xpath->query(".", $price); 
-			$priceString = $priceQuery->item(0)->nodeValue;
-			
-			if(strpos($priceString, "ZDARMA") !== false) {
-				$price = str_replace("ZDARMA", 0, $priceString);
-			} else {
-				$price = str_replace("Kč", "", $priceString);
-			}
-			
-			$this->movies[$movieItems]->setPrice($price);
-			$movieItems++;
 		}
 		
 		$this->setMovies($this->movies);
