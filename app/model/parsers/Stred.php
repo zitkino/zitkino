@@ -20,26 +20,31 @@ class Stred extends Parser {
 			$linkQuery = $xpath->query(".", $event);
 			$link = $linkQuery->item(0)->getAttribute("href");
 			
-			$timeQuery = $xpath->query(".//div[@class='datetime col-xs-1']//small", $event);
+			$timeQuery = $xpath->query(".//div[contains(@class, 'dateTime')]//div[@class='dayAndTime']", $event);
 			$days = ["po, ", "út, ", "st, ", "čt, ", "pá, ", "so, ", "ne, "];
 			$timeString = str_replace($days, "", $timeQuery->item(0)->nodeValue);
 			$time = explode(":", $timeString);
 			
-			$dateQuery = $xpath->query(".//div[@class='datetime col-xs-1']//div[@class='date']", $event);
+			$dateQuery = $xpath->query(".//div[contains(@class, 'dateTime')]//div[@class='date']", $event);
 			$dateString = $dateQuery->item(0)->nodeValue;
 			
-			$date = \DateTime::createFromFormat("d. m.", $dateString);
-			$date->setTime(intval($time[0]), intval($time[1]));
-			$datetimes = [$date];
+			$yearQuery = $xpath->query(".//div[contains(@class, 'dateTime')]//div[@class='year']", $event);
+			$year = $yearQuery->item(0)->nodeValue;
 			
-			$nameQuery = $xpath->query(".//div[@class='title col-xs-7']//h2", $event);
+			$date = $dateString." ".$year;
+			
+			$datetime = \DateTime::createFromFormat("d. m. Y", $date);
+			$datetime->setTime(intval($time[0]), intval($time[1]));
+			$datetimes = [$datetime];
+			
+			$nameQuery = $xpath->query(".//div[contains(@class, 'titleAndBasicInfo')]//h2", $event);
 			$name = $nameQuery->item(0)->nodeValue;
 			
-			$metaQuery = $xpath->query(".//div[@class='title col-xs-7']//div[@class='meta_info']", $event);
+			$metaQuery = $xpath->query(".//div[contains(@class, 'titleAndBasicInfo')]//div[@class='catalogMetas']", $event);
 			$metaString = $metaQuery->item(0)->nodeValue;
 			$meta = explode(",", $metaString);
 			
-			$length = $meta[3];
+			$length = str_replace("min", "", $meta[3]);
 			
 			$language = explode(" / ", $meta[4]);
 			
