@@ -3,8 +3,8 @@
 
 
 "@fortawesome/fontawesome-free-webfonts@^1.0.1":
-  version "1.0.2"
-  resolved "https://npm.fontawesome.com/A68C9CE4-2A19-4787-9A03-2A2A396538B0/@fortawesome/fontawesome-free-webfonts/-/fontawesome-free-webfonts-1.0.2.tgz#0bbc883687ce10564ee1c9f4042563a8f9048221"
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free-webfonts/-/fontawesome-free-webfonts-1.0.9.tgz#72f2c10453422aba0d338fa6a9cb761b50ba24d5"
 
 jquery@3.2.1:
   version "3.2.1"

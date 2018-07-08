@@ -11,21 +11,35 @@ php:
 application:
 	errorPresenter: Error
 	mapping:
-		*: App\Presenters\*Presenter
+		*: App\presenters\*
 
 di:
 	accessors: true
-
+	
+http:
+	frames: yes
+	
 latte:
 	macros:
-		- Lib\fontAwesome\LatteMacro
+		- Fazette\latte\Fa
 
 services:
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter
-	nette.latteFactory:
+	
+	latte.latteFactory:
 		setup:
 			- setAutoRefresh(true)
 
-tracy:
-	strictMode: false
+
+extensions:
+	console: Kdyby\Console\DI\ConsoleExtension
+	events: Kdyby\Events\DI\EventsExtension
+	annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	doctrine: Kdyby\Doctrine\DI\OrmExtension
+	
+doctrine:
+	charset: UTF8
+	driver: pdo_mysql
+	metadata:
+		App: %appDir%

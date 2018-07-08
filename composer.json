@@ -16,7 +16,9 @@
 		"hermajan/fazette": "dev-master",
 		"hermajan/lib": "dev-master",
 		"johngrogg/ics-parser": "^2.0",
+		"kdyby/doctrine": "^3.3",
 		"nette/nette": "^2.4",
-		"twbs/bootstrap": "^3.3"
+		"twbs/bootstrap": "^3.3",
+		"vlucas/phpdotenv": "^2.5"
 	}
 }

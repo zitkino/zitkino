@@ -54,7 +54,7 @@ abstract class Parser {
 	}
 	
 	public function getConnection() {
-		$db = new \Lib\database\Doctrine(__DIR__."/../../database.ini");
+		$db = new \Lib\database\Doctrine(__DIR__."/../../config/database.ini");
 		$this->connection = $db->getConnection();
 	}
 

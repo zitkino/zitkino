@@ -11,7 +11,7 @@ class Cinema {
 	private $movies;
 
 	public function __construct($id) {
-		$db = new DB(__DIR__."/../database.ini");
+		$db = new DB(__DIR__."/../config/database.ini");
 		/** @var \Doctrine\DBAL\Connection $connection */
 		$connection = $db->getConnection();
 		

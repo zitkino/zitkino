@@ -6,7 +6,9 @@ domains/
 node_modules/
 vendor/
 
+.env
 *.ini
-config*.neon
 *.config
 *-data.sql
+
+app/config/production.neon

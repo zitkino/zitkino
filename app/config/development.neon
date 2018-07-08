@@ -1,0 +1,13 @@
+application:
+	debugger: true
+	silentLinks: false
+	
+doctrine:
+	host: localhost
+	user: root
+	password: ''
+	dbname: zitkino
+
+tracy:
+	strictMode: true
+	showBar: true

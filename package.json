@@ -1,12 +1,10 @@
 {
 	"name": "zitkino",
-	
 	"dependencies": {
 		"@fortawesome/fontawesome-free-webfonts": "^1.0.1",
 		"jquery": "3.2.1"
 	},
 	"devDependencies": {},
-	
 	"scripts": {
 		"postinstall": "yarn autoclean --force"
 	}

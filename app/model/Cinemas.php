@@ -33,7 +33,7 @@ class Cinemas {
 	}
 
 	public function __construct() {
-		$db = new DB(__DIR__."/../database.ini");
+		$db = new DB(__DIR__."/../config/database.ini");
 		$connection = $db->getConnection();
 		
 		$cinemas = $connection->fetchAll("SELECT id FROM cinemas WHERE active_until IS null ORDER BY short_name");
