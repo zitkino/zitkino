@@ -44,9 +44,17 @@ class Stred extends Parser {
 			$metaString = $metaQuery->item(0)->nodeValue;
 			$meta = explode(",", $metaString);
 			
-			$length = str_replace("min", "", $meta[3]);
+			$length = null;
+			if(isset($meta[3])) {
+				$length = str_replace("min", "", intval($meta[3]));
+				if($length == 0) {
+					$length = null;
+				}
+			}
 			
-			$language = explode(" / ", $meta[4]);
+			if(isset($meta[4])) {
+				$language = explode(" / ", $meta[4]);
+			}
 			
 			$dubbing = null;
 			switch (true) {

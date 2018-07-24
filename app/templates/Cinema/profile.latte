@@ -1,47 +1,47 @@
-{var $title=$cinema["name"]}
+{var $title = $cinema->getName()}
 
 {block content}
-<h1 class="page-header">{$cinema["name"]}</h1>
+<h1 class="page-header">{$cinema->getName()}</h1>
 {import "list.latte"}
 
 {include #movieList, movies => $movies}
 
 <div>
 	<div class="pull-right">
-		<a href="{$cinema["programme"]}" title="Program na webu kina.">{fa book} podrobný program</a><br>
+		<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{fa book} podrobný program</a><br>
 		
 		<span class="pull-right">
-			{php $facebook = $cinema["facebook"];}
+			{php $facebook = $cinema->getFacebook();}
 			{ifset $facebook}
 				<a href="https://www.facebook.com/{$facebook}">{fa b, facebook, "2x"}</a>
 			{/ifset}
 			
-			{php $googleplus = $cinema["google+"];}
-			{ifset $googleplus}
-				<a href="https://plus.google.com/{$googleplus}">{fa b, google-plus-g, "2x"}</a>
+			{php $googlePlus = $cinema->getGooglePlus();}
+			{ifset $googlePlus}
+				<a href="https://plus.google.com/{$googlePlus}">{fa b, google-plus-g, "2x"}</a>
 			{/ifset}
 			
-			{php $instagram = $cinema["instagram"];}
+			{php $instagram = $cinema->getInstagram();}
 			{ifset $instagram}
 				<a href="https://www.instagram.com/{$instagram}">{fa b, instagram, "2x"}</a>
 			{/ifset}
 			
-			{php $twitter = $cinema["twitter"];}
+			{php $twitter = $cinema->getTwitter();}
 			{ifset $twitter}
 				<a href="https://twitter.com/{$twitter}">{fa b, twitter, "2x"}</a>
 			{/ifset}
 		</span>
 	</div>
 	<address>
-		<strong>{$cinema["name"]}</strong><br>
-		{fa map-marker-alt} {$cinema["address"]}, {$cinema["city"]}<br>
-		{ifset $cinema["phone"]}
-			{fa phone} <a href="tel:{$cinema['phone']|replace:' ',''}">{$cinema["phone"]}</a><br>
-		{/ifset}
-		{ifset $cinema["email"]}
-			{fa r, envelope} <a href="mailto:{$cinema['email']}">{$cinema["email"]}</a><br>
-		{/ifset}
-		{fa link} <a href="{$cinema['url']}">{$cinema["url"]}</a>
+		<strong>{$cinema->getName()}</strong><br>
+		{fa map-marker-alt} {$cinema->getAddress()}, {$cinema->getCity()}<br>
+		{if $cinema->getPhone()}
+			{fa phone} <a href="tel:{$cinema->getPhone()|replace:' ',''}">{$cinema->getPhone()}</a><br>
+		{/if}
+		{if $cinema->getEmail()}
+			{fa r, envelope} <a href="mailto:{$cinema->getEmail()}">{$cinema->getEmail()}</a><br>
+		{/if}
+		{fa link} <a href="{$cinema->getUrl()}">{$cinema->getUrl()}</a>
 	</address>
 	
 	<a href="#cinemaMap" onClick="showCinemaMap();" id="cinemaMapButton" class="btn btn-danger collapsed" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cinemaMap">
@@ -60,6 +60,7 @@
 	// 	$("#cinemaMapButton").click();
 	// }
 	
+    /** @todo change api key */
 	function showCinemaMap() {
 		if($("#cinemaMap").css("display") === "block") {
 			$("#cinemaMap").css("display", "none");

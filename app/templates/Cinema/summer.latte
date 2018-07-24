@@ -2,12 +2,11 @@
 
 {block #content}
 <h1 class="page-header">{$title}</h1>
-{php $cinemas = new \Zitkino\Cinemas();}
 
 <ul class="list-group">
 	{import "list.latte"}
-	{foreach $cinemas->getSummer() as $cinemaItem}
-		{include #cinemaList, cinema => $cinemaItem->getData()}
+	{foreach $cinemas as $cinemaItem}
+		{include #cinemaList, cinema => $cinemaItem}
 	{/foreach}
 </ul>
 

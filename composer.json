@@ -13,10 +13,11 @@
 	"require": {
 		"php": "^7.0",
 		"doctrine/dbal": "^2.5",
-		"hermajan/fazette": "dev-master",
+		"hermajan/fazette": "^0.1.0",
 		"hermajan/lib": "dev-master",
 		"johngrogg/ics-parser": "^2.0",
 		"kdyby/doctrine": "^3.3",
+		"kdyby/doctrine-magic-accessors": "^1.0",
 		"nette/nette": "^2.4",
 		"twbs/bootstrap": "^3.3",
 		"vlucas/phpdotenv": "^2.5"

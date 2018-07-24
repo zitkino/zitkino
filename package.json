@@ -1,7 +1,8 @@
 {
 	"name": "zitkino",
 	"dependencies": {
-		"@fortawesome/fontawesome-free-webfonts": "^1.0.1",
+		"@fortawesome/fontawesome-free": "^5.1.1",
+		"@hermajan/facolors": "^0.1.0",
 		"jquery": "3.2.1"
 	},
 	"devDependencies": {},

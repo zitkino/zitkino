@@ -7,32 +7,32 @@
 {/define}
 
 {define cinemaListContent}
-	<strong>{$cinema["name"]}</strong>
+	<strong>{$cinema->getName()}</strong>
 
 	&nbsp;&nbsp;
-	{var $address = $cinema["address"].", ".$cinema["city"];}
+	{var $address = $cinema->getAddress().", ".$cinema->getCity();}
 	<a href="https://www.google.cz/maps/place/{$address|escapeurl}">{fa map-marker-alt} {$address}</a>
 
 	&nbsp;&nbsp;
-	{php $url = $cinema["url"];}
+	{php $url = $cinema->getUrl();}
 	<a href="{$url}">{fa link} {$url}</a>
 
 	<div class="pull-right">
-		<a n:href="Cinema:profile, $id = $cinema['short_name']">{fa r, list-alt, "lg"} profil kina</a>
+		<a n:href="Cinema:profile, $id = $cinema->getShortName()">{fa r, list-alt, "lg"} profil kina</a>
 	</div>
 {/define}
 
 {define cinemaMovieList}
 	{foreach $cinemas as $cinemaItem}
-		{var $data = $cinemaItem->getData()}
+        {php $cinemaItem->setMovies()}
 		<section class="panel panel-default">
-			<header class="panel-heading" data-toggle="collapse" data-target="#{$data['short_name']}">
-				{include #cinemaListContent, cinema => $data}
+			<header class="panel-heading" data-toggle="collapse" data-target="#{$cinemaItem->getShortName()}">
+				{include #cinemaListContent, cinema => $cinemaItem}
 			</header>
 			
-			<article id="{$data['short_name']}" class="panel-collapse collapse in">
+			<article id="{$cinemaItem->getShortName()}" class="panel-collapse collapse in">
 				{var $movies = $cinemaItem->getSoonestMovies();}
-				{include #movieList, movies => $movies, cinema => $data}
+				{include #movieList, movies => $movies, cinema => $cinemaItem}
 			</article>
 		</section>
 	{/foreach}
@@ -143,12 +143,12 @@
 	{if is_null($movies) or empty($movies)}
 		<p>Dnes kino asi nepromítá. &#9785;</p>
 		<p>Program na další dny je na webu kina:
-			<a href="{$cinema['programme']}" title="Program na webu kina.">{$cinema["programme"]}</a>
+			<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 		</p>
 	{else}
-		{if basename($_SERVER["REQUEST_URI"]) == $cinema["short_name"]}
+		{if basename($_SERVER["REQUEST_URI"]) == $cinema->getShortName()}
 			<p>Další program a podrobné informace o filmech:
-				<a href="{$cinema['programme']}" title="Program na webu kina.">{$cinema["programme"]}</a>
+				<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 			</p>
 		{else}
 			{*<p>Další promítání jsou na stránce*}

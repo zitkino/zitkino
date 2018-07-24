@@ -1,10 +1,16 @@
 <?php
 namespace App\presenters;
 
+use Zitkino\Facades\CinemaFacade;
+
 /**
  * Homepage presenter.
  */
 class Home extends Base {
+	/** @var CinemaFacade @inject */
+	public $cinemaFacade;
+	
+	
 	public function beforeRender() {
 		Base::beforeRender();
 		
@@ -13,7 +19,7 @@ class Home extends Base {
 	}
 	
 	public function renderDefault() {
-		$cinemas = new \Zitkino\Cinemas();
-		$this->template->cinemas = $cinemas->getWithMovies();
+		$cinemas = $this->cinemaFacade->getWithMovies("all");
+		$this->template->cinemas = $cinemas;
 	}
 }

@@ -2,27 +2,26 @@
 
 {block #content}
 <h1 class="page-header">{$title}</h1>
-{php $cinemas = new \Zitkino\Cinemas();}
 
 <h2><a n:href="Cinema:classic">Klasická kina</a> <span class="pull-right"><small><a n:href="Cinema:classic_programme">{fa r, building}</a></small></span></h2>
 <ul class="list-group">
 	{import "list.latte"}
-	{foreach $cinemas->getClassic() as $cinemaItem}
-		{include #cinemaList, cinema => $cinemaItem->getData()}
+	{foreach $classicCinemas as $cinemaItem}
+		{include #cinemaList, cinema => $cinemaItem}
 	{/foreach}
 </ul>
 
 <h2><a n:href="Cinema:multiplex">Multiplexy</a> <span class="pull-right"><small><a n:href="Cinema:multiplex_programme">{fa building}</a></small></span></h2>
 <ul class="list-group">
-	{foreach $cinemas->getMultiplex() as $cinemaItem}
-		{include #cinemaList, cinema => $cinemaItem->getData()}
+	{foreach $multiplexCinemas as $cinemaItem}
+		{include #cinemaList, cinema => $cinemaItem}
 	{/foreach}
 </ul>
 
 <h2><a n:href="Cinema:summer">Letní kina</a> <span class="pull-right"><small><a n:href="Cinema:summer_programme">{fa r, sun}</a></small></span></h2>
 <ul class="list-group">
-	{foreach $cinemas->getSummer() as $cinemaItem}
-		{include #cinemaList, cinema => $cinemaItem->getData()}
+	{foreach $summerCinemas as $cinemaItem}
+		{include #cinemaList, cinema => $cinemaItem}
 	{/foreach}
 </ul>
 {/block}

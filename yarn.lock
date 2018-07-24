@@ -6,6 +6,14 @@
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free-webfonts/-/fontawesome-free-webfonts-1.0.9.tgz#72f2c10453422aba0d338fa6a9cb761b50ba24d5"
 
+"@fortawesome/fontawesome-free@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.1.1.tgz#b2c8d73675e349062112c2795a6e9e146bf47e1e"
+
+"@hermajan/facolors@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@hermajan/facolors/-/facolors-0.1.0.tgz#f74a53ad32162529144ad80fba4c5d9ecd7db927"
+
 jquery@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"

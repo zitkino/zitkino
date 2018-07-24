@@ -43,3 +43,4 @@ doctrine:
 	driver: pdo_mysql
 	metadata:
 		App: %appDir%
+		Zitkino: %appDir%

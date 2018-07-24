@@ -1,0 +1,2 @@
+services: 
+	- Zitkino\Facades\CinemaFacade
