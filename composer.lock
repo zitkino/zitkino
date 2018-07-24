@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ddc338f71e836ca19ca020f3dc8a89b",
+    "content-hash": "c315cd15cb9bf62cbaffa1e99895b3d7",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -860,6 +860,34 @@
                 "reflection"
             ],
             "time": "2018-06-14T14:45:07+00:00"
+        },
+        {
+            "name": "hermajan/dobine",
+            "version": "9999999-dev",
+            "dist": {
+                "type": "path",
+                "url": "../dobine",
+                "reference": "2eecc7c3470c061fa313a90c6abba8f5cdf513d2",
+                "shasum": null
+            },
+            "require": {
+                "doctrine/orm": "^2.5",
+                "php": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dobine\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Doctrine extensions.",
+            "homepage": "https://hermajan.net/dobine",
+            "support": {
+                "issues": "https://github.com/hermajan/dobine/issues"
+            }
         },
         {
             "name": "hermajan/fazette",
@@ -3377,6 +3405,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "hermajan/dobine": 20,
         "hermajan/lib": 20
     },
     "prefer-stable": false,

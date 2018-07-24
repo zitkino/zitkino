@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Velky Spalicek parser.

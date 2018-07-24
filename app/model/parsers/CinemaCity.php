@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Cinema City parser.
@@ -101,7 +101,7 @@ abstract class CinemaCity extends Parser {
 					if($type == "3D") { $price = 239; }
 				}
 				
-				$movie = new \Zitkino\Movie($name, $datetimes);
+				$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 				$movie->setLink($link);
 				$movie->setType($type);
 				$movie->setDubbing($dubbing);

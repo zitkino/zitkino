@@ -1,4 +1,6 @@
 <?php
+use Dotenv\Dotenv;
+
 if(isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO"] === "https") {
 	$_SERVER["HTTPS"] = "on";
 	$_SERVER["SERVER_PORT"] = "443";
@@ -9,7 +11,7 @@ if(isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO
 
 require_once __DIR__."/vendor/autoload.php";
 
-$dotenv = new Dotenv\Dotenv(__DIR__);
+$dotenv = new Dotenv(__DIR__);
 $dotenv->load();
 
 // Add Nette

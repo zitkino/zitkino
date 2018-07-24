@@ -1,11 +1,11 @@
 <?php
-namespace Zitkino;
+namespace Zitkino\Movies;
 
 /**
  * Movies.
  */
 class Movies {
-	/** @var \Zitkino\Movie[] */
+	/** @var Movie[] */
 	private $movies;
 	
 	public function __construct($movies) {

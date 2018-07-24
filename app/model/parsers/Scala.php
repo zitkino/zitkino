@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Scala parser.
@@ -63,7 +63,7 @@ class Scala extends Parser {
 				$priceString = htmlentities($priceItem, null, "utf-8");
 				$price = trim(str_replace("&nbsp;Kč", "", $priceString));
 				
-				$movie = new \Zitkino\Movie($name, $datetimes);
+				$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 				$movie->setLink($link);
 				$movie->setDubbing($dubbing);
 				$movie->setPrice($price);

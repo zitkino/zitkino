@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Letní kino na Dvoře Městského divadla parser.
@@ -46,7 +46,7 @@ class Mdb extends Parser {
 			
 			$price = 99;
 			
-			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 			$movie->setLink($link);
 			$movie->setPrice($price);
 			$this->movies[] = $movie;

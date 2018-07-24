@@ -1,8 +1,9 @@
 <?php
 use Nette\Application\Application;
+use Nette\Configurator;
 
 // Let bootstrap create Dependency Injection container.
-$configurator = new Nette\Configurator;
+$configurator = new Configurator;
 
 // Enable Nette Debugger for error visualisation & logging
 //$configurator->setDebugMode(true);

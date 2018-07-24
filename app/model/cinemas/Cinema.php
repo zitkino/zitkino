@@ -1,9 +1,10 @@
 <?php
-namespace Zitkino\Entities;
+namespace Zitkino\Cinemas;
 
+use Dobine\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\BaseEntity;
 use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
+use Zitkino\Movies\Movie;
 
 /**
  * Cinema
@@ -11,131 +12,122 @@ use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
  * @ORM\Table(name="cinemas", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  * @ORM\Entity
  */
-class Cinema {
+class Cinema extends BaseEntity {
 	use MagicAccessors;
 	
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=100, nullable=false)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="short_name", type="string", length=20, nullable=false)
-     */
-    protected $shortName;
-
-    /**
-     * @var enum
-     *
-     * @ORM\Column(name="type", type="enum", nullable=false, options={"default"="classic"})
-     */
-    protected $type = 'classic';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="address", type="string", length=100, nullable=true)
-     */
-    protected $address;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="city", type="string", length=100, nullable=false, options={"default"="Brno"})
-     */
-    protected $city = 'Brno';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="phone", type="string", length=100, nullable=true)
-     */
-    protected $phone;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="email", type="string", length=100, nullable=true)
-     */
-    protected $email;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="url", type="string", length=1000, nullable=true)
-     */
-    protected $url;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="gmaps", type="string", length=1000, nullable=true)
-     */
-    protected $gmaps;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="programme", type="string", length=100, nullable=true)
-     */
-    protected $programme;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="facebook", type="string", length=100, nullable=true)
-     */
-    protected $facebook;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="googlePlus", type="string", length=100, nullable=true)
-     */
-    protected $googlePlus;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="instagram", type="string", length=100, nullable=true)
-     */
-    protected $instagram;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="twitter", type="string", length=100, nullable=true)
-     */
-    protected $twitter;
-
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="active_since", type="date", nullable=true)
-     */
-    protected $activeSince;
-
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="active_until", type="date", nullable=true)
-     */
-    protected $activeUntil;
-
-    /** @var \Zitkino\Movie[] */
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="name", type="string", length=100, nullable=false)
+	 */
+	protected $name;
+	
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="short_name", type="string", length=20, nullable=false)
+	 */
+	protected $shortName;
+	
+	/**
+	 * @var enum
+	 *
+	 * @ORM\Column(name="type", type="enum", nullable=false, options={"default"="classic"})
+	 */
+	protected $type = 'classic';
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="address", type="string", length=100, nullable=true)
+	 */
+	protected $address;
+	
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="city", type="string", length=100, nullable=false, options={"default"="Brno"})
+	 */
+	protected $city = 'Brno';
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="phone", type="string", length=100, nullable=true)
+	 */
+	protected $phone;
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="email", type="string", length=100, nullable=true)
+	 */
+	protected $email;
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="url", type="string", length=1000, nullable=true)
+	 */
+	protected $url;
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="gmaps", type="string", length=1000, nullable=true)
+	 */
+	protected $gmaps;
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="programme", type="string", length=100, nullable=true)
+	 */
+	protected $programme;
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="facebook", type="string", length=100, nullable=true)
+	 */
+	protected $facebook;
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="googlePlus", type="string", length=100, nullable=true)
+	 */
+	protected $googlePlus;
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="instagram", type="string", length=100, nullable=true)
+	 */
+	protected $instagram;
+	
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="twitter", type="string", length=100, nullable=true)
+	 */
+	protected $twitter;
+	
+	/**
+	 * @var \DateTime|null
+	 *
+	 * @ORM\Column(name="active_since", type="date", nullable=true)
+	 */
+	protected $activeSince;
+	
+	/**
+	 * @var \DateTime|null
+	 *
+	 * @ORM\Column(name="active_until", type="date", nullable=true)
+	 */
+	protected $activeUntil;
+	
+	/** @var Movie[] */
 	protected $movies;
 	
 	public function getMovies() {
@@ -144,9 +136,9 @@ class Cinema {
 	
 	public function setMovies() {
 		try {
-			$parserClass = "\Zitkino\parsers\\".ucfirst($this->shortName);
+			$parserClass = "\Zitkino\Parsers\\".ucfirst($this->shortName);
 			if(class_exists($parserClass)) {
-				/** @var \Zitkino\parsers\Parser $parser */
+				/** @var \Zitkino\Parsers\Parser $parser */
 				$parser = new $parserClass();
 				
 				$films = $parser->getMovies();
@@ -227,7 +219,7 @@ class Cinema {
 		return $soonest;
 	}
 	
-	public function checkActualMovie(\Zitkino\Movie $movie) {
+	public function checkActualMovie(Movie $movie) {
 		$datetime = $movie->getDatetimes()[0];
 		if($datetime > new \DateTime()) {
 			return true;

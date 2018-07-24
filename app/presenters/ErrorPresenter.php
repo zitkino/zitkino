@@ -1,21 +1,25 @@
 <?php
-namespace App\presenters;
+namespace Zitkino\Presenters;
 
-use Nette, Tracy\Debugger;
+use Nette\Application\{
+	AbortException, BadRequestException
+};
+use Tracy\Debugger;
 
 /**
  * Error presenter.
  */
-class Error extends Base {
+class ErrorPresenter extends BasePresenter {
 	/**
-	 * @param  Exception
+	 * @param \Exception
 	 * @return void
+	 * @throws AbortException
 	 */
 	public function renderDefault($exception) {
 		if ($this->isAjax()) { // AJAX request? Just note this error in payload.
 			$this->payload->error = true;
 			$this->terminate();
-		} elseif ($exception instanceof Nette\Application\BadRequestException) {
+		} elseif ($exception instanceof BadRequestException) {
 			$code = $exception->getCode();
 			// load template 403.latte or 404.latte or ... 4xx.latte
 			$this->setView(in_array($code, array(403, 404, 405, 410, 500)) ? $code : '4xx');

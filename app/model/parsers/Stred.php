@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 use ICal\ICal;
 
 /**
@@ -83,7 +83,7 @@ class Stred extends Parser {
 				$price = 50;
 			}
 			
-			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 			$movie->setLink($link);
 			$movie->setDubbing($dubbing);
 			$movie->setSubtitles($subtitles);

@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Spilberk parser.
@@ -54,7 +54,7 @@ class Spilberk extends Parser {
 			$priceString = $priceQuery->item(0)->nodeValue;
 			$price = str_replace([",- Kč"], "", $priceString);
 			
-			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 			$movie->setDubbing($dubbing);
 			$movie->setLength($length);
 			$movie->setPrice($price);

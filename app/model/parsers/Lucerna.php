@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Lucerna parser.
@@ -79,7 +79,7 @@ class Lucerna extends Parser {
 					}
 				}
 				
-				$movie = new \Zitkino\Movie($name, $datetimes);
+				$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 				$movie->setLink($link);
 				$movie->setType($type);
 				$movie->setDubbing($dubbing);

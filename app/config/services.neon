@@ -1,2 +1,2 @@
 services: 
-	- Zitkino\Facades\CinemaFacade
+	- Zitkino\Cinemas\CinemaFacade

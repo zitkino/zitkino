@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Kinokavarna parser.
@@ -70,7 +70,7 @@ class Kinokavarna extends Parser {
 				$price = null;
 			}
 			
-			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 			$movie->setLink($link);
 			$movie->setDubbing($dubbing);
 			$movie->setSubtitles($subtitles);

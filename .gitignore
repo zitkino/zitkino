@@ -12,3 +12,5 @@ vendor/
 *-data.sql
 
 app/config/production.neon
+
+db/d137638_zitkino\.sql

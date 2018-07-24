@@ -1,23 +1,17 @@
 <?php
-namespace App\presenters;
+namespace Zitkino\Presenters;
 
-use Zitkino\Facades\CinemaFacade;
+use Zitkino\Cinemas\CinemaFacade;
 
 /**
  * Cinema presenter.
  */
-class Cinema extends Base {
+class CinemaPresenter extends BasePresenter {
 	private $cinemas;
 	
 	/** @var CinemaFacade @inject */
 	public $cinemaFacade;
 	
-	public function beforeRender() {
-		Base::beforeRender();
-		
-		$this->template->menuExists = false;
-		//$this->template->menuURL='Home/menu.latte';
-	}
 	
 	public function renderDefault() {
 		$this->template->classicCinemas = $this->cinemaFacade->getByType("classic");

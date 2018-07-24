@@ -44,7 +44,7 @@
 		<thead>
 		<tr>
 			<th>{fa film} Film</th>
-			{var $films = new \Zitkino\Movies($movies)}
+			{var $films = new \Zitkino\Movies\Movies($movies)}
 			
 			{if $films->hasTypes()}
 				<th><abbr title="Typ filmu">{fa video}</abbr> <span class="hidden-xs hidden-sm">Typ</span></th>

@@ -1,10 +1,8 @@
 <?php
-namespace Zitkino\Facades;
+namespace Zitkino\Cinemas;
 
-use App\Facades\BaseFacade;
+use Dobine\BaseFacade;
 use Doctrine\ORM\EntityManager;
-use Zitkino\Cinema\Cinemas;
-use Zitkino\Entities\Cinema;
 
 class CinemaFacade extends BaseFacade {
 	use Cinemas;

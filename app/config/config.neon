@@ -11,7 +11,7 @@ php:
 application:
 	errorPresenter: Error
 	mapping:
-		*: App\presenters\*
+		*: Zitkino\Presenters\*Presenter
 
 di:
 	accessors: true
@@ -24,8 +24,8 @@ latte:
 		- Fazette\latte\Fa
 
 services:
-	- App\RouterFactory
-	router: @App\RouterFactory::createRouter
+	- Zitkino\RouterFactory
+	router: @Zitkino\RouterFactory::createRouter
 	
 	latte.latteFactory:
 		setup:
@@ -42,5 +42,4 @@ doctrine:
 	charset: UTF8
 	driver: pdo_mysql
 	metadata:
-		App: %appDir%
 		Zitkino: %appDir%

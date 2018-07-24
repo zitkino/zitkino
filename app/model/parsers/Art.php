@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Art parser.
@@ -106,7 +106,7 @@ class Art extends Parser {
 			
 			$price = trim(str_replace($priceReplace, "", $priceString));
 			
-			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 			$movie->setLink($link);
 			//$movie->setDubbing($language);
 			//$movie->setSubtitles($subtitles);

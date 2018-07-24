@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino;
+namespace Zitkino\Movies;
 
 /**
  * Movie.

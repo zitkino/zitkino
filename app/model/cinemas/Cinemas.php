@@ -1,11 +1,10 @@
 <?php
-namespace Zitkino\Cinema;
+namespace Zitkino\Cinemas;
 
 use Doctrine\ORM\EntityRepository;
-use Zitkino\Entities\Cinema;
 
 /**
- * Cinemas.
+ * Methods for handling multiple cinemas.
  * @property EntityRepository $repository
  */
 trait Cinemas {

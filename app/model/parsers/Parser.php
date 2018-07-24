@@ -1,5 +1,6 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
+
 use DOMDocument, DOMXPath;
 
 /**
@@ -79,7 +80,7 @@ abstract class Parser {
 			$datetime = \DateTime::createFromFormat("Y-m-d H:i:s", $event["date"]." ".$event["time"]);
 			$datetimes[] = $datetime;
 			
-			$movie = new \Zitkino\Movie($event["name"], $datetimes);
+			$movie = new \Zitkino\Movies\Movie($event["name"], $datetimes);
 			$movie->setLink($event["link"]);
 			$movie->setType($event["type"]);
 			$movie->setDubbing($event["dubbing"]);

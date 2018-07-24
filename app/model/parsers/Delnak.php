@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * Delnak parser.
@@ -63,7 +63,7 @@ class Delnak extends Parser {
 				$priceString = $priceQuery->item($movieItems)->nodeValue;
 				$price = str_replace(["Vstupné: ", " Kč"], "", $priceString);
 				
-				$movie = new \Zitkino\Movie($name, $datetimes);
+				$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 				$movie->setLink($link);
 				$movie->setDubbing($dubbing);
 				$movie->setSubtitles($subtitles);

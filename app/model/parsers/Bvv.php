@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\parsers;
+namespace Zitkino\Parsers;
 
 /**
  * BVV parser.
@@ -61,7 +61,7 @@ class Bvv extends Parser {
 				$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);	
 			} else { $csfd = null; }
 			
-			$movie = new \Zitkino\Movie($name, $datetimes);
+			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
 			$movie->setPrice($price);
 			$movie->setCsfd($csfd);
 			$this->movies[] = $movie;
