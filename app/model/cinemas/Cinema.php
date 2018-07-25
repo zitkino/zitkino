@@ -1,7 +1,7 @@
 <?php
 namespace Zitkino\Cinemas;
 
-use Dobine\BaseEntity;
+use Dobine\Entities\DobineEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
 use Zitkino\Movies\Movie;
@@ -12,13 +12,13 @@ use Zitkino\Movies\Movie;
  * @ORM\Table(name="cinemas", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  * @ORM\Entity
  */
-class Cinema extends BaseEntity {
+class Cinema extends DobineEntity {
 	use MagicAccessors;
 	
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="name", type="string", length=100, nullable=false)
+	 * @ORM\Column(name="name", type="string", length=255, nullable=false)
 	 */
 	protected $name;
 	
@@ -39,14 +39,14 @@ class Cinema extends BaseEntity {
 	/**
 	 * @var string|null
 	 *
-	 * @ORM\Column(name="address", type="string", length=100, nullable=true)
+	 * @ORM\Column(name="address", type="string", length=255, nullable=true)
 	 */
 	protected $address;
 	
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="city", type="string", length=100, nullable=false, options={"default"="Brno"})
+	 * @ORM\Column(name="city", type="string", length=255, nullable=false, options={"default"="Brno"})
 	 */
 	protected $city = 'Brno';
 	
@@ -60,7 +60,7 @@ class Cinema extends BaseEntity {
 	/**
 	 * @var string|null
 	 *
-	 * @ORM\Column(name="email", type="string", length=100, nullable=true)
+	 * @ORM\Column(name="email", type="string", length=255, nullable=true)
 	 */
 	protected $email;
 	
@@ -81,35 +81,35 @@ class Cinema extends BaseEntity {
 	/**
 	 * @var string|null
 	 *
-	 * @ORM\Column(name="programme", type="string", length=100, nullable=true)
+	 * @ORM\Column(name="programme", type="string", length=255, nullable=true)
 	 */
 	protected $programme;
 	
 	/**
 	 * @var string|null
 	 *
-	 * @ORM\Column(name="facebook", type="string", length=100, nullable=true)
+	 * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
 	 */
 	protected $facebook;
 	
 	/**
 	 * @var string|null
 	 *
-	 * @ORM\Column(name="googlePlus", type="string", length=100, nullable=true)
+	 * @ORM\Column(name="googlePlus", type="string", length=255, nullable=true)
 	 */
 	protected $googlePlus;
 	
 	/**
 	 * @var string|null
 	 *
-	 * @ORM\Column(name="instagram", type="string", length=100, nullable=true)
+	 * @ORM\Column(name="instagram", type="string", length=255, nullable=true)
 	 */
 	protected $instagram;
 	
 	/**
 	 * @var string|null
 	 *
-	 * @ORM\Column(name="twitter", type="string", length=100, nullable=true)
+	 * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
 	 */
 	protected $twitter;
 	

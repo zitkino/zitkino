@@ -1,17 +1,17 @@
 <?php
 namespace Zitkino\Cinemas;
 
-use Dobine\BaseFacade;
+use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\EntityManager;
 
-class CinemaFacade extends BaseFacade {
+class CinemaFacade extends DobineFacade {
 	use Cinemas;
 	
 	public function __construct(EntityManager $entityManager) {
 		$this->entityManager = $entityManager;
 		$this->repository = $this->entityManager->getRepository(Cinema::class);
 	}
-
+	
 	/**
 	 * @param int|string $id
 	 * @return object|Cinema
