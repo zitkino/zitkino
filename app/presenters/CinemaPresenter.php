@@ -14,9 +14,9 @@ class CinemaPresenter extends BasePresenter {
 	
 	
 	public function renderDefault() {
-		$this->template->classicCinemas = $this->cinemaFacade->getByType("classic");
-		$this->template->multiplexCinemas = $this->cinemaFacade->getByType("multiplex");
-		$this->template->summerCinemas = $this->cinemaFacade->getByType("summer");
+		$this->template->classicCinemas = $this->cinemaFacade->getByType("1");
+		$this->template->multiplexCinemas = $this->cinemaFacade->getByType("2");
+		$this->template->summerCinemas = $this->cinemaFacade->getByType("3");
 	}
 	
 	public function renderProfile($id) {
@@ -35,23 +35,23 @@ class CinemaPresenter extends BasePresenter {
 	}
 	
 	public function renderClassic($id) {
-		$this->template->cinemas = $this->cinemaFacade->getByType("classic");
+		$this->template->cinemas = $this->cinemaFacade->getByType("1");
 	}
 	public function renderClassic_programme($id) {
-		$this->template->cinemas = $this->cinemaFacade->getWithMovies("classic");
+		$this->template->cinemas = $this->cinemaFacade->getWithMovies("1");
 	}
 	
 	public function renderMultiplex($id) {
-		$this->template->cinemas = $this->cinemaFacade->getByType("multiplex");
+		$this->template->cinemas = $this->cinemaFacade->getByType("2");
 	}
 	public function renderMultiplex_programme($id) {
-		$this->template->cinemas = $this->cinemaFacade->getWithMovies("multiplex");
+		$this->template->cinemas = $this->cinemaFacade->getWithMovies("2");
 	}
 	
 	public function renderSummer($id) {
-		$this->template->cinemas = $this->cinemaFacade->getByType("summer");
+		$this->template->cinemas = $this->cinemaFacade->getByType("3");
 	}
 	public function renderSummer_programme($id) {
-		$this->template->cinemas = $this->cinemaFacade->getWithMovies("summer");
+		$this->template->cinemas = $this->cinemaFacade->getWithMovies("3");
 	}
 }

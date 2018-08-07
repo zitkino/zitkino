@@ -9,7 +9,7 @@ use Zitkino\Movies\Movie;
 /**
  * Cinema
  *
- * @ORM\Table(name="cinemas", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
+ * @ORM\Table(name="cinemas", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="type", columns={"type"})})
  * @ORM\Entity
  */
 class Cinema extends DobineEntity {
@@ -17,118 +17,106 @@ class Cinema extends DobineEntity {
 	
 	/**
 	 * @var string
-	 *
 	 * @ORM\Column(name="name", type="string", length=255, nullable=false)
 	 */
 	protected $name;
 	
 	/**
 	 * @var string
-	 *
 	 * @ORM\Column(name="short_name", type="string", length=20, nullable=false)
 	 */
 	protected $shortName;
 	
 	/**
-	 * @var enum
-	 *
-	 * @ORM\Column(name="type", type="enum", nullable=false, options={"default"="classic"})
-	 */
-	protected $type = 'classic';
+     * @var CinemaType
+     * @ORM\ManyToOne(targetEntity="CinemaType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="type", referencedColumnName="id")
+     * })
+     */
+    protected $type;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="address", type="string", length=255, nullable=true)
 	 */
 	protected $address;
 	
 	/**
 	 * @var string
-	 *
 	 * @ORM\Column(name="city", type="string", length=255, nullable=false, options={"default"="Brno"})
 	 */
 	protected $city = 'Brno';
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="phone", type="string", length=100, nullable=true)
 	 */
 	protected $phone;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="email", type="string", length=255, nullable=true)
 	 */
 	protected $email;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="url", type="string", length=1000, nullable=true)
 	 */
 	protected $url;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="gmaps", type="string", length=1000, nullable=true)
 	 */
 	protected $gmaps;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="programme", type="string", length=255, nullable=true)
 	 */
 	protected $programme;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
 	 */
 	protected $facebook;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="googlePlus", type="string", length=255, nullable=true)
 	 */
 	protected $googlePlus;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="instagram", type="string", length=255, nullable=true)
 	 */
 	protected $instagram;
 	
 	/**
 	 * @var string|null
-	 *
 	 * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
 	 */
 	protected $twitter;
 	
 	/**
 	 * @var \DateTime|null
-	 *
 	 * @ORM\Column(name="active_since", type="date", nullable=true)
 	 */
 	protected $activeSince;
 	
 	/**
 	 * @var \DateTime|null
-	 *
 	 * @ORM\Column(name="active_until", type="date", nullable=true)
 	 */
 	protected $activeUntil;
 	
 	/** @var Movie[] */
 	protected $movies;
+	
 	
 	public function getMovies() {
 		return $this->movies;
@@ -165,6 +153,8 @@ class Cinema extends DobineEntity {
 	}
 	
 	public function getSoonestMovies() {
+		return $this->movies;
+		
 		$soonest = [];
 		if(isset($this->movies)) {
 			$currentDate = new \DateTime();
