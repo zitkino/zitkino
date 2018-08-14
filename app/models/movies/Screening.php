@@ -94,7 +94,169 @@ class Screening {
 	
 	/** @var Showtime[] */
 	protected $showtimes;
-
+	
+	
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getDate(): \DateTime {
+		return $this->date;
+	}
+	
+	/**
+	 * @param \DateTime|null $date
+	 * @return Screening
+	 */
+	public function setDate(\DateTime $date): Screening {
+		$this->date = $date;
+		return $this;
+	}
+	
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getTime(): \DateTime {
+		return $this->time;
+	}
+	
+	/**
+	 * @param \DateTime|null $time
+	 * @return Screening
+	 */
+	public function setTime(\DateTime $time): Screening {
+		$this->time = $time;
+		return $this;
+	}
+	
+	/**
+	 * @return int|null
+	 */
+	public function getPrice(): int {
+		return $this->price;
+	}
+	
+	/**
+	 * @param int|null $price
+	 * @return Screening
+	 */
+	public function setPrice(int $price): Screening {
+		$this->price = $price;
+		return $this;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getLink(): string {
+		return $this->link;
+	}
+	
+	/**
+	 * @param null|string $link
+	 * @return Screening
+	 */
+	public function setLink(string $link): Screening {
+		$this->link = $link;
+		return $this;
+	}
+	
+	/**
+	 * @return Movie
+	 */
+	public function getMovie(): Movie {
+		return $this->movie;
+	}
+	
+	/**
+	 * @param Movie $movie
+	 * @return Screening
+	 */
+	public function setMovie(Movie $movie): Screening {
+		$this->movie = $movie;
+		return $this;
+	}
+	
+	/**
+	 * @return Cinema
+	 */
+	public function getCinema(): Cinema {
+		return $this->cinema;
+	}
+	
+	/**
+	 * @param Cinema $cinema
+	 * @return Screening
+	 */
+	public function setCinema(Cinema $cinema): Screening {
+		$this->cinema = $cinema;
+		return $this;
+	}
+	
+	/**
+	 * @return Language
+	 */
+	public function getDubbing(): Language {
+		return $this->dubbing;
+	}
+	
+	/**
+	 * @param Language $dubbing
+	 * @return Screening
+	 */
+	public function setDubbing(Language $dubbing): Screening {
+		$this->dubbing = $dubbing;
+		return $this;
+	}
+	
+	/**
+	 * @return Language
+	 */
+	public function getSubtitles(): Language {
+		return $this->subtitles;
+	}
+	
+	/**
+	 * @param Language $subtitles
+	 * @return Screening
+	 */
+	public function setSubtitles(Language $subtitles): Screening {
+		$this->subtitles = $subtitles;
+		return $this;
+	}
+	
+	/**
+	 * @return ScreeningType
+	 */
+	public function getType(): ScreeningType {
+		return $this->type;
+	}
+	
+	/**
+	 * @param ScreeningType $type
+	 * @return Screening
+	 */
+	public function setType(ScreeningType $type): Screening {
+		$this->type = $type;
+		return $this;
+	}
+	
+	/**
+	 * @return Showtime[]
+	 */
+	public function getShowtimes(): array {
+		return $this->showtimes;
+	}
+	
+	/**
+	 * @param Showtime[] $showtimes
+	 * @return Screening
+	 */
+	public function setShowtimes(array $showtimes): Screening {
+		$this->showtimes = $showtimes;
+		return $this;
+	}
+	
+	
 	public function addShowtime($showtime) {
 		$this->showtimes[] = $showtime;
 	}

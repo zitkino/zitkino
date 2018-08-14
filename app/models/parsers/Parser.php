@@ -3,6 +3,7 @@ namespace Zitkino\Parsers;
 
 use DOMDocument, DOMXPath;
 use Zitkino\Exceptions\ParserException;
+use Zitkino\Movies\Movie;
 
 /**
  * Parser.
@@ -74,8 +75,9 @@ abstract class Parser {
 
 	/**
 	 * Gets movies and other data from the web page.
+	 * @return Movie[] Array of movies.
 	 */
-	abstract public function getContent();
+	abstract public function parse();
 	
 	public function getContentFromDB($cinema) {
 		$today = date("Y-m-d", strtotime("now"));

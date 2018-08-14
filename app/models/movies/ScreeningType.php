@@ -2,7 +2,7 @@
 namespace Zitkino\Movies;
 
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
+use Kdyby\Doctrine\Entities\Attributes\Identifier;
 
 /**
  * ScreeningType
@@ -11,19 +11,28 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
  * @ORM\Entity
  */
 class ScreeningType {
-	use MagicAccessors;
-	
-	/**
-	 * @var int
-	 * @ORM\Column(name="id", type="integer", nullable=false)
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="IDENTITY")
-	 */
-	protected $id;
+	use Identifier;
 	
 	/**
 	 * @var string
 	 * @ORM\Column(name="name", type="string", length=255, nullable=false)
 	 */
 	protected $name;
+	
+	
+	/**
+	 * @return string
+	 */
+	public function getName(): string {
+		return $this->name;
+	}
+	
+	/**
+	 * @param string $name
+	 * @return ScreeningType
+	 */
+	public function setName(string $name): ScreeningType {
+		$this->name = $name;
+		return $this;
+	}
 }

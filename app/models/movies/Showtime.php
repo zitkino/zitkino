@@ -2,6 +2,7 @@
 namespace Zitkino\Movies;
 
 use Doctrine\ORM\Mapping as ORM;
+use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 
 /**
@@ -11,15 +12,7 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
  * @ORM\Entity
  */
 class Showtime {
-	use MagicAccessors;
-	
-	/**
-	 * @var int
-	 * @ORM\Column(name="id", type="integer", nullable=false)
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="IDENTITY")
-	 */
-	protected $id;
+	use MagicAccessors, Identifier;
 	
 	/**
 	 * @var Screening
@@ -35,4 +28,37 @@ class Showtime {
 	 * @ORM\Column(name="datetime", type="datetime", nullable=false)
 	 */
 	protected $datetime;
+	
+	
+	/**
+	 * @return Screening
+	 */
+	public function getScreening(): Screening {
+		return $this->screening;
+	}
+	
+	/**
+	 * @param Screening $screening
+	 * @return Showtime
+	 */
+	public function setScreening(Screening $screening): Showtime {
+		$this->screening = $screening;
+		return $this;
+	}
+	
+	/**
+	 * @return \DateTime
+	 */
+	public function getDatetime(): \DateTime {
+		return $this->datetime;
+	}
+	
+	/**
+	 * @param \DateTime $datetime
+	 * @return Showtime
+	 */
+	public function setDatetime(\DateTime $datetime): Showtime {
+		$this->datetime = $datetime;
+		return $this;
+	}
 }
