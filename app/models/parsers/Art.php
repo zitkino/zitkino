@@ -1,6 +1,10 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Showtime;
+
 /**
  * Art parser.
  */
@@ -106,11 +110,23 @@ class Art extends Parser {
 			
 			$price = trim(str_replace($priceReplace, "", $priceString));
 			
-			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
-			$movie->setLink($link);
-			//$movie->setDubbing($language);
-			//$movie->setSubtitles($subtitles);
-			$movie->setPrice($price);
+			$movie = new Movie($name);
+			$screening = new Screening();
+			$screening->setLink($link);
+			$screening->setPrice($price);
+//			$screening->setDubbing($language);
+//			$screening->setSubtitles($subtitles);
+//			$screening->setCinema();
+			
+			foreach($datetimes as $datetime) {
+				$showtime = new Showtime();
+				$showtime->setScreening($screening);
+				$showtime->setDatetime($datetime);
+				$screening->addShowtime($showtime);
+			}
+			
+			$movie->addScreening($screening);
+			
 			$this->movies[] = $movie;
 			
 			$movieItems++;

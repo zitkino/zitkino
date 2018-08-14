@@ -2,6 +2,7 @@
 namespace Zitkino\Parsers;
 
 use DOMDocument, DOMXPath;
+use Zitkino\Exceptions\ParserException;
 
 /**
  * Parser.
@@ -47,11 +48,17 @@ abstract class Parser {
 		$handle = curl_init($this->url);
 		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handle, CURLOPT_ENCODING, "UTF-8");
+        curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
+//        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
         
 		$html = curl_exec($handle);
 		if($html === false) {
-			throw new \Exception("URL '".$this->getUrl()."' cannot be parsed.");
+			$e = new ParserException(curl_error($handle));
+			$e->setUrl($this->getUrl());
+			throw $e;
 		}
+		
+		curl_close($handle);
 		
 		libxml_use_internal_errors(true); // Prevent HTML errors from displaying
 		$this->document->loadHTML(mb_convert_encoding($html, "HTML-ENTITIES", "UTF-8"));

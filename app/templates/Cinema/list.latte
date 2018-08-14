@@ -73,7 +73,7 @@
 			{if !empty($movie)}
 		<tr>
 			<td title="Název filmu">
-				{php $link = $movie->getLink()}
+				{php $link = $movie->getScreenings()[0]->getLink()}
 				{ifset $link}
 					<a href="{$link}">
 				{/ifset}
@@ -102,13 +102,13 @@
 					{/ifset}
 				</td>
 			{/if}
-			
+			{dump $movie->screenings}
 			<td title="Datum a čas">{fa r, calendar}
-				{foreach $movie->getDatetimes() as $datetime}
+				{foreach $movie->screenings[0]->showtimes as $showtime}
 					{if $iterator->first}
-						{$datetime->format('d.m.Y')} <br class="hidden-md hidden-lg">{fa r, clock}
+						{$showtime->datetime->format('d.m.Y')} <br class="hidden-md hidden-lg">{fa r, clock}
 					{/if}
-					{$datetime->format('H:i')}{sep}, {/sep}
+					{$showtime->datetime->format('H:i')}{sep}, {/sep}
 				{/foreach}
 			</td>
 			

@@ -3,7 +3,7 @@ namespace Zitkino\Cinemas;
 
 use Dobine\Entities\DobineEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
+use Kdyby\Doctrine\Entities\MagicAccessors;
 use Zitkino\Movies\Movie;
 
 /**
@@ -28,13 +28,13 @@ class Cinema extends DobineEntity {
 	protected $shortName;
 	
 	/**
-     * @var CinemaType
-     * @ORM\ManyToOne(targetEntity="CinemaType")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="type", referencedColumnName="id")
-     * })
-     */
-    protected $type;
+	 * @var CinemaType
+	 * @ORM\ManyToOne(targetEntity="CinemaType")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="type", referencedColumnName="id")
+	 * })
+	 */
+	protected $type;
 	
 	/**
 	 * @var string|null
@@ -130,11 +130,13 @@ class Cinema extends DobineEntity {
 				$parser = new $parserClass();
 				
 				$films = $parser->getMovies();
+				\Tracy\Debugger::barDump($films);
 				if(isset($films)) {
 					foreach($films as $film) {
-						if($this->checkActualMovie($film)) {
+//						\Tracy\Debugger::barDump($film);
+//						if($this->checkActualMovie($film)) {
 							$this->movies[] = $film;
-						}
+//						}
 					}
 				}
 			} else { $this->movies = null; }

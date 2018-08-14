@@ -9,6 +9,13 @@
 		"sort-packages": true,
 		"optimize-autoloader": true
 	},
+	
+	"repositories": [
+        {
+            "type": "path",
+            "url": "../dobine"
+        }
+    ],
 
 	"require": {
 		"php": "^7.0",
@@ -18,7 +25,6 @@
 		"hermajan/lib": "dev-master",
 		"johngrogg/ics-parser": "^2.0",
 		"kdyby/doctrine": "^3.3",
-		"kdyby/doctrine-magic-accessors": "^1.0",
 		"nette/nette": "^2.4",
 		"twbs/bootstrap": "^3.3",
 		"vlucas/phpdotenv": "^2.5"
