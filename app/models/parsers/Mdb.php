@@ -1,17 +1,23 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Cinemas\Cinema;
+use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Screenings;
+
 /**
  * Letní kino na Dvoře Městského divadla parser.
  */
 class Mdb extends Parser {
-	public function __construct() {
+	public function __construct(Cinema $cinema) {
+		$this->cinema = $cinema;
 		$this->setUrl("https://www.letnikinobrno.cz/program-kina/");
 		$this->initiateDocument();
-		$this->getContent();
+		$this->parse();
 	}
 	
-	public function getContent() {
+	public function parse(): Screenings {
 		$xpath = $this->downloadData();
 		
 		$events = $xpath->query("//div[@class='wpb_wrapper']//div[@class='table-events-content']");
@@ -46,12 +52,18 @@ class Mdb extends Parser {
 			
 			$price = 99;
 			
-			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
-			$movie->setLink($link);
-			$movie->setPrice($price);
-			$this->movies[] = $movie;
+			
+			$movie = new Movie($name);
+			
+			$screening = new Screening($movie, $this->cinema);
+			$screening->setPrice($price);
+			$screening->setLink($link);
+			$screening->setShowtimes($datetimes);
+			
+			$this->screenings[] = $screening;
 		}
 		
-		$this->setMovies($this->movies);
+		$this->setScreenings($this->screenings);
+		return new Screenings($this->screenings);
 	}
 }

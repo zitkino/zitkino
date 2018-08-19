@@ -18,40 +18,45 @@ class Movie {
      * @var string|null
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    protected $name;
+    public $name;
 
     /**
      * @var int|null
      * @ORM\Column(name="length", type="integer", nullable=true)
      */
-    protected $length;
+    public $length;
 
     /**
      * @var string|null
      * @ORM\Column(name="csfd", type="string", length=255, nullable=true)
      */
-    protected $csfd;
+    public $csfd;
 
     /**
      * @var string|null
      * @ORM\Column(name="imdb", type="string", length=255, nullable=true)
      */
-    protected $imdb;
+    public $imdb;
     
-    protected $databases;
+    /** @var array */
+    public $databases;
     
+    /** @var array */
     protected $datetimes;
     
     /** @var Screening[] */
     protected $screenings;
     
+    
     public function __construct($name) {
 		$this->name = $name;
-		$this->fixDatabases();
-//		$this->datetimes = $datetimes;
-//		$this->fixDatetimes();
 	}
-    
+	
+	
+	public function setDatabases(array $databases) {
+    	$this->databases = $databases;
+    	$this->fixDatabases();
+	}
     
     public function fixDatabases() {
 		$csfdUrl = "https://www.csfd.cz";

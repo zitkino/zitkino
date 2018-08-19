@@ -1,18 +1,24 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Cinemas\Cinema;
+use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Screenings;
+
 /**
  * Scalní letňák parser.
  */
 class ScalaLetni extends Parser {
-	public function __construct() {
+	public function __construct(Cinema $cinema) {
+		$this->cinema = $cinema;
 		$this->setUrl("https://www.kinoscala.cz/cz/cyklus/scalni-letnak-251");
 		$this->initiateDocument();
 		
-		$this->getContent();
+		$this->parse();
 	}
 	
-	public function getContent() {
+	public function parse(): Screenings {
 		$xpath = $this->downloadData();
 		
 		$events = $xpath->query("//div[@id='program']/table//tr");
@@ -46,16 +52,22 @@ class ScalaLetni extends Parser {
 			$priceString = htmlentities($priceItem, null, "utf-8");
 			$price = trim(str_replace("&nbsp;Kč", "", $priceString));
 			
-			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
-			$movie->setLink($link);
-			$movie->setDubbing($dubbing);
-			$movie->setPrice($price);
-			$this->movies[] = $movie;
+			
+			$movie = new Movie($name);
+			
+			$screening = new Screening($movie, $this->cinema);
+			$screening->setLanguages($dubbing, null);
+			$screening->setPrice($price);
+			$screening->setLink($link);
+			$screening->setShowtimes($datetimes);
+			
+			$this->screenings[] = $screening;
 			
 			$movieItems++;
 			$days++;
 		}
 		
-		$this->setMovies($this->movies);
+		$this->setScreenings($this->screenings);
+		return new Screenings($this->screenings);
 	}
 }

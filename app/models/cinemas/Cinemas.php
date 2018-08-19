@@ -32,10 +32,11 @@ trait Cinemas {
 		$cinemas = $this->getByType($type);
 		/** @var Cinema $cinema */
 		foreach($cinemas as $cinema) {
-			$cinema->setMovies();
-			if($cinema->hasMovies()) {
+//			\Tracy\Debugger::barDump($cinema);
+			$cinema->setScreenings();
+//			if($cinema->hasMovies()) {
 				$output[] = $cinema;
-			}
+//			}
 		}
 		
 		return $output;

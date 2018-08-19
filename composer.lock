@@ -867,11 +867,12 @@
             "dist": {
                 "type": "path",
                 "url": "../dobine",
-                "reference": "91f6c41a9cfc6940dbd594cb7dbd542780ea50ad",
+                "reference": "bc80d0d40732273e1782e8da5026a38baf72142f",
                 "shasum": null
             },
             "require": {
                 "doctrine/orm": "^2.5",
+                "nette/utils": "^2.5",
                 "php": "^7.0"
             },
             "type": "library",

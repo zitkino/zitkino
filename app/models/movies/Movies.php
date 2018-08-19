@@ -1,47 +1,28 @@
 <?php
 namespace Zitkino\Movies;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Movies.
  */
-class Movies {
+class Movies extends ArrayCollection {
 	/** @var Movie[] */
 	private $movies;
-	
-	public function __construct($movies) {
-		$this->movies = $movies;
+
+	/**
+	 * @return Movie[]
+	 */
+	public function getMovies(): array {
+		return $this->toArray();
 	}
 	
-	public function hasTypes() {
-//		foreach($this->movies as $movie) {
-//			$type = $movie->getType();
-//			if(isset($type)) { return true; }
-//		}
-		return false;
-	}
-	
-	public function hasLanguages() {
-//		foreach($this->movies as $movie) {
-//			$dubbing = $movie->getDubbing();
-//			$subtitles = $movie->getSubtitles();
-//			if(isset($dubbing) or isset($subtitles)) { return true; }
-//		}
-		return false;
-	}
 	
 	public function hasLengths() {
-//		foreach($this->movies as $movie) {
-//			$length = $movie->getLength();
-//			if(isset($length)) { return true; }
-//		}
-		return false;
-	}
-	
-	public function hasPrices() {
-//		foreach($this->movies as $movie) {
-//			$price = $movie->getPrice();
-//			if(isset($price)) { return true; }
-//		}
+		foreach($this->toArray() as $movie) {
+			$length = $movie->length;
+			if(isset($length)) { return true; }
+		}
 		return false;
 	}
 }

@@ -13,6 +13,7 @@ class HomePresenter extends BasePresenter {
 	
 	public function renderDefault() {
 		$cinemas = $this->cinemaFacade->getWithMovies("all");
+		\Tracy\Debugger::barDump($cinemas);
 		$this->template->cinemas = $cinemas;
 	}
 }

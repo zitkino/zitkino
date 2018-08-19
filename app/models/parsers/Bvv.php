@@ -1,6 +1,10 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Showtime;
+
 /**
  * BVV parser.
  */
@@ -9,10 +13,10 @@ class Bvv extends Parser {
 		$this->setUrl("http://www.bvv.cz/letni-kino/");
 		$this->initiateDocument();
 		
-		$this->getContent();
+		$this->parse();
 	}
 	
-	public function getContent() {
+	public function parse() {
 		$xpath = $this->downloadData();
 		$events = "//*[@id='content']/div[1]/div[2]";
 		
@@ -61,10 +65,21 @@ class Bvv extends Parser {
 				$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);	
 			} else { $csfd = null; }
 			
-			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
-			$movie->setPrice($price);
-			$movie->setCsfd($csfd);
-			$this->movies[] = $movie;
+			$movie = new Movie($name);
+//			$movie->csfd = $csfd;
+			
+			$screening = new Screening();
+			$screening->price = $price;
+			
+			foreach($datetimes as $datetime) {
+				$showtime = new Showtime();
+				$showtime->screening = $screening;
+				$showtime->datetime = $datetime;
+				$screening->addShowtime($showtime);
+			}
+			
+			$movie->addScreening($screening);
+			$this->screenings[] = $movie;
 			
 			$movieItems++;
 		}
@@ -98,13 +113,13 @@ class Bvv extends Parser {
 					}
 				}
 				
-				$this->movies[$movieItems]->setDubbing($dubbing);
-				$this->movies[$movieItems]->setLength($length);
+				$this->screenings[$movieItems]->screenings[0]->dubbing = $dubbing;
+				$this->screenings[$movieItems]->screenings[0]->length = $length;
 			}
 			
 			$movieItems++;
 		}
 		
-		$this->setMovies($this->movies);
+		$this->setScreenings($this->screenings);
 	}
 }

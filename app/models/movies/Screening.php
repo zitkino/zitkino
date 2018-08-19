@@ -24,28 +24,16 @@ class Screening {
 	protected $id;
 	
 	/**
-	 * @var \DateTime|null
-	 * @ORM\Column(name="date", type="date", nullable=true)
-	 */
-	protected $date;
-	
-	/**
-	 * @var \DateTime|null
-	 * @ORM\Column(name="time", type="time", nullable=true)
-	 */
-	protected $time;
-	
-	/**
 	 * @var int|null
 	 * @ORM\Column(name="price", type="integer", nullable=true)
 	 */
-	protected $price;
+	public $price;
 	
 	/**
 	 * @var string|null
 	 * @ORM\Column(name="link", type="string", length=1000, nullable=true)
 	 */
-	protected $link;
+	public $link;
 	
 	/**
 	 * @var Movie
@@ -54,7 +42,7 @@ class Screening {
 	 *   @ORM\JoinColumn(name="movie", referencedColumnName="id")
 	 * })
 	 */
-	protected $movie;
+	public $movie;
 	
 	/**
 	 * @var Cinema
@@ -63,7 +51,7 @@ class Screening {
 	 *   @ORM\JoinColumn(name="cinema", referencedColumnName="id")
 	 * })
 	 */
-	protected $cinema;
+	public $cinema;
 	
 	/**
 	 * @var Language
@@ -72,7 +60,7 @@ class Screening {
 	 *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id")
 	 * })
 	 */
-	protected $dubbing;
+	public $dubbing;
 	
 	/**
 	 * @var Language
@@ -81,7 +69,7 @@ class Screening {
 	 *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id")
 	 * })
 	 */
-	protected $subtitles;
+	public $subtitles;
 	
 	/**
 	 * @var ScreeningType
@@ -90,174 +78,53 @@ class Screening {
 	 *   @ORM\JoinColumn(name="type", referencedColumnName="id")
 	 * })
 	 */
-	protected $type;
+	public $type;
 	
 	/** @var Showtime[] */
 	protected $showtimes;
 	
 	
 	/**
-	 * @return \DateTime|null
-	 */
-	public function getDate(): \DateTime {
-		return $this->date;
-	}
-	
-	/**
-	 * @param \DateTime|null $date
+	 * @param Language|string $dubbing
+	 * @param Language|string $subtitles
 	 * @return Screening
 	 */
-	public function setDate(\DateTime $date): Screening {
-		$this->date = $date;
-		return $this;
-	}
-	
-	/**
-	 * @return \DateTime|null
-	 */
-	public function getTime(): \DateTime {
-		return $this->time;
-	}
-	
-	/**
-	 * @param \DateTime|null $time
-	 * @return Screening
-	 */
-	public function setTime(\DateTime $time): Screening {
-		$this->time = $time;
-		return $this;
-	}
-	
-	/**
-	 * @return int|null
-	 */
-	public function getPrice(): int {
-		return $this->price;
-	}
-	
-	/**
-	 * @param int|null $price
-	 * @return Screening
-	 */
-	public function setPrice(int $price): Screening {
-		$this->price = $price;
-		return $this;
-	}
-	
-	/**
-	 * @return null|string
-	 */
-	public function getLink(): string {
-		return $this->link;
-	}
-	
-	/**
-	 * @param null|string $link
-	 * @return Screening
-	 */
-	public function setLink(string $link): Screening {
-		$this->link = $link;
-		return $this;
-	}
-	
-	/**
-	 * @return Movie
-	 */
-	public function getMovie(): Movie {
-		return $this->movie;
-	}
-	
-	/**
-	 * @param Movie $movie
-	 * @return Screening
-	 */
-	public function setMovie(Movie $movie): Screening {
-		$this->movie = $movie;
-		return $this;
-	}
-	
-	/**
-	 * @return Cinema
-	 */
-	public function getCinema(): Cinema {
-		return $this->cinema;
-	}
-	
-	/**
-	 * @param Cinema $cinema
-	 * @return Screening
-	 */
-	public function setCinema(Cinema $cinema): Screening {
-		$this->cinema = $cinema;
-		return $this;
-	}
-	
-	/**
-	 * @return Language
-	 */
-	public function getDubbing(): Language {
-		return $this->dubbing;
-	}
-	
-	/**
-	 * @param Language $dubbing
-	 * @return Screening
-	 */
-	public function setDubbing(Language $dubbing): Screening {
+	public function setLanguages($dubbing, $subtitles): Screening {
 		$this->dubbing = $dubbing;
-		return $this;
-	}
-	
-	/**
-	 * @return Language
-	 */
-	public function getSubtitles(): Language {
-		return $this->subtitles;
-	}
-	
-	/**
-	 * @param Language $subtitles
-	 * @return Screening
-	 */
-	public function setSubtitles(Language $subtitles): Screening {
 		$this->subtitles = $subtitles;
 		return $this;
 	}
 	
-	/**
-	 * @return ScreeningType
-	 */
-	public function getType(): ScreeningType {
-		return $this->type;
+	
+	public function __construct(Movie $movie, Cinema $cinema) {
+		$this->movie = $movie;
+		$this->cinema = $cinema;
 	}
-	
-	/**
-	 * @param ScreeningType $type
-	 * @return Screening
-	 */
-	public function setType(ScreeningType $type): Screening {
-		$this->type = $type;
-		return $this;
-	}
-	
-	/**
-	 * @return Showtime[]
-	 */
-	public function getShowtimes(): array {
-		return $this->showtimes;
-	}
-	
-	/**
-	 * @param Showtime[] $showtimes
-	 * @return Screening
-	 */
-	public function setShowtimes(array $showtimes): Screening {
-		$this->showtimes = $showtimes;
-		return $this;
-	}
-	
-	
+
+
 	public function addShowtime($showtime) {
 		$this->showtimes[] = $showtime;
+	}
+
+
+	/**
+	 * @param \DateTime[] $datetimes
+	 */
+	public function setShowtimes($datetimes) {
+		foreach($datetimes as $datetime) {
+			$showtime = new Showtime($this);
+			$showtime->datetime = $datetime;
+			$this->addShowtime($showtime);
+		}	
+	}
+	
+	public function fixPrice() {
+		if(!isset($this->price) or !is_numeric($this->price)) {
+			return null;
+		} elseif($this->price == 0) {
+			return "zdarma";
+		} else {
+			return $this->price." Kč";
+		}
 	}
 }

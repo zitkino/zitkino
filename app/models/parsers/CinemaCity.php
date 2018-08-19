@@ -1,6 +1,11 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Cinemas\Cinema;
+use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Screenings;
+
 /**
  * Cinema City parser.
  */
@@ -16,7 +21,9 @@ abstract class CinemaCity extends Parser {
 		$this->cinemaId = $cinemaId;
 	}
 	
-	public function __construct() {
+	public function __construct(Cinema $cinema) {
+		$this->cinema = $cinema;
+		
 		$datetime = new \DateTime();
 		$this->getOneDay($datetime);
 		
@@ -31,10 +38,10 @@ abstract class CinemaCity extends Parser {
 		$this->setUrl("https://www.cinemacity.cz/scheduleInfo?locationId=".$this->cinemaId."&date=".$dateUrl."&venueTypeId=1&hideSite=true&openedFromPopup=1&newwin=1");
 		$this->initiateDocument();
 		
-		$this->getContent();
+		$this->parse();
 	}
 	
-	public function getContent() {
+	public function parse(): Screenings {
 		$xpath = $this->downloadData();
 		
 		/*dateQuery = $xpath->query("//div[@id[starts-with(.,'scheduleInfo_')]]//label[@class='date']");
@@ -101,17 +108,22 @@ abstract class CinemaCity extends Parser {
 					if($type == "3D") { $price = 239; }
 				}
 				
-				$movie = new \Zitkino\Movies\Movie($name, $datetimes);
-				$movie->setLink($link);
-				$movie->setType($type);
-				$movie->setDubbing($dubbing);
-				$movie->setSubtitles($subtitles);
+				
+				$movie = new Movie($name);
 				$movie->setLength($length);
-				$movie->setPrice($price);
-				$this->movies[] = $movie;
+				
+				$screening = new Screening($movie, $this->cinema);
+				$screening->setType($type);
+				$screening->setLanguages($dubbing, $subtitles);
+				$screening->setPrice($price);
+				$screening->setLink($link);
+				$screening->setShowtimes($datetimes);
+				
+				$this->screenings[] = $screening;
 			}
 		}
 		
-		$this->setMovies($this->movies);
+		$this->setScreenings($this->screenings);
+		return new Screenings($this->screenings);
 	}
 }

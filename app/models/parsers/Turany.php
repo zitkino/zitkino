@@ -1,16 +1,20 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Cinemas\Cinema;
+use Zitkino\Movies\Screenings;
+
 /**
  * Turany parser.
  */
 class Turany extends Parser {
-	public function __construct() {
+	public function __construct(Cinema $cinema) {
+		$this->cinema = $cinema;
 		$this->getConnection();
-		$this->getContent();
+		$this->parse();
 	}
 	
-	public function getContent() {
+	public function parse(): Screenings {
 		$this->getContentFromDB(14);
 	}
 }

@@ -1,34 +1,61 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\DBAL\Connection;
 use DOMDocument, DOMXPath;
+use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Screenings;
+use Zitkino\Movies\Showtime;
 
 /**
  * Parser.
  */
 abstract class Parser {
+	/** @var Cinema */
+	protected $cinema;
+	
 	private $url = "";
+	
 	/** @var \DOMDocument */
 	private $document;
 	
-	protected $movies = [];
-	/** @var \Doctrine\DBAL\Connection */
+	/** @var Screenings|array */
+	protected $screenings;
+	
+	/** @var Connection */
 	protected $connection;
+	
 	
 	public function getUrl() {
 		return $this->url;
 	}
-	public function getMovies() {
-		return $this->movies;
+	public function getScreenings() {
+		if(is_array($this->screenings)) {
+			return new Screenings($this->screenings);
+		}
+		
+		return $this->screenings;
 	}
 	
 	public function setUrl($url) {
 		$this->url = $url;
 	}
-	public function setMovies($movies) {
-		$this->movies = $movies;
+
+
+	/**
+	 * @param Screenings|array $screenings
+	 * @return Parser
+	 */
+	public function setScreenings($screenings) {
+//		if(is_array($screenings)) {
+//			$this->screenings = new Screenings($screenings);
+//		}
+		$this->screenings = $screenings;
+		
+		return $this;
 	}
 	
 	/**
@@ -75,9 +102,9 @@ abstract class Parser {
 
 	/**
 	 * Gets movies and other data from the web page.
-	 * @return Movie[] Array of movies.
+	 * @return Screenings Collection of screenings.
 	 */
-	abstract public function parse();
+	abstract public function parse(): Screenings;
 	
 	public function getContentFromDB($cinema) {
 		$today = date("Y-m-d", strtotime("now"));
@@ -89,18 +116,23 @@ abstract class Parser {
 			$datetime = \DateTime::createFromFormat("Y-m-d H:i:s", $event["date"]." ".$event["time"]);
 			$datetimes[] = $datetime;
 			
-			$movie = new \Zitkino\Movies\Movie($event["name"], $datetimes);
-			$movie->setLink($event["link"]);
-			$movie->setType($event["type"]);
-			$movie->setDubbing($event["dubbing"]);
-			$movie->setSubtitles($event["subtitles"]);
-			$movie->setLength($event["length"]);
-			$movie->setPrice($event["price"]);
-			$movie->setCsfd($event["csfd"]);
-			$movie->setImdb($event["imdb"]);
-			$this->movies[] = $movie;
+			$movie = new Movie($event["name"]);
+			$movie->length = $event["length"];
+			$movie->csfd = $event["csfd"];
+			$movie->imdb = $event["imdb"];
+			
+			$screening = new Screening($movie, $this->cinema);
+			$screening->type = $event["type"];
+			$screening->setLanguages($event["dubbing"], $event["subtitles"]);
+			$screening->price = $event["price"];
+			$screening->link = $event["link"];
+			$screening->setShowtimes($datetimes);
+			
+			$movie->addScreening($screening);
+			$this->screenings[] = $screening;
 		}
 		
-		$this->setMovies($this->movies);
+		$this->setScreenings($this->screenings);
+		return new Screenings($this->screenings);
 	}
 }

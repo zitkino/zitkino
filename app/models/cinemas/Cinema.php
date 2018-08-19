@@ -5,6 +5,9 @@ use Dobine\Entities\DobineEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Screenings;
+use Zitkino\Parsers\Parser;
 
 /**
  * Cinema
@@ -114,31 +117,34 @@ class Cinema extends DobineEntity {
 	 */
 	protected $activeUntil;
 	
-	/** @var Movie[] */
-	protected $movies;
+	
+	/** @var Screenings */
+	public $screenings;
 	
 	
-	public function getMovies() {
-		return $this->movies;
+	public function getScreenings() {
+		return $this->screenings;
 	}
 	
-	public function setMovies() {
+	public function setScreenings() {
 		try {
 			$parserClass = "\Zitkino\Parsers\\".ucfirst($this->shortName);
 			if(class_exists($parserClass)) {
-				/** @var \Zitkino\Parsers\Parser $parser */
-				$parser = new $parserClass();
+				/** @var Parser $parser */
+				$parser = new $parserClass($this);
 				
-				$films = $parser->getMovies();
-				\Tracy\Debugger::barDump($films);
-				if(isset($films)) {
-					foreach($films as $film) {
-//						\Tracy\Debugger::barDump($film);
-//						if($this->checkActualMovie($film)) {
-							$this->movies[] = $film;
-//						}
-					}
-				}
+				
+				$this->screenings = $parser->getScreenings();
+				\Tracy\Debugger::barDump([$parser, $this->screenings]);
+//				\Tracy\Debugger::barDump($films);
+//				if(isset($films)) {
+//					foreach($films as $film) {
+////						\Tracy\Debugger::barDump($film);
+////						if($this->checkActualMovie($film)) {
+//							$this->movies[] = $film;
+////						}
+//					}
+//				}
 			} else { $this->movies = null; }
 		} catch(\Error $error) {
 			\Tracy\Debugger::barDump($error);
@@ -154,8 +160,8 @@ class Cinema extends DobineEntity {
 		else { return false; }
 	}
 	
-	public function getSoonestMovies() {
-		return $this->movies;
+	public function getSoonestScreenings() {
+		return $this->screenings;
 		
 		$soonest = [];
 		if(isset($this->movies)) {
@@ -166,7 +172,7 @@ class Cinema extends DobineEntity {
 				$nextDate->modify("+1 days");
 				
 				$datetimes = [];
-				foreach($movie->getDatetimes() as $datetime) {
+				foreach($movie->datetimes as $datetime) {
 					// checks if movie is played from now to +1 day
 					if($currentDate < $datetime and $datetime < $nextDate) {
 						$datetimes[] = $datetime;
@@ -174,7 +180,7 @@ class Cinema extends DobineEntity {
 				}
 				
 				if(!empty($datetimes)) {
-					$movie->setDatetimes($datetimes);
+					$movie->datetimes = $datetimes;
 					$soonest[] = $movie;
 				}
 			}

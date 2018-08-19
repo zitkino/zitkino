@@ -7,10 +7,10 @@ namespace Zitkino\Parsers;
 class Ahoy extends Parser {
 	public function __construct() {
 		$this->getConnection();
-		$this->getContent();
+		$this->parse();
 	}
 	
-	public function getContent() {
+	public function parse() {
 		$this->getContentFromDB(11);
 	}
 }

@@ -1,18 +1,24 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Cinemas\Cinema;
+use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Screenings;
+
 /**
  * Lucerna parser.
  */
 class Lucerna extends Parser {
-	public function __construct() {
+	public function __construct(Cinema $cinema) {
+		$this->cinema = $cinema;
 		$this->setUrl("http://www.kinolucerna.info");
 		$this->initiateDocument();
 		
-		$this->getContent();
+		$this->parse();
 	}
 	
-	public function getContent() {
+	public function parse(): Screenings {
 		$xpath = $this->downloadData();
 		
 		$days = $xpath->query("//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
@@ -79,17 +85,21 @@ class Lucerna extends Parser {
 					}
 				}
 				
-				$movie = new \Zitkino\Movies\Movie($name, $datetimes);
-				$movie->setLink($link);
-				$movie->setType($type);
-				$movie->setDubbing($dubbing);
-				$movie->setSubtitles($subtitles);
+				$movie = new Movie($name);
 				$movie->setLength($length);
-				$movie->setPrice($price);
-				$this->movies[] = $movie;
+				
+				$screening = new Screening($movie, $this->cinema);
+				$screening->setType($type);
+				$screening->setLanguages($dubbing, $subtitles);
+				$screening->setPrice($price);
+				$screening->setLink($link);
+				$screening->setShowtimes($datetimes);
+				
+				$this->screenings[] = $screening;
 			}
 		}
 		
-		$this->setMovies($this->movies);
+		$this->setScreenings($this->screenings);
+		return new Screenings($this->screenings);
 	}
 }

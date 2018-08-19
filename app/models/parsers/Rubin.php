@@ -1,27 +1,31 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Movies\Screening;
+use Zitkino\Movies\Screenings;
 use Zitkino\Movies\Showtime;
 
 /**
  * Rubin parser.
  */
 class Rubin extends Parser {
-	public function __construct() {
+	public function __construct(Cinema $cinema) {
+		$this->cinema = $cinema;
 		$this->setUrl("http://www.kdrubin.cz/program");
 		$this->initiateDocument();
 		
-		$movies = $this->parse();
-		$this->setMovies($movies);
+		$this->parse();
 	}
 
 	/**
-	 * @return Movie[]
+	 * @return Screenings
 	 * @throws \Exception
 	 */
-	public function parse() {
+	public function parse(): Screenings {
+		$movies = [];
+		
 		$xpath = $this->downloadData();
 		
 		$events = $xpath->query("//div[@id='itemListLeading']//div[@class='K2ItemsRow']");
@@ -47,19 +51,19 @@ class Rubin extends Parser {
 				$time = trim($dateArray[2]);
 				$datetime = \DateTime::createFromFormat("d. m Y H:i", $date.$time);
 				
-				$movie = new Movie($name);
-				$screening = new Screening();
-				$screening->setLink($link);
 				
-				$showtime = new Showtime();
-				$showtime->setDatetime($datetime);
-				$screening->addShowtime($showtime);
+				$movie = new Movie($name);
+				
+				$screening = new Screening($movie, $this->cinema);
+				$screening->setLink($link);
+				$screening->setShowtimes([$datetime]);
 				
 				$movie->addScreening($screening);
-				$this->movies[] = $movie;
+				$this->screenings[] = $screening;
 			}
 		}
 		
-		return $this->movies;
+		$this->setScreenings($this->screenings);
+		return new Screenings($this->screenings);
 	}
 }

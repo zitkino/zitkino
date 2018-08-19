@@ -21,44 +21,16 @@ class Showtime {
 	 *   @ORM\JoinColumn(name="screening", referencedColumnName="id")
 	 * })
 	 */
-	protected $screening;
+	public $screening;
 	
 	/**
 	 * @var \DateTime
 	 * @ORM\Column(name="datetime", type="datetime", nullable=false)
 	 */
-	protected $datetime;
+	public $datetime;
 	
 	
-	/**
-	 * @return Screening
-	 */
-	public function getScreening(): Screening {
-		return $this->screening;
-	}
-	
-	/**
-	 * @param Screening $screening
-	 * @return Showtime
-	 */
-	public function setScreening(Screening $screening): Showtime {
+	public function __construct(Screening $screening) {
 		$this->screening = $screening;
-		return $this;
-	}
-	
-	/**
-	 * @return \DateTime
-	 */
-	public function getDatetime(): \DateTime {
-		return $this->datetime;
-	}
-	
-	/**
-	 * @param \DateTime $datetime
-	 * @return Showtime
-	 */
-	public function setDatetime(\DateTime $datetime): Showtime {
-		$this->datetime = $datetime;
-		return $this;
 	}
 }

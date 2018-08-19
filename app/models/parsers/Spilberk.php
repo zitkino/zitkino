@@ -1,18 +1,24 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Cinemas\Cinema;
+use Zitkino\Movies\Movie;
+use Zitkino\Movies\Screening;
+use Zitkino\Movies\Screenings;
+
 /**
  * Spilberk parser.
  */
 class Spilberk extends Parser {
-	public function __construct() {
+	public function __construct(Cinema $cinema) {
+		$this->cinema = $cinema;
 		$this->setUrl("http://www.letnikinospilberk.cz");
 		$this->initiateDocument();
 		
-		$this->getContent();
+		$this->parse();
 	}
 	
-	public function getContent() {
+	public function parse(): Screenings {
 		$xpath = $this->downloadData();
 		
 		$events = $xpath->query("//div[@id='page-program']/div[@class='film']");
@@ -54,14 +60,19 @@ class Spilberk extends Parser {
 			$priceString = $priceQuery->item(0)->nodeValue;
 			$price = str_replace([",- Kč"], "", $priceString);
 			
-			$movie = new \Zitkino\Movies\Movie($name, $datetimes);
-			$movie->setDubbing($dubbing);
+			$movie = new Movie($name);
 			$movie->setLength($length);
-			$movie->setPrice($price);
 			$movie->setCsfd($csfd);
-			$this->movies[] = $movie;
+			
+			$screening = new Screening($movie, $this->cinema);
+			$screening->setLanguages($dubbing, null);
+			$screening->setPrice($price);
+			$screening->setShowtimes($datetimes);
+			
+			$this->screenings[] = $screening;
 		}
 		
-		$this->setMovies($this->movies);
+		$this->setScreenings($this->screenings);
+		return new Screenings($this->screenings);
 	}
 }
