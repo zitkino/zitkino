@@ -1,6 +1,8 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Screenings\Screenings;
+
 /**
  * Ahoy parser.
  */
@@ -10,7 +12,7 @@ class Ahoy extends Parser {
 		$this->parse();
 	}
 	
-	public function parse() {
+	public function parse(): Screenings {
 		$this->getContentFromDB(11);
 	}
 }

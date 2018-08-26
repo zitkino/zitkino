@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\Movies;
+namespace Zitkino\Screenings;
 
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
@@ -30,7 +30,24 @@ class Showtime {
 	public $datetime;
 	
 	
+	/**
+	 * @return \DateTime
+	 */
+	public function getDatetime(): \DateTime {
+		return $this->datetime;
+	}
+	
+	
 	public function __construct(Screening $screening) {
 		$this->screening = $screening;
+	}
+	
+	
+	public function isActual() {
+		if($this->datetime > new \DateTime()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Zitkino\Movies\Screenings;
+use Zitkino\Screenings\Screenings;
 
 /**
  * Certova rokle parser.

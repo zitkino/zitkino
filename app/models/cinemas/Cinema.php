@@ -4,10 +4,9 @@ namespace Zitkino\Cinemas;
 use Dobine\Entities\DobineEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\MagicAccessors;
-use Zitkino\Movies\Movie;
-use Zitkino\Movies\Screening;
-use Zitkino\Movies\Screenings;
 use Zitkino\Parsers\Parser;
+use Zitkino\Screenings\Screenings;
+use Zitkino\Screenings\Showtime;
 
 /**
  * Cinema
@@ -133,19 +132,23 @@ class Cinema extends DobineEntity {
 				/** @var Parser $parser */
 				$parser = new $parserClass($this);
 				
-				
 				$this->screenings = $parser->getScreenings();
-				\Tracy\Debugger::barDump([$parser, $this->screenings]);
+//				\Tracy\Debugger::barDump([$parser, $this->screenings]);
 //				\Tracy\Debugger::barDump($films);
-//				if(isset($films)) {
-//					foreach($films as $film) {
-////						\Tracy\Debugger::barDump($film);
-////						if($this->checkActualMovie($film)) {
-//							$this->movies[] = $film;
-////						}
+//				$s = [];
+				if(isset($this->screenings)) {
+//					/** @var Screening $screening */
+//					foreach($this->screenings as $screening) {
+//////						\Tracy\Debugger::barDump($film);
+//						foreach ($screening->getShowtimes() as $showtime) {
+//							if($this->checkActualMovie($showtime)) {
+//								$s[] = $screening;
+//							}
+//						}
 //					}
-//				}
-			} else { $this->movies = null; }
+//					\Tracy\Debugger::barDump($s);
+				}
+			} else { $this->screenings = null; }
 		} catch(\Error $error) {
 			\Tracy\Debugger::barDump($error);
 			\Tracy\Debugger::log($error, \Tracy\Debugger::ERROR);
@@ -155,43 +158,46 @@ class Cinema extends DobineEntity {
 		}
 	}
 	
-	public function hasMovies() {
-		if(isset($this->movies) and !empty($this->movies)) { return true; }
-		else { return false; }
+	public function hasScreenings() {
+		if(isset($this->screenings) and !empty($this->screenings->toArray())) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public function getSoonestScreenings() {
-		return $this->screenings;
+//		return $this->screenings;
 		
 		$soonest = [];
-		if(isset($this->movies)) {
+		if(isset($this->screenings)) {
 			$currentDate = new \DateTime();
 			
-			foreach($this->movies as $movie) {
+			foreach($this->screenings as $screening) {
 				$nextDate = new \DateTime();
 				$nextDate->modify("+1 days");
 				
-				$datetimes = [];
-				foreach($movie->datetimes as $datetime) {
-					// checks if movie is played from now to +1 day
-					if($currentDate < $datetime and $datetime < $nextDate) {
-						$datetimes[] = $datetime;
+				$showtimes = $screening->getShowtimes();
+				if(isset($showtimes)) {
+					/** @var Showtime $showtime */
+					foreach($showtimes as $showtime) {
+						// checks if movie is played from now to +1 day
+						if($currentDate < $showtime->getDatetime() and $showtime->getDatetime() < $nextDate) {
+							$soonest[] = $screening;
+							break;
+						}
 					}
 				}
-				
-				if(!empty($datetimes)) {
-					$movie->datetimes = $datetimes;
-					$soonest[] = $movie;
-				}
 			}
+			\Tracy\Debugger::barDump($soonest);
 			
 			if(count($soonest) < 5) {
 				$soonest = [];
-				for($i=0; $i<count($this->movies); $i++) {
-					if(isset($this->movies[$i])) {
-						foreach($this->movies[$i]->getDatetimes() as $datetime) {
-							if($currentDate < $datetime) {
-								$soonest[] = $this->movies[$i];
+				for($i=0; $i<count($this->screenings->toArray()); $i++) {
+					if(isset($this->screenings[$i])) {
+						foreach($this->screenings[$i]->getShowtimes() as $showtime) {
+							if($currentDate < $showtime->getDatetime()) {
+								$soonest[] = $this->screenings[$i];
 							}
 						}
 					}
@@ -203,26 +209,18 @@ class Cinema extends DobineEntity {
 			}
 		}
 		
-		if(empty($soonest)) {
-			if(is_null($this->movies) or empty($this->movies)) { $soonest = null; }
-			else {
-				if($this->checkActualMovie($this->movies[0])) {
-					$soonest = [$this->movies[0]];
-				} else {
-					$soonest = null;
-				}
-			}
-		}
+//		if(empty($soonest)) {
+//			if(is_null($this->screenings) or empty($this->screenings->toArray())) {
+//				$soonest = [];
+//			} else {
+//				if($this->screenings[0]->getShowtimes()[0]->isActual()) {
+//					$soonest = [$this->screenings[0]];
+//				} else {
+//					$soonest = [];
+//				}
+//			}
+//		}
 		
-		return $soonest;
-	}
-	
-	public function checkActualMovie(Movie $movie) {
-		$datetime = $movie->getDatetimes()[0];
-		if($datetime > new \DateTime()) {
-			return true;
-		} else {
-			return false;
-		}
+		return new Screenings($soonest);
 	}
 }

@@ -1,7 +1,8 @@
 <?php
-namespace Zitkino\Movies;
+namespace Zitkino\Screenings;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Zitkino\Movies\Movies;
 
 class Screenings extends ArrayCollection {
 	public function getMovies() {

@@ -24,7 +24,7 @@ class CinemaPresenter extends BasePresenter {
 		$this->template->cinema = $cinema;
 		
 		$cinema->setScreenings();
-		$this->template->movies = $cinema->getScreenings();
+		$this->template->screenings = $cinema->getScreenings();
 		
 		$gmaps = $cinema->getGmaps();
 		if(is_null($gmaps)) {

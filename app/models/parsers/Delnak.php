@@ -3,8 +3,8 @@ namespace Zitkino\Parsers;
 
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
-use Zitkino\Movies\Screening;
-use Zitkino\Movies\Screenings;
+use Zitkino\Screenings\Screening;
+use Zitkino\Screenings\Screenings;
 
 /**
  * Delnak parser.

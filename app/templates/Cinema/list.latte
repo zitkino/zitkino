@@ -25,13 +25,13 @@
 {define cinemaMovieList}
 	{foreach $cinemas as $cinemaItem}
         {php $cinemaItem->setScreenings()}
-		<section class="panel panel-default">
+		{var $screenings = $cinemaItem->getSoonestScreenings();}
+		<section n:if="!$screenings->isEmpty()" class="panel panel-default">
 			<header class="panel-heading" data-toggle="collapse" data-target="#{$cinemaItem->getShortName()}">
 				{include #cinemaListContent, cinema => $cinemaItem}
 			</header>
 			
 			<article id="{$cinemaItem->getShortName()}" class="panel-collapse collapse in">
-				{var $screenings = $cinemaItem->getSoonestScreenings();}
 				{include #movieList, screenings => $screenings, cinema => $cinemaItem}
 			</article>
 		</section>
@@ -40,39 +40,38 @@
 
 {define movieList}
 <div class="table-responsive">
-	<table class="table table-hover" n:if="$screenings">
-		<thead>
+<table class="table table-hover">
+    <thead>
 		<tr>
 			<th>{fa film} Film</th>
-			{*{var $films = new \Zitkino\Movies\Movies($movies)}*}
-            {dump [$screenings]}
 			
-			{if $screenings->hasTypes()}
-				<th><abbr title="Typ filmu">{fa video}</abbr> <span class="hidden-xs hidden-sm">Typ</span></th>
-			{/if}
+            <th n:if="$screenings->hasTypes()">
+                <abbr title="Typ filmu">{fa video}</abbr> <span class="hidden-xs hidden-sm">Typ</span>
+            </th>
 			
-			{if $screenings->hasLanguages()}
-				<th><abbr title="Dabing">{fa headphones}</abbr> <span class="hidden-xs hidden-sm">Dabing</span> a 
-					<abbr title="Titulky">{fa paragraph}</abbr> <span class="hidden-xs hidden-sm">titulky</span></th>
-			{/if}
+            <th n:if="$screenings->hasLanguages()">
+                <abbr title="Dabing">{fa headphones}</abbr> <span class="hidden-xs hidden-sm">Dabing</span> a 
+                <abbr title="Titulky">{fa paragraph}</abbr> <span class="hidden-xs hidden-sm">titulky</span>
+            </th>
 			
 			<th>{fa r, calendar-alt} Promítání</th>
 			
-			{if $screenings->getMovies()->hasLengths()}
-				<th><abbr title="Délka">{fa hourglass-end}</abbr> <span class="hidden-xs hidden-sm">Délka</span></th>
-			{/if}
+            <th n:if="$screenings->getMovies()->hasLengths()">
+                <abbr title="Délka">{fa hourglass-end}</abbr> <span class="hidden-xs hidden-sm">Délka</span>
+            </th>
 			
-			{if $screenings->hasPrices()}
-				<th><abbr title="Cena">{fa r, money-bill-alt}</abbr> <span class="hidden-xs hidden-sm">Cena</span></th>
-			{/if}
+            <th n:if="$screenings->hasPrices()">
+                <abbr title="Cena">{fa r, money-bill-alt}</abbr> <span class="hidden-xs hidden-sm">Cena</span>
+            </th>
 			
-			<th><abbr title="Filmové databáze">{fa database}</abbr> <span class="hidden-xs hidden-sm">Databáze</span></th>
+			<th>
+                <abbr title="Filmové databáze">{fa database}</abbr> <span class="hidden-xs hidden-sm">Databáze</span>
+            </th>
 		</tr>
-		</thead>
-		<tbody>
-		{foreach $screenings as $screening}
-			{if !empty($screening)}
-		<tr>
+    </thead>
+    <tbody>
+		<tr n:foreach="$screenings as $screening" n:if="!empty($screening->getShowtimes())">
+            {dump $screening}
 			<td title="Název filmu">
 				{php $link = $screening->link}
 				{ifset $link}
@@ -81,51 +80,46 @@
 				{$screening->movie->name}</a>
 			</td>
 			
-			{if $screenings->hasTypes()}
-				<td title="Typ filmu">
-					{php $type = $screening->type}
-					{ifset $type}
-						<span class="label label-type" title="Typ">{$type}</span>
-					{/ifset}
-				</td>
-			{/if}
+            <td n:if="$screenings->hasTypes()" title="Typ filmu">
+                {php $type = $screening->type}
+                {ifset $type}
+                    <span class="label label-type" title="Typ">{$type}</span>
+                {/ifset}
+            </td>
 			
-			{if $screenings->hasLanguages()}
-				<td title="Jazyk">
-					{php $dubbing = $screening->getDubbing()}
-					{ifset $dubbing}
-						<span class="label label-language" title="Dabing">{fa headphones}&nbsp;{$dubbing}</span>
-					{/ifset}
-					<br class="hidden-md hidden-lg">
-					{php $subtitles = $screening->getSubtitles()}
-					{ifset $subtitles}
-						<span class="label label-subtitles" title="Titulky">{fa paragraph}&nbsp;{$subtitles}</span>
-					{/ifset}
-				</td>
-			{/if}
+            <td n:if="$screenings->hasLanguages()" title="Jazyk">
+                {php $dubbing = $screening->getDubbing()}
+                {ifset $dubbing}
+                    <span class="label label-language" title="Dabing">{fa headphones}&nbsp;{$dubbing}</span>
+                {/ifset}
+                <br class="hidden-md hidden-lg">
+                {php $subtitles = $screening->getSubtitles()}
+                {ifset $subtitles}
+                    <span class="label label-subtitles" title="Titulky">{fa paragraph}&nbsp;{$subtitles}</span>
+                {/ifset}
+            </td>
 			
-			<td title="Datum a čas">{fa r, calendar}
-				{foreach $screening->showtimes as $showtime}
-					{if $iterator->first}
-						{$showtime->datetime->format('d.m.Y')} <br class="hidden-md hidden-lg">{fa r, clock}
-					{/if}
-					{$showtime->datetime->format('H:i')}{sep}, {/sep}
-				{/foreach}
+			<td title="Datum a čas">
+				{if !empty($screening->showtimes)}
+					{fa r, calendar}
+					{foreach $screening->showtimes as $showtime}
+						{if $iterator->first}
+							{$showtime->datetime->format('d.m.Y')} <br class="hidden-md hidden-lg">{fa r, clock}
+						{/if}
+						{$showtime->datetime->format('H:i')}{sep}, {/sep}
+					{/foreach}
+				{/if}
 			</td>
 			
-			{if $screenings->getMovies()->hasLengths()}
-				<td title="Délka">
-					{php $length = $screening->movie->getLength()}
-					{ifset $length}{$length|trim} min.{/ifset}
-				</td>
-			{/if}
+            <td n:if="$screenings->getMovies()->hasLengths()" title="Délka">
+                {php $length = $screening->movie->getLength()}
+                {ifset $length}{$length|trim} min.{/ifset}
+            </td>
 			
-			{if $screenings->hasPrices()}
-				<td title="Cena">
-					{php $price = $screening->fixPrice()}
-					{ifset $price}{$price|trim}{/ifset}
-				</td>
-			{/if}
+            <td n:if="$screenings->hasPrices()" title="Cena">
+                {php $price = $screening->fixPrice()}
+                {ifset $price}{$price|trim}{/ifset}
+            </td>
 			
 			<td title="Databáze">
 				{var $databases = $screening->movie->getDatabases()}
@@ -134,14 +128,12 @@
 				<a href="{$databases['imdb']}" title="IMDb">{fa b, imdb, "lg"}</a>
 			</td>
 		</tr>
-			{/if}
-		{/foreach}
-		</tbody>
-	</table>
+    </tbody>
+</table>
 </div>
 
 	<div class="panel-body">
-	{if is_null($screenings) or empty($screenings)}
+	{if is_null($screenings) or $screenings->isEmpty()}
 		<p>Dnes kino asi nepromítá. &#9785;</p>
 		<p>Program na další dny je na webu kina:
 			<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>

@@ -2,8 +2,8 @@
 namespace Zitkino\Parsers;
 
 use Zitkino\Movies\Movie;
-use Zitkino\Movies\Screening;
-use Zitkino\Movies\Showtime;
+use Zitkino\Screenings\Screening;
+use Zitkino\Screenings\Showtime;
 
 /**
  * BVV parser.

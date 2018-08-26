@@ -2,7 +2,7 @@
 namespace Zitkino\Parsers;
 
 use Zitkino\Cinemas\Cinema;
-use Zitkino\Movies\Screenings;
+use Zitkino\Screenings\Screenings;
 
 /**
  * Trznice parser.

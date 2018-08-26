@@ -1,5 +1,5 @@
 <?php
-namespace Zitkino\Movies;
+namespace Zitkino\Screenings;
 
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;

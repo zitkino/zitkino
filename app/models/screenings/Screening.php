@@ -1,10 +1,11 @@
 <?php
-namespace Zitkino\Movies;
+namespace Zitkino\Screenings;
 
 use Kdyby\Doctrine\Entities\MagicAccessors;
 use Doctrine\ORM\Mapping as ORM;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Language;
+use Zitkino\Movies\Movie;
 
 /**
  * Screening
@@ -106,16 +107,34 @@ class Screening {
 		$this->showtimes[] = $showtime;
 	}
 
+	/**
+	 * @return Showtime[]
+	 */
+	public function getShowtimes(): array {
+		if(!isset($this->showtimes)) {
+			return [];
+		}
+		
+		return $this->showtimes;
+	}
 
 	/**
 	 * @param \DateTime[] $datetimes
+	 * @param bool $actual
 	 */
-	public function setShowtimes($datetimes) {
+	public function setShowtimes($datetimes, $actual = true) {
 		foreach($datetimes as $datetime) {
 			$showtime = new Showtime($this);
 			$showtime->datetime = $datetime;
-			$this->addShowtime($showtime);
-		}	
+			
+			if($actual === true) {
+				if(isset($showtime->datetime) and $showtime->isActual()) {
+					$this->addShowtime($showtime);
+				}
+			} elseif ($actual === false) {
+				$this->addShowtime($showtime);
+			}
+		}
 	}
 	
 	public function fixPrice() {

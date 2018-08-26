@@ -6,9 +6,8 @@ use DOMDocument, DOMXPath;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
-use Zitkino\Movies\Screening;
-use Zitkino\Movies\Screenings;
-use Zitkino\Movies\Showtime;
+use Zitkino\Screenings\Screening;
+use Zitkino\Screenings\Screenings;
 
 /**
  * Parser.
@@ -77,7 +76,7 @@ abstract class Parser {
 		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handle, CURLOPT_ENCODING, "UTF-8");
         curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
-//        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
         
 		$html = curl_exec($handle);
 		if($html === false) {
