@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityRepository;
 trait Cinemas {
 	public function cinemasSelect() {
 		return $this->repository->createQueryBuilder("c")
-			->where("c.activeUntil is null")->orderBy("c.shortName");
+			->where("c.activeUntil is null")->orderBy("c.code");
 	}
 	
 	
@@ -33,7 +33,6 @@ trait Cinemas {
 		/** @var Cinema $cinema */
 		foreach($cinemas as $cinema) {
 			$cinema->setScreenings();
-			\Tracy\Debugger::barDump($cinema);
 			if($cinema->hasScreenings()) {
 				$output[] = $cinema;
 			}

@@ -25,9 +25,9 @@ class Cinema extends DobineEntity {
 	
 	/**
 	 * @var string
-	 * @ORM\Column(name="short_name", type="string", length=20, nullable=false)
+	 * @ORM\Column(name="code", type="string", length=20, nullable=false)
 	 */
-	protected $shortName;
+	protected $code;
 	
 	/**
 	 * @var CinemaType
@@ -127,27 +127,12 @@ class Cinema extends DobineEntity {
 	
 	public function setScreenings() {
 		try {
-			$parserClass = "\Zitkino\Parsers\\".ucfirst($this->shortName);
+			$parserClass = "\Zitkino\Parsers\\".ucfirst($this->code);
 			if(class_exists($parserClass)) {
 				/** @var Parser $parser */
 				$parser = new $parserClass($this);
 				
 				$this->screenings = $parser->getScreenings();
-//				\Tracy\Debugger::barDump([$parser, $this->screenings]);
-//				\Tracy\Debugger::barDump($films);
-//				$s = [];
-				if(isset($this->screenings)) {
-//					/** @var Screening $screening */
-//					foreach($this->screenings as $screening) {
-//////						\Tracy\Debugger::barDump($film);
-//						foreach ($screening->getShowtimes() as $showtime) {
-//							if($this->checkActualMovie($showtime)) {
-//								$s[] = $screening;
-//							}
-//						}
-//					}
-//					\Tracy\Debugger::barDump($s);
-				}
 			} else { $this->screenings = null; }
 		} catch(\Error $error) {
 			\Tracy\Debugger::barDump($error);
@@ -189,7 +174,6 @@ class Cinema extends DobineEntity {
 					}
 				}
 			}
-			\Tracy\Debugger::barDump($soonest);
 			
 			if(count($soonest) < 5) {
 				$soonest = [];

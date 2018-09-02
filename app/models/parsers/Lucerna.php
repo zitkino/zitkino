@@ -34,12 +34,22 @@ class Lucerna extends Parser {
 				$nameQuery = $xpath->query($info."//h2//a", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
+				$smallQuery = $xpath->query($info."//h2//a/small", $event);
+				$smallItem = $smallQuery->item(0);
+				if(isset($smallItem)) {
+					$small = $smallItem->nodeValue;
+				} else {
+					$small = "";
+				}
+				$name = str_replace($small, "", $name);
+				
 				$link = "http://www.kinolucerna.info".$nameQuery->item(0)->getAttribute("href");
 				
 				$lengthQuery = $xpath->query($info."//div[@class='eventlenght']", $event);
 				$lengthString = $lengthQuery->item(0)->nodeValue;
 				$length = str_replace("&nbsp;min", "", htmlentities($lengthString, null, "utf-8"));
 				
+				$type = null;
 				$typeQuery = $xpath->query($info."//div[@class='left']/div/span[1]", $event);
 				if($typeQuery->length >= 1) {
 					$typeString = $typeQuery->item(0)->nodeValue;
@@ -50,6 +60,8 @@ class Lucerna extends Parser {
 					}	
 				}
 				
+				$dubbing = null;
+				$subtitles = null;
 				$languageQuery = $xpath->query($info."//div[@class='left']/div/span[2]", $event);
 				if($languageQuery->length >= 1) {
 					$languageString = $languageQuery->item(0)->nodeValue;
@@ -64,6 +76,7 @@ class Lucerna extends Parser {
 				}
 				
 				$datetimes = [];
+				$price = null;
 				$timesQuery = $xpath->query("./div[@class='times']/div[@class='right']/span", $event);
 				/** @var \DOMElement $timeElement */
 				foreach($timesQuery as $timeElement) {
@@ -100,6 +113,6 @@ class Lucerna extends Parser {
 		}
 		
 		$this->setScreenings($this->screenings);
-		return new Screenings($this->screenings);
+		return $this->screenings;
 	}
 }

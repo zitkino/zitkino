@@ -7,9 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Movies.
  */
 class Movies extends ArrayCollection {
-	/** @var Movie[] */
-	private $movies;
-
 	/**
 	 * @return Movie[]
 	 */

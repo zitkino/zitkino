@@ -24,7 +24,7 @@ class Art extends Parser {
 		
 		$screenings = $this->getHall($xpath, "program");
 		$this->setScreenings($screenings);
-		return new Screenings($screenings);
+		return $this->screenings;
 	}
 
 	/**

@@ -15,6 +15,6 @@ class Turany extends Parser {
 	}
 	
 	public function parse(): Screenings {
-		$this->getContentFromDB(14);
+		return $this->getContentFromDB(14);
 	}
 }

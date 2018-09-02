@@ -5,6 +5,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Zitkino\Movies\Movies;
 
 class Screenings extends ArrayCollection {
+	public function __construct($screenings) {
+		if(!isset($screenings)) {
+			$screenings = [];
+		}
+		
+		parent::__construct($screenings);
+	}
+	
+
 	public function getMovies() {
 		$movies = [];
 		
@@ -19,7 +28,7 @@ class Screenings extends ArrayCollection {
 	public function hasTypes() {
 		foreach($this->toArray() as $screening) {
 			$type = $screening->type;
-			if(isset($type)) { return true; }
+			if(isset($type) and $type !== "2D") { return true; }
 		}
 		return false;
 	}

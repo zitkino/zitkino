@@ -1,22 +1,24 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
-use Zitkino\Screenings\Screening;
+use Zitkino\Screenings\Screenings;
 use Zitkino\Screenings\Showtime;
 
 /**
  * BVV parser.
  */
 class Bvv extends Parser {
-	public function __construct() {
+	public function __construct(Cinema $cinema) {
+		$this->cinema = $cinema;
 		$this->setUrl("http://www.bvv.cz/letni-kino/");
 		$this->initiateDocument();
 		
 		$this->parse();
 	}
 	
-	public function parse() {
+	public function parse(): Screenings {
 		$xpath = $this->downloadData();
 		$events = "//*[@id='content']/div[1]/div[2]";
 		
@@ -121,5 +123,6 @@ class Bvv extends Parser {
 		}
 		
 		$this->setScreenings($this->screenings);
+		return $this->screenings;
 	}
 }

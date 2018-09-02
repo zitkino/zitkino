@@ -85,6 +85,6 @@ class Scala extends Parser {
 		}
 		
 		$this->setScreenings($this->screenings);
-		return new Screenings($this->screenings);
+		return $this->screenings;
 	}
 }

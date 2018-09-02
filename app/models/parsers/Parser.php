@@ -49,10 +49,15 @@ abstract class Parser {
 	 * @return Parser
 	 */
 	public function setScreenings($screenings) {
-//		if(is_array($screenings)) {
-//			$this->screenings = new Screenings($screenings);
-//		}
-		$this->screenings = $screenings;
+		if(!isset($screenings)) {
+			$screenings = [];
+		}
+		
+		if(is_array($screenings)) {
+			$this->screenings = new Screenings($screenings);
+		} else {
+			$this->screenings = $screenings;	
+		}
 		
 		return $this;
 	}
@@ -107,12 +112,20 @@ abstract class Parser {
 	
 	public function getContentFromDB($cinema) {
 		$today = date("Y-m-d", strtotime("now"));
-		$events = $this->connection->fetchAll("SELECT s.*, m.*, l.czech AS dubbing, ls.czech AS subtitles FROM screenings AS s JOIN movies AS m ON s.movie = m.id
-			 LEFT JOIN languages AS l ON s.dubbing = l.id LEFT JOIN languages AS ls ON s.subtitles = ls.id WHERE s.cinema = ? AND date >= ?", [$cinema, $today]);
+		$events = $this->connection->fetchAll("
+			SELECT s.*, m.*, l.czech AS dubbing, ls.czech AS subtitles, stype.name as type, st.datetime FROM screenings AS s
+			LEFT JOIN movies AS m ON s.movie = m.id
+			LEFT JOIN languages AS l ON s.dubbing = l.id
+			LEFT JOIN languages AS ls ON s.subtitles = ls.id
+			LEFT JOIN screenings_types AS stype ON stype.id = s.type
+			LEFT JOIN showtimes AS st ON st.screening = s.id
+			WHERE s.cinema = ? AND st.datetime >= ?",
+			[$cinema, $today]
+		);
 		
 		foreach($events as $event) {
 			$datetimes = [];
-			$datetime = \DateTime::createFromFormat("Y-m-d H:i:s", $event["date"]." ".$event["time"]);
+			$datetime = \DateTime::createFromFormat("Y-m-d H:i:s", $event["datetime"]);
 			$datetimes[] = $datetime;
 			
 			$movie = new Movie($event["name"]);
@@ -132,6 +145,6 @@ abstract class Parser {
 		}
 		
 		$this->setScreenings($this->screenings);
-		return new Screenings($this->screenings);
+		return $this->screenings;
 	}
 }

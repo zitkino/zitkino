@@ -20,7 +20,7 @@ class CinemaFacade extends DobineFacade {
 		if(is_numeric($id)) {
 			return $this->repository->findOneBy(["id" => $id]);
 		} else {
-			return $this->repository->findOneBy(["shortName" => $id]);
+			return $this->repository->findOneBy(["code" => $id]);
 		}
 	}
 }

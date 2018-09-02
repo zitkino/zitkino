@@ -18,7 +18,7 @@
 	<a href="{$url}">{fa link} {$url}</a>
 
 	<div class="pull-right">
-		<a n:href="Cinema:profile, $id = $cinema->getShortName()">{fa r, list-alt, "lg"} profil kina</a>
+		<a n:href="Cinema:profile, $id = $cinema->getCode()">{fa r, list-alt, "lg"} profil kina</a>
 	</div>
 {/define}
 
@@ -27,11 +27,11 @@
         {php $cinemaItem->setScreenings()}
 		{var $screenings = $cinemaItem->getSoonestScreenings();}
 		<section n:if="!$screenings->isEmpty()" class="panel panel-default">
-			<header class="panel-heading" data-toggle="collapse" data-target="#{$cinemaItem->getShortName()}">
+			<header class="panel-heading" data-toggle="collapse" data-target="#{$cinemaItem->getCode()}">
 				{include #cinemaListContent, cinema => $cinemaItem}
 			</header>
 			
-			<article id="{$cinemaItem->getShortName()}" class="panel-collapse collapse in">
+			<article id="{$cinemaItem->getCode()}" class="panel-collapse collapse in">
 				{include #movieList, screenings => $screenings, cinema => $cinemaItem}
 			</article>
 		</section>
@@ -139,13 +139,13 @@
 			<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 		</p>
 	{else}
-		{if basename($_SERVER["REQUEST_URI"]) == $cinema->getShortName()}
+		{if basename($_SERVER["REQUEST_URI"]) == $cinema->getCode()}
 			<p>Další program a podrobné informace o filmech:
 				<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 			</p>
 		{else}
 			{*<p>Další promítání jsou na stránce*}
-				{*<a n:href="Cinema:profile, $id = $cinema['short_name']"><i class="fa fa-list-alt"></i> profilu kina</a>.*}
+				{*<a n:href="Cinema:profile, $id = $cinema['code']"><i class="fa fa-list-alt"></i> profilu kina</a>.*}
 			{*</p>*}
 		{/if}
 	{/if}

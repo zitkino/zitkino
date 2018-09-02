@@ -15,6 +15,6 @@ class Trznice extends Parser {
 	}
 	
 	public function parse(): Screenings {
-		$this->getContentFromDB(16);
+		return $this->getContentFromDB(16);
 	}
 }
