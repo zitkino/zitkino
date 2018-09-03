@@ -71,7 +71,6 @@
     </thead>
     <tbody>
 		<tr n:foreach="$screenings as $screening" n:if="!empty($screening->getShowtimes())">
-            {dump $screening}
 			<td title="Název filmu">
 				{php $link = $screening->link}
 				{ifset $link}

@@ -26,6 +26,7 @@ class RouterFactory {
 		$router[] = new Route("kino/<id>", "Cinema:profile");
 		
 		$router[] = new Route("klasicka[/]", "Cinema:classic");
+		$router[] = new Route("klasicky[/]", "Cinema:classic");
 		$router[] = new Route("klasicky/program", "Cinema:classic_programme");
 		$router[] = new Route("klasicka/program", "Cinema:classic_programme");
 		

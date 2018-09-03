@@ -2,7 +2,7 @@
 	"name": "zitkino/zitkino",
 	"description": "Brno's cinemas",
 	"type": "project",
-
+	
 	"config": {
 		"vendor-dir": "vendor",
 		"preferred-install": "dist",
@@ -10,15 +10,11 @@
 		"optimize-autoloader": true
 	},
 	
-	"repositories": [
-        {
-            "type": "path",
-            "url": "../dobine"
-        }
-    ],
-
 	"require": {
-		"php": "^7.0",
+		"php": "^7.1",
+		"ext-curl": "*",
+		"ext-dom": "*",
+		"ext-libxml": "*",
 		"doctrine/dbal": "^2.5",
 		"hermajan/dobine": "dev-master",
 		"hermajan/fazette": "^0.1.0",
