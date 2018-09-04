@@ -2,6 +2,7 @@
 namespace Zitkino\Cinemas;
 
 use Dobine\Entities\DobineEntity;
+use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 use Zitkino\Parsers\Parser;
@@ -11,11 +12,11 @@ use Zitkino\Screenings\Showtime;
 /**
  * Cinema
  *
- * @ORM\Table(name="cinemas", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="type", columns={"type"})})
+ * @ORM\Table(name="cinemas", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"}), @ORM\UniqueConstraint(name="code", columns={"code"})}, indexes={@ORM\Index(name="type", columns={"type"})})
  * @ORM\Entity
  */
 class Cinema extends DobineEntity {
-	use MagicAccessors;
+	use Identifier, MagicAccessors;
 	
 	/**
 	 * @var string
@@ -116,14 +117,137 @@ class Cinema extends DobineEntity {
 	 */
 	protected $activeUntil;
 	
-	
 	/** @var Screenings */
-	public $screenings;
+	protected $screenings;
 	
 	
-	public function getScreenings() {
+	public function __construct(string $code) {
+		$this->code = $code;
+		$this->name = $code;
+	}
+	
+	
+	/**
+	 * @return string
+	 */
+	public function getName(): string {
+		return $this->name;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getCode(): string {
+		return $this->code;
+	}
+	
+	/**
+	 * @return CinemaType
+	 */
+	public function getType(): CinemaType {
+		return $this->type;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getAddress(): ?string {
+		return $this->address;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getCity(): string {
+		return $this->city;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getPhone(): ?string {
+		return $this->phone;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getEmail(): ?string {
+		return $this->email;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getUrl(): ?string {
+		return $this->url;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getGmaps(): ?string {
+		return $this->gmaps;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getProgramme(): ?string {
+		return $this->programme;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getFacebook(): ?string {
+		return $this->facebook;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getGooglePlus(): ?string {
+		return $this->googlePlus;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getInstagram(): ?string {
+		return $this->instagram;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getTwitter(): ?string {
+		return $this->twitter;
+	}
+	
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getActiveSince(): ?\DateTime {
+		return $this->activeSince;
+	}
+	
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getActiveUntil(): ?\DateTime {
+		return $this->activeUntil;
+	}
+	
+	/**
+	 * @return Screenings
+	 */
+	public function getScreenings(): Screenings {
 		return $this->screenings;
 	}
+	
+	
+	
 	
 	public function setScreenings() {
 		try {

@@ -22,7 +22,9 @@ trait Cinemas {
 		if($type == "all") {
 			return $this->getAll();
 		} else {
-			return $this->cinemasSelect()->andWhere("c.type = :type")->setParameter("type", $type)->getQuery()->getResult();
+			return $this->cinemasSelect()->join("c.type", "ct")
+				->andWhere("ct.code = :type")->setParameter("type", $type)
+				->getQuery()->getResult();
 		}
 	}
 	

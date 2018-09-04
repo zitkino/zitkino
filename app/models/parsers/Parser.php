@@ -8,6 +8,7 @@ use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 use Zitkino\Screenings\Screenings;
+use Zitkino\Screenings\ScreeningType;
 
 /**
  * Parser.
@@ -129,15 +130,15 @@ abstract class Parser {
 			$datetimes[] = $datetime;
 			
 			$movie = new Movie($event["name"]);
-			$movie->length = $event["length"];
-			$movie->csfd = $event["csfd"];
-			$movie->imdb = $event["imdb"];
+			$movie->setLength($event["length"]);
+			$movie->setCsfd($event["csfd"]);
+			$movie->setImdb($event["imdb"]);
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->type = $event["type"];
+			$screening->setType(new ScreeningType($event["type"]));
 			$screening->setLanguages($event["dubbing"], $event["subtitles"]);
-			$screening->price = $event["price"];
-			$screening->link = $event["link"];
+			$screening->setPrice($event["price"]);
+			$screening->setLink($event["link"]);
 			$screening->setShowtimes($datetimes);
 			
 			$movie->addScreening($screening);

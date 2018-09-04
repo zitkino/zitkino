@@ -2,6 +2,7 @@ nbproject/
 .idea/
 _log/
 .temp/
+bin/Entities
 domains/
 node_modules/
 vendor/

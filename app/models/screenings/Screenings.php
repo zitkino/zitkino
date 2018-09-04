@@ -26,9 +26,10 @@ class Screenings extends ArrayCollection {
 	}
 	
 	public function hasTypes() {
+		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
-			$type = $screening->type;
-			if(isset($type) and $type !== "2D") { return true; }
+			$type = $screening->getType();
+			if(isset($type) and $type->getCode() !== "2D") { return true; }
 		}
 		return false;
 	}

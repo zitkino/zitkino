@@ -1,6 +1,7 @@
 <?php
 namespace Zitkino\Screenings;
 
+use Dobine\Entities\Identifier;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 use Doctrine\ORM\Mapping as ORM;
 use Zitkino\Cinemas\Cinema;
@@ -10,80 +11,163 @@ use Zitkino\Movies\Movie;
 /**
  * Screening
  *
- * @ORM\Table(name="screenings", indexes={@ORM\Index(name="language", columns={"dubbing"}), @ORM\Index(name="subtitles", columns={"subtitles"}), @ORM\Index(name="movie", columns={"movie"}), @ORM\Index(name="cinema", columns={"cinema"}), @ORM\Index(name="type", columns={"type"})})
+ * @ORM\Table(name="screenings", indexes={@ORM\Index(name="movie", columns={"movie"}), @ORM\Index(name="cinema", columns={"cinema"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="dubbing", columns={"dubbing"}), @ORM\Index(name="subtitles", columns={"subtitles"})})
  * @ORM\Entity
  */
 class Screening {
-	use MagicAccessors;
-	
-	/**
-	 * @var int
-	 * @ORM\Column(name="id", type="integer", nullable=false)
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="IDENTITY")
-	 */
-	protected $id;
-	
-	/**
-	 * @var int|null
-	 * @ORM\Column(name="price", type="integer", nullable=true)
-	 */
-	public $price;
-	
-	/**
-	 * @var string|null
-	 * @ORM\Column(name="link", type="string", length=1000, nullable=true)
-	 */
-	public $link;
-	
-	/**
-	 * @var Movie
-	 * @ORM\ManyToOne(targetEntity="Movie")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="movie", referencedColumnName="id")
-	 * })
-	 */
-	public $movie;
-	
-	/**
-	 * @var Cinema
-	 * @ORM\ManyToOne(targetEntity="Cinema")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="cinema", referencedColumnName="id")
-	 * })
-	 */
-	public $cinema;
-	
-	/**
-	 * @var Language
-	 * @ORM\ManyToOne(targetEntity="Language")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id")
-	 * })
-	 */
-	public $dubbing;
-	
-	/**
-	 * @var Language
-	 * @ORM\ManyToOne(targetEntity="Language")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id")
-	 * })
-	 */
-	public $subtitles;
-	
-	/**
-	 * @var ScreeningType
-	 * @ORM\ManyToOne(targetEntity="ScreeningType")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="type", referencedColumnName="id")
-	 * })
-	 */
-	public $type;
+	use Identifier, MagicAccessors;
+
+    /**
+     * @var Movie
+     * @ORM\ManyToOne(targetEntity="\Zitkino\Movies\Movie")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="movie", referencedColumnName="id", nullable=false)
+     * })
+     */
+    protected $movie;
+
+    /**
+     * @var Cinema
+     * @ORM\ManyToOne(targetEntity="\Zitkino\Cinemas\Cinema")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="cinema", referencedColumnName="id", nullable=false)
+     * })
+     */
+    protected $cinema;
+
+    /**
+     * @var ScreeningType|null
+     * @ORM\ManyToOne(targetEntity="ScreeningType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="type", referencedColumnName="id")
+     * })
+     */
+    protected $type;
+
+    /**
+     * @var Language|string|null
+     * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id")
+     * })
+     */
+    protected $dubbing;
+
+    /**
+     * @var Language|string|null
+     * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id")
+     * })
+     */
+    protected $subtitles;
+    
+    /**
+     * @var int|null
+     * @ORM\Column(name="price", type="integer", nullable=true)
+     */
+    protected $price;
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="link", type="string", length=1000, nullable=true)
+     */
+    protected $link;
 	
 	/** @var Showtime[] */
 	protected $showtimes;
 	
+	
+	public function __construct(Movie $movie, Cinema $cinema) {
+		$this->movie = $movie;
+		$this->cinema = $cinema;
+	}
+	
+	
+	/**
+	 * @return int|null
+	 */
+	public function getPrice(): ?int {
+		return $this->price;
+	}
+	
+	/**
+	 * @param int|string|null $price
+	 * @return Screening
+	 */
+	public function setPrice($price): Screening {
+		if(isset($price) and !empty($price)) {
+			$this->price = intval($price);	
+		} else {
+			$this->price = null;
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * @return null|string
+	 */
+	public function getLink(): ?string {
+		return $this->link;
+	}
+	
+	/**
+	 * @param null|string $link
+	 * @return Screening
+	 */
+	public function setLink(?string $link): Screening {
+		$this->link = $link;
+		return $this;
+	}
+	
+	/**
+	 * @return Language|string|null
+	 */
+	public function getDubbing() {
+		return $this->dubbing;
+	}
+	
+	/**
+	 * @param Language|string|null $dubbing
+	 * @return Screening
+	 */
+	public function setDubbing($dubbing): Screening {
+		$this->dubbing = $dubbing;
+		return $this;
+	}
+	
+	/**
+	 * @return Language|string|null
+	 */
+	public function getSubtitles() {
+		return $this->subtitles;
+	}
+	
+	/**
+	 * @param Language|string|null $subtitles
+	 * @return Screening
+	 */
+	public function setSubtitles($subtitles): Screening {
+		$this->subtitles = $subtitles;
+		return $this;
+	}
+	
+	/**
+	 * @return ScreeningType|null
+	 */
+	public function getType(): ?ScreeningType {
+		return $this->type;
+	}
+	
+	/**
+	 * @param ScreeningType|null $type
+	 * @return Screening
+	 */
+	public function setType(?ScreeningType $type): Screening {
+		$this->type = $type;
+		return $this;
+	}
 	
 	/**
 	 * @param Language|string $dubbing
@@ -96,17 +180,6 @@ class Screening {
 		return $this;
 	}
 	
-	
-	public function __construct(Movie $movie, Cinema $cinema) {
-		$this->movie = $movie;
-		$this->cinema = $cinema;
-	}
-
-
-	public function addShowtime($showtime) {
-		$this->showtimes[] = $showtime;
-	}
-
 	/**
 	 * @return Showtime[]
 	 */
@@ -117,24 +190,27 @@ class Screening {
 		
 		return $this->showtimes;
 	}
-
+	
 	/**
 	 * @param \DateTime[] $datetimes
 	 * @param bool $actual
 	 */
 	public function setShowtimes($datetimes, $actual = true) {
 		foreach($datetimes as $datetime) {
-			$showtime = new Showtime($this);
-			$showtime->datetime = $datetime;
+			$showtime = new Showtime($this, $datetime);
 			
 			if($actual === true) {
-				if(isset($showtime->datetime) and $showtime->isActual()) {
+				if(isset($datetime) and $showtime->isActual()) {
 					$this->addShowtime($showtime);
 				}
-			} elseif ($actual === false) {
+			} elseif($actual === false) {
 				$this->addShowtime($showtime);
 			}
 		}
+	}
+	
+	public function addShowtime($showtime) {
+		$this->showtimes[] = $showtime;
 	}
 	
 	public function fixPrice() {

@@ -4,5 +4,7 @@
 <h1 class="page-header">{$title}</h1>
 {import "../Cinema/list.latte"}
 
+{*{cache "homepage", expire => "1 hour"}*}
 {include #cinemaMovieList}
+{*{/cache}*}
 {/block}

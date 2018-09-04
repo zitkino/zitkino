@@ -1,1 +1,1 @@
-php "./../index.php" orm:convert-mapping --namespace="Zitkino\Entities\\" --force  --from-database annotation .
+php "./../index.php" orm:convert-mapping --namespace="Entities\\" --force  --from-database annotation .

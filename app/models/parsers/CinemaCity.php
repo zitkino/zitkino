@@ -5,6 +5,7 @@ use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 use Zitkino\Screenings\Screenings;
+use Zitkino\Screenings\ScreeningType;
 
 /**
  * Cinema City parser.
@@ -58,7 +59,7 @@ abstract class CinemaCity extends Parser {
 				
 				$link = "http://cinemacity.cz/" . $nameQuery->item(0)->getAttribute("href");
 				
-				$type = null;
+				$type = "2D";
 				if(strpos($name, "3D") !== false) {
 					$type = "3D";
 					$name = str_replace(" 3D", "", $name);
@@ -113,7 +114,7 @@ abstract class CinemaCity extends Parser {
 				$movie->setLength($length);
 				
 				$screening = new Screening($movie, $this->cinema);
-				$screening->setType($type);
+				$screening->setType(new ScreeningType($type));
 				$screening->setLanguages($dubbing, $subtitles);
 				$screening->setPrice($price);
 				$screening->setLink($link);

@@ -80,10 +80,9 @@
 			</td>
 			
             <td n:if="$screenings->hasTypes()" title="Typ filmu">
-                {php $type = $screening->type}
-                {ifset $type}
-                    <span class="label label-type" title="Typ">{$type}</span>
-                {/ifset}
+                {if !empty($screening->getType()) and $screening->getType()->getCode() !== "2D"}
+                    <span class="label label-type" title="Typ">{$screening->getType()->getName()}</span>
+                {/if}
             </td>
 			
             <td n:if="$screenings->hasLanguages()" title="Jazyk">

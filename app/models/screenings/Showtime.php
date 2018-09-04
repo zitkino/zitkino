@@ -1,8 +1,8 @@
 <?php
 namespace Zitkino\Screenings;
 
+use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 
 /**
@@ -12,23 +12,44 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
  * @ORM\Entity
  */
 class Showtime {
-	use MagicAccessors, Identifier;
+	use Identifier, MagicAccessors;
 	
 	/**
 	 * @var Screening
 	 * @ORM\ManyToOne(targetEntity="Screening")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="screening", referencedColumnName="id")
+	 *   @ORM\JoinColumn(name="screening", referencedColumnName="id", nullable=false)
 	 * })
 	 */
-	public $screening;
+	protected $screening;
 	
 	/**
 	 * @var \DateTime
 	 * @ORM\Column(name="datetime", type="datetime", nullable=false)
 	 */
-	public $datetime;
+	protected $datetime;
 	
+	
+	public function __construct(Screening $screening, \DateTime $datetime) {
+		$this->screening = $screening;
+		$this->datetime = $datetime;
+		$this->fixDatetime();
+	}
+	
+	
+	public function fixDatetime() {
+		$currentDate = new \DateTime();
+		if($currentDate->format("m") == "12" and $this->datetime->format("m") == "01") {
+			$year = (int)$this->datetime->format("Y");
+			$nextYear = (int)$currentDate->format("Y") + 1;
+			
+			if($year < $nextYear) {
+				$year++;
+			}
+			
+			$this->datetime->setDate($year, $this->datetime->format("m"), $this->datetime->format("d"));
+		}
+	}
 	
 	/**
 	 * @return \DateTime
@@ -37,13 +58,7 @@ class Showtime {
 		return $this->datetime;
 	}
 	
-	
-	public function __construct(Screening $screening) {
-		$this->screening = $screening;
-	}
-	
-	
-	public function isActual() {
+	public function isActual(): bool {
 		if($this->datetime > new \DateTime()) {
 			return true;
 		} else {
