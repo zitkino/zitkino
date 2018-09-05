@@ -70,7 +70,7 @@
 		else {
 			$("#cinemaMap").css("display", "block");
 			$("#cinemaMapButtonText").text("Skrýt");
-			$("#cinemaMapIframe").attr("src", "https://www.google.com/maps/embed/v1/place?q={$gmap|noescape}&key=AIzaSyC6zSdM-L1w8ObLqeUf9alzs4NI5z5hULw");
+			$("#cinemaMapIframe").attr("src", "https://www.google.com/maps/embed/v1/place?q={$gmap|noescape}&key={$gmapKey|noescape}");
 		}
 	}
 </script>

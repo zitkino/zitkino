@@ -11,27 +11,34 @@ $logDir = __DIR__."/../_log";
 if(!file_exists($logDir)) { mkdir($logDir, 0777, true); }
 $configurator->enableTracy($logDir);
 
-// Enable RobotLoader - this will load all classes automatically
 $tempDir = __DIR__."/../.temp";
 if(!file_exists($tempDir)) { mkdir($tempDir, 0777, true); }
 $configurator->setTempDirectory($tempDir);
 
+// Enable RobotLoader - this will load all classes automatically
 $configurator->createRobotLoader()->addDirectory(__DIR__)->register();
 
 // Create Dependency Injection container from config.neon file
 $configurator->addConfig(__DIR__."/config/config.neon");
 $configurator->addConfig(__DIR__."/config/services.neon");
+$configurator->addConfig(__DIR__."/config/keys.neon");
 
-switch($_ENV["APP_ENV"]) {
-	case "dev":
-	case "development":
-	default:
-		$configurator->addConfig(__DIR__."/config/development.neon");
-		break;
-	case "prod":
-	case "production":
-		$configurator->addConfig(__DIR__."/config/production.neon");
-		break;
+if(isset($_ENV["APP_ENV"])) {
+	switch($_ENV["APP_ENV"]) {
+		case "dev": case "development": default:
+			$configurator->addConfig(__DIR__."/config/development.neon");
+			break;
+			
+		case "stage":
+			$configurator->addConfig(__DIR__."/config/stage.neon");
+			break;
+			
+		case "prod": case "production":
+			$configurator->addConfig(__DIR__."/config/production.neon");
+			break;
+	}
+} else {
+	$configurator->addConfig(__DIR__."/config/development.neon");
 }
 
 $container = $configurator->createContainer();

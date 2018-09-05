@@ -32,6 +32,8 @@ class CinemaPresenter extends BasePresenter {
 			$param = urlencode($address);
 		} else { $param = "place_id:".$gmaps; }
 		$this->template->gmap = $param;
+		
+		$this->template->gmapKey = $this->context->getParameters()["google-maps-key"];
 	}
 	
 	public function renderClassic($id) {
