@@ -52,7 +52,6 @@ class Mdb extends Parser {
 			
 			$price = 99;
 			
-			
 			$movie = new Movie($name);
 			
 			$screening = new Screening($movie, $this->cinema);

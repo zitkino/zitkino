@@ -50,6 +50,7 @@ class Movie {
 	public function __construct(string $name) {
 		$this->name = $name;
 		$this->fixDatabases();
+		$this->screenings = new Screenings(null);
 	}
 	
 	

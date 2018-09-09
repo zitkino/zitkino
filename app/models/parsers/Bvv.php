@@ -3,6 +3,7 @@ namespace Zitkino\Parsers;
 
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
+use Zitkino\Screenings\Screening;
 use Zitkino\Screenings\Screenings;
 use Zitkino\Screenings\Showtime;
 
@@ -70,18 +71,16 @@ class Bvv extends Parser {
 			$movie = new Movie($name);
 //			$movie->csfd = $csfd;
 			
-			$screening = new Screening();
-			$screening->price = $price;
+			$screening = new Screening($movie, $this->cinema);
+			$screening->setPrice($price);
 			
 			foreach($datetimes as $datetime) {
-				$showtime = new Showtime();
-				$showtime->screening = $screening;
-				$showtime->datetime = $datetime;
+				$showtime = new Showtime($screening, $datetime);
 				$screening->addShowtime($showtime);
 			}
 			
 			$movie->addScreening($screening);
-			$this->screenings[] = $movie;
+			$this->screenings[] = $screening;
 			
 			$movieItems++;
 		}
@@ -115,8 +114,8 @@ class Bvv extends Parser {
 					}
 				}
 				
-				$this->screenings[$movieItems]->screenings[0]->dubbing = $dubbing;
-				$this->screenings[$movieItems]->screenings[0]->length = $length;
+				$this->screenings[$movieItems]->setDubbing($dubbing);
+				$this->screenings[$movieItems]->movie->setLength($length);
 			}
 			
 			$movieItems++;

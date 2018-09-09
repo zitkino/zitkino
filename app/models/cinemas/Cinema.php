@@ -5,6 +5,7 @@ use Dobine\Entities\DobineEntity;
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\MagicAccessors;
+use Tracy\Debugger;
 use Zitkino\Parsers\Parser;
 use Zitkino\Screenings\Screenings;
 use Zitkino\Screenings\Showtime;
@@ -124,6 +125,7 @@ class Cinema extends DobineEntity {
 	public function __construct(string $code) {
 		$this->code = $code;
 		$this->name = $code;
+		$this->screenings = new Screenings(null);
 	}
 	
 	
@@ -240,14 +242,19 @@ class Cinema extends DobineEntity {
 	}
 	
 	/**
+	 * @param string $type
 	 * @return Screenings
 	 */
-	public function getScreenings(): Screenings {
-		return $this->screenings;
+	public function getScreenings($type = "all"): Screenings {
+		switch($type) {
+			case "all": default:
+				return $this->screenings; break;
+			case "soonest":
+				return $this->getSoonestScreenings(); break;
+			case "new":
+				return $this->getNewScreenings(); break;
+		}
 	}
-	
-	
-	
 	
 	public function setScreenings() {
 		try {
@@ -259,15 +266,15 @@ class Cinema extends DobineEntity {
 				$this->screenings = $parser->getScreenings();
 			} else { $this->screenings = null; }
 		} catch(\Error $error) {
-			\Tracy\Debugger::barDump($error);
-			\Tracy\Debugger::log($error, \Tracy\Debugger::ERROR);
+			Debugger::barDump($error);
+			Debugger::log($error, Debugger::ERROR);
 		} catch(\Exception $exception) {
-			\Tracy\Debugger::barDump($exception);
-			\Tracy\Debugger::log($exception, \Tracy\Debugger::EXCEPTION);
+			Debugger::barDump($exception);
+			Debugger::log($exception, Debugger::EXCEPTION);
 		}
 	}
 	
-	public function hasScreenings() {
+	public function hasScreenings(): bool {
 		if(isset($this->screenings) and !empty($this->screenings->toArray())) {
 			return true;
 		} else {
@@ -275,9 +282,7 @@ class Cinema extends DobineEntity {
 		}
 	}
 	
-	public function getSoonestScreenings() {
-//		return $this->screenings;
-		
+	public function getSoonestScreenings(): Screenings {
 		$soonest = [];
 		if(isset($this->screenings)) {
 			$currentDate = new \DateTime();
@@ -330,5 +335,26 @@ class Cinema extends DobineEntity {
 //		}
 		
 		return new Screenings($soonest);
+	}
+	
+	public function getNewScreenings(): Screenings {
+		$new = [];
+		if(isset($this->screenings)) {
+			$currentDate = new \DateTime();
+			
+			foreach($this->screenings as $screening) {
+				$showtimes = $screening->getShowtimes();
+				if(isset($showtimes)) {
+					/** @var Showtime $showtime */
+					foreach($showtimes as $showtime) {
+						if($currentDate < $showtime->getDatetime()) {
+							$new[] = $screening;
+							break;
+						}
+					}
+				}
+			}
+		}
+		return new Screenings($new);
 	}
 }

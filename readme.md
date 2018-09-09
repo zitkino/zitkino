@@ -6,6 +6,5 @@ Here is the code for the web [https://www.zitkino.cz](https://www.zitkino.cz).
 
 ## Installation
 * Install this via [Composer](https://getcomposer.org): `composer create-project zitkino/zitkino:dev-master`
-* Rename in folder `app` file `default.neon` to `config.neon`
-* Setup your database connection in file `app/database.ini` ([example of this file](https://github.com/hermajan/lib/blob/master/src/database/database.ini))
+* Setup your database connection in file `app/config/database.ini` ([example of this file](https://github.com/hermajan/lib/blob/master/src/database/database.ini)) and `app/config/development.neon`
 * Create tables in your database with SQL expressions in folder `db`

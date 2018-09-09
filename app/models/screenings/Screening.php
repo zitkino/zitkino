@@ -105,6 +105,16 @@ class Screening {
 		return $this;
 	}
 	
+	public function fixPrice() {
+		if(!isset($this->price) or !is_numeric($this->price)) {
+			return null;
+		} elseif($this->price == 0) {
+			return "zdarma";
+		} else {
+			return $this->price." Kč";
+		}
+	}
+	
 	/**
 	 * @return null|string
 	 */
@@ -213,13 +223,10 @@ class Screening {
 		$this->showtimes[] = $showtime;
 	}
 	
-	public function fixPrice() {
-		if(!isset($this->price) or !is_numeric($this->price)) {
-			return null;
-		} elseif($this->price == 0) {
-			return "zdarma";
-		} else {
-			return $this->price." Kč";
-		}
+	/**
+	 * @return Movie
+	 */
+	public function getMovie(): Movie {
+		return $this->movie;
 	}
 }

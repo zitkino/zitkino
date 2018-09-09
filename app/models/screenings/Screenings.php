@@ -14,18 +14,18 @@ class Screenings extends ArrayCollection {
 	}
 	
 
-	public function getMovies() {
+	public function getMovies(): Movies {
 		$movies = [];
 		
 		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
-			$movies[] = $screening->movie;
+			$movies[] = $screening->getMovie();
 		}
 		
 		return new Movies($movies);
 	}
 	
-	public function hasTypes() {
+	public function hasTypes(): bool {
 		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
 			$type = $screening->getType();
@@ -34,7 +34,7 @@ class Screenings extends ArrayCollection {
 		return false;
 	}
 	
-	public function hasLanguages() {
+	public function hasLanguages(): bool {
 		foreach($this->toArray() as $screening) {
 			$dubbing = $screening->dubbing;
 			$subtitles = $screening->subtitles;
@@ -43,7 +43,7 @@ class Screenings extends ArrayCollection {
 		return false;
 	}
 	
-	public function hasPrices() {
+	public function hasPrices(): bool {
 		foreach($this->toArray() as $screening) {
 			$price = $screening->price;
 			if(isset($price)) { return true; }

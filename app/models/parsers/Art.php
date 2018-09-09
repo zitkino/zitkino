@@ -123,12 +123,11 @@ class Art extends Parser {
 			
 			$screening = new Screening($movie, $this->cinema);
 //			$screening->setLanguages($dubbing, $subtitles);			
-			$screening->price = $price;
-			$screening->link = $link;
+			$screening->setPrice($price);
+			$screening->setLink($link);
 			$screening->setShowtimes($datetimes);
 			
 			$movie->addScreening($screening);
-			
 			$this->screenings[] = $screening;
 			
 			$movieItems++;
