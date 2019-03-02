@@ -102,11 +102,11 @@ abstract class CinemaCity extends Parser {
 				
 				$dayOfWeek = $datetime->format("w");
 				if($dayOfWeek == 1) {
-					$price = 164;
-					if($type == "3D") { $price = 209; }
+					$price = 175;
+					if($type == "3D") { $price = 220; }
 				} else {
-					$price = 194;
-					if($type == "3D") { $price = 239; }
+					$price = 205;
+					if($type == "3D") { $price = 250; }
 				}
 				
 				

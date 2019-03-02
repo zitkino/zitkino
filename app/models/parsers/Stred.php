@@ -57,30 +57,31 @@ class Stred extends Parser {
 				}
 			}
 			
+			$dubbing = null;
+			$subtitles = null;
 			if(isset($meta[4])) {
 				$language = explode(" / ", $meta[4]);
-			}
-			
-			$dubbing = null;
-			switch (true) {
-				case (strpos($language[0], "CZ") !== false): $dubbing = "česky"; break;
-				case (strpos($language[0], "DA") !== false): $dubbing = "dánsky"; break;
-				case (strpos($language[0], "DE") !== false): $dubbing = "německy"; break;
-				case (strpos($language[0], "DN") !== false): $dubbing = "dánsky"; break;
-				case (strpos($language[0], "EN") !== false): $dubbing = "anglicky"; break;
-				case (strpos($language[0], "ES") !== false): $dubbing = "španělsky"; break;
-				case (strpos($language[0], "FA") !== false): $dubbing = "persky"; break;
-				case (strpos($language[0], "FR") !== false): $dubbing = "francouzsky"; break;
-				case (strpos($language[0], "HE") !== false): $dubbing = "hebrejsky"; break;
-				case (strpos($language[0], "NO") !== false): $dubbing = "norsky"; break;
-				case (strpos($language[0], "HU") !== false): $dubbing = "maďarsky"; break;
-				case (strpos($language[0], "IT") !== false): $dubbing = "italsky"; break;
-				case (strpos($language[0], "SW") !== false): $dubbing = "švédsky"; break;
-			}
-			
-			$subtitles = null;
-			if(isset($language[1]) and (strpos($language[1], "CZ tit") !== false or strpos($language[1], "CZE tit") !== false)) {
-				$subtitles = "české";
+				
+				switch (true) {
+					case (strpos($language[0], "CZ") !== false): $dubbing = "česky"; break;
+					case (strpos($language[0], "DA") !== false): $dubbing = "dánsky"; break;
+					case (strpos($language[0], "DE") !== false): $dubbing = "německy"; break;
+					case (strpos($language[0], "DN") !== false): $dubbing = "dánsky"; break;
+					case (strpos($language[0], "EN") !== false): $dubbing = "anglicky"; break;
+					case (strpos($language[0], "ES") !== false): $dubbing = "španělsky"; break;
+					case (strpos($language[0], "FA") !== false): $dubbing = "persky"; break;
+					case (strpos($language[0], "FR") !== false): $dubbing = "francouzsky"; break;
+					case (strpos($language[0], "HE") !== false): $dubbing = "hebrejsky"; break;
+					case (strpos($language[0], "NO") !== false): $dubbing = "norsky"; break;
+					case (strpos($language[0], "HU") !== false): $dubbing = "maďarsky"; break;
+					case (strpos($language[0], "IT") !== false): $dubbing = "italsky"; break;
+					case (strpos($language[0], "SW") !== false): $dubbing = "švédsky"; break;
+				}
+				
+				
+				if(isset($language[1]) and (strpos($language[1], "CZ tit") !== false or strpos($language[1], "CZE tit") !== false)) {
+					$subtitles = "české";
+				}
 			}
 			
 			$price = 90;
