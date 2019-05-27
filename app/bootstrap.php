@@ -5,8 +5,22 @@ use Nette\Configurator;
 // Let bootstrap create Dependency Injection container.
 $configurator = new Configurator;
 
+if(isset($_ENV["APP_ENV"])) {
+	switch($_ENV["APP_ENV"]) {
+		case "development": default:
+			$configurator->setDebugMode(true);
+			break;
+			
+		case "stage":
+		case "production":
+			$configurator->setDebugMode(false);
+			break;
+	}
+} else {
+	throw new RuntimeException("You did not set environment in .env file!");
+}
+
 // Enable Nette Debugger for error visualisation & logging
-//$configurator->setDebugMode(true);
 $logDir = __DIR__."/../_log";
 if(!file_exists($logDir)) { mkdir($logDir, 0777, true); }
 $configurator->enableTracy($logDir);
@@ -22,24 +36,7 @@ $configurator->createRobotLoader()->addDirectory(__DIR__)->register();
 $configurator->addConfig(__DIR__."/config/config.neon");
 $configurator->addConfig(__DIR__."/config/services.neon");
 $configurator->addConfig(__DIR__."/config/keys.neon");
-
-if(isset($_ENV["APP_ENV"])) {
-	switch($_ENV["APP_ENV"]) {
-		case "dev": case "development": default:
-			$configurator->addConfig(__DIR__."/config/development.neon");
-			break;
-			
-		case "stage":
-			$configurator->addConfig(__DIR__."/config/stage.neon");
-			break;
-			
-		case "prod": case "production":
-			$configurator->addConfig(__DIR__."/config/production.neon");
-			break;
-	}
-} else {
-	$configurator->addConfig(__DIR__."/config/development.neon");
-}
+$configurator->addConfig(__DIR__."/config/".$_ENV["APP_ENV"].".neon");
 
 $container = $configurator->createContainer();
 

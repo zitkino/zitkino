@@ -78,7 +78,6 @@ class Stred extends Parser {
 					case (strpos($language[0], "SW") !== false): $dubbing = "švédsky"; break;
 				}
 				
-				
 				if(isset($language[1]) and (strpos($language[1], "CZ tit") !== false or strpos($language[1], "CZE tit") !== false)) {
 					$subtitles = "české";
 				}
