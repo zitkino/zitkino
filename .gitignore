@@ -1,11 +1,12 @@
-nbproject/
-.idea/
-_log/
-.temp/
-bin/Entities
-domains/
-node_modules/
-vendor/
+/nbproject
+/.idea
+/_log
+/.temp
+/domains
+/subdom
+/node_modules
+/vendor
+/dist
 
 .env
 *.ini
