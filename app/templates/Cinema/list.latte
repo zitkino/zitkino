@@ -17,7 +17,7 @@
 	{php $url = $cinema->getUrl();}
 	<a href="{$url}">{fa link} {$url}</a>
 
-	<div class="pull-right">
+	<div class="float-right">
 		<a n:href="Cinema:profile, $id = $cinema->getCode()">{fa r, list-alt, "lg"} profil kina</a>
 	</div>
 {/define}
@@ -30,7 +30,7 @@
 			<header class="panel-heading" data-toggle="collapse" data-target="#{$cinemaItem->getCode()}">
 				{include #cinemaListContent, cinema => $cinemaItem}
 			</header>
-			
+
 			<article id="{$cinemaItem->getCode()}" class="panel-collapse collapse in">
 				{include #movieList, screenings => $screenings, cinema => $cinemaItem}
 			</article>
@@ -44,26 +44,26 @@
     <thead>
 		<tr>
 			<th>{fa film} Film</th>
-			
+
             <th n:if="$screenings->hasTypes()">
                 <abbr title="Typ filmu">{fa video}</abbr> <span class="hidden-xs hidden-sm">Typ</span>
             </th>
-			
+
             <th n:if="$screenings->hasLanguages()">
-                <abbr title="Dabing">{fa headphones}</abbr> <span class="hidden-xs hidden-sm">Dabing</span> a 
+                <abbr title="Dabing">{fa headphones}</abbr> <span class="hidden-xs hidden-sm">Dabing</span> a
                 <abbr title="Titulky">{fa paragraph}</abbr> <span class="hidden-xs hidden-sm">titulky</span>
             </th>
-			
+
 			<th>{fa r, calendar-alt} Promítání</th>
-			
+
             <th n:if="$screenings->getMovies()->hasLengths()">
                 <abbr title="Délka">{fa hourglass-end}</abbr> <span class="hidden-xs hidden-sm">Délka</span>
             </th>
-			
+
             <th n:if="$screenings->hasPrices()">
                 <abbr title="Cena">{fa r, money-bill-alt}</abbr> <span class="hidden-xs hidden-sm">Cena</span>
             </th>
-			
+
 			<th>
                 <abbr title="Filmové databáze">{fa database}</abbr> <span class="hidden-xs hidden-sm">Databáze</span>
             </th>
@@ -78,13 +78,13 @@
 				{/ifset}
 				{$screening->movie->name}</a>
 			</td>
-			
+
             <td n:if="$screenings->hasTypes()" title="Typ filmu">
                 {if !empty($screening->getType()) and $screening->getType()->getCode() !== "2D"}
                     <span class="label label-type" title="Typ">{$screening->getType()->getName()}</span>
                 {/if}
             </td>
-			
+
             <td n:if="$screenings->hasLanguages()" title="Jazyk">
                 {php $dubbing = $screening->getDubbing()}
                 {ifset $dubbing}
@@ -96,7 +96,7 @@
                     <span class="label label-subtitles" title="Titulky">{fa paragraph}&nbsp;{$subtitles}</span>
                 {/ifset}
             </td>
-			
+
 			<td title="Datum a čas">
 				{if !empty($screening->showtimes)}
 					{fa r, calendar}
@@ -108,17 +108,17 @@
 					{/foreach}
 				{/if}
 			</td>
-			
+
             <td n:if="$screenings->getMovies()->hasLengths()" title="Délka">
                 {php $length = $screening->movie->getLength()}
                 {ifset $length}{$length|trim} min.{/ifset}
             </td>
-			
+
             <td n:if="$screenings->hasPrices()" title="Cena">
                 {php $price = $screening->fixPrice()}
                 {ifset $price}{$price|trim}{/ifset}
             </td>
-			
+
 			<td title="Databáze">
 				{var $databases = $screening->movie->getDatabases()}
 				<a href="{$databases['csfd']}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="20"></a>

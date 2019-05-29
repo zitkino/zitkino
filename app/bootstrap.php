@@ -34,8 +34,10 @@ $configurator->createRobotLoader()->addDirectory(__DIR__)->register();
 
 // Create Dependency Injection container from config.neon file
 $configurator->addConfig(__DIR__."/config/config.neon");
+$configurator->addConfig(__DIR__."/config/extensions.neon");
 $configurator->addConfig(__DIR__."/config/services.neon");
 $configurator->addConfig(__DIR__."/config/keys.neon");
+$configurator->addConfig(__DIR__."/config/parameters.neon");
 $configurator->addConfig(__DIR__."/config/".$_ENV["APP_ENV"].".neon");
 
 $container = $configurator->createContainer();

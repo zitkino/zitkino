@@ -1,7 +1,7 @@
-{var $title="Multiplexy"}
+{block title}Multiplexy{/block}
 
 {block #content}
-<h1 class="page-header">{$title}</h1>
+<h1 n:tag-if="title" class="page-header">{include title}</h1>
 
 <ul class="list-group">
 	{import "list.latte"}

@@ -1,7 +1,7 @@
-{var $title="Informace"}
+{block title}Informace{/block}
 
 {block #content}
-<h2 class="page-header">{$title}</h2>
+<h1 n:tag-if="title" class="page-header">{include title}</h1>
 
 <div class="row">
 	<div class="col-md-8">

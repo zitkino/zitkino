@@ -1,11 +1,7 @@
-@import "../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css";
+@import "variables";
 
-$fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
-@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
-@import "../../node_modules/@fortawesome/fontawesome-free/scss/brands";
-@import "../../node_modules/@fortawesome/fontawesome-free/scss/regular";
-@import "../../node_modules/@fortawesome/fontawesome-free/scss/solid";
-@import "../../vendor/hermajan/lib/src/fontAwesome/facolors.css";
-
-@import "booty";
+@import "../../node_modules/@hermajan/booty/scss/libraries";
+@import "../../node_modules/@hermajan/facolors/scss/facolors";
+@import "../../node_modules/@hermajan/booty/scss/booty";
+//@import "booty";
 @import "zitkino";

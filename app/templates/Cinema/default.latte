@@ -1,7 +1,7 @@
-{var $title="Brněnská kina"}
+{block title}Brněnská kina{/block}
 
 {block #content}
-<h1 class="page-header">{$title}</h1>
+<h1 n:tag-if="title" class="page-header">{include title}</h1>
 
 <h2><a n:href="Cinema:classic">Klasická kina</a> <span class="pull-right"><small><a n:href="Cinema:classic_programme">{fa r, building}</a></small></span></h2>
 <ul class="list-group">

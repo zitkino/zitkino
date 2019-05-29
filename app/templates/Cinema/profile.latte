@@ -1,7 +1,7 @@
-{var $title = $cinema->getName()}
+{block title}{$cinema->getName()}{/block}
 
 {block content}
-<h1 class="page-header">{$cinema->getName()}</h1>
+<h1 n:tag-if="title" class="page-header">{include title}</h1>
 {import "list.latte"}
 
 {include #movieList, screenings => $screenings}
