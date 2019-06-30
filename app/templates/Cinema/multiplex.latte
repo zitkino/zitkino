@@ -8,11 +8,11 @@
 	{foreach $cinemas as $cinemaItem}
 		{include #cinemaList, cinema => $cinemaItem}
 	{/foreach}
-</ul>
+</ul><br>
 
 <nav>
-	<ul class="pager">
-		<li class="next"><a n:href="Cinema:multiplex_programme">{fa book} program multiplexů <span aria-hidden="true">&rarr;</span></a></li>
+	<ul class="pagination">
+		<li class="page-item"><a n:href="Cinema:multiplex_programme" class="page-link">{fa book} program multiplexů <span aria-hidden="true">&rarr;</span></a></li>
 	</ul>
 </nav>
 {/block}

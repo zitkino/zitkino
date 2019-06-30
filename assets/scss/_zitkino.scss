@@ -35,20 +35,27 @@
 	background-color: #b10;
 }
 
-.label-type {
+.badge-type {
 	background-color: #3d3d3d;
+	color: white;
 }
-.label-language {
+.badge-language {
 	background-color: #01a;
+	color: white;
 }
-.label-subtitles {
+.badge-subtitles {
 	background-color: #2162a6;
-}
-
-.panel-body {
-	padding: 0 15px;
+	color: white;
 }
 
 a {
 	color: #337ab7;
+}
+
+.card {
+	.card-header {
+		.list-inline {
+			margin: 0;
+		}
+	}
 }

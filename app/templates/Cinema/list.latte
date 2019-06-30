@@ -1,151 +1,160 @@
 {define cinemaList}
-	{ifset $cinema}
-	<li class="list-group-item">
-		{include #cinemaListContent, cinema => $cinema}
-	</li>
-	{/ifset}
+    {ifset $cinema}
+		<li class="list-group-item">
+            {include #cinemaListContent, cinema => $cinema}
+		</li>
+    {/ifset}
 {/define}
 
 {define cinemaListContent}
 	<strong>{$cinema->getName()}</strong>
-
-	&nbsp;&nbsp;
-	{var $address = $cinema->getAddress().", ".$cinema->getCity();}
-	<a href="https://www.google.cz/maps/place/{$address|escapeurl}">{fa map-marker-alt} {$address}</a>
-
-	&nbsp;&nbsp;
-	{php $url = $cinema->getUrl();}
-	<a href="{$url}">{fa link} {$url}</a>
-
 	<div class="float-right">
 		<a n:href="Cinema:profile, $id = $cinema->getCode()">{fa r, list-alt, "lg"} profil kina</a>
 	</div>
+
+	<ul class="list-inline">
+		<li class="list-inline-item">
+			{var $address = $cinema->getAddress().", ".$cinema->getCity();}
+			<a href="https://www.google.cz/maps/place/{$address|escapeurl}">{fa map-marker-alt} {$address}</a>
+		</li>
+		<li class="list-inline-item">
+			{php $url = $cinema->getUrl();}
+			<a href="{$url}">{fa link} {$url}</a>
+		</li>
+	</ul>
 {/define}
 
 {define cinemaMovieList}
-	{foreach $cinemas as $cinemaItem}
+    {foreach $cinemas as $cinemaItem}
         {php $cinemaItem->setScreenings()}
-		{var $screenings = $cinemaItem->getSoonestScreenings();}
-		<section n:if="!$screenings->isEmpty()" class="panel panel-default">
-			<header class="panel-heading" data-toggle="collapse" data-target="#{$cinemaItem->getCode()}">
-				{include #cinemaListContent, cinema => $cinemaItem}
+        {var $screenings = $cinemaItem->getSoonestScreenings();}
+		<section n:if="!$screenings->isEmpty()" class="card card-default">
+			<header class="card-header" data-toggle="collapse" data-target="#{$cinemaItem->getCode()}">
+                {include #cinemaListContent, cinema => $cinemaItem}
 			</header>
 
-			<article id="{$cinemaItem->getCode()}" class="panel-collapse collapse in">
-				{include #movieList, screenings => $screenings, cinema => $cinemaItem}
+			<article id="{$cinemaItem->getCode()}" class="card-body collapse show">
+                {include #movieList, screenings => $screenings, cinema => $cinemaItem}
 			</article>
 		</section>
-	{/foreach}
+    {/foreach}
 {/define}
 
 {define movieList}
-<div class="table-responsive">
-<table class="table table-hover">
-    <thead>
-		<tr>
-			<th>{fa film} Film</th>
+	<div class="table-responsive">
+		<table class="table table-hover table-sm">
+			<thead>
+			<tr>
+				<th>
+					<abbr title="Film">{fa film}</abbr> <span class="d-none d-sm-none d-md-inline">Film</span>
+				</th>
 
-            <th n:if="$screenings->hasTypes()">
-                <abbr title="Typ filmu">{fa video}</abbr> <span class="hidden-xs hidden-sm">Typ</span>
-            </th>
+				<th n:if="$screenings->hasTypes()">
+					<abbr title="Typ filmu">{fa video}</abbr> <span class="d-none d-sm-none d-md-inline">Typ</span>
+				</th>
 
-            <th n:if="$screenings->hasLanguages()">
-                <abbr title="Dabing">{fa headphones}</abbr> <span class="hidden-xs hidden-sm">Dabing</span> a
-                <abbr title="Titulky">{fa paragraph}</abbr> <span class="hidden-xs hidden-sm">titulky</span>
-            </th>
+				<th n:if="$screenings->hasLanguages()">
+					<abbr title="Dabing">{fa headphones}</abbr> <span class="d-none d-sm-none d-md-inline">Dabing</span>
+					a
+					<abbr title="Titulky">{fa paragraph}</abbr> <span
+							class="d-none d-sm-none d-md-inline">titulky</span>
+				</th>
 
-			<th>{fa r, calendar-alt} Promítání</th>
+				<th>
+					<abbr title="Promítání">{fa r, calendar-alt}</abbr> <span class="d-none d-sm-none d-md-inline">Promítání</span>
+				</th>
 
-            <th n:if="$screenings->getMovies()->hasLengths()">
-                <abbr title="Délka">{fa hourglass-end}</abbr> <span class="hidden-xs hidden-sm">Délka</span>
-            </th>
+				<th n:if="$screenings->getMovies()->hasLengths()">
+					<abbr title="Délka">{fa hourglass-end}</abbr> <span
+							class="d-none d-sm-none d-md-inline">Délka</span>
+				</th>
 
-            <th n:if="$screenings->hasPrices()">
-                <abbr title="Cena">{fa r, money-bill-alt}</abbr> <span class="hidden-xs hidden-sm">Cena</span>
-            </th>
+				<th n:if="$screenings->hasPrices()">
+					<abbr title="Cena">{fa r, money-bill-alt}</abbr> <span
+							class="d-none d-sm-none d-md-inline">Cena</span>
+				</th>
 
-			<th>
-                <abbr title="Filmové databáze">{fa database}</abbr> <span class="hidden-xs hidden-sm">Databáze</span>
-            </th>
-		</tr>
-    </thead>
-    <tbody>
-		<tr n:foreach="$screenings as $screening" n:if="!empty($screening->getShowtimes())">
-			<td title="Název filmu">
-				{php $link = $screening->link}
-				{ifset $link}
+				<th>
+					<abbr title="Filmové databáze">{fa database}</abbr> <span class="d-none d-sm-none d-md-inline">Databáze</span>
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr n:foreach="$screenings as $screening" n:if="!empty($screening->getShowtimes())">
+				<td title="Název filmu">
+                    {php $link = $screening->link}
+                    {ifset $link}
 					<a href="{$link}">
-				{/ifset}
-				{$screening->movie->name}</a>
-			</td>
+                        {/ifset}
+                        {$screening->movie->name}</a>
+				</td>
 
-            <td n:if="$screenings->hasTypes()" title="Typ filmu">
-                {if !empty($screening->getType()) and $screening->getType()->getCode() !== "2D"}
-                    <span class="label label-type" title="Typ">{$screening->getType()->getName()}</span>
-                {/if}
-            </td>
+				<td n:if="$screenings->hasTypes()" title="Typ filmu">
+                    {if !empty($screening->getType()) and $screening->getType()->getCode() !== "2D"}
+						<span class="badge badge-type" title="Typ">{$screening->getType()->getName()}</span>
+                    {/if}
+				</td>
 
-            <td n:if="$screenings->hasLanguages()" title="Jazyk">
-                {php $dubbing = $screening->getDubbing()}
-                {ifset $dubbing}
-                    <span class="label label-language" title="Dabing">{fa headphones}&nbsp;{$dubbing}</span>
-                {/ifset}
-                <br class="hidden-md hidden-lg">
-                {php $subtitles = $screening->getSubtitles()}
-                {ifset $subtitles}
-                    <span class="label label-subtitles" title="Titulky">{fa paragraph}&nbsp;{$subtitles}</span>
-                {/ifset}
-            </td>
+				<td n:if="$screenings->hasLanguages()" title="Jazyk">
+                    {php $dubbing = $screening->getDubbing()}
+                    {ifset $dubbing}
+						<span class="badge badge-language" title="Dabing">{fa headphones}&nbsp;{$dubbing}</span>
+                    {/ifset}
+					<br class="d-md-none d-lg-none">
+                    {php $subtitles = $screening->getSubtitles()}
+                    {ifset $subtitles}
+						<span class="badge badge-subtitles" title="Titulky">{fa paragraph}&nbsp;{$subtitles}</span>
+                    {/ifset}
+				</td>
 
-			<td title="Datum a čas">
-				{if !empty($screening->showtimes)}
-					{fa r, calendar}
-					{foreach $screening->showtimes as $showtime}
-						{if $iterator->first}
-							{$showtime->datetime->format('d.m.Y')} <br class="hidden-md hidden-lg">{fa r, clock}
-						{/if}
-						{$showtime->datetime->format('H:i')}{sep}, {/sep}
-					{/foreach}
-				{/if}
-			</td>
+				<td title="Datum a čas">
+                    {if !empty($screening->showtimes)}
+                        {fa r, calendar}
+                        {foreach $screening->showtimes as $showtime}
+                            {if $iterator->first}
+                                {$showtime->datetime->format('d.m.Y')} <br class="d-md-none d-lg-none">{fa r, clock}
+                            {/if}
+                            {$showtime->datetime->format('H:i')}{sep}, {/sep}
+                        {/foreach}
+                    {/if}
+				</td>
 
-            <td n:if="$screenings->getMovies()->hasLengths()" title="Délka">
-                {php $length = $screening->movie->getLength()}
-                {ifset $length}{$length|trim} min.{/ifset}
-            </td>
+				<td n:if="$screenings->getMovies()->hasLengths()" title="Délka">
+                    {php $length = $screening->movie->getLength()}
+                    {ifset $length}{$length|trim} min.{/ifset}
+				</td>
 
-            <td n:if="$screenings->hasPrices()" title="Cena">
-                {php $price = $screening->fixPrice()}
-                {ifset $price}{$price|trim}{/ifset}
-            </td>
+				<td n:if="$screenings->hasPrices()" title="Cena">
+                    {php $price = $screening->fixPrice()}
+                    {ifset $price}{$price|trim}{/ifset}
+				</td>
 
-			<td title="Databáze">
-				{var $databases = $screening->movie->getDatabases()}
-				<a href="{$databases['csfd']}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="20"></a>
-				<br class="hidden-md hidden-lg">
-				<a href="{$databases['imdb']}" title="IMDb">{fa b, imdb, "lg"}</a>
-			</td>
-		</tr>
-    </tbody>
-</table>
-</div>
+				<td title="Databáze">
+                    {var $databases = $screening->movie->getDatabases()}
+					<a href="{$databases['csfd']}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="20"
+																	 alt="ČSFD"></a>
+					<br class="d-md-none d-lg-none">
+					<a href="{$databases['imdb']}" title="IMDb">{fa b, imdb, "lg"}</a>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-	<div class="panel-body">
-	{if is_null($screenings) or $screenings->isEmpty()}
+    {if is_null($screenings) or $screenings->isEmpty()}
 		<p>Dnes kino asi nepromítá. &#9785;</p>
 		<p>Program na další dny je na webu kina:
 			<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 		</p>
-	{else}
-		{if basename($_SERVER["REQUEST_URI"]) == $cinema->getCode()}
+    {else}
+        {if basename($_SERVER["REQUEST_URI"]) == $cinema->getCode()}
 			<p>Další program a podrobné informace o filmech:
 				<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{$cinema->getProgramme()}</a>
 			</p>
-		{else}
-			{*<p>Další promítání jsou na stránce*}
-				{*<a n:href="Cinema:profile, $id = $cinema['code']"><i class="fa fa-list-alt"></i> profilu kina</a>.*}
-			{*</p>*}
-		{/if}
-	{/if}
-	</div>
+        {else}
+            {*<p>Další promítání jsou na stránce*}
+            {*<a n:href="Cinema:profile, $id = $cinema['code']"><i class="fa fa-list-alt"></i> profilu kina</a>.*}
+            {*</p>*}
+        {/if}
+    {/if}
 {/define}

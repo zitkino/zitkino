@@ -3,7 +3,7 @@
 {block #content}
 <h1 n:tag-if="title" class="page-header">{include title}</h1>
 
-<h2><a n:href="Cinema:classic">Klasická kina</a> <span class="pull-right"><small><a n:href="Cinema:classic_programme">{fa r, building}</a></small></span></h2>
+<h2><a n:href="Cinema:classic">Klasická kina</a> <span class="float-right"><small><a n:href="Cinema:classic_programme">{fa r, building}</a></small></span></h2>
 <ul class="list-group">
 	{import "list.latte"}
 	{foreach $classicCinemas as $cinemaItem}
@@ -11,14 +11,14 @@
 	{/foreach}
 </ul>
 
-<h2><a n:href="Cinema:multiplex">Multiplexy</a> <span class="pull-right"><small><a n:href="Cinema:multiplex_programme">{fa building}</a></small></span></h2>
+<h2><a n:href="Cinema:multiplex">Multiplexy</a> <span class="float-right"><small><a n:href="Cinema:multiplex_programme">{fa building}</a></small></span></h2>
 <ul class="list-group">
 	{foreach $multiplexCinemas as $cinemaItem}
 		{include #cinemaList, cinema => $cinemaItem}
 	{/foreach}
 </ul>
 
-<h2><a n:href="Cinema:summer">Letní kina</a> <span class="pull-right"><small><a n:href="Cinema:summer_programme">{fa r, sun}</a></small></span></h2>
+<h2><a n:href="Cinema:summer">Letní kina</a> <span class="float-right"><small><a n:href="Cinema:summer_programme">{fa r, sun}</a></small></span></h2>
 <ul class="list-group">
 	{foreach $summerCinemas as $cinemaItem}
 		{include #cinemaList, cinema => $cinemaItem}

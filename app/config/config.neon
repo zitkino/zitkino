@@ -40,4 +40,4 @@ services:
 tracy:
 	maxLen: 500
 	maxDepth: 5
-	netteMailer: true
+#	netteMailer: true

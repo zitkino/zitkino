@@ -4,11 +4,11 @@
 <h1 n:tag-if="title" class="page-header">{include title}</h1>
 {import "list.latte"}
 
-{include #cinemaMovieList}
+{include #cinemaMovieList}<br>
 
 <nav>
-	<ul class="pager">
-		<li class="previous"><a n:href="Cinema:classic"><span aria-hidden="true">&larr;</span> {fa list} seznam klasických kin</a></li>
+	<ul class="pagination">
+		<li class="previous"><a n:href="Cinema:classic" class="page-link"><span aria-hidden="true">&larr;</span> {fa list} seznam klasických kin</a></li>
 	</ul>
 </nav>
 {/block}
