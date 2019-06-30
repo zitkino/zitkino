@@ -2,10 +2,21 @@
 	"name": "zitkino",
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.1.1",
+		"@hermajan/booty": "file:./../booty",
 		"@hermajan/facolors": "^0.1.0",
-		"jquery": "3.4.0"
+		"jquery": "^3.4.0"
 	},
-	"devDependencies": {},
+	"devDependencies": {
+		"gulp": "^4.0.2",
+		"gulp-autoprefixer": "^6.1.0",
+		"gulp-cli": "^2.2.0",
+		"gulp-concat": "^2.6.1",
+		"gulp-cssnano": "^2.1.3",
+		"gulp-postcss": "^8.0.0",
+		"gulp-sass": "^4.0.2",
+		"gulp-sourcemaps": "^2.6.5",
+		"gulp-uglify": "^3.0.2"
+	},
 	"scripts": {
 		"postinstall": "yarn autoclean --force"
 	}
