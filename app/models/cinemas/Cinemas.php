@@ -10,7 +10,8 @@ use Doctrine\ORM\EntityRepository;
 trait Cinemas {
 	public function cinemasSelect() {
 		return $this->repository->createQueryBuilder("c")
-			->where("c.activeUntil is null")->orderBy("c.code");
+			->where("c.activeUntil is null")->orderBy("c.code")
+			->andWhere("c.disabled = 0");
 	}
 	
 	

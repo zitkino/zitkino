@@ -32,6 +32,12 @@ class Cinema extends DobineEntity {
 	protected $code;
 	
 	/**
+     * @var bool
+     * @ORM\Column(name="disabled", type="boolean", options={"default": 0}, nullable=false)
+     */
+    protected $disabled;
+	
+	/**
 	 * @var CinemaType
 	 * @ORM\ManyToOne(targetEntity="CinemaType")
 	 * @ORM\JoinColumns({
@@ -141,6 +147,13 @@ class Cinema extends DobineEntity {
 	 */
 	public function getCode(): string {
 		return $this->code;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isDisabled(): bool {
+		return $this->disabled;
 	}
 	
 	/**
