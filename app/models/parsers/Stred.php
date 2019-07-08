@@ -1,10 +1,12 @@
 <?php
 namespace Zitkino\Parsers;
 use ICal\ICal;
+use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 use Zitkino\Screenings\Screenings;
+use Zitkino\Screenings\ScreeningType;
 
 /**
  * Stred parser.
@@ -60,14 +62,28 @@ class Stred extends Parser {
 			$dubbing = null;
 			$subtitles = null;
 			if(isset($meta[4])) {
-				$language = explode(" / ", $meta[4]);
+				$l = explode(" / ", $meta[4]);
+				if(count($l) == 2) {
+					$meta[4] = $l[0];
+					$meta[5] = $l[1];
+				}
+				
+				$language[0] = trim($meta[4]);
 				
 				switch (true) {
-					case (strpos($language[0], "CZ") !== false): $dubbing = "česky"; break;
-					case (strpos($language[0], "DA") !== false): $dubbing = "dánsky"; break;
-					case (strpos($language[0], "DE") !== false): $dubbing = "německy"; break;
-					case (strpos($language[0], "DN") !== false): $dubbing = "dánsky"; break;
-					case (strpos($language[0], "EN") !== false): $dubbing = "anglicky"; break;
+					case (strpos($language[0], "CZ") !== false):
+					case (strpos($language[0], "česky") !== false):
+						$dubbing = "česky"; break;
+					case (strpos($language[0], "DE") !== false):
+					case (strpos($language[0], "německy") !== false):
+						$dubbing = "německy"; break;
+					case (strpos($language[0], "DA") !== false):
+					case (strpos($language[0], "DN") !== false):
+					case (strpos($language[0], "dánsky") !== false):
+						$dubbing = "dánsky"; break;
+					case (strpos($language[0], "EN") !== false):
+					case (strpos($language[0], "anglicky") !== false):
+						$dubbing = "anglicky"; break;
 					case (strpos($language[0], "ES") !== false): $dubbing = "španělsky"; break;
 					case (strpos($language[0], "FA") !== false): $dubbing = "persky"; break;
 					case (strpos($language[0], "FR") !== false): $dubbing = "francouzsky"; break;
@@ -75,24 +91,43 @@ class Stred extends Parser {
 					case (strpos($language[0], "NO") !== false): $dubbing = "norsky"; break;
 					case (strpos($language[0], "HU") !== false): $dubbing = "maďarsky"; break;
 					case (strpos($language[0], "IT") !== false): $dubbing = "italsky"; break;
-					case (strpos($language[0], "SW") !== false): $dubbing = "švédsky"; break;
-				}
-				
-				if(isset($language[1]) and (strpos($language[1], "CZ tit") !== false or strpos($language[1], "CZE tit") !== false)) {
-					$subtitles = "české";
+					case (strpos($language[0], "SW") !== false):
+					case (strpos($language[0], "švédsky") !== false):
+						$dubbing = "švédsky"; break;
+					default: $dubbing = $language[0]; break;
 				}
 			}
 			
-			$price = 90;
+			if(count($meta) >= 5) {
+				switch(true) {
+					case (strpos(end($meta), "CZ tit") !== false):
+					case (strpos(end($meta), "CZE tit") !== false):
+					case (strpos(end($meta), "CT tit") !== false):
+						$subtitles = "české"; break;
+				}
+			}
+			
+			$price = 100;
 			if(strpos($name, "Swingový večer") !== false) {
 				$price = 50;
 			}
 			
+			$cycleQuery = $xpath->query(".//div[contains(@class, 'icons_and_more')]//div[@class='cycle']", $event);
+			$cycleItem = $cycleQuery->item(0);
+			$cycle = "";
+			if(isset($cycleItem)) {
+				$cycle = $cycleItem->nodeValue;
+				
+				if(strpos($cycle, "Das Sommerkino") !== false) {
+					$price = 50;
+				}
+			}
 			
 			$movie = new Movie($name);
 			$movie->setLength($length);
 			
 			$screening = new Screening($movie, $this->cinema);
+			$screening->setType(new ScreeningType($cycle));
 			$screening->setLanguages($dubbing, $subtitles);
 			$screening->setPrice($price);
 			$screening->setLink($link);

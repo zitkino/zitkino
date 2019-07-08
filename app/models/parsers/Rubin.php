@@ -30,14 +30,14 @@ class Rubin extends Parser {
 		
 		$events = $xpath->query("//div[@id='itemListLeading']//div[@class='K2ItemsRow']");
 		foreach($events as $event) {
-			$nameQuery = $xpath->query(".//h2[@class='tagItemTitle']/a", $event);
-			$nameString = $nameQuery->item(0)->nodeValue;
+			$itemQuery = $xpath->query(".//h2[@class='tagItemTitle']/a", $event);
+			$itemString = $itemQuery->item(0)->nodeValue;
 			
-			if(strpos($nameString, "Letní kino") !== false) {
-				$nameArray = explode(" - ", trim($nameString));
-				$name = $nameArray[1];
+			if(strpos($itemString, "Letní kino") !== false) {
+				$nameQuery = $xpath->query(".//div[@class='catItemIntroText']/p/strong", $event);
+				$name = $nameQuery->item(0)->nodeValue;
 				
-				$linkString = $nameQuery->item(0)->getAttribute("href");
+				$linkString = $itemQuery->item(0)->getAttribute("href");
 				$link = "http://www.kdrubin.cz".$linkString;
 				
 				$datetimeQuery = $xpath->query(".//span[@class='catItemDateCreated']", $event);

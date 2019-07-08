@@ -1,6 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
@@ -36,9 +37,9 @@ class Mdb extends Parser {
 			$days = ["PONDĚLÍ", "ÚTERÝ", "STŘEDA", "ČTVRTEK", "PÁTEK", "SOBOTA", "NEDĚLE"];
 			$dateString = str_replace($days, "", $dateQuery->item(0)->nodeValue);
 			
-			$months = ["července", "červen", "srpna", "září"];
+			$months = ["července", "června", "srpna", "září"];
 			$monthsNumbers = [7, 6, 8, 9];
-			$date = trim(str_replace($months, $monthsNumbers, $dateString));
+			$date = trim(str_replace($months, $monthsNumbers, mb_strtolower($dateString)));
 			
 			$datetime = \DateTime::createFromFormat("d. m Y", $date);
 			if($datetime != false) {

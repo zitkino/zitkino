@@ -1,6 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
@@ -29,28 +30,30 @@ class Delnak extends Parser {
 			
 			if(strpos($itemString, "Letní kino") !== false) {
 				$name = str_replace("Letní kino - ", "", $itemString);
-				$dubbing = $length = $csfd = null;
+				$dubbing = $subtitles = $length = $csfd = null;
 				
 				$details = $xpath->query(".//div//p", $event);
 				foreach($details as $detail) {
 					if(strpos($detail->nodeValue, "min.") !== false) {
 						$matches = [];
 						preg_match_all("/\((.*?)\)/", $detail->nodeValue, $matches);
-						$data = explode(",", $matches[1][0]);
-						
-						$dubbing = null;
-						if(strpos($data[0], "CZ") !== false) {
-							$dubbing = "česky";
-						}
-						
-						$subtitles = null;
-						if(isset($data[3])) {
-							if(strpos($data[3], "české titulky") !== false) {
-								$subtitles = "české";
+						if(!empty($matches[1])) {
+							$data = explode(",", $matches[1][0]);
+							
+							$dubbing = null;
+							if(strpos($data[0], "CZ") !== false) {
+								$dubbing = "česky";
 							}
+							
+							$subtitles = null;
+							if(isset($data[3])) {
+								if(strpos($data[3], "české titulky") !== false) {
+									$subtitles = "české";
+								}
+							}
+							
+							$length = str_replace("min.", "", $data[2]);
 						}
-						
-						$length = str_replace("min.", "", $data[2]);
 					}
 				}
 				

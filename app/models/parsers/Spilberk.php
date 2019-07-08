@@ -37,9 +37,15 @@ class Spilberk extends Parser {
 			$itemsQuery = $xpath->query(".//div[@class='right']//p[@class='popisek']", $event);
 			$itemString = $itemsQuery->item(0)->nodeValue;
 			
-			$dubbing = null;
-			if(strpos($itemString, "Česko") !== false) {
-				$dubbing = "český";
+			switch(true) {
+				case(strpos($itemString, "Česko") !== false):
+				case(strpos($itemString, "český dabing") !== false):
+					$dubbing = "český"; $subtitles = null; break;
+				case(strpos($itemString, "čes. titulky") !== false):
+					$dubbing = null; $subtitles = "české"; break;
+				default:
+					$dubbing = null; $subtitles = null;
+					break;
 			}
 			
 			$dateQuery = $xpath->query(".//div[@class='left']//p", $event);
@@ -54,7 +60,7 @@ class Spilberk extends Parser {
 			$datetimes = [$datetime];
 			
 			$lengthString = explode("min", $itemString);
-			$length = $lengthString[0];
+			$length = trim($lengthString[0]);
 			
 			$priceQuery = $xpath->query(".//div[@class='right']//p[@class='cena']", $event);
 			$priceString = $priceQuery->item(0)->nodeValue;
@@ -65,7 +71,7 @@ class Spilberk extends Parser {
 			$movie->setCsfd($csfd);
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages($dubbing, null);
+			$screening->setLanguages($dubbing, $subtitles);
 			$screening->setPrice($price);
 			$screening->setShowtimes($datetimes);
 			
