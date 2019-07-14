@@ -13,13 +13,11 @@ class ScalaLetni extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("https://www.kinoscala.cz/cz/cyklus/scalni-letnak-251");
-		$this->initiateDocument();
-		
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@id='program']/table//tr");
 		$days = 0;

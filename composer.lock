@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fb05b4ac881df1c9b7e11d11331a60c",
+    "content-hash": "6617b5545739952982ce20576ce02aaa",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -632,12 +632,12 @@
             "version": "v2.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "shasum": ""
             },
@@ -864,22 +864,31 @@
         },
         {
             "name": "hermajan/dobine",
-            "version": "dev-master",
+            "version": "v0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hermajan/dobine.git",
-                "reference": "7e0f76340873645ff69a74d866641261db2567aa"
+                "reference": "0f18727923cfe06abbbfcd1d39b897633586ad05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hermajan/dobine/zipball/7e0f76340873645ff69a74d866641261db2567aa",
-                "reference": "7e0f76340873645ff69a74d866641261db2567aa",
+                "url": "https://api.github.com/repos/hermajan/dobine/zipball/0f18727923cfe06abbbfcd1d39b897633586ad05",
+                "reference": "0f18727923cfe06abbbfcd1d39b897633586ad05",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "^2.5",
                 "nette/utils": "^2.5",
                 "php": "^7.0"
+            },
+            "require-dev": {
+                "nette/neon": "^2.4",
+                "nette/tester": "^2.0",
+                "vlucas/phpdotenv": "^2.5"
+            },
+            "suggest": {
+                "nette/neon": "For parsing connection parameters from .neon files.",
+                "vlucas/phpdotenv": "For loading connection environment from .env file."
             },
             "type": "library",
             "autoload": {
@@ -893,7 +902,7 @@
             ],
             "description": "Doctrine extensions.",
             "homepage": "https://hermajan.net/dobine",
-            "time": "2018-08-27T10:33:50+00:00"
+            "time": "2018-10-10T20:33:09+00:00"
         },
         {
             "name": "hermajan/fazette",
@@ -3290,7 +3299,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "hermajan/dobine": 20,
         "hermajan/lib": 20
     },
     "prefer-stable": false,

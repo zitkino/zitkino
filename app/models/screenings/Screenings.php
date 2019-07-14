@@ -34,6 +34,15 @@ class Screenings extends ArrayCollection {
 		return false;
 	}
 	
+	public function hasPlaces(): bool {
+		/** @var Screening $screening */
+		foreach($this->toArray() as $screening) {
+			$place = $screening->getPlace();
+			if(isset($place)) { return true; }
+		}
+		return false;
+	}
+	
 	public function hasLanguages(): bool {
 		foreach($this->toArray() as $screening) {
 			$dubbing = $screening->dubbing;

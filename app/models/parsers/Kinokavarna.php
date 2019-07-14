@@ -13,13 +13,11 @@ class Kinokavarna extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("http://www.kinokavarna.cz/program.html");
-		$this->initiateDocument();
-		
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@id='content-in']/div[@class='aktuality']");
 		foreach($events as $event) {

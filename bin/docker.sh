@@ -13,7 +13,6 @@ function help() {
 }
 
 function start() {
-	export DOCKER_HOST='tcp://127.0.0.1:2375'
     docker-compose up -d --build
 }
 
@@ -25,13 +24,19 @@ function clean() {
 	docker system prune -a
 }
 
+function ip() {
+	echo "www"
+	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' zitkino_www_1
+
+	echo "database"
+	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' zitkino_db_1
+}
+
 function logs() {
-	export DOCKER_HOST='tcp://127.0.0.1:2375'
-    sudo -E docker-compose logs
+    docker-compose logs
 }
 
 function list() {
-
     docker-compose ps
 }
 

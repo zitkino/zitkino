@@ -9,8 +9,7 @@ use Zitkino\Cinemas\Cinema;
 class VelkySpalicek extends CinemaCity {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
-		$this->setCinemaId("1010107");
 		
-		parent::__construct($cinema);
+		parent::__construct($cinema, "1035");
 	}
 }
