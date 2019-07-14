@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:7.3-apache
 
 # System packages
 RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
@@ -14,14 +14,15 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
     libpng-dev \
     libjpeg62-turbo-dev \
     curl libcurl4-openssl-dev \
-    mysql-client \
+    default-mysql-client \
     zip \
     wget \
     linux-libc-dev \
     libssl-dev \
     libzip-dev \
     libicu-dev \
-    g++
+    g++ \
+	nodejs
 
 # Memcached
 RUN curl -L -o /tmp/memcached.tar.gz "https://api.github.com/repos/php-memcached-dev/php-memcached/tarball" \
@@ -32,9 +33,9 @@ RUN curl -L -o /tmp/memcached.tar.gz "https://api.github.com/repos/php-memcached
     && rm /tmp/memcached.tar.gz
 
 # PHP extensions
-RUN a2enmod rewrite ssl
+RUN a2enmod rewrite ssl headers
 
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-configure zip --with-libzip4
 

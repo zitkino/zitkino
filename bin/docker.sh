@@ -52,7 +52,7 @@ function ssh() {
         USER=$1
     fi
 
-    ../docker exec -u ${USER} -it ${PWD##*/} bash
+    docker exec -u ${USER} -it zitkino_www_1 bash
 }
 
 if [ "${COMMAND}" == "" ]; then
