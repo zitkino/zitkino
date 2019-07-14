@@ -1,59 +1,48 @@
-{default $menuExists=false} {default $wwwdir=$basePath}
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="theme-color" content="#ba1b0a">
-	<meta name="description" content="List of Brno's cinemas">
-	<meta name="robots" content="{$robots}" n:ifset="$robots">
+	<meta name="theme-color" content="{$meta["color"]}">
+	<meta name="description" content="{$meta["description"]}">
+	<meta name="author" content="{$meta["author"]}">
+	<meta name="robots" content="{$meta["robots"]}" n:ifset="$meta['robots']">
 	
-	<title>{ifset $title}{$title}{else}Žít kino{/ifset} - Žít kino</title>
+	<title>{ifset title}{include title|stripHtml} {$meta["separator"]}{else}{$meta["title"]}{/ifset} {$meta["name"]}</title>
 	
-	<link rel="shortcut icon" href="{$wwwdir}/favicon.ico">
-	<link rel="stylesheet" media="screen" href="{$wwwdir}/css/style.css">
-	{*<link rel="stylesheet" media="print" href="{$wwwdir}/print.css">*}
+	<link rel="shortcut icon" href="{$baseUrl}/favicon.ico">
+	<link rel="stylesheet" media="screen" href="{$baseUrl}/dist/style.css">
+	{*<link rel="stylesheet" media="print" href="{$baseUrl}/print.css">*}
 	
-	<script src="{$wwwdir}/node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="{$baseUrl}/node_modules/jquery/dist/jquery.min.js"></script>
 </head>
 
 <body>
-<header id="header" class="navbar navbar-default navbar-static-top navbar-inverse">
+<header id="header" class="navbar navbar-dark navbar-expand-md">
 	<div class="container-fluid">
 		{include 'header.latte'}
 	</div>
 </header>
 
-<article id="content">
+<main id="main">
 	<div class="container-fluid">
 		<div class="row">
-			<section class="col-xs-12">
-				{block #content}{/block}
-			</section>
+			<article class="col-12" id="content">
+				<div n:if="!empty($flashes)" n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" role="alert">{$flash->message}</div>
+				{include #content}
+			</article>
 		</div>
 	</div>
-</article>
+</main>
 
-{*<footer id="footer">*}
-	{*<div class="container-fluid">*}
-		{*include 'footer.latte'*}
-	{*</div>*}
-{*</footer>*}
+<footer id="footer" n:ifset="$footerFile">
+	<div class="container-fluid">
+		{include 'footer.latte'}
+	</div>
+</footer>
 
-<script src="{$wwwdir}/vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-	// Google Analytics
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-80065906-1']);
-	_gaq.push(['_setDomainName', 'zitkino.cz']);
-	_gaq.push(['_trackPageview']);
-
-	(function() {
-    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	    ga.src = ('https:' === document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
-    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  	  })();
-</script>
+<script src="{$baseUrl}/node_modules/@hermajan/booty/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{$baseUrl}/node_modules/@hermajan/booty/js/booty.js"></script>
+<script src="{$baseUrl}/dist/ganalytics.js"></script>
 </body>
 </html>

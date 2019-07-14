@@ -1,18 +1,20 @@
-{var $title="Letní kina"}
+{block title}Letní kina{/block}
 
 {block #content}
-<h1 class="page-header">{$title}</h1>
+<h1 n:tag-if="title" class="page-header">{include title}</h1>
 
 <ul class="list-group">
 	{import "list.latte"}
 	{foreach $cinemas as $cinemaItem}
 		{include #cinemaList, cinema => $cinemaItem}
 	{/foreach}
-</ul>
+</ul><br>
 
 <nav>
-	<ul class="pager">
-		<li class="next"><a n:href="Cinema:summer_programme">{fa book} program letních kin <span aria-hidden="true">&rarr;</span></a></li>
+	<ul class="pagination">
+		<li class="page-item">
+			<a n:href="Cinema:summer_programme" class="page-link">{fa book} program letních kin <span aria-hidden="true">&rarr;</span></a>
+		</li>
 	</ul>
 </nav>
 {/block}

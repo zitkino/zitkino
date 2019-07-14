@@ -3,11 +3,13 @@ application:
 	silentLinks: false
 	
 doctrine:
-	host: localhost
+	host: 'db'
 	user: root
-	password: ''
+	password: 'heslo'
 	dbname: zitkino
 
 tracy:
 	strictMode: true
 	showBar: true
+	editorMapping:
+		/var/www/html: c:\OneDrive\github\zitkino

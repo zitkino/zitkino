@@ -51,4 +51,4 @@ Options -Indexes
 </IfModule>
 
 # A+ on HTTPS certificate
-Header set Strict-Transport-Security "max-age=31536000" env=HTTPS
+#Header set Strict-Transport-Security "max-age=31536000" env=HTTPS

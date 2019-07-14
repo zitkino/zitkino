@@ -1,14 +1,14 @@
-{var $title="Program multiplexů"}
+{block title}Program multiplexů{/block}
 
 {block #content}
-<h1 class="page-header">{$title}</h1>
+<h1 n:tag-if="title" class="page-header">{include title}</h1>
 {import "list.latte"}
 
-{include #cinemaMovieList}
+{include #cinemaMovieList}<br>
 
 <nav>
-	<ul class="pager">
-		<li class="previous"><a n:href="Cinema:multiplex"><span aria-hidden="true">&larr;</span> {fa list} seznam multiplexů</a></li>
+	<ul class="pagination">
+		<li class="previous"><a n:href="Cinema:multiplex" class="page-link"><span aria-hidden="true">&larr;</span> {fa list} seznam multiplexů</a></li>
 	</ul>
 </nav>
 {/block}

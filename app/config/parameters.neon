@@ -1,0 +1,10 @@
+parameters:
+	meta:
+		color: "#ba1b0a"
+		description: "List of Brno's cinemas"
+		author: "hermajan"
+		robots: ""
+		
+		title: ""
+		separator: "-"
+		name: "Žít kino"

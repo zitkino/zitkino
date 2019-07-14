@@ -1,8 +1,13 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Dobine\Connections\DBAL;
 use Doctrine\DBAL\Connection;
-use DOMDocument, DOMXPath;
+use DOMDocument;
+use DOMXPath;
+use Nette\Utils\Json;
+use Nette\Utils\JsonException;
+use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
@@ -19,19 +24,16 @@ abstract class Parser {
 	
 	private $url = "";
 	
-	/** @var \DOMDocument */
-	private $document;
-	
 	/** @var Screenings|array */
 	protected $screenings;
 	
 	/** @var Connection */
 	protected $connection;
 	
-	
 	public function getUrl() {
 		return $this->url;
 	}
+	
 	public function getScreenings() {
 		if(is_array($this->screenings)) {
 			return new Screenings($this->screenings);
@@ -43,8 +45,7 @@ abstract class Parser {
 	public function setUrl($url) {
 		$this->url = $url;
 	}
-
-
+	
 	/**
 	 * @param Screenings|array $screenings
 	 * @return Parser
@@ -57,54 +58,70 @@ abstract class Parser {
 		if(is_array($screenings)) {
 			$this->screenings = new Screenings($screenings);
 		} else {
-			$this->screenings = $screenings;	
+			$this->screenings = $screenings;
 		}
 		
 		return $this;
 	}
 	
 	/**
-	 * Initiates DOM document.
-	 */
-	public function initiateDocument() {
-		$this->document = new DOMDocument("1.0", "UTF-8");
-		$this->document->formatOutput = true;
-		$this->document->preserveWhiteSpace = true;
-	}
-	
-	/**
 	 * Downloads data from internet.
 	 * @return DOMXPath XPath document for parsing.
-	 * @throws \Exception
+	 * @throws ParserException
 	 */
-	public function downloadData() {
+	private function downloadData() {
 		$handle = curl_init($this->url);
 		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handle, CURLOPT_ENCODING, "UTF-8");
-        curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
-        
-		$html = curl_exec($handle);
-		if($html === false) {
+		curl_setopt($handle, CURLOPT_ENCODING, "UTF-8");
+		curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
+		
+		$data = curl_exec($handle);
+		if($data === false) {
 			$e = new ParserException(curl_error($handle));
 			$e->setUrl($this->getUrl());
 			throw $e;
 		}
 		
 		curl_close($handle);
-		
+		return $data;
+	}
+	
+	/**
+	 * @return DOMXPath
+	 * @throws ParserException
+	 */
+	public function getXpath() {
+		$data = $this->downloadData();
 		libxml_use_internal_errors(true); // Prevent HTML errors from displaying
-		$this->document->loadHTML(mb_convert_encoding($html, "HTML-ENTITIES", "UTF-8"));
-		$xpath = new DOMXPath($this->document);
 		
+		$document = new DOMDocument("1.0", "UTF-8");
+		$document->formatOutput = true;
+		$document->preserveWhiteSpace = true;
+		
+		$html = mb_convert_encoding($data, "HTML-ENTITIES", "UTF-8");
+		$document->loadHTML($html);
+		
+		$xpath = new DOMXPath($document);
 		return $xpath;
 	}
 	
+	/**
+	 * @return array
+	 * @throws ParserException
+	 * @throws JsonException
+	 */
+	public function getJson() {
+		$data = $this->downloadData();
+		
+		return Json::decode($data, Json::FORCE_ARRAY);
+	}
+	
 	public function getConnection() {
-		$db = new \Lib\database\Doctrine(__DIR__."/../../config/database.ini");
+		$db = new DBAL(__DIR__."/../../config/".$_ENV["APP_ENV"].".neon");
 		$this->connection = $db->getConnection();
 	}
-
+	
 	/**
 	 * Gets movies and other data from the web page.
 	 * @return Screenings Collection of screenings.
@@ -135,7 +152,9 @@ abstract class Parser {
 			$movie->setImdb($event["imdb"]);
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setType(new ScreeningType($event["type"]));
+			if(isset($event["type"])) {
+				$screening->setType(new ScreeningType($event["type"]));
+			}
 			$screening->setLanguages($event["dubbing"], $event["subtitles"]);
 			$screening->setPrice($event["price"]);
 			$screening->setLink($event["link"]);

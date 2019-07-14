@@ -1,6 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Nette\Utils\Strings;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
@@ -11,119 +12,112 @@ use Zitkino\Screenings\ScreeningType;
  * Cinema City parser.
  */
 abstract class CinemaCity extends Parser {
-	private $cinemaId;
-	private $date;
+	/** @var string */
+	private $id;
 	
-	function getCinemaId() {
-		return $this->cinemaId;
-	}
-	
-	function setCinemaId($cinemaId) {
-		$this->cinemaId = $cinemaId;
-	}
-	
-	public function __construct(Cinema $cinema) {
+	public function __construct(Cinema $cinema, string $id) {
 		$this->cinema = $cinema;
-		
-		$datetime = new \DateTime();
-		$this->getOneDay($datetime);
-		
-		$datetime->modify("+1 days");
-		$this->getOneDay($datetime);
-	}
-	
-	public function getOneDay(\DateTime $datetime) {
-		$this->date = $datetime->format("j/m/Y");
-		
-		$dateUrl = str_replace("/", "%2F", $this->date);
-		$this->setUrl("https://www.cinemacity.cz/scheduleInfo?locationId=".$this->cinemaId."&date=".$dateUrl."&venueTypeId=1&hideSite=true&openedFromPopup=1&newwin=1");
-		$this->initiateDocument();
-		
+		$this->id = $id;
 		$this->parse();
 	}
 	
-	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+	public function getContent() {
+		$json = $this->getJson();
 		
-		/*dateQuery = $xpath->query("//div[@id[starts-with(.,'scheduleInfo_')]]//label[@class='date']");
-		$dateString = $dateQuery->item(0)->nodeValue;*/
+		$screenings = [];
+		$datetimes = [];
 		
-		$events = $xpath->query("//table[@id[starts-with(.,'scheduleTable_')]]/tbody/tr");
-		foreach($events as $event) {
-			$emptyQuery = $xpath->query(".//td[@class='empty']", $event);
-			if($emptyQuery->length !== 0) {
-				break;
-			} else {
-				$nameQuery = $xpath->query(".//td[@class='featureName']//a", $event);
-				$name = $nameQuery->item(0)->nodeValue;
-				
-				$link = "http://cinemacity.cz/" . $nameQuery->item(0)->getAttribute("href");
-				
-				$type = "2D";
-				if(strpos($name, "3D") !== false) {
+		foreach($json["body"]["events"] as $event) {
+			$key = array_search($event["filmId"], array_column($json["body"]["films"], "id"));
+			$film = $json["body"]["films"][$key];
+			
+			$name = $film["name"];
+			$link = $event["bookingLink"];
+			
+			$type = "2D";
+			switch(true) {
+				case (in_array("2d", $event["attributeIds"])):
+					$type = "2D";
+					break;
+				case (in_array("3d", $event["attributeIds"])):
 					$type = "3D";
-					$name = str_replace(" 3D", "", $name);
-				}
-				
-				$languageQuery = $xpath->query(".//td[4]", $event);
-				$dubbing = $languageQuery->item(0)->nodeValue;
-				switch($dubbing) {
-					case "CZ": $dubbing = "česky"; break;
-					case "EN": $dubbing = "anglicky"; break;
-					case "FR": $dubbing = "francouzsky"; break;
-				}
-				
-				$subtitlesQuery = $xpath->query(".//td[3]", $event);
-				$subtitles = $subtitlesQuery->item(0)->nodeValue;
-				if(strpos($subtitles, "ČT") !== false) {
-					$subtitles = "české";
-				}
-				if((strpos($subtitles, "DAB") !== false) or (strpos($subtitles, "CZ") !== false)) {
-					$subtitles = null;
-					$dubbing = "česky";
-				}
-				if(strpos($subtitles, "---") !== false) {
-					$subtitles = null;
-				}
-				
-				$timeQuery = $xpath->query(".//td[@class='prsnt']/a", $event);
-				$datetimes = [];
-				foreach($timeQuery as $timeElement) {
-					$time = explode(":", trim($timeElement->textContent));
-					
-					$datetime = \DateTime::createFromFormat("j/m/Y", $this->date);
-					$datetime->setTime(intval($time[0]), intval($time[1]));
-					
-					$datetimes[] = $datetime;
-				}
-				
-				$lengthQuery = $xpath->query(".//td[5]", $event);
-				$length = $lengthQuery->item(0)->nodeValue;
-				
-				$dayOfWeek = $datetime->format("w");
-				if($dayOfWeek == 1) {
-					$price = 175;
-					if($type == "3D") { $price = 220; }
-				} else {
-					$price = 205;
-					if($type == "3D") { $price = 250; }
-				}
-				
-				
-				$movie = new Movie($name);
-				$movie->setLength($length);
-				
-				$screening = new Screening($movie, $this->cinema);
-				$screening->setType(new ScreeningType($type));
-				$screening->setLanguages($dubbing, $subtitles);
-				$screening->setPrice($price);
-				$screening->setLink($link);
-				$screening->setShowtimes($datetimes);
-				
-				$this->screenings[] = $screening;
+					break;
 			}
+			
+			$dubbing = null;
+			switch(true) {
+				case (in_array("dubbed-lang-cs", $event["attributeIds"])):
+				case (in_array("original-lang-cs", $event["attributeIds"])):
+					$dubbing = "česky";
+					break;
+				case (in_array("original-lang-en-us", $event["attributeIds"])):
+					$dubbing = "anglicky";
+					break;
+			}
+			
+			$subtitles = null;
+			switch(true) {
+				case (in_array("first-subbed-lang-cs", $event["attributeIds"])):
+					$subtitles = "české";
+					break;
+			}
+			
+			$key = Strings::webalize($name."-".$type."-".$dubbing."-".$subtitles."-".$event["businessDay"]);
+			
+			$datetime = \DateTime::createFromFormat("Y-m-d\TH:i:s", $event["eventDateTime"]);
+			$datetimes[$key][] = $datetime;
+			
+			$length = $film["length"];
+			
+			$dayOfWeek = $datetime->format("w");
+			if($dayOfWeek == 1) {
+				$price = 175;
+				if($type == "3D") {
+					$price = 220;
+				}
+			} else {
+				$price = 205;
+				if($type == "3D") {
+					$price = 250;
+				}
+			}
+			
+			$movie = new Movie($name);
+			$movie->setLength($length);
+			
+			$screening = new Screening($movie, $this->cinema);
+			$screening->setType(new ScreeningType($type));
+			$screening->setLanguages($dubbing, $subtitles);
+			$screening->setPrice($price);
+			$screening->setLink($link);
+			
+			$screenings[$key] = $screening;
 		}
 		
+		foreach($screenings as $key => $screening) {
+			$screening->setShowtimes($datetimes[$key]);
+		}
+		
+		return $screenings;
+	}
+	
+	public function getOneDay(\DateTime $datetime) {
+		$date = $datetime->format("Y-m-d");
+		$this->setUrl("https://www.cinemacity.cz/cz/data-api-service/v1/quickbook/10101/film-events/in-cinema/".$this->id."/at-date/".$date."?attr=&lang=cs_CZ");
+		
+		return $this->getContent();
+	}
+	
+	public function parse(): Screenings {
+		$screenings = [];
+		
+		$datetime = new \DateTime();
+		$screenings[] = $this->getOneDay($datetime);
+		
+		$datetime->modify("+1 days");
+		$screenings[] = $this->getOneDay($datetime);
+		
+		$this->screenings = array_merge($screenings[0], $screenings[1]);
 		$this->setScreenings($this->screenings);
 		return $this->screenings;
 	}

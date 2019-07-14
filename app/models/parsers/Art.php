@@ -1,11 +1,12 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
+use Zitkino\Place;
 use Zitkino\Screenings\Screening;
 use Zitkino\Screenings\Screenings;
-use Zitkino\Screenings\Showtime;
 
 /**
  * Art parser.
@@ -13,129 +14,88 @@ use Zitkino\Screenings\Showtime;
 class Art extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
-		$this->setUrl("http://kinoart.cz/program/");
-		$this->initiateDocument();
-		
+		$this->setUrl("https://kinoart.cz/cs/program/");
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
-		$screenings = $this->getHall($xpath, "program");
-		$this->setScreenings($screenings);
-		return $this->screenings;
-	}
-
-	/**
-	 * Parses data for selected hall.
-	 * @param \DOMXPath $xpath XPath document for parsing.
-	 * @param string $which ID which hall to parse.
-	 * @return array
-	 */
-	public function getHall($xpath, $which) {
-		$movies = [];
-		
-		$events = $xpath->query("//div[@id='content']//div[@class='".$which."']//tr");
-		$movieItems = 0;
-		foreach($events as $event) {
-			$datetimes = [];
+		$days = $xpath->query("//div[@class='events-calendar']//div[@class='grid events-calendar__day']");
+		foreach($days as $day) {
+			$dateQuery = $xpath->query(".//h2[@class='events-calendar__day-date']", $day);
+			$dateArray = explode(" ", $dateQuery->item(0)->nodeValue);
 			
-			$nameQuery = $xpath->query(".//td[@class='movie']//a", $event);
-			$name = $nameQuery->item(0)->nodeValue;
-			
-			$link = $nameQuery->item(0)->getAttribute("href");
-			
-			$dateQuery = $xpath->query(".//td[@class='date']", $event);
-			$date = mb_substr($dateQuery->item(0)->nodeValue, 3);
-			$datetime = \DateTime::createFromFormat("j.m.H:i", $date);
-			$datetimes[] = $datetime;
-			
-			/*$programmeUrl = $this->getUrl();
-			$this->setUrl($link);
-			$xpathCurrent = $this->downloadData();
-			$screenings = $xpathCurrent->query("//div[@id='content']//div[@class='rightcol']//tr");
-			$screeningItems = 0;
-			foreach($screenings as $screening) {
-				$dateQuery = $xpathCurrent->query("//td[@class='date']", $screening);
-				$date = mb_substr($dateQuery->item($screeningItems)->nodeValue, 3);
-				$datetimeCurrent = \DateTime::createFromFormat("j.m.H:i", $date);
-
-				$dubbing = null;
-				$subtitles = null;
-				if($datetimeCurrent == $datetime) {
-					$languageQuery = $xpathCurrent->query(".//td[@class='sub']", $screening);
-					var_dump($languageQuery->length);
-					$languageString = $languageQuery->item(0)->nodeValue;
-					var_dump($languageString);
-					var_dump($screeningItems);
-					var_dump($datetimeCurrent);
-					echo "<br>";
-					
-					if((strpos($languageString, "CZ / ") !== false) or (strpos($languageString, "česky") !== false) or (strpos($languageString, "CZ dabing") !== false)) {
-						$dubbing = "česky";
-					}
-					if(strpos($languageString, "DE / ") !== false) {
-						$dubbing = "německy";
-					}
-					if(strpos($languageString, "EN / ") !== false) {
-						$dubbing = "anglicky";
-					}
-					if(strpos($languageString, "IT / ") !== false) {
-						$dubbing = "italsky";
-					}
-					if(strpos($languageString, "SWE / ") !== false) {
-						$dubbing = "švédsky";
-					}
-					
-					if((strpos($languageString, "titulky CZ") !== false) or (strpos($languageString, "CZ titulky") !== false)) {
-						$subtitles = "české";
-					}
-					if(strpos($dubbingString, "titulky EN") !== false) {
-						$subtitles = "anglické";
-					}
-				}
-				$screeningItems++;
+			switch(true) {
+				case (strpos($dateArray[1], "července") !== false):
+					$month = 7;
+					break;
+				case (strpos($dateArray[1], "srpna") !== false):
+					$month = 8;
+					break;
+				default:
+					$month = null;
+					break;
 			}
-			$this->setUrl($programmeUrl);*/
 			
-			$priceReplace = ["akreditace celý festival", "Kč"];
-			$priceQuery = $xpath->query(".//td[@class='price']//a", $event);
-			$priceItem = $priceQuery->item(0);
-			if(!isset($priceItem)) {
-				$spanQuery = $xpath->query(".//td[@class='price']//span", $event);
-				if($spanQuery->length > 0) {
-					$priceReplace[] = $spanQuery->item(0)->nodeValue;
+			$events = $xpath->query(".//div[@class='events-calendar__events']//div[@class='events-calendar__event']", $day);
+			foreach($events as $event) {
+				$nameQuery = $xpath->query(".//h3[contains(@class, 'events-calendar__event-title')]//a", $event);
+				$name = $nameQuery->item(0)->nodeValue;
+				
+				$link = $nameQuery->item(0)->getAttribute("href");
+				
+				$placeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--custom']", $event);
+				$placeName = $placeQuery->item(0)->nodeValue;
+				$placeLink = $placeQuery->item(0)->getAttribute("href");
+				
+				$place = new Place($placeName);
+				$place->setLink($placeLink);
+				
+				$timeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--black']", $event);
+				$time = $timeQuery->item(0)->nodeValue;
+				
+				$datetime = \DateTime::createFromFormat("j.m H:i", trim($dateArray[0].$month." ".$time));
+				$datetimes = [$datetime];
+				
+				$languagesQuery = $xpath->query(".//div[@class='credits__event-movie-languages']//a", $event);
+				$dubbing = null;
+				$dubbingLanguages = [];
+				$subtitles = null;
+				if($languagesQuery->length > 1) {
+					for($i = 0; $i < $languagesQuery->length; $i++) {
+						if($i == $languagesQuery->length - 1) {
+							$subtitles = $languagesQuery->item($i)->nodeValue;
+							break;
+						}
+						
+						$dubbingLanguages[] = $languagesQuery->item($i)->nodeValue;
+					}
+					
+					$dubbing = implode(", ", $dubbingLanguages);
+				} else {
+					$dubbing = $languagesQuery->item(0)->nodeValue;
 				}
 				
-				$priceQuery = $xpath->query(".//td[@class='price']", $event);
-				$priceString = $priceQuery->item(0)->nodeValue;
-			} else { $priceString = $priceItem->nodeValue; }
-			
-			if(strpos($priceString, "/") !== false) {
-				$priceString = explode("/", $priceString)[0];
+				$lengthQuery = $xpath->query(".//div[@class='credits__countries-year']//p[@class='credits__duration']", $event);
+				$lengthString = $lengthQuery->item(0)->nodeValue;
+				$length = str_replace("min", "", intval($lengthString));
+				
+				$movie = new Movie($name);
+				$movie->setLength($length);
+				
+				$screening = new Screening($movie, $this->cinema);
+				$screening->setPlace($place);
+				$screening->setLanguages($dubbing, $subtitles);
+				$screening->setLink($link);
+				$screening->setShowtimes($datetimes);
+				
+				$movie->addScreening($screening);
+				$this->screenings[] = $screening;
 			}
-			
-			$price = trim(str_replace($priceReplace, "", $priceString));
-			
-			
-			$movie = new Movie($name);
-			
-			$screening = new Screening($movie, $this->cinema);
-//			$screening->setLanguages($dubbing, $subtitles);			
-			$screening->setPrice($price);
-			$screening->setLink($link);
-			$screening->setShowtimes($datetimes);
-			
-			$movie->addScreening($screening);
-			$this->screenings[] = $screening;
-			
-			$movieItems++;
-			/*if($movieItems == 10) {
-				break;
-			}*/
 		}
 		
+		$this->setScreenings($this->screenings);
 		return $this->screenings;
 	}
 }

@@ -11,12 +11,12 @@
 	},
 	
 	"require": {
-		"php": "^7.1",
+		"php": "^7.3",
 		"ext-curl": "*",
 		"ext-dom": "*",
 		"ext-libxml": "*",
 		"doctrine/dbal": "^2.5",
-		"hermajan/dobine": "dev-master",
+		"hermajan/dobine": "^0.1.0",
 		"hermajan/fazette": "^0.1.0",
 		"hermajan/lib": "dev-master",
 		"johngrogg/ics-parser": "^2.0",

@@ -9,11 +9,13 @@ php:
 	zlib.output_compression: yes
 
 application:
+	debugger: true
 	errorPresenter: Error
 	mapping:
 		*: Zitkino\Presenters\*Presenter
 
 di:
+	debugger: true
 	accessors: true
 	
 http:
@@ -23,6 +25,10 @@ latte:
 	macros:
 		- Fazette\latte\Fa
 
+#session:
+	#autoStart: smart
+	#expiration: 14 days
+
 services:
 	- Zitkino\RouterFactory
 	router: @Zitkino\RouterFactory::createRouter
@@ -31,19 +37,7 @@ services:
 		setup:
 			- setAutoRefresh(true)
 
-
-extensions:
-	console: Kdyby\Console\DI\ConsoleExtension
-	events: Kdyby\Events\DI\EventsExtension
-	annotations: Kdyby\Annotations\DI\AnnotationsExtension
-	doctrine: Kdyby\Doctrine\DI\OrmExtension
-	
-doctrine:
-	charset: UTF8
-	driver: pdo_mysql
-	metadata:
-		Zitkino: %appDir%
-
 tracy:
 	maxLen: 500
 	maxDepth: 5
+#	netteMailer: true

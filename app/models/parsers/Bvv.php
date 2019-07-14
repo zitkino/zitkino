@@ -14,13 +14,11 @@ class Bvv extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("http://www.bvv.cz/letni-kino/");
-		$this->initiateDocument();
-		
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		$events = "//*[@id='content']/div[1]/div[2]";
 		
 		$movieItems = 0;

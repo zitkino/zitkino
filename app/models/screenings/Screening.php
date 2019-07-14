@@ -2,11 +2,12 @@
 namespace Zitkino\Screenings;
 
 use Dobine\Entities\Identifier;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 use Doctrine\ORM\Mapping as ORM;
+use Kdyby\Doctrine\Entities\MagicAccessors;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Language;
 use Zitkino\Movies\Movie;
+use Zitkino\Place;
 
 /**
  * Screening
@@ -16,73 +17,80 @@ use Zitkino\Movies\Movie;
  */
 class Screening {
 	use Identifier, MagicAccessors;
-
-    /**
-     * @var Movie
-     * @ORM\ManyToOne(targetEntity="\Zitkino\Movies\Movie")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="movie", referencedColumnName="id", nullable=false)
-     * })
-     */
-    protected $movie;
-
-    /**
-     * @var Cinema
-     * @ORM\ManyToOne(targetEntity="\Zitkino\Cinemas\Cinema")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cinema", referencedColumnName="id", nullable=false)
-     * })
-     */
-    protected $cinema;
-
-    /**
-     * @var ScreeningType|null
-     * @ORM\ManyToOne(targetEntity="ScreeningType")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="type", referencedColumnName="id")
-     * })
-     */
-    protected $type;
-
-    /**
-     * @var Language|string|null
-     * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id")
-     * })
-     */
-    protected $dubbing;
-
-    /**
-     * @var Language|string|null
-     * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id")
-     * })
-     */
-    protected $subtitles;
-    
-    /**
-     * @var int|null
-     * @ORM\Column(name="price", type="integer", nullable=true)
-     */
-    protected $price;
-
-    /**
-     * @var string|null
-     * @ORM\Column(name="link", type="string", length=1000, nullable=true)
-     */
-    protected $link;
+	
+	/**
+	 * @var Movie
+	 * @ORM\ManyToOne(targetEntity="\Zitkino\Movies\Movie")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="movie", referencedColumnName="id", nullable=false)
+	 * })
+	 */
+	protected $movie;
+	
+	/**
+	 * @var Cinema
+	 * @ORM\ManyToOne(targetEntity="\Zitkino\Cinemas\Cinema")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="cinema", referencedColumnName="id", nullable=false)
+	 * })
+	 */
+	protected $cinema;
+	
+	/**
+	 * @var ScreeningType|null
+	 * @ORM\ManyToOne(targetEntity="ScreeningType")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="type", referencedColumnName="id")
+	 * })
+	 */
+	protected $type;
+	
+	/**
+	 * @var Place|null
+	 * @ORM\ManyToOne(targetEntity="\Zitkino\Place")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="place", referencedColumnName="id")
+	 * })
+	 */
+	protected $place;
+	
+	/**
+	 * @var Language|string|null
+	 * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id")
+	 * })
+	 */
+	protected $dubbing;
+	
+	/**
+	 * @var Language|string|null
+	 * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id")
+	 * })
+	 */
+	protected $subtitles;
+	
+	/**
+	 * @var int|null
+	 * @ORM\Column(name="price", type="integer", nullable=true)
+	 */
+	protected $price;
+	
+	/**
+	 * @var string|null
+	 * @ORM\Column(name="link", type="string", length=1000, nullable=true)
+	 */
+	protected $link;
 	
 	/** @var Showtime[] */
 	protected $showtimes;
-	
 	
 	public function __construct(Movie $movie, Cinema $cinema) {
 		$this->movie = $movie;
 		$this->cinema = $cinema;
 	}
-	
 	
 	/**
 	 * @return int|null
@@ -97,7 +105,7 @@ class Screening {
 	 */
 	public function setPrice($price): Screening {
 		if(isset($price) and !empty($price)) {
-			$this->price = intval($price);	
+			$this->price = intval($price);
 		} else {
 			$this->price = null;
 		}
@@ -108,10 +116,12 @@ class Screening {
 	public function fixPrice() {
 		if(!isset($this->price) or !is_numeric($this->price)) {
 			return null;
-		} elseif($this->price == 0) {
-			return "zdarma";
 		} else {
-			return $this->price." Kč";
+			if($this->price == 0) {
+				return "zdarma";
+			} else {
+				return $this->price." Kč";
+			}
 		}
 	}
 	
@@ -180,6 +190,22 @@ class Screening {
 	}
 	
 	/**
+	 * @return Place|null
+	 */
+	public function getPlace(): ?Place {
+		return $this->place;
+	}
+	
+	/**
+	 * @param Place|null $place
+	 * @return Screening
+	 */
+	public function setPlace(?Place $place): Screening {
+		$this->place = $place;
+		return $this;
+	}
+	
+	/**
 	 * @param Language|string $dubbing
 	 * @param Language|string $subtitles
 	 * @return Screening
@@ -213,8 +239,10 @@ class Screening {
 				if(isset($datetime) and $showtime->isActual()) {
 					$this->addShowtime($showtime);
 				}
-			} elseif($actual === false) {
-				$this->addShowtime($showtime);
+			} else {
+				if($actual === false) {
+					$this->addShowtime($showtime);
+				}
 			}
 		}
 	}

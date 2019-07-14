@@ -9,8 +9,7 @@ use Zitkino\Cinemas\Cinema;
 class Olympia extends CinemaCity {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
-		$this->setCinemaId("1010103");
 		
-		parent::__construct($cinema);
+		parent::__construct($cinema, "1034");
 	}
 }
