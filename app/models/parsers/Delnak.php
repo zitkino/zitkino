@@ -14,13 +14,11 @@ class Delnak extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("http://www.delnickydumbrno.cz/cely-program.html");
-		$this->initiateDocument();
-		
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$movieItems = 0;
 		$events = $xpath->query("//div[@id='content-in']//div[@class='aktuality']//div[@class='content']");

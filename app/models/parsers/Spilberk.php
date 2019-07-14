@@ -13,13 +13,11 @@ class Spilberk extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("http://www.letnikinospilberk.cz");
-		$this->initiateDocument();
-		
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@id='page-program']/div[@class='film']");
 		foreach($events as $event) {

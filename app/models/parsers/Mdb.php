@@ -14,12 +14,11 @@ class Mdb extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("https://www.letnikinobrno.cz/program-kina/");
-		$this->initiateDocument();
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@class='wpb_wrapper']//div[@class='table-events-content']");
 		foreach($events as $event) {

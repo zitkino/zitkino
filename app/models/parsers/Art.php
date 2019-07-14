@@ -1,6 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Place;
@@ -14,13 +15,11 @@ class Art extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("https://kinoart.cz/cs/program/");
-		$this->initiateDocument();
-		
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$days = $xpath->query("//div[@class='events-calendar']//div[@class='grid events-calendar__day']");
 		foreach($days as $day) {
@@ -60,15 +59,22 @@ class Art extends Parser {
 				$datetimes = [$datetime];
 				
 				$languagesQuery = $xpath->query(".//div[@class='credits__event-movie-languages']//a", $event);
-				$dubbing = "";
-				$subtitles = "";
-				for($i = 0; $i < $languagesQuery->length; $i++) {
-					if($i == $languagesQuery->length - 1) {
-						$subtitles = $languagesQuery->item($i)->nodeValue;
-						break;
+				$dubbing = null;
+				$dubbingLanguages = [];
+				$subtitles = null;
+				if($languagesQuery->length > 1) {
+					for($i = 0; $i < $languagesQuery->length; $i++) {
+						if($i == $languagesQuery->length - 1) {
+							$subtitles = $languagesQuery->item($i)->nodeValue;
+							break;
+						}
+						
+						$dubbingLanguages[] = $languagesQuery->item($i)->nodeValue;
 					}
 					
-					$dubbing .= $languagesQuery->item($i)->nodeValue." ";
+					$dubbing = implode(", ", $dubbingLanguages);
+				} else {
+					$dubbing = $languagesQuery->item(0)->nodeValue;
 				}
 				
 				$lengthQuery = $xpath->query(".//div[@class='credits__countries-year']//p[@class='credits__duration']", $event);

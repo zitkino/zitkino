@@ -15,12 +15,11 @@ class Stred extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("http://kinobude.cz/program/");
-		$this->initiateDocument();
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@class='contentContent']//a[@class='programPolozka row']");
 		foreach($events as $event) {

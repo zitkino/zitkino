@@ -14,8 +14,6 @@ class Rubin extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("http://www.kdrubin.cz/program");
-		$this->initiateDocument();
-		
 		$this->parse();
 	}
 
@@ -26,7 +24,7 @@ class Rubin extends Parser {
 	public function parse(): Screenings {
 		$movies = [];
 		
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@id='itemListLeading']//div[@class='K2ItemsRow']");
 		foreach($events as $event) {

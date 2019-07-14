@@ -13,13 +13,11 @@ class Lucerna extends Parser {
 	public function __construct(Cinema $cinema) {
 		$this->cinema = $cinema;
 		$this->setUrl("http://www.kinolucerna.info");
-		$this->initiateDocument();
-		
 		$this->parse();
 	}
 	
 	public function parse(): Screenings {
-		$xpath = $this->downloadData();
+		$xpath = $this->getXpath();
 		
 		$days = $xpath->query("//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
 		foreach($days as $day) {
