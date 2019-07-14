@@ -2,7 +2,7 @@
 	"name": "zitkino",
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.1.1",
-		"@hermajan/booty": "file:./../booty",
+		"@hermajan/booty": "https://github.com/hermajan/booty",
 		"@hermajan/facolors": "^0.1.0",
 		"jquery": "^3.4.0"
 	},
