@@ -4,7 +4,6 @@ const sass = require('gulp-sass');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const autoprefixer = require('gulp-autoprefixer');
-const cssnano = require('gulp-cssnano');
 
 const files = {
 	scssPath: 'assets/scss/**/*.scss',
@@ -15,9 +14,8 @@ const files = {
 function scssTask() {
 	return src(files.scssPath)
 		.pipe(sourcemaps.init()) // initializes sourcemaps first
-		.pipe(sass()) // compiles SCSS to CSS
+		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError)) // compiles SCSS to CSS and minifies CSS files
 		.pipe(autoprefixer()) // adds vendor prefixes to CSS rules
-		.pipe(cssnano()) // minifies CSS files
 		.pipe(sourcemaps.write('.')) // writes sourcemaps file in current directory
 		.pipe(dest('dist')); // puts final CSS in dist folder
 }
