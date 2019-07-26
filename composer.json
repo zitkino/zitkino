@@ -22,7 +22,8 @@
 		"johngrogg/ics-parser": "^2.0",
 		"kdyby/doctrine": "^3.3",
 		"nette/nette": "^2.4",
+		"tracy/tracy": "^2.6",
 		"twbs/bootstrap": "^3.3",
-		"vlucas/phpdotenv": "^2.5"
+		"vlucas/phpdotenv": "^3.4"
 	}
 }
