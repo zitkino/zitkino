@@ -56,9 +56,11 @@ class Scala extends Parser {
 				$timeQuery = $xpath->query("//td[@class='col_time_reservation']", $event);
 				$time = explode(":", $timeQuery->item($movieItems)->nodeValue);
 				
-				$datetime = \DateTime::createFromFormat("j.n.Y", $date);
-				$datetime->setTime(intval($time[0]), intval($time[1]));
-				$datetimes[] = $datetime;
+				if(isset($date)) {
+					$datetime = \DateTime::createFromFormat("j.n.Y", $date);
+					$datetime->setTime(intval($time[0]), intval($time[1]));
+					$datetimes[] = $datetime;
+				}
 				
 				$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->getAttribute("href");
 				

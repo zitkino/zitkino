@@ -47,7 +47,7 @@ abstract class Parser {
 	}
 	
 	/**
-	 * @param Screenings|array $screenings
+	 * @param Screenings|array|null $screenings
 	 * @return Parser
 	 */
 	public function setScreenings($screenings) {

@@ -25,5 +25,12 @@
 		"tracy/tracy": "^2.6",
 		"twbs/bootstrap": "^3.3",
 		"vlucas/phpdotenv": "^3.4"
+	},
+	"require-dev": {
+		"nette/tester": "^2.2",
+		"phpstan/phpstan": "^0.11.12",
+		"phpstan/phpstan-doctrine": "^0.11.5",
+		"phpstan/phpstan-nette": "^0.11.1",
+		"phpstan/phpstan-shim": "^0.11.12"
 	}
 }

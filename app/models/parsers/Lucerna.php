@@ -64,11 +64,11 @@ class Lucerna extends Parser {
 				if($languageQuery->length >= 1) {
 					$languageString = $languageQuery->item(0)->nodeValue;
 					switch(true) {
+						case stripos($languageString, "ČD") !== false:
 						case stripos($languageString, "ČV") !== false: $dubbing = "česky"; $subtitles = null; break;
 						case stripos($languageString, "ČT") !== false: $dubbing = null; $subtitles = "české"; break;
-						case stripos($languageString, "ČD") !== false: $dubbing = "česky"; $subtitles = null; break;
+						case stripos($languageString, "Anglická verze s českými titulky") !== false:
 						case stripos($languageString, "anglicka_verzia_ceske_titulky") !== false: $dubbing = "anglicky"; $subtitles = "české"; break;
-						case stripos($languageString, "Anglická verze s českými titulky") !== false: $dubbing = "anglicky"; $subtitles = "české"; break;
 						default: $dubbing = null; $subtitles = null;
 					}
 				}

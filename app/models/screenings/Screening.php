@@ -90,6 +90,7 @@ class Screening {
 	public function __construct(Movie $movie, Cinema $cinema) {
 		$this->movie = $movie;
 		$this->cinema = $cinema;
+		$this->showtimes = [];
 	}
 	
 	/**
@@ -220,10 +221,6 @@ class Screening {
 	 * @return Showtime[]
 	 */
 	public function getShowtimes(): array {
-		if(!isset($this->showtimes)) {
-			return [];
-		}
-		
 		return $this->showtimes;
 	}
 	
@@ -236,7 +233,7 @@ class Screening {
 			$showtime = new Showtime($this, $datetime);
 			
 			if($actual === true) {
-				if(isset($datetime) and $showtime->isActual()) {
+				if($showtime->isActual()) {
 					$this->addShowtime($showtime);
 				}
 			} else {
