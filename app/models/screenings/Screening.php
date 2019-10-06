@@ -40,7 +40,7 @@ class Screening {
 	 * @var ScreeningType|null
 	 * @ORM\ManyToOne(targetEntity="ScreeningType")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="type", referencedColumnName="id")
+	 *   @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=true)
 	 * })
 	 */
 	protected $type;
@@ -49,7 +49,7 @@ class Screening {
 	 * @var Place|null
 	 * @ORM\ManyToOne(targetEntity="\Zitkino\Place")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="place", referencedColumnName="id")
+	 *   @ORM\JoinColumn(name="place", referencedColumnName="id", nullable=true)
 	 * })
 	 */
 	protected $place;
@@ -58,7 +58,7 @@ class Screening {
 	 * @var Language|string|null
 	 * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id")
+	 *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id", nullable=true)
 	 * })
 	 */
 	protected $dubbing;
@@ -67,7 +67,7 @@ class Screening {
 	 * @var Language|string|null
 	 * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id")
+	 *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id", nullable=true)
 	 * })
 	 */
 	protected $subtitles;

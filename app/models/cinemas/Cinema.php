@@ -41,7 +41,7 @@ class Cinema extends DobineEntity {
 	 * @var CinemaType
 	 * @ORM\ManyToOne(targetEntity="CinemaType")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="type", referencedColumnName="id")
+	 *   @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=true)
 	 * })
 	 */
 	protected $type;
