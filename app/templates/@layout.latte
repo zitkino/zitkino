@@ -7,14 +7,27 @@
 	<meta name="description" content="{$meta["description"]}">
 	<meta name="author" content="{$meta["author"]}">
 	<meta name="robots" content="{$meta["robots"]}" n:ifset="$meta['robots']">
-	
+
 	<title>{ifset title}{include title|stripHtml} {$meta["separator"]}{else}{$meta["title"]}{/ifset} {$meta["name"]}</title>
-	
+
 	<link rel="shortcut icon" href="{$baseUrl}/favicon.ico">
 	<link rel="stylesheet" media="screen" href="{$baseUrl}/dist/style.css">
 	{*<link rel="stylesheet" media="print" href="{$baseUrl}/print.css">*}
-	
+
 	<script src="{$baseUrl}/node_modules/jquery/dist/jquery.min.js"></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-80065906-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-80065906-1');
+	</script>
 </head>
 
 <body>
@@ -43,6 +56,5 @@
 
 <script src="{$baseUrl}/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="{$baseUrl}/node_modules/@hermajan/booty/js/booty.js"></script>
-<script src="{$baseUrl}/dist/ganalytics.js"></script>
 </body>
 </html>

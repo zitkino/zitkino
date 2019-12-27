@@ -6,6 +6,7 @@ networks:
 
 services:
     db:
+        container_name: zitkino_db
         image: mysql:5.7
         restart: always
         networks:
@@ -21,6 +22,7 @@ services:
             MYSQL_PASSWORD: heslo
 
     www:
+        container_name: zitkino_www
         networks:
             - docker_network
         depends_on:
