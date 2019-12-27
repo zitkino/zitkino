@@ -18,7 +18,7 @@ class Movie {
 	
 	/**
 	 * @var string
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+	 * @ORM\Column(name="name", type="string", length=255, nullable=false)
 	 */
 	protected $name;
 	
@@ -43,9 +43,11 @@ class Movie {
 	/** @var array */
 	protected $databases;
 	
-	/** @var Screenings */
+	/**
+	 * @var Screenings
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Screening", mappedBy="movie", cascade={"persist", "remove"})
+	 */
 	protected $screenings;
-	
 	
 	public function __construct(string $name) {
 		$this->name = $name;
@@ -53,17 +55,20 @@ class Movie {
 		$this->screenings = new Screenings(null);
 	}
 	
-	
 	public function fixDatabases() {
 		$csfdUrl = "https://www.csfd.cz";
 		if(isset($this->csfd)) {
 			$this->databases["csfd"] = $csfdUrl."/film/".$this->csfd;
-		} else { $this->databases["csfd"] = $csfdUrl."/hledat/?q=".urlencode($this->name); }
+		} else {
+			$this->databases["csfd"] = $csfdUrl."/hledat/?q=".urlencode($this->name);
+		}
 		
 		$imdbUrl = "https://www.imdb.com";
 		if(isset($this->imdb)) {
 			$this->databases["imdb"] = $imdbUrl."/title/".$this->imdb;
-		} else { $this->databases["imdb"] = $imdbUrl."/find?s=tt&q=".urlencode($this->name); }
+		} else {
+			$this->databases["imdb"] = $imdbUrl."/find?s=tt&q=".urlencode($this->name);
+		}
 	}
 	
 	/**
@@ -95,7 +100,7 @@ class Movie {
 	public function getLength(): ?int {
 		return $this->length;
 	}
-
+	
 	/**
 	 * @param int|null $length
 	 * @return Movie

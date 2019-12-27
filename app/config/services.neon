@@ -1,2 +1,9 @@
 services: 
-	- Zitkino\Cinemas\CinemaFacade
+	cinemaFacade: Zitkino\Cinemas\CinemaFacade
+	movieFacade: Zitkino\MovieFacade
+	languageFacade: Zitkino\LanguageFacade
+	placeFacade: Zitkino\PlaceFacade
+
+	tablePrefix:
+		class: Dobine\Subscribers\TablePrefixSubscriber(%database%)
+		tags: [kdyby.subscriber]

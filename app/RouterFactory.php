@@ -49,7 +49,7 @@ class RouterFactory {
 		$router[] = new Route("cinema[/]", "Cinema:default", Route::ONE_WAY);
 		$router[] = new Route("film[/<f=>]", "Home:default", Route::ONE_WAY);
 
-		$router[] = new Route("<action>", "Home:default");
+//		$router[] = new Route("<action>", "Home:default");
 		$router[] = new Route("[<presenter>/]<action>", "Home:default");
 
 		return $router;

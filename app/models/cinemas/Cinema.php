@@ -32,10 +32,10 @@ class Cinema extends DobineEntity {
 	protected $code;
 	
 	/**
-     * @var bool
-     * @ORM\Column(name="disabled", type="boolean", options={"default": 0}, nullable=false)
-     */
-    protected $disabled;
+	 * @var bool
+	 * @ORM\Column(name="disabled", type="boolean", options={"default": 0}, nullable=false)
+	 */
+	protected $disabled;
 	
 	/**
 	 * @var CinemaType
@@ -124,16 +124,17 @@ class Cinema extends DobineEntity {
 	 */
 	protected $activeUntil;
 	
-	/** @var Screenings */
-	protected $screenings;
-	
+	/**
+	 * @var Screenings
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Screening", mappedBy="cinema", cascade={"persist", "remove"})
+	 */
+	private $screenings;
 	
 	public function __construct(string $code) {
 		$this->code = $code;
 		$this->name = $code;
 		$this->screenings = new Screenings(null);
 	}
-	
 	
 	/**
 	 * @return string
@@ -260,12 +261,16 @@ class Cinema extends DobineEntity {
 	 */
 	public function getScreenings($type = "all"): Screenings {
 		switch($type) {
-			case "all": default:
-				return $this->screenings; break;
+			case "all":
+			default:
+				return $this->screenings;
+				break;
 			case "soonest":
-				return $this->getSoonestScreenings(); break;
+				return $this->getSoonestScreenings();
+				break;
 			case "new":
-				return $this->getNewScreenings(); break;
+				return $this->getNewScreenings();
+				break;
 		}
 	}
 	
@@ -277,7 +282,9 @@ class Cinema extends DobineEntity {
 				$parser = new $parserClass($this);
 				
 				$this->screenings = $parser->getScreenings();
-			} else { $this->screenings = null; }
+			} else {
+				$this->screenings = null;
+			}
 		} catch(\Error $error) {
 			Debugger::barDump($error);
 			Debugger::log($error, Debugger::ERROR);
@@ -319,7 +326,7 @@ class Cinema extends DobineEntity {
 			
 			if(count($soonest) < 5) {
 				$soonest = [];
-				for($i=0; $i<count($this->screenings->toArray()); $i++) {
+				for($i = 0; $i < count($this->screenings->toArray()); $i++) {
 					if(isset($this->screenings[$i])) {
 						foreach($this->screenings[$i]->getShowtimes() as $showtime) {
 							if($currentDate < $showtime->getDatetime()) {
@@ -334,7 +341,7 @@ class Cinema extends DobineEntity {
 				}
 			}
 		}
-		
+
 //		if(empty($soonest)) {
 //			if(is_null($this->screenings) or empty($this->screenings->toArray())) {
 //				$soonest = [];

@@ -8,3 +8,7 @@ parameters:
 		title: ""
 		separator: "-"
 		name: "Žít kino"
+
+	database:
+		namespace: "Zitkino"
+		prefix: "zk_"

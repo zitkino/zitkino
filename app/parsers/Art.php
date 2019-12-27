@@ -91,11 +91,14 @@ class Art extends Parser {
 				$lengthString = $lengthQuery->item(0)->nodeValue ?? null;
 				$length = $lengthString ? str_replace("min", "", intval($lengthString)) : null;
 				
+				Debugger::barDump($this->languageFacade);
+				
 				$movie = new Movie($name);
 				$movie->setLength($length);
 				
 				$screening = new Screening($movie, $this->cinema);
 				$screening->setPlace($place);
+				
 				$screening->setLanguages($dubbing, $subtitles);
 				$screening->setLink($link);
 				$screening->setShowtimes($datetimes);

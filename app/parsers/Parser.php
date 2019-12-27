@@ -3,17 +3,18 @@ namespace Zitkino\Parsers;
 
 use Dobine\Connections\DBAL;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use DOMDocument;
 use DOMXPath;
 use Nette\Utils\Json;
 use Nette\Utils\JsonException;
-use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
+use Zitkino\LanguageFacade;
+use Zitkino\MovieFacade;
 use Zitkino\Movies\Movie;
-use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
-use Zitkino\Screenings\ScreeningType;
+use Zitkino\PlaceFacade;
+use Zitkino\Screenings\{Screening, Screenings, ScreeningType};
 
 /**
  * Parser.
@@ -29,6 +30,19 @@ abstract class Parser {
 	
 	/** @var Connection */
 	protected $connection;
+	
+	/** @var LanguageFacade @inject */
+	public $languageFacade;
+	
+	/** @var MovieFacade @inject */
+	public $movieFacade;
+	
+	/** @var PlaceFacade @inject */
+	public $placeFacade;
+	
+	public function injectLanguageFacade(LanguageFacade $languageFacade) {
+		$this->languageFacade = $languageFacade;
+	}
 	
 	public function getUrl() {
 		return $this->url;
@@ -117,8 +131,11 @@ abstract class Parser {
 		return Json::decode($data, Json::FORCE_ARRAY);
 	}
 	
+	/**
+	 * @throws DBALException
+	 */
 	public function getConnection() {
-		$db = new DBAL(__DIR__."/../../config/".$_ENV["APP_ENV"].".neon");
+		$db = new DBAL(__DIR__."/../config/".$_ENV["APP_ENV"].".neon");
 		$this->connection = $db->getConnection();
 	}
 	

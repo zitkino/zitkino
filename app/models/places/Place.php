@@ -5,6 +5,7 @@ use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 use Nette\Utils\Strings;
+use Zitkino\Screenings\Screenings;
 
 /**
  * Place
@@ -32,6 +33,12 @@ class Place {
 	 * @ORM\Column(name="link", type="string", length=255, nullable=true)
 	 */
 	protected $link;
+	
+	/**
+	 * @var Screenings
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Screening", mappedBy="place", cascade={"persist", "remove"})
+	 */
+	private $screenings;
 	
 	public function __construct(string $name) {
 		$this->name = $name;

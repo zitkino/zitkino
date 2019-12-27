@@ -2,6 +2,7 @@
 namespace Zitkino\Screenings;
 
 use Dobine\Entities\Identifier;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 use Zitkino\Cinemas\Cinema;
@@ -55,20 +56,14 @@ class Screening {
 	protected $place;
 	
 	/**
-	 * @var Language|string|null
-	 * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id", nullable=true)
-	 * })
+	 * @var string|null
+	 * @ORM\Column(name="dubbing", type="string", length=255, nullable=true)
 	 */
 	protected $dubbing;
 	
 	/**
-	 * @var Language|string|null
-	 * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id", nullable=true)
-	 * })
+	 * @var string|null
+	 * @ORM\Column(name="subtitles", type="string", length=255, nullable=true)
 	 */
 	protected $subtitles;
 	
@@ -84,7 +79,10 @@ class Screening {
 	 */
 	protected $link;
 	
-	/** @var Showtime[] */
+	/**
+	 * @var Collection|Showtime[]
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Showtime", mappedBy="showtimes", cascade={"persist", "remove"})
+	 */
 	protected $showtimes;
 	
 	public function __construct(Movie $movie, Cinema $cinema) {
@@ -143,14 +141,14 @@ class Screening {
 	}
 	
 	/**
-	 * @return Language|string|null
+	 * @return string|null
 	 */
 	public function getDubbing() {
 		return $this->dubbing;
 	}
 	
 	/**
-	 * @param Language|string|null $dubbing
+	 * @param string|null $dubbing
 	 * @return Screening
 	 */
 	public function setDubbing($dubbing): Screening {
@@ -159,14 +157,14 @@ class Screening {
 	}
 	
 	/**
-	 * @return Language|string|null
+	 * @return string|null
 	 */
 	public function getSubtitles() {
 		return $this->subtitles;
 	}
 	
 	/**
-	 * @param Language|string|null $subtitles
+	 * @param string|null $subtitles
 	 * @return Screening
 	 */
 	public function setSubtitles($subtitles): Screening {
@@ -207,8 +205,8 @@ class Screening {
 	}
 	
 	/**
-	 * @param Language|string $dubbing
-	 * @param Language|string $subtitles
+	 * @param string|null $dubbing
+	 * @param string|null $subtitles
 	 * @return Screening
 	 */
 	public function setLanguages($dubbing, $subtitles): Screening {

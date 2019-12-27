@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c5c0badf62c28868f71cfab385fd285",
+    "content-hash": "48ea1ad6eb74effec805dfd50923feb3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -880,30 +880,35 @@
         },
         {
             "name": "hermajan/dobine",
-            "version": "v0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hermajan/dobine.git",
-                "reference": "0f18727923cfe06abbbfcd1d39b897633586ad05"
+                "reference": "1bc0dd728b8a7e70ecc764b20fb8bcef89979d9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hermajan/dobine/zipball/0f18727923cfe06abbbfcd1d39b897633586ad05",
-                "reference": "0f18727923cfe06abbbfcd1d39b897633586ad05",
+                "url": "https://api.github.com/repos/hermajan/dobine/zipball/1bc0dd728b8a7e70ecc764b20fb8bcef89979d9a",
+                "reference": "1bc0dd728b8a7e70ecc764b20fb8bcef89979d9a",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "^2.5",
-                "nette/utils": "^2.5",
-                "php": "^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "nette/neon": "^2.4",
-                "nette/tester": "^2.0",
+                "nette/tester": "^2.3",
+                "nette/utils": "^2.5",
+                "phpstan/phpstan": "^0.11.12",
+                "phpstan/phpstan-doctrine": "^0.11.5",
+                "phpstan/phpstan-nette": "^0.11.1",
+                "phpstan/phpstan-shim": "^0.11.12",
                 "vlucas/phpdotenv": "^2.5"
             },
             "suggest": {
                 "nette/neon": "For parsing connection parameters from .neon files.",
+                "nette/utils": "For using with Nette.",
                 "vlucas/phpdotenv": "For loading connection environment from .env file."
             },
             "type": "library",
@@ -918,7 +923,7 @@
             ],
             "description": "Doctrine extensions.",
             "homepage": "https://hermajan.net/dobine",
-            "time": "2018-10-10T20:33:09+00:00"
+            "time": "2019-10-06T16:10:45+00:00"
         },
         {
             "name": "hermajan/fazette",
@@ -3837,6 +3842,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "hermajan/dobine": 20,
         "hermajan/lib": 20
     },
     "prefer-stable": false,
