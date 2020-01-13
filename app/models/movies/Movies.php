@@ -14,11 +14,13 @@ class Movies extends ArrayCollection {
 		return $this->toArray();
 	}
 	
-	
 	public function hasLengths() {
+		/** @var Movie $movie */
 		foreach($this->toArray() as $movie) {
-			$length = $movie->length;
-			if(isset($length)) { return true; }
+			$length = $movie->getLength();
+			if(isset($length)) {
+				return true;
+			}
 		}
 		return false;
 	}

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="cinemas_types", uniqueConstraints={@ORM\UniqueConstraint(name="code", columns={"code"})})
  * @ORM\Entity
  */
-class CinemaType extends DobineEntity {
+class CinemaType {
 	use Identifier;
 	
 	/**

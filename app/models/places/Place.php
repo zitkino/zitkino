@@ -3,7 +3,6 @@ namespace Zitkino;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 use Nette\Utils\Strings;
 use Zitkino\Screenings\Screenings;
 
@@ -14,7 +13,7 @@ use Zitkino\Screenings\Screenings;
  * @ORM\Entity
  */
 class Place {
-	use Identifier, MagicAccessors;
+	use Identifier;
 	
 	/**
 	 * @var string

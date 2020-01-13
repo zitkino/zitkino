@@ -2207,6 +2207,11 @@ needle@^2.2.1:
     iconv-lite "^0.4.4"
     sax "^1.2.4"
 
+nette-forms@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/nette-forms/-/nette-forms-3.0.3.tgz#e385089e27b5a10eaf567c9a0d11088f3db53947"
+  integrity sha512-5qlJQpUAOgZw/cJS1DV4QxcK194HNPMLnsSExAZ30kRdk8eFlHFSEqYZkyuTwPY4dcG+rWq5AuiozxDhTCByyA==
+
 next-tick@1, next-tick@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"

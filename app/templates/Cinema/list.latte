@@ -83,9 +83,9 @@
 			<tbody>
 			<tr n:foreach="$screenings as $screening" n:if="!empty($screening->getShowtimes())">
 				<td title="Název filmu">
-                    {php $link = $screening->link}
+                    {php $link = $screening->getLink()}
                     {ifset $link}<a href="{$link}">{/ifset}
-                        {$screening->movie->name}
+                        {$screening->getMovie()->getName()}
 					{ifset $link}</a>{/ifset}
 				</td>
 
@@ -96,23 +96,23 @@
 				</td>
 
 				<td title="Datum a čas">
-                    {if !empty($screening->showtimes)}
+                    {if !empty($screening->getShowtimes())}
                         {fa r, calendar}
-                        {foreach $screening->showtimes as $showtime}
+                        {foreach $screening->getShowtimes() as $showtime}
                             {if $iterator->first}
-                                {$showtime->datetime->format('d.m.Y')} <br class="d-md-none d-lg-none">{fa r, clock}
+                                {$showtime->getDatetime()->format('d.m.Y')} <br class="d-md-none d-lg-none">{fa r, clock}
                             {/if}
-                            {$showtime->datetime->format('H:i')}{sep}, {/sep}
+                            {$showtime->getDatetime()->format('H:i')}{sep}, {/sep}
                         {/foreach}
                     {/if}
 				</td>
 
 				<td n:if="$screenings->hasPlaces()" title="Místo">
-                    {php $place = $screening->getPlace()}
-                    {ifset $place}
-						{ifset $place->link}<a href="{$place->link}">{/ifset}
-                        {$place->name|trim}
-						{ifset $place->link}</a>{/ifset}
+                    {php $place = $screening->getPlace()} {ifset $place}
+						{php $placeLink = $place->getLink()}
+						{ifset $placeLink}<a href="{$placeLink}">{/ifset}
+                        {$place->getName()|trim}
+						{ifset $placeLink}</a>{/ifset}
                     {/ifset}
 				</td>
 
@@ -129,7 +129,7 @@
 				</td>
 
 				<td n:if="$screenings->getMovies()->hasLengths()" title="Délka">
-                    {php $length = $screening->movie->getLength()}
+                    {php $length = $screening->getMovie()->getLength()}
                     {ifset $length}{$length|trim} min.{/ifset}
 				</td>
 
@@ -139,9 +139,10 @@
 				</td>
 
 				<td title="Databáze">
-                    {var $databases = $screening->movie->getDatabases()}
-					<a href="{$databases['csfd']}" title="ČSFD"><img src="{$basePath}/img/csfd.svg" width="20"
-																	 alt="ČSFD"></a>
+                    {var $databases = $screening->getMovie()->getDatabases()}
+					<a href="{$databases['csfd']}" title="ČSFD">
+						<img src="{$basePath}/img/csfd.svg" width="20" alt="ČSFD">
+					</a>
 					<br class="d-md-none d-lg-none">
 					<a href="{$databases['imdb']}" title="IMDb">{fa b, imdb, "lg"}</a>
 				</td>

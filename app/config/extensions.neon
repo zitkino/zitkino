@@ -1,11 +1,19 @@
 extensions:
-	console: Kdyby\Console\DI\ConsoleExtension
-	events: Kdyby\Events\DI\EventsExtension
-	annotations: Kdyby\Annotations\DI\AnnotationsExtension
-	doctrine: Kdyby\Doctrine\DI\OrmExtension
+	console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+	dbal: Nettrine\DBAL\DI\DbalExtension
+	orm: Nettrine\ORM\DI\OrmExtension
+	orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
+	orm.console: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrine.cache: Nettrine\Cache\DI\CacheExtension
 
-doctrine:
-	charset: UTF8
-	driver: pdo_mysql
-	metadata:
-		Zitkino: %appDir%
+orm.annotations:
+	paths:
+		- App/Model
+
+dbal:
+	debug:
+		panel: %debugMode%
+		sourcePaths: [%appDir%]
+	connection:
+		charset: UTF8
+		driver: pdo_mysql

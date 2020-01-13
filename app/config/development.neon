@@ -2,14 +2,22 @@ application:
 	debugger: true
 	silentLinks: false
 	
-doctrine:
-	host: 'db'
-	user: root
-	password: 'heslo'
-	dbname: zitkino
+dbal:
+	connection:
+		host: 'db'
+		user: root
+		password: 'heslo'
+		dbname: zitkino
 
 tracy:
 	strictMode: true
 	showBar: true
 	editorMapping:
 		/var/www/html: c:\OneDrive\github\zitkino
+	bar:
+		- Nextras\MailPanel\MailPanel(%tempDir%/mail-panel-latte)
+
+services:
+	nette.mailer:
+		class: Nette\Mail\IMailer
+		factory: Nextras\MailPanel\FileMailer(%tempDir%/mail-panel-mails)

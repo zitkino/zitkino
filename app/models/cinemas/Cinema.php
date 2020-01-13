@@ -1,14 +1,11 @@
 <?php
 namespace Zitkino\Cinemas;
 
-use Dobine\Entities\DobineEntity;
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 use Tracy\Debugger;
 use Zitkino\Parsers\Parser;
-use Zitkino\Screenings\Screenings;
-use Zitkino\Screenings\Showtime;
+use Zitkino\Screenings\{Screenings, Showtime};
 
 /**
  * Cinema
@@ -16,8 +13,8 @@ use Zitkino\Screenings\Showtime;
  * @ORM\Table(name="cinemas", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"}), @ORM\UniqueConstraint(name="code", columns={"code"})}, indexes={@ORM\Index(name="type", columns={"type"})})
  * @ORM\Entity
  */
-class Cinema extends DobineEntity {
-	use Identifier, MagicAccessors;
+class Cinema {
+	use Identifier;
 	
 	/**
 	 * @var string
@@ -165,7 +162,7 @@ class Cinema extends DobineEntity {
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getAddress(): ?string {
 		return $this->address;
@@ -179,63 +176,63 @@ class Cinema extends DobineEntity {
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getPhone(): ?string {
 		return $this->phone;
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getEmail(): ?string {
 		return $this->email;
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getUrl(): ?string {
 		return $this->url;
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getGmaps(): ?string {
 		return $this->gmaps;
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getProgramme(): ?string {
 		return $this->programme;
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getFacebook(): ?string {
 		return $this->facebook;
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getGooglePlus(): ?string {
 		return $this->googlePlus;
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getInstagram(): ?string {
 		return $this->instagram;
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getTwitter(): ?string {
 		return $this->twitter;

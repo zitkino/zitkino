@@ -1,7 +1,6 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Place;
@@ -90,8 +89,6 @@ class Art extends Parser {
 				$lengthQuery = $xpath->query(".//div[@class='credits__countries-year']//p[@class='credits__duration']", $event);
 				$lengthString = $lengthQuery->item(0)->nodeValue ?? null;
 				$length = $lengthString ? str_replace("min", "", intval($lengthString)) : null;
-				
-				Debugger::barDump($this->languageFacade);
 				
 				$movie = new Movie($name);
 				$movie->setLength($length);

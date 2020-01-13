@@ -13,7 +13,6 @@ class Screenings extends ArrayCollection {
 		parent::__construct($screenings);
 	}
 	
-
 	public function getMovies(): Movies {
 		$movies = [];
 		
@@ -29,7 +28,9 @@ class Screenings extends ArrayCollection {
 		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
 			$type = $screening->getType();
-			if(isset($type) and $type->getCode() !== "2D") { return true; }
+			if(isset($type) and $type->getCode() !== "2D") {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -38,24 +39,32 @@ class Screenings extends ArrayCollection {
 		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
 			$place = $screening->getPlace();
-			if(isset($place)) { return true; }
+			if(isset($place)) {
+				return true;
+			}
 		}
 		return false;
 	}
 	
 	public function hasLanguages(): bool {
+		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
-			$dubbing = $screening->dubbing;
-			$subtitles = $screening->subtitles;
-			if(isset($dubbing) or isset($subtitles)) { return true; }
+			$dubbing = $screening->getDubbing();
+			$subtitles = $screening->getSubtitles();
+			if(isset($dubbing) or isset($subtitles)) {
+				return true;
+			}
 		}
 		return false;
 	}
 	
 	public function hasPrices(): bool {
+		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
-			$price = $screening->price;
-			if(isset($price)) { return true; }
+			$price = $screening->getPrice();
+			if(isset($price)) {
+				return true;
+			}
 		}
 		return false;
 	}

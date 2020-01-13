@@ -12,7 +12,7 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
  * @ORM\Entity
  */
 class Language {
-	use Identifier, MagicAccessors;
+	use Identifier;
 	
 	/**
 	 * @var string

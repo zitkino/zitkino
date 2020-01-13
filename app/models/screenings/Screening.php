@@ -17,7 +17,7 @@ use Zitkino\Place;
  * @ORM\Entity
  */
 class Screening {
-	use Identifier, MagicAccessors;
+	use Identifier;
 	
 	/**
 	 * @var Movie

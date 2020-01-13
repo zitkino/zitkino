@@ -5,5 +5,5 @@ services:
 	placeFacade: Zitkino\PlaceFacade
 
 	tablePrefix:
-		class: Dobine\Subscribers\TablePrefixSubscriber(%database%)
-		tags: [kdyby.subscriber]
+		factory: Dobine\Subscribers\TablePrefixSubscriber(%database%)
+		tags: [nettrine.subscriber]

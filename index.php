@@ -11,7 +11,7 @@ if(isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO
 
 require_once __DIR__."/vendor/autoload.php";
 
-$dotenv = Dotenv::create(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 $dotenv->required("APP_ENV")->notEmpty();
 

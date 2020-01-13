@@ -23,7 +23,11 @@ class Mdb extends Parser {
 		$events = $xpath->query("//div[@class='wpb_wrapper']//div[@class='table-events-content']");
 		foreach($events as $event) {
 			$nameQuery = $xpath->query(".//div[@class='events-text1 events-text']//p[1]", $event);
-			$name = $nameQuery->item(0)->nodeValue;
+			$nameItem = $nameQuery->item(0);
+			$name = "";
+			if(isset($nameItem)) {
+				$name = $nameItem->nodeValue;
+			}
 			
 			$linkQuery = $xpath->query(".//div[@class='events-text1 events-text']//p[2]/a", $event);
 			$linkItem = $linkQuery->item(0);

@@ -2,10 +2,10 @@
 namespace Zitkino;
 
 use Dobine\Facades\DobineFacade;
-use Doctrine\ORM\EntityManager;
+use Nettrine\ORM\EntityManagerDecorator;
 
 class PlaceFacade extends DobineFacade {
-	public function __construct(EntityManager $entityManager) {
+	public function __construct(EntityManagerDecorator $entityManager) {
 		$this->entityManager = $entityManager;
 		$this->repository = $this->entityManager->getRepository(Place::class);
 	}
