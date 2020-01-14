@@ -54,22 +54,6 @@ class Movie {
 		$this->screenings = new Screenings(null);
 	}
 	
-	public function fixDatabases() {
-		$csfdUrl = "https://www.csfd.cz";
-		if(isset($this->csfd)) {
-			$this->databases["csfd"] = $csfdUrl."/film/".$this->csfd;
-		} else {
-			$this->databases["csfd"] = $csfdUrl."/hledat/?q=".urlencode($this->name);
-		}
-		
-		$imdbUrl = "https://www.imdb.com";
-		if(isset($this->imdb)) {
-			$this->databases["imdb"] = $imdbUrl."/title/".$this->imdb;
-		} else {
-			$this->databases["imdb"] = $imdbUrl."/find?s=tt&q=".urlencode($this->name);
-		}
-	}
-	
 	/**
 	 * @return string
 	 */
@@ -110,14 +94,14 @@ class Movie {
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getCsfd(): ?string {
 		return $this->csfd;
 	}
 	
 	/**
-	 * @param null|string $csfd
+	 * @param string|null $csfd
 	 * @return Movie
 	 */
 	public function setCsfd(?string $csfd): Movie {
@@ -126,14 +110,14 @@ class Movie {
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getImdb(): ?string {
 		return $this->imdb;
 	}
 	
 	/**
-	 * @param null|string $imdb
+	 * @param string|null $imdb
 	 * @return Movie
 	 */
 	public function setImdb(?string $imdb): Movie {
@@ -142,9 +126,9 @@ class Movie {
 	}
 	
 	/**
-	 * @return array
+	 * @return array|null
 	 */
-	public function getDatabases(): array {
+	public function getDatabases(): ?array {
 		return $this->databases;
 	}
 	
@@ -152,6 +136,22 @@ class Movie {
 		$this->databases = $databases;
 		$this->fixDatabases();
 		return $this;
+	}
+	
+	public function fixDatabases() {
+		$csfdUrl = "https://www.csfd.cz";
+		if(isset($this->csfd)) {
+			$this->databases["csfd"] = $csfdUrl."/film/".$this->csfd;
+		} else {
+			$this->databases["csfd"] = $csfdUrl."/hledat/?q=".urlencode($this->name);
+		}
+		
+		$imdbUrl = "https://www.imdb.com";
+		if(isset($this->imdb)) {
+			$this->databases["imdb"] = $imdbUrl."/title/".$this->imdb;
+		} else {
+			$this->databases["imdb"] = $imdbUrl."/find?s=tt&q=".urlencode($this->name);
+		}
 	}
 	
 	public function addScreening(Screening $screening) {

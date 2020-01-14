@@ -31,6 +31,9 @@ class ScreeningType {
 		$this->name = $code;
 	}
 	
+	public function __toString() {
+		return $this->getCode();
+	}
 	
 	/**
 	 * @return string

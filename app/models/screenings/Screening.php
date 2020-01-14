@@ -2,11 +2,10 @@
 namespace Zitkino\Screenings;
 
 use Dobine\Entities\Identifier;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 use Zitkino\Cinemas\Cinema;
-use Zitkino\Language;
 use Zitkino\Movies\Movie;
 use Zitkino\Place;
 
@@ -80,15 +79,33 @@ class Screening {
 	protected $link;
 	
 	/**
-	 * @var Collection|Showtime[]
-	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Showtime", mappedBy="showtimes", cascade={"persist", "remove"})
+	 * @var Collection
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Showtime", mappedBy="screening", cascade={"persist", "remove"})
 	 */
 	protected $showtimes;
 	
 	public function __construct(Movie $movie, Cinema $cinema) {
 		$this->movie = $movie;
 		$this->cinema = $cinema;
-		$this->showtimes = [];
+		$this->showtimes = new ArrayCollection();
+	}
+	
+	public function __toString() {
+		return $this->getMovie()->getId()."-".$this->getCinema()."-".$this->getType()."-".$this->getDubbing()."-".$this->getSubtitles();
+	}
+	
+	/**
+	 * @return Movie
+	 */
+	public function getMovie(): Movie {
+		return $this->movie;
+	}
+	
+	/**
+	 * @return Cinema
+	 */
+	public function getCinema(): Cinema {
+		return $this->cinema;
 	}
 	
 	/**
@@ -216,9 +233,9 @@ class Screening {
 	}
 	
 	/**
-	 * @return Showtime[]
+	 * @return Collection
 	 */
-	public function getShowtimes(): array {
+	public function getShowtimes(): Collection {
 		return $this->showtimes;
 	}
 	
@@ -244,12 +261,5 @@ class Screening {
 	
 	public function addShowtime($showtime) {
 		$this->showtimes[] = $showtime;
-	}
-	
-	/**
-	 * @return Movie
-	 */
-	public function getMovie(): Movie {
-		return $this->movie;
 	}
 }

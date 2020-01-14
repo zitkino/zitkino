@@ -11,14 +11,10 @@ class PlaceFacade extends DobineFacade {
 	}
 	
 	/**
-	 * @param int|string $id
-	 * @return object|Language
+	 * @param string $name
+	 * @return Place|object
 	 */
-	public function getById($id) {
-		if(is_numeric($id)) {
-			return $this->repository->findOneBy(["id" => $id]);
-		} else {
-			return $this->repository->findOneBy(["code" => $id]);
-		}
+	public function getByName(string $name) {
+		return $this->repository->findOneBy(["name" => $name]);
 	}
 }

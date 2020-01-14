@@ -3,9 +3,7 @@ namespace Zitkino\Cinemas;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Tracy\Debugger;
-use Zitkino\Parsers\Parser;
-use Zitkino\Screenings\{Screenings, Showtime};
+use Zitkino\Screenings\{Screening, Screenings, Showtime};
 
 /**
  * Cinema
@@ -131,6 +129,10 @@ class Cinema {
 		$this->code = $code;
 		$this->name = $code;
 		$this->screenings = new Screenings(null);
+	}
+	
+	public function __toString() {
+		return $this->getCode();
 	}
 	
 	/**
@@ -271,24 +273,17 @@ class Cinema {
 		}
 	}
 	
-	public function setScreenings() {
-		try {
-			$parserClass = "\Zitkino\Parsers\\".ucfirst($this->code);
-			if(class_exists($parserClass)) {
-				/** @var Parser $parser */
-				$parser = new $parserClass($this);
-				
-				$this->screenings = $parser->getScreenings();
-			} else {
-				$this->screenings = null;
-			}
-		} catch(\Error $error) {
-			Debugger::barDump($error);
-			Debugger::log($error, Debugger::ERROR);
-		} catch(\Exception $exception) {
-			Debugger::barDump($exception);
-			Debugger::log($exception, Debugger::EXCEPTION);
-		}
+	/**
+	 * @param Screenings $screenings
+	 * @return Cinema
+	 */
+	public function setScreenings(Screenings $screenings): Cinema {
+		$this->screenings = $screenings;
+		return $this;
+	}
+	
+	public function addScreening(Screening $screening) {
+		$this->screenings->add($screening);
 	}
 	
 	public function hasScreenings(): bool {
@@ -304,6 +299,7 @@ class Cinema {
 		if(isset($this->screenings)) {
 			$currentDate = new \DateTime();
 			
+			/** @var Screening $screening */
 			foreach($this->screenings as $screening) {
 				$nextDate = new \DateTime();
 				$nextDate->modify("+1 days");
@@ -359,6 +355,7 @@ class Cinema {
 		if(isset($this->screenings)) {
 			$currentDate = new \DateTime();
 			
+			/** @var Screening $screening */
 			foreach($this->screenings as $screening) {
 				$showtimes = $screening->getShowtimes();
 				if(isset($showtimes)) {

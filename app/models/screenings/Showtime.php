@@ -3,7 +3,6 @@ namespace Zitkino\Screenings;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 
 /**
  * Showtime

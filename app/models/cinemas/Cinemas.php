@@ -35,7 +35,6 @@ trait Cinemas {
 		$cinemas = $this->getByType($type);
 		/** @var Cinema $cinema */
 		foreach($cinemas as $cinema) {
-			$cinema->setScreenings();
 			if($cinema->hasScreenings()) {
 				$output[] = $cinema;
 			}

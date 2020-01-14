@@ -5,11 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Zitkino\Movies\Movies;
 
 class Screenings extends ArrayCollection {
-	public function __construct($screenings) {
-		if(!isset($screenings)) {
-			$screenings = [];
-		}
-		
+	public function __construct(array $screenings = []) {
 		parent::__construct($screenings);
 	}
 	

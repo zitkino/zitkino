@@ -10,4 +10,12 @@ class MovieFacade extends DobineFacade {
 		$this->entityManager = $entityManager;
 		$this->repository = $this->entityManager->getRepository(Movie::class);
 	}
+	
+	/**
+	 * @param string $name
+	 * @return Movie|object
+	 */
+	public function getByName(string $name) {
+		return $this->repository->findOneBy(["name" => $name]);
+	}
 }

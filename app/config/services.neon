@@ -1,9 +1,6 @@
-services: 
-	cinemaFacade: Zitkino\Cinemas\CinemaFacade
-	movieFacade: Zitkino\MovieFacade
-	languageFacade: Zitkino\LanguageFacade
-	placeFacade: Zitkino\PlaceFacade
-
+services:
 	tablePrefix:
 		factory: Dobine\Subscribers\TablePrefixSubscriber(%database%)
 		tags: [nettrine.subscriber]
+
+	parser: Zitkino\Parsers\ParserService

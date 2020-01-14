@@ -26,7 +26,6 @@
 
 {define cinemaMovieList}
     {foreach $cinemas as $cinemaItem}
-        {php $cinemaItem->setScreenings()}
         {var $screenings = $cinemaItem->getSoonestScreenings();}
 		<section n:if="!$screenings->isEmpty()" class="card card-default">
 			<header class="card-header" data-toggle="collapse" data-target="#{$cinemaItem->getCode()}">

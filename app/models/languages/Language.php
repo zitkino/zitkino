@@ -3,7 +3,7 @@ namespace Zitkino;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
+
 
 /**
  * Language

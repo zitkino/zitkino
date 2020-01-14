@@ -1,6 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Place;
@@ -11,13 +12,13 @@ use Zitkino\Screenings\Screenings;
  * Art parser.
  */
 class Art extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("https://kinoart.cz/cs/program/");
 		$this->parse();
 	}
 	
-	public function parse(): Screenings {
+	public function parse(): void {
 		$xpath = $this->getXpath();
 		
 		$days = $xpath->query("//div[@class='events-calendar']//div[@class='grid events-calendar__day']");
@@ -42,14 +43,25 @@ class Art extends Parser {
 				$nameQuery = $xpath->query(".//h3[contains(@class, 'events-calendar__event-title')]//a", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
+				$movie = $this->parserService->getMovieFacade()->getByName($name);
+				if(!isset($movie)) {
+					$movie = new Movie($name);
+				}
+				
 				$link = $nameQuery->item(0)->getAttribute("href");
 				
 				$placeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--custom']", $event);
 				$placeName = $placeQuery->item(0)->nodeValue;
 				$placeLink = $placeQuery->item(0)->getAttribute("href");
 				
-				$place = new Place($placeName);
+				$place = $this->parserService->getPlaceFacade()->getByName($placeName);
+				if(!isset($place)) {
+					$place = new Place($placeName);
+					$place->setCinema($this->cinema);
+				}
 				$place->setLink($placeLink);
+				$this->parserService->getEntityManager()->persist($place);
+				$this->parserService->getEntityManager()->flush($place);
 				
 				if(isset($month)) {
 					$timeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--black']", $event);
@@ -89,23 +101,22 @@ class Art extends Parser {
 				$lengthQuery = $xpath->query(".//div[@class='credits__countries-year']//p[@class='credits__duration']", $event);
 				$lengthString = $lengthQuery->item(0)->nodeValue ?? null;
 				$length = $lengthString ? str_replace("min", "", intval($lengthString)) : null;
-				
-				$movie = new Movie($name);
 				$movie->setLength($length);
+				
+				$this->parserService->getEntityManager()->persist($movie);
 				
 				$screening = new Screening($movie, $this->cinema);
 				$screening->setPlace($place);
-				
 				$screening->setLanguages($dubbing, $subtitles);
 				$screening->setLink($link);
 				$screening->setShowtimes($datetimes);
+				$this->parserService->getEntityManager()->persist($screening);
 				
-				$movie->addScreening($screening);
-				$this->screenings[] = $screening;
+				$this->cinema->addScreening($screening);
 			}
+			
+			$this->parserService->getEntityManager()->persist($this->cinema);
+			$this->parserService->getEntityManager()->flush();
 		}
-		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
 	}
 }

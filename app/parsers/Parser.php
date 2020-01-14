@@ -20,22 +20,24 @@ abstract class Parser {
 	
 	private $url = "";
 	
-	/** @var Screenings|array */
-	protected $screenings;
-	
 	/** @var Connection */
 	protected $connection;
 	
-	public function getUrl() {
-		return $this->url;
+	/** @var ParserService */
+	protected $parserService;
+	
+	/**
+	 * Parser constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		$this->parserService = $parserService;
+		$this->cinema = $cinema;
 	}
 	
-	public function getScreenings() {
-		if(is_array($this->screenings)) {
-			return new Screenings($this->screenings);
-		}
-		
-		return $this->screenings;
+	public function getUrl() {
+		return $this->url;
 	}
 	
 	public function setUrl($url) {
@@ -124,9 +126,8 @@ abstract class Parser {
 	
 	/**
 	 * Gets movies and other data from the web page.
-	 * @return Screenings Collection of screenings.
 	 */
-	abstract public function parse(): Screenings;
+	abstract public function parse(): void;
 	
 	public function getContentFromDB($cinema) {
 		$today = date("Y-m-d", strtotime("now"));

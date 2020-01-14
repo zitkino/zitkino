@@ -4,6 +4,7 @@ namespace Zitkino;
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
 use Nette\Utils\Strings;
+use Zitkino\Cinemas\Cinema;
 use Zitkino\Screenings\Screenings;
 
 /**
@@ -14,12 +15,6 @@ use Zitkino\Screenings\Screenings;
  */
 class Place {
 	use Identifier;
-	
-	/**
-	 * @var string
-	 * @ORM\Column(name="code", type="string", length=10, nullable=false)
-	 */
-	protected $code;
 	
 	/**
 	 * @var string
@@ -34,30 +29,22 @@ class Place {
 	protected $link;
 	
 	/**
+	 * @var Cinema
+	 * @ORM\ManyToOne(targetEntity="\Zitkino\Cinemas\Cinema")
+	 * @ORM\JoinColumns({
+	 *   @ORM\JoinColumn(name="cinema", referencedColumnName="id", nullable=false)
+	 * })
+	 */
+	protected $cinema;
+	
+	/**
 	 * @var Screenings
-	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Screening", mappedBy="place", cascade={"persist", "remove"})
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Screening", mappedBy="place")
 	 */
 	private $screenings;
 	
 	public function __construct(string $name) {
 		$this->name = $name;
-		$this->code = Strings::webalize($name);
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getCode(): string {
-		return $this->code;
-	}
-	
-	/**
-	 * @param string $code
-	 * @return Place
-	 */
-	public function setCode(string $code): Place {
-		$this->code = $code;
-		return $this;
 	}
 	
 	/**
@@ -89,6 +76,22 @@ class Place {
 	 */
 	public function setLink(?string $link): Place {
 		$this->link = $link;
+		return $this;
+	}
+	
+	/**
+	 * @return Cinema
+	 */
+	public function getCinema(): Cinema {
+		return $this->cinema;
+	}
+	
+	/**
+	 * @param Cinema $cinema
+	 * @return Place
+	 */
+	public function setCinema(Cinema $cinema): Place {
+		$this->cinema = $cinema;
 		return $this;
 	}
 }

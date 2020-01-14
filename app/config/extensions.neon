@@ -6,9 +6,9 @@ extensions:
 	orm.console: Nettrine\ORM\DI\OrmConsoleExtension
 	nettrine.cache: Nettrine\Cache\DI\CacheExtension
 
-orm.annotations:
-	paths:
-		- App/Model
+#orm.annotations:
+#	paths:
+#		- App/Model
 
 dbal:
 	debug:
@@ -17,3 +17,11 @@ dbal:
 	connection:
 		charset: UTF8
 		driver: pdo_mysql
+
+search:
+	facades:
+		in: %appDir%/models
+		extends: Dobine\Facades\DobineFacade
+		classes:
+			- Zitkino\*Facade
+			- Zitkino\*\*Facade
