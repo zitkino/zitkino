@@ -1,12 +1,11 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
+use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Place;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 
 /**
  * Art parser.
@@ -15,9 +14,11 @@ class Art extends Parser {
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("https://kinoart.cz/cs/program/");
-		$this->parse();
 	}
 	
+	/**
+	 * @throws ParserException
+	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
 		

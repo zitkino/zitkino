@@ -1,7 +1,6 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\EntityManager;
 use Nettrine\ORM\EntityManagerDecorator;
 use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
@@ -73,10 +72,8 @@ class ParserService {
 			if(class_exists($parserClass)) {
 				/** @var Parser $parser */
 				$this->parser = new $parserClass($this, $cinema);
-
-//				$this->screenings = $parser->getScreenings();
-//			} else {
-//				$this->screenings = null;
+				$this->getScreeningFacade()->removeScreenings($cinema);
+				$this->parser->parse();
 			}
 		} catch(\Error $error) {
 			Debugger::barDump($error);

@@ -1,6 +1,7 @@
 <?php
 namespace Zitkino\Presenters;
 
+use Nette\Application\AbortException;
 use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Cinemas\CinemaFacade;
@@ -16,23 +17,19 @@ class CronPresenter extends BasePresenter {
 	/** @var ParserService @inject */
 	public $parserService;
 	
-	public function actionDefault() {
+	/**
+	 * @throws AbortException
+	 */
+	public function actionParse() {
+		$cinemas = $this->cinemaFacade->getAll();
 		/** @var Cinema $cinema */
-		$cinema = $this->cinemaFacade->getById("art");
-		$this->parserService->initParser($cinema);
-		$parser = $this->parserService->getParser();
-		Debugger::barDump($parser);
+		foreach($cinemas as $cinema) {
+			$this->parserService->initParser($cinema);
+			
+			$parser = $this->parserService->getParser();
+			Debugger::barDump($parser);
+		}
 		
-//		$cinema->setScreenings();
-//		Debugger::barDump($cinema);
-//		$id = $this->cinemaFacade->update($cinema);
-//		Debugger::barDump($id);
-//
-//		foreach($cinema->getScreenings() as $screening) {
-//			$this->cinemaFacade->save($screening);
-//		}
-//		Debugger::barDump($cinema);
-//
 		$this->terminate();
 	}
 }

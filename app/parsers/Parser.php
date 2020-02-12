@@ -9,7 +9,7 @@ use Nette\Utils\{Json, JsonException};
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
-use Zitkino\Screenings\{Screening, Screenings, ScreeningType};
+use Zitkino\Screenings\{Screening, ScreeningType};
 
 /**
  * Parser.
@@ -45,26 +45,8 @@ abstract class Parser {
 	}
 	
 	/**
-	 * @param Screenings|array|null $screenings
-	 * @return Parser
-	 */
-	public function setScreenings($screenings) {
-		if(!isset($screenings)) {
-			$screenings = [];
-		}
-		
-		if(is_array($screenings)) {
-			$this->screenings = new Screenings($screenings);
-		} else {
-			$this->screenings = $screenings;
-		}
-		
-		return $this;
-	}
-	
-	/**
 	 * Downloads data from internet.
-	 * @return DOMXPath XPath document for parsing.
+	 * @return bool|DOMXPath|string
 	 * @throws ParserException
 	 */
 	private function downloadData() {
@@ -100,8 +82,7 @@ abstract class Parser {
 		$html = mb_convert_encoding($data, "HTML-ENTITIES", "UTF-8");
 		$document->loadHTML($html);
 		
-		$xpath = new DOMXPath($document);
-		return $xpath;
+		return new DOMXPath($document);
 	}
 	
 	/**
@@ -129,6 +110,11 @@ abstract class Parser {
 	 */
 	abstract public function parse(): void;
 	
+	/**
+	 * @param $cinema
+	 * @return array
+	 * @deprecated
+	 */
 	public function getContentFromDB($cinema) {
 		$today = date("Y-m-d", strtotime("now"));
 		$events = $this->connection->fetchAll("
@@ -142,6 +128,7 @@ abstract class Parser {
 			[$cinema, $today]
 		);
 		
+		$screenings = [];
 		foreach($events as $event) {
 			$datetimes = [];
 			$datetime = \DateTime::createFromFormat("Y-m-d H:i:s", $event["datetime"]);
@@ -162,10 +149,9 @@ abstract class Parser {
 			$screening->setShowtimes($datetimes);
 			
 			$movie->addScreening($screening);
-			$this->screenings[] = $screening;
+			$screenings[] = $screening;
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		return $screenings;
 	}
 }

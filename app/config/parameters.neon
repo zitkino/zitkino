@@ -3,7 +3,7 @@ parameters:
 		color: "#ba1b0a"
 		description: "List of Brno's cinemas"
 		author: "hermajan"
-		robots: ""
+		robots: "all,follow"
 		
 		title: ""
 		separator: "-"
