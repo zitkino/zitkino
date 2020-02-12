@@ -1,22 +1,28 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Zitkino\Cinemas\Cinema;
+use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 
 /**
  * Scala parser.
  */
 class Scala extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("https://www.kinoscala.cz/cz/program");
-		$this->parse();
 	}
 	
-	public function parse(): Screenings {
+	/**
+	 * @throws ParserException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function parse(): void {
 		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@id='content']/table//tr");
@@ -33,20 +39,19 @@ class Scala extends Parser {
 				$day = $dateString[0];
 				
 				$monthString = $dateString[1];
-				$monthArray = array("ledna","února","března","dubna","května","června","července","srpna","září","října","listopadu","prosince");
-				$monthNumbers = array("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+				$monthArray = ["ledna", "února", "března", "dubna", "května", "června", "července", "srpna", "září", "října", "listopadu", "prosince"];
+				$monthNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 				$month = str_replace($monthArray, $monthNumbers, $monthString);
 				
 				$year = date("Y");
 				
 				$date = trim($day).".".trim($month).".".$year;
 				$days++;
-			}
-			else {
+			} else {
 				$nameQuery = $xpath->query("//td[@class='col_movie_name']//a", $event);
 				$nameString = $nameQuery->item($movieItems)->nodeValue;
 				$name = str_replace("feat. Kmeny90/BU2R", "", $nameString);
-
+				
 				$dubbing = null;
 				if(\Lib\Strings::endsWith($name, "- cz dabing")) {
 					$dubbing = "česky";
@@ -69,8 +74,11 @@ class Scala extends Parser {
 				$priceString = htmlentities($priceItem, null, "utf-8");
 				$price = trim(str_replace("&nbsp;Kč", "", $priceString));
 				
-				
-				$movie = new Movie($name);
+				$movie = $this->parserService->getMovieFacade()->getByName($name);
+				if(!isset($movie)) {
+					$movie = new Movie($name);
+					$this->parserService->getMovieFacade()->save($movie);
+				}
 				
 				$screening = new Screening($movie, $this->cinema);
 				$screening->setLanguages($dubbing, null);
@@ -78,13 +86,14 @@ class Scala extends Parser {
 				$screening->setLink($link);
 				$screening->setShowtimes($datetimes);
 				
-				$this->screenings[] = $screening;
+				$this->parserService->getEntityManager()->persist($screening);
+				$this->cinema->addScreening($screening);
 				
 				$movieItems++;
 			}
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
 	}
 }

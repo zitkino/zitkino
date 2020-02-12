@@ -27,6 +27,18 @@ class ScreeningFacade extends DobineFacade {
 		$this->repositoryShowtime = $this->entityManager->getRepository(Showtime::class);
 	}
 	
+	/**
+	 * @param string|null $type
+	 * @return ScreeningType|object
+	 */
+	public function getType(?string $type = null) {
+		if(!isset($type)) {
+			return $this->repositoryType->findOneBy(["code" => "2D"]);
+		} else {
+			return $this->repositoryType->findOneBy(["code" => $type]);
+		}
+	}
+	
 	public function removeScreenings(Cinema $cinema) {
 		return $this->repository->createQueryBuilder("s")->delete()
 			->where("s.cinema = :cinema")->setParameter("cinema", $cinema)

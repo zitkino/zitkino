@@ -7,9 +7,7 @@ use Zitkino\Cinemas\Cinema;
  * Olympia parser.
  */
 class Olympia extends CinemaCity {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
-		
-		parent::__construct($cinema, "1034");
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema, "1034");
 	}
 }

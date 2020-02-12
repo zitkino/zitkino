@@ -1,22 +1,29 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Zitkino\Cinemas\Cinema;
+use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
+use Zitkino\Screenings\ScreeningType;
 
 /**
  * Lucerna parser.
  */
 class Lucerna extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.kinolucerna.info");
-		$this->parse();
 	}
 	
-	public function parse(): Screenings {
+	/**
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws ParserException
+	 */
+	public function parse(): void {
 		$xpath = $this->getXpath();
 		
 		$days = $xpath->query("//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
@@ -55,7 +62,7 @@ class Lucerna extends Parser {
 						$type = $typeString;
 					} else {
 						$type = null;
-					}	
+					}
 				}
 				
 				$dubbing = null;
@@ -65,11 +72,22 @@ class Lucerna extends Parser {
 					$languageString = $languageQuery->item(0)->nodeValue;
 					switch(true) {
 						case stripos($languageString, "ČD") !== false:
-						case stripos($languageString, "ČV") !== false: $dubbing = "česky"; $subtitles = null; break;
-						case stripos($languageString, "ČT") !== false: $dubbing = null; $subtitles = "české"; break;
+						case stripos($languageString, "ČV") !== false:
+							$dubbing = "česky";
+							$subtitles = null;
+							break;
+						case stripos($languageString, "ČT") !== false:
+							$dubbing = null;
+							$subtitles = "české";
+							break;
 						case stripos($languageString, "Anglická verze s českými titulky") !== false:
-						case stripos($languageString, "anglicka_verzia_ceske_titulky") !== false: $dubbing = "anglicky"; $subtitles = "české"; break;
-						default: $dubbing = null; $subtitles = null;
+						case stripos($languageString, "anglicka_verzia_ceske_titulky") !== false:
+							$dubbing = "anglicky";
+							$subtitles = "české";
+							break;
+						default:
+							$dubbing = null;
+							$subtitles = null;
 					}
 				}
 				
@@ -96,21 +114,30 @@ class Lucerna extends Parser {
 					}
 				}
 				
-				$movie = new Movie($name);
-				$movie->setLength($length);
+				$movie = $this->parserService->getMovieFacade()->getByName($name);
+				if(!isset($movie)) {
+					$movie = new Movie($name);
+					$movie->setLength($length);
+					$this->parserService->getMovieFacade()->save($movie);
+				}
+				
+				$screeningType = $this->parserService->getScreeningFacade()->getType($type);
+				if(!isset($screeningType)) {
+					$screeningType = new ScreeningType($type);
+				}
 				
 				$screening = new Screening($movie, $this->cinema);
-				$screening->setType($type);
+				$screening->setType($screeningType);
 				$screening->setLanguages($dubbing, $subtitles);
 				$screening->setPrice($price);
 				$screening->setLink($link);
 				$screening->setShowtimes($datetimes);
-				
-				$this->screenings[] = $screening;
+				$this->parserService->getEntityManager()->persist($screening);
+				$this->cinema->addScreening($screening);
 			}
+			
+			$this->parserService->getEntityManager()->persist($this->cinema);
+			$this->parserService->getEntityManager()->flush();
 		}
-		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
 	}
 }

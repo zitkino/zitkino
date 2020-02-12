@@ -1,6 +1,8 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
@@ -18,6 +20,8 @@ class Art extends Parser {
 	
 	/**
 	 * @throws ParserException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
@@ -44,25 +48,11 @@ class Art extends Parser {
 				$nameQuery = $xpath->query(".//h3[contains(@class, 'events-calendar__event-title')]//a", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
-				$movie = $this->parserService->getMovieFacade()->getByName($name);
-				if(!isset($movie)) {
-					$movie = new Movie($name);
-				}
-				
 				$link = $nameQuery->item(0)->getAttribute("href");
 				
 				$placeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--custom']", $event);
 				$placeName = $placeQuery->item(0)->nodeValue;
 				$placeLink = $placeQuery->item(0)->getAttribute("href");
-				
-				$place = $this->parserService->getPlaceFacade()->getByName($placeName);
-				if(!isset($place)) {
-					$place = new Place($placeName);
-					$place->setCinema($this->cinema);
-				}
-				$place->setLink($placeLink);
-				$this->parserService->getEntityManager()->persist($place);
-				$this->parserService->getEntityManager()->flush($place);
 				
 				if(isset($month)) {
 					$timeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--black']", $event);
@@ -102,9 +92,22 @@ class Art extends Parser {
 				$lengthQuery = $xpath->query(".//div[@class='credits__countries-year']//p[@class='credits__duration']", $event);
 				$lengthString = $lengthQuery->item(0)->nodeValue ?? null;
 				$length = $lengthString ? str_replace("min", "", intval($lengthString)) : null;
-				$movie->setLength($length);
 				
-				$this->parserService->getEntityManager()->persist($movie);
+				$movie = $this->parserService->getMovieFacade()->getByName($name);
+				if(!isset($movie)) {
+					$movie = new Movie($name);
+					$movie->setLength($length);
+					$this->parserService->getMovieFacade()->save($movie);
+				}
+				
+				$place = $this->parserService->getPlaceFacade()->getByName($placeName);
+				if(!isset($place)) {
+					$place = new Place($placeName);
+					$place->setCinema($this->cinema);
+				}
+				$place->setLink($placeLink);
+				$this->parserService->getEntityManager()->persist($place);
+				$this->parserService->getEntityManager()->flush($place);
 				
 				$screening = new Screening($movie, $this->cinema);
 				$screening->setPlace($place);
@@ -112,7 +115,6 @@ class Art extends Parser {
 				$screening->setLink($link);
 				$screening->setShowtimes($datetimes);
 				$this->parserService->getEntityManager()->persist($screening);
-				
 				$this->cinema->addScreening($screening);
 			}
 			
