@@ -26,10 +26,10 @@ function clean() {
 
 function ip() {
 	echo "www"
-	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' zitkino_www_1
+	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' zitkino_www
 
 	echo "database"
-	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' zitkino_db_1
+	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' zitkino_db
 }
 
 function logs() {
@@ -52,7 +52,7 @@ function ssh() {
         USER=$1
     fi
 
-    docker exec -u ${USER} -it zitkino_www_1 bash
+    docker exec -u ${USER} -it zitkino_www bash
 }
 
 if [ "${COMMAND}" == "" ]; then
