@@ -1,7 +1,6 @@
 <?php
 namespace Zitkino\Cinemas;
 
-use Dobine\Entities\DobineEntity;
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="cinemas_types", uniqueConstraints={@ORM\UniqueConstraint(name="code", columns={"code"})})
  * @ORM\Entity
  */
-class CinemaType extends DobineEntity {
+class CinemaType {
 	use Identifier;
 	
 	/**
@@ -26,12 +25,10 @@ class CinemaType extends DobineEntity {
 	 */
 	protected $name;
 	
-	
 	public function __construct(string $code) {
 		$this->code = $code;
 		$this->name = $code;
 	}
-	
 	
 	/**
 	 * @return string

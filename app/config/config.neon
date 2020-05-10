@@ -16,7 +16,6 @@ application:
 
 di:
 	debugger: true
-	accessors: true
 	
 http:
 	frames: yes
@@ -38,6 +37,6 @@ services:
 			- setAutoRefresh(true)
 
 tracy:
-	maxLen: 500
+	maxLength: 500
 	maxDepth: 5
-#	netteMailer: true
+	netteMailer: true

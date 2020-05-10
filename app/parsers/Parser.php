@@ -2,18 +2,14 @@
 namespace Zitkino\Parsers;
 
 use Dobine\Connections\DBAL;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\{Connection, DBALException};
 use DOMDocument;
 use DOMXPath;
-use Nette\Utils\Json;
-use Nette\Utils\JsonException;
-use Tracy\Debugger;
+use Nette\Utils\{Json, JsonException};
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
-use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
-use Zitkino\Screenings\ScreeningType;
+use Zitkino\Screenings\{Screening, ScreeningType};
 
 /**
  * Parser.
@@ -24,22 +20,24 @@ abstract class Parser {
 	
 	private $url = "";
 	
-	/** @var Screenings|array */
-	protected $screenings;
-	
 	/** @var Connection */
 	protected $connection;
 	
-	public function getUrl() {
-		return $this->url;
+	/** @var ParserService */
+	protected $parserService;
+	
+	/**
+	 * Parser constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		$this->parserService = $parserService;
+		$this->cinema = $cinema;
 	}
 	
-	public function getScreenings() {
-		if(is_array($this->screenings)) {
-			return new Screenings($this->screenings);
-		}
-		
-		return $this->screenings;
+	public function getUrl() {
+		return $this->url;
 	}
 	
 	public function setUrl($url) {
@@ -47,26 +45,8 @@ abstract class Parser {
 	}
 	
 	/**
-	 * @param Screenings|array $screenings
-	 * @return Parser
-	 */
-	public function setScreenings($screenings) {
-		if(!isset($screenings)) {
-			$screenings = [];
-		}
-		
-		if(is_array($screenings)) {
-			$this->screenings = new Screenings($screenings);
-		} else {
-			$this->screenings = $screenings;
-		}
-		
-		return $this;
-	}
-	
-	/**
 	 * Downloads data from internet.
-	 * @return DOMXPath XPath document for parsing.
+	 * @return bool|DOMXPath|string
 	 * @throws ParserException
 	 */
 	private function downloadData() {
@@ -102,8 +82,7 @@ abstract class Parser {
 		$html = mb_convert_encoding($data, "HTML-ENTITIES", "UTF-8");
 		$document->loadHTML($html);
 		
-		$xpath = new DOMXPath($document);
-		return $xpath;
+		return new DOMXPath($document);
 	}
 	
 	/**
@@ -117,17 +96,25 @@ abstract class Parser {
 		return Json::decode($data, Json::FORCE_ARRAY);
 	}
 	
+	/**
+	 * @throws DBALException
+	 */
 	public function getConnection() {
-		$db = new DBAL(__DIR__."/../../config/".$_ENV["APP_ENV"].".neon");
-		$this->connection = $db->getConnection();
+		$db = new DBAL();
+		$this->connection = $db->connectFromFile(__DIR__."/../config/".$_ENV["APP_ENV"].".neon", "dbal.connection");
+//		$this->connection = $db->getConnection();
 	}
 	
 	/**
 	 * Gets movies and other data from the web page.
-	 * @return Screenings Collection of screenings.
 	 */
-	abstract public function parse(): Screenings;
+	abstract public function parse(): void;
 	
+	/**
+	 * @param $cinema
+	 * @return array
+	 * @deprecated
+	 */
 	public function getContentFromDB($cinema) {
 		$today = date("Y-m-d", strtotime("now"));
 		$events = $this->connection->fetchAll("
@@ -141,6 +128,7 @@ abstract class Parser {
 			[$cinema, $today]
 		);
 		
+		$screenings = [];
 		foreach($events as $event) {
 			$datetimes = [];
 			$datetime = \DateTime::createFromFormat("Y-m-d H:i:s", $event["datetime"]);
@@ -161,10 +149,9 @@ abstract class Parser {
 			$screening->setShowtimes($datetimes);
 			
 			$movie->addScreening($screening);
-			$this->screenings[] = $screening;
+			$screenings[] = $screening;
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		return $screenings;
 	}
 }

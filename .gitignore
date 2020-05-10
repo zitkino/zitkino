@@ -18,3 +18,5 @@ app/config/stage.neon
 app/config/production.neon
 
 .docker/mysql
+/admin
+/db

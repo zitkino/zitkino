@@ -14,23 +14,25 @@ class ScreeningType {
 	use Identifier;
 	
 	/**
-     * @var string
-     * @ORM\Column(name="code", type="string", length=10, nullable=false)
-     */
-    private $code;
-
-    /**
-     * @var string|null
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
-    private $name;
+	 * @var string
+	 * @ORM\Column(name="code", type="string", length=10, nullable=false)
+	 */
+	private $code;
 	
+	/**
+	 * @var string|null
+	 * @ORM\Column(name="name", type="string", length=255, nullable=true)
+	 */
+	private $name;
 	
 	public function __construct(string $code) {
 		$this->code = $code;
 		$this->name = $code;
 	}
 	
+	public function __toString() {
+		return $this->getCode();
+	}
 	
 	/**
 	 * @return string

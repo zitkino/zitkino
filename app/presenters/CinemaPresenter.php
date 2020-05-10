@@ -12,7 +12,6 @@ class CinemaPresenter extends BasePresenter {
 	/** @var CinemaFacade @inject */
 	public $cinemaFacade;
 	
-	
 	public function renderDefault() {
 		$this->template->classicCinemas = $this->cinemaFacade->getByType("classic");
 		$this->template->multiplexCinemas = $this->cinemaFacade->getByType("multiplex");
@@ -23,14 +22,15 @@ class CinemaPresenter extends BasePresenter {
 		$cinema = $this->cinemaFacade->getById($id);
 		$this->template->cinema = $cinema;
 		
-		$cinema->setScreenings();
 		$this->template->screenings = $cinema->getNewScreenings();
 		
 		$gmaps = $cinema->getGmaps();
 		if(is_null($gmaps)) {
 			$address = $cinema->getAddress().", ".$cinema->getCity();
 			$param = urlencode($address);
-		} else { $param = "place_id:".$gmaps; }
+		} else {
+			$param = "place_id:".$gmaps;
+		}
 		$this->template->gmap = $param;
 		
 		$this->template->gmapKey = $this->context->getParameters()["google-maps-key"];
@@ -39,6 +39,7 @@ class CinemaPresenter extends BasePresenter {
 	public function renderClassic($id) {
 		$this->template->cinemas = $this->cinemaFacade->getByType("classic");
 	}
+	
 	public function renderClassic_programme($id) {
 		$this->template->cinemas = $this->cinemaFacade->getWithMovies("classic");
 	}
@@ -46,6 +47,7 @@ class CinemaPresenter extends BasePresenter {
 	public function renderMultiplex($id) {
 		$this->template->cinemas = $this->cinemaFacade->getByType("multiplex");
 	}
+	
 	public function renderMultiplex_programme($id) {
 		$this->template->cinemas = $this->cinemaFacade->getWithMovies("multiplex");
 	}
@@ -53,6 +55,7 @@ class CinemaPresenter extends BasePresenter {
 	public function renderSummer($id) {
 		$this->template->cinemas = $this->cinemaFacade->getByType("summer");
 	}
+	
 	public function renderSummer_programme($id) {
 		$this->template->cinemas = $this->cinemaFacade->getWithMovies("summer");
 	}

@@ -3,7 +3,6 @@ namespace Zitkino;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 
 /**
  * Language
@@ -12,7 +11,7 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
  * @ORM\Entity
  */
 class Language {
-	use Identifier, MagicAccessors;
+	use Identifier;
 	
 	/**
 	 * @var string
@@ -32,11 +31,9 @@ class Language {
 	 */
 	protected $english;
 	
-	
 	public function __construct(string $code) {
 		$this->code = $code;
 	}
-	
 	
 	/**
 	 * @return string

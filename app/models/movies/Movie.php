@@ -3,7 +3,6 @@ namespace Zitkino\Movies;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 use Zitkino\Screenings\Screening;
 use Zitkino\Screenings\Screenings;
 
@@ -14,11 +13,11 @@ use Zitkino\Screenings\Screenings;
  * @ORM\Entity
  */
 class Movie {
-	use Identifier, MagicAccessors;
+	use Identifier;
 	
 	/**
 	 * @var string
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+	 * @ORM\Column(name="name", type="string", length=255, nullable=false)
 	 */
 	protected $name;
 	
@@ -43,27 +42,16 @@ class Movie {
 	/** @var array */
 	protected $databases;
 	
-	/** @var Screenings */
+	/**
+	 * @var Screenings
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Screening", mappedBy="movie", cascade={"persist", "remove"})
+	 */
 	protected $screenings;
-	
 	
 	public function __construct(string $name) {
 		$this->name = $name;
 		$this->fixDatabases();
-		$this->screenings = new Screenings(null);
-	}
-	
-	
-	public function fixDatabases() {
-		$csfdUrl = "https://www.csfd.cz";
-		if(isset($this->csfd)) {
-			$this->databases["csfd"] = $csfdUrl."/film/".$this->csfd;
-		} else { $this->databases["csfd"] = $csfdUrl."/hledat/?q=".urlencode($this->name); }
-		
-		$imdbUrl = "https://www.imdb.com";
-		if(isset($this->imdb)) {
-			$this->databases["imdb"] = $imdbUrl."/title/".$this->imdb;
-		} else { $this->databases["imdb"] = $imdbUrl."/find?s=tt&q=".urlencode($this->name); }
+		$this->screenings = new Screenings();
 	}
 	
 	/**
@@ -95,7 +83,7 @@ class Movie {
 	public function getLength(): ?int {
 		return $this->length;
 	}
-
+	
 	/**
 	 * @param int|null $length
 	 * @return Movie
@@ -106,14 +94,14 @@ class Movie {
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getCsfd(): ?string {
 		return $this->csfd;
 	}
 	
 	/**
-	 * @param null|string $csfd
+	 * @param string|null $csfd
 	 * @return Movie
 	 */
 	public function setCsfd(?string $csfd): Movie {
@@ -122,14 +110,14 @@ class Movie {
 	}
 	
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getImdb(): ?string {
 		return $this->imdb;
 	}
 	
 	/**
-	 * @param null|string $imdb
+	 * @param string|null $imdb
 	 * @return Movie
 	 */
 	public function setImdb(?string $imdb): Movie {
@@ -138,9 +126,9 @@ class Movie {
 	}
 	
 	/**
-	 * @return array
+	 * @return array|null
 	 */
-	public function getDatabases(): array {
+	public function getDatabases(): ?array {
 		return $this->databases;
 	}
 	
@@ -148,6 +136,22 @@ class Movie {
 		$this->databases = $databases;
 		$this->fixDatabases();
 		return $this;
+	}
+	
+	public function fixDatabases() {
+		$csfdUrl = "https://www.csfd.cz";
+		if(isset($this->csfd)) {
+			$this->databases["csfd"] = $csfdUrl."/film/".$this->csfd;
+		} else {
+			$this->databases["csfd"] = $csfdUrl."/hledat/?q=".urlencode($this->name);
+		}
+		
+		$imdbUrl = "https://www.imdb.com";
+		if(isset($this->imdb)) {
+			$this->databases["imdb"] = $imdbUrl."/title/".$this->imdb;
+		} else {
+			$this->databases["imdb"] = $imdbUrl."/find?s=tt&q=".urlencode($this->name);
+		}
 	}
 	
 	public function addScreening(Screening $screening) {

@@ -1,23 +1,20 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 
 /**
  * Delnak parser.
  */
 class Delnak extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.delnickydumbrno.cz/cely-program.html");
-		$this->parse();
 	}
 	
-	public function parse(): Screenings {
+	public function parse(): void {
 		$xpath = $this->getXpath();
 		
 		$movieItems = 0;
@@ -71,7 +68,6 @@ class Delnak extends Parser {
 				$priceString = $priceQuery->item($movieItems)->nodeValue;
 				$price = str_replace(["Vstupné: ", " Kč"], "", $priceString);
 				
-				
 				$movie = new Movie($name);
 				$movie->setLength($length);
 				
@@ -81,13 +77,15 @@ class Delnak extends Parser {
 				$screening->setLink($link);
 				$screening->setShowtimes($datetimes);
 				
-				$this->screenings[] = $screening;
+				$this->parserService->getEntityManager()->persist($screening);
+				$this->cinema->addScreening($screening);
 			}
 			
 			$movieItems++;
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		$this->cinema->setParsed(new \DateTime());
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
 	}
 }

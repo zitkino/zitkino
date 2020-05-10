@@ -7,9 +7,7 @@ use Zitkino\Cinemas\Cinema;
  * Velky Spalicek parser.
  */
 class VelkySpalicek extends CinemaCity {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
-		
-		parent::__construct($cinema, "1035");
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema, "1035");
 	}
 }

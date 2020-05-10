@@ -1,11 +1,14 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Nette\Utils\JsonException;
 use Nette\Utils\Strings;
 use Zitkino\Cinemas\Cinema;
+use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 use Zitkino\Screenings\ScreeningType;
 
 /**
@@ -15,12 +18,18 @@ abstract class CinemaCity extends Parser {
 	/** @var string */
 	private $id;
 	
-	public function __construct(Cinema $cinema, string $id) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema, string $id) {
+		parent::__construct($parserService, $cinema);
 		$this->id = $id;
-		$this->parse();
 	}
 	
+	/**
+	 * @return bool
+	 * @throws JsonException
+	 * @throws ParserException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function getContent() {
 		$json = $this->getJson();
 		
@@ -82,11 +91,20 @@ abstract class CinemaCity extends Parser {
 				}
 			}
 			
-			$movie = new Movie($name);
-			$movie->setLength($length);
+			$movie = $this->parserService->getMovieFacade()->getByName($name);
+			if(!isset($movie)) {
+				$movie = new Movie($name);
+				$movie->setLength($length);
+				$this->parserService->getMovieFacade()->save($movie);
+			}
+			
+			$screeningType = $this->parserService->getScreeningFacade()->getType($type);
+			if(!isset($screeningType)) {
+				$screeningType = new ScreeningType($type);
+			}
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setType(new ScreeningType($type));
+			$screening->setType($screeningType);
 			$screening->setLanguages($dubbing, $subtitles);
 			$screening->setPrice($price);
 			$screening->setLink($link);
@@ -96,11 +114,25 @@ abstract class CinemaCity extends Parser {
 		
 		foreach($screenings as $key => $screening) {
 			$screening->setShowtimes($datetimes[$key]);
+			$this->parserService->getEntityManager()->persist($screening);
+			$this->cinema->addScreening($screening);
 		}
 		
-		return $screenings;
+		$this->cinema->setParsed(new \DateTime());
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
+		
+		return true;
 	}
 	
+	/**
+	 * @param \DateTime $datetime
+	 * @return bool
+	 * @throws JsonException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws ParserException
+	 */
 	public function getOneDay(\DateTime $datetime) {
 		$date = $datetime->format("Y-m-d");
 		$this->setUrl("https://www.cinemacity.cz/cz/data-api-service/v1/quickbook/10101/film-events/in-cinema/".$this->id."/at-date/".$date."?attr=&lang=cs_CZ");
@@ -108,17 +140,17 @@ abstract class CinemaCity extends Parser {
 		return $this->getContent();
 	}
 	
-	public function parse(): Screenings {
-		$screenings = [];
-		
+	/**
+	 * @throws JsonException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws ParserException
+	 */
+	public function parse(): void {
 		$datetime = new \DateTime();
-		$screenings[] = $this->getOneDay($datetime);
+		$this->getOneDay($datetime);
 		
 		$datetime->modify("+1 days");
-		$screenings[] = $this->getOneDay($datetime);
-		
-		$this->screenings = array_merge($screenings[0], $screenings[1]);
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		$this->getOneDay($datetime);
 	}
 }

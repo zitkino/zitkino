@@ -3,7 +3,6 @@ namespace Zitkino\Screenings;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 
 /**
  * Showtime
@@ -12,7 +11,7 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
  * @ORM\Entity
  */
 class Showtime {
-	use Identifier, MagicAccessors;
+	use Identifier;
 	
 	/**
 	 * @var Screening
@@ -29,13 +28,11 @@ class Showtime {
 	 */
 	protected $datetime;
 	
-	
 	public function __construct(Screening $screening, \DateTime $datetime) {
 		$this->screening = $screening;
 		$this->datetime = $datetime;
 		$this->fixDatetime();
 	}
-	
 	
 	public function fixDatetime() {
 		$currentDate = new \DateTime();

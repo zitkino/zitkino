@@ -37,7 +37,7 @@ RUN a2enmod rewrite ssl headers
 
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-configure intl
-RUN docker-php-ext-configure zip --with-libzip4
+RUN docker-php-ext-configure zip --with-libzip
 
 RUN docker-php-ext-install \
 	curl \

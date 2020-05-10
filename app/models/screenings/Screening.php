@@ -2,10 +2,10 @@
 namespace Zitkino\Screenings;
 
 use Dobine\Entities\Identifier;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
 use Zitkino\Cinemas\Cinema;
-use Zitkino\Language;
 use Zitkino\Movies\Movie;
 use Zitkino\Place;
 
@@ -16,7 +16,7 @@ use Zitkino\Place;
  * @ORM\Entity
  */
 class Screening {
-	use Identifier, MagicAccessors;
+	use Identifier;
 	
 	/**
 	 * @var Movie
@@ -40,7 +40,7 @@ class Screening {
 	 * @var ScreeningType|null
 	 * @ORM\ManyToOne(targetEntity="ScreeningType")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="type", referencedColumnName="id")
+	 *   @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=true)
 	 * })
 	 */
 	protected $type;
@@ -49,26 +49,20 @@ class Screening {
 	 * @var Place|null
 	 * @ORM\ManyToOne(targetEntity="\Zitkino\Place")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="place", referencedColumnName="id")
+	 *   @ORM\JoinColumn(name="place", referencedColumnName="id", nullable=true)
 	 * })
 	 */
 	protected $place;
 	
 	/**
-	 * @var Language|string|null
-	 * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="dubbing", referencedColumnName="id")
-	 * })
+	 * @var string|null
+	 * @ORM\Column(name="dubbing", type="string", length=255, nullable=true)
 	 */
 	protected $dubbing;
 	
 	/**
-	 * @var Language|string|null
-	 * @ORM\ManyToOne(targetEntity="\Zitkino\Language")
-	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="subtitles", referencedColumnName="id")
-	 * })
+	 * @var string|null
+	 * @ORM\Column(name="subtitles", type="string", length=255, nullable=true)
 	 */
 	protected $subtitles;
 	
@@ -84,12 +78,34 @@ class Screening {
 	 */
 	protected $link;
 	
-	/** @var Showtime[] */
+	/**
+	 * @var Collection
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Showtime", mappedBy="screening", cascade={"persist", "remove"})
+	 */
 	protected $showtimes;
 	
 	public function __construct(Movie $movie, Cinema $cinema) {
 		$this->movie = $movie;
 		$this->cinema = $cinema;
+		$this->showtimes = new ArrayCollection();
+	}
+	
+	public function __toString() {
+		return $this->getMovie()->getId()."-".$this->getCinema()."-".$this->getType()."-".$this->getDubbing()."-".$this->getSubtitles();
+	}
+	
+	/**
+	 * @return Movie
+	 */
+	public function getMovie(): Movie {
+		return $this->movie;
+	}
+	
+	/**
+	 * @return Cinema
+	 */
+	public function getCinema(): Cinema {
+		return $this->cinema;
 	}
 	
 	/**
@@ -142,14 +158,14 @@ class Screening {
 	}
 	
 	/**
-	 * @return Language|string|null
+	 * @return string|null
 	 */
 	public function getDubbing() {
 		return $this->dubbing;
 	}
 	
 	/**
-	 * @param Language|string|null $dubbing
+	 * @param string|null $dubbing
 	 * @return Screening
 	 */
 	public function setDubbing($dubbing): Screening {
@@ -158,14 +174,14 @@ class Screening {
 	}
 	
 	/**
-	 * @return Language|string|null
+	 * @return string|null
 	 */
 	public function getSubtitles() {
 		return $this->subtitles;
 	}
 	
 	/**
-	 * @param Language|string|null $subtitles
+	 * @param string|null $subtitles
 	 * @return Screening
 	 */
 	public function setSubtitles($subtitles): Screening {
@@ -206,8 +222,8 @@ class Screening {
 	}
 	
 	/**
-	 * @param Language|string $dubbing
-	 * @param Language|string $subtitles
+	 * @param string|null $dubbing
+	 * @param string|null $subtitles
 	 * @return Screening
 	 */
 	public function setLanguages($dubbing, $subtitles): Screening {
@@ -217,13 +233,9 @@ class Screening {
 	}
 	
 	/**
-	 * @return Showtime[]
+	 * @return Collection
 	 */
-	public function getShowtimes(): array {
-		if(!isset($this->showtimes)) {
-			return [];
-		}
-		
+	public function getShowtimes(): Collection {
 		return $this->showtimes;
 	}
 	
@@ -236,7 +248,7 @@ class Screening {
 			$showtime = new Showtime($this, $datetime);
 			
 			if($actual === true) {
-				if(isset($datetime) and $showtime->isActual()) {
+				if($showtime->isActual()) {
 					$this->addShowtime($showtime);
 				}
 			} else {
@@ -249,12 +261,5 @@ class Screening {
 	
 	public function addShowtime($showtime) {
 		$this->showtimes[] = $showtime;
-	}
-	
-	/**
-	 * @return Movie
-	 */
-	public function getMovie(): Movie {
-		return $this->movie;
 	}
 }

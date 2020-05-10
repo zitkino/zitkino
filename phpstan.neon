@@ -1,0 +1,10 @@
+parameters:
+	level: 1
+	autoload_directories:
+		- %currentWorkingDirectory%/app/
+		- %currentWorkingDirectory%/tests/
+
+includes:
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon
+	- vendor/phpstan/phpstan-doctrine/extension.neon

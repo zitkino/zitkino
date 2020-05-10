@@ -1,2 +1,6 @@
-services: 
-	- Zitkino\Cinemas\CinemaFacade
+services:
+	tablePrefix:
+		factory: Dobine\Subscribers\TablePrefixSubscriber(%database%)
+		tags: [nettrine.subscriber]
+
+	parser: Zitkino\Parsers\ParserService
