@@ -9,7 +9,7 @@ use Zitkino\Screenings\{Screening, Screenings, Showtime};
  * Cinema
  *
  * @ORM\Table(name="cinemas", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"}), @ORM\UniqueConstraint(name="code", columns={"code"})}, indexes={@ORM\Index(name="type", columns={"type"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Zitkino\Cinemas\CinemaRepository")
  */
 class Cinema {
 	use Identifier;
@@ -28,9 +28,9 @@ class Cinema {
 	
 	/**
 	 * @var bool
-	 * @ORM\Column(name="disabled", type="boolean", options={"default": 0}, nullable=false)
+	 * @ORM\Column(name="parsable", type="boolean", options={"default": 0}, nullable=false)
 	 */
-	protected $disabled;
+	protected $parsable;
 	
 	/**
 	 * @var CinemaType
@@ -120,6 +120,12 @@ class Cinema {
 	protected $activeUntil;
 	
 	/**
+	 * @var \DateTime|null
+	 * @ORM\Column(name="parsed", type="datetime", nullable=true)
+	 */
+	protected $parsed;
+	
+	/**
 	 * @var Screenings
 	 * @ORM\OneToMany(targetEntity="\Zitkino\Screenings\Screening", mappedBy="cinema", cascade={"persist", "remove"})
 	 */
@@ -152,8 +158,8 @@ class Cinema {
 	/**
 	 * @return bool
 	 */
-	public function isDisabled(): bool {
-		return $this->disabled;
+	public function isParsable(): bool {
+		return $this->parsable;
 	}
 	
 	/**
@@ -252,6 +258,22 @@ class Cinema {
 	 */
 	public function getActiveUntil(): ?\DateTime {
 		return $this->activeUntil;
+	}
+	
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getParsed(): ?\DateTime {
+		return $this->parsed;
+	}
+	
+	/**
+	 * @param \DateTime|null $parsed
+	 * @return Cinema
+	 */
+	public function setParsed(?\DateTime $parsed): Cinema {
+		$this->parsed = $parsed;
+		return $this;
 	}
 	
 	/**

@@ -1,7 +1,6 @@
 <?php
 namespace Zitkino\Cinemas;
 
-use Dobine\Entities\DobineEntity;
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,12 +25,10 @@ class CinemaType {
 	 */
 	protected $name;
 	
-	
 	public function __construct(string $code) {
 		$this->code = $code;
 		$this->name = $code;
 	}
-	
 	
 	/**
 	 * @return string

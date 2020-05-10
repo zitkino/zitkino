@@ -1,10 +1,7 @@
 <?php
 namespace Zitkino;
 
-use Nette\Application\Routers\{
-	Route, RouteList
-};
-
+use Nette\Application\Routers\{Route, RouteList};
 
 /**
  * Router factory.
@@ -51,7 +48,7 @@ class RouterFactory {
 
 //		$router[] = new Route("<action>", "Home:default");
 		$router[] = new Route("[<presenter>/]<action>", "Home:default");
-
+		
 		return $router;
 	}
 }

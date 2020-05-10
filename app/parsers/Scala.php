@@ -93,6 +93,7 @@ class Scala extends Parser {
 			}
 		}
 		
+		$this->cinema->setParsed(new \DateTime());
 		$this->parserService->getEntityManager()->persist($this->cinema);
 		$this->parserService->getEntityManager()->flush();
 	}

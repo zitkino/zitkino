@@ -114,12 +114,14 @@ class Art extends Parser {
 				$screening->setLanguages($dubbing, $subtitles);
 				$screening->setLink($link);
 				$screening->setShowtimes($datetimes);
+				
 				$this->parserService->getEntityManager()->persist($screening);
 				$this->cinema->addScreening($screening);
 			}
-			
-			$this->parserService->getEntityManager()->persist($this->cinema);
-			$this->parserService->getEntityManager()->flush();
 		}
+		
+		$this->cinema->setParsed(new \DateTime());
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
 	}
 }

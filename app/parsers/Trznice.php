@@ -2,19 +2,18 @@
 namespace Zitkino\Parsers;
 
 use Zitkino\Cinemas\Cinema;
-use Zitkino\Screenings\Screenings;
 
 /**
  * Trznice parser.
  */
 class Trznice extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->getConnection();
-		$this->parse();
 	}
 	
-	public function parse(): Screenings {
-		return $this->getContentFromDB(16);
+	public function parse(): void {
+		$screenings = $this->getContentFromDB(16);
+		$this->cinema->setScreenings($screenings);
 	}
 }

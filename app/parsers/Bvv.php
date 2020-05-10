@@ -11,13 +11,12 @@ use Zitkino\Screenings\Showtime;
  * BVV parser.
  */
 class Bvv extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.bvv.cz/letni-kino/");
-		$this->parse();
 	}
 	
-	public function parse(): Screenings {
+	public function parse(): void {
 		$xpath = $this->getXpath();
 		$events = "//*[@id='content']/div[1]/div[2]";
 		
@@ -119,7 +118,9 @@ class Bvv extends Parser {
 			$movieItems++;
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		$this->cinema->setScreenings($this->screenings);
+		$this->cinema->setParsed(new \DateTime());
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
 	}
 }

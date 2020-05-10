@@ -4,7 +4,6 @@ namespace Zitkino;
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * Language
  *
@@ -32,11 +31,9 @@ class Language {
 	 */
 	protected $english;
 	
-	
 	public function __construct(string $code) {
 		$this->code = $code;
 	}
-	
 	
 	/**
 	 * @return string

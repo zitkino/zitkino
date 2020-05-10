@@ -4,19 +4,17 @@ namespace Zitkino\Parsers;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 
 /**
  * Spilberk parser.
  */
 class Spilberk extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.letnikinospilberk.cz");
-		$this->parse();
 	}
 	
-	public function parse(): Screenings {
+	public function parse(): void {
 		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@id='page-program']/div[@class='film']");
@@ -30,7 +28,9 @@ class Spilberk extends Parser {
 			if(isset($csfdItem)) {
 				$csfdString = $csfdItem->getAttribute("href");
 				$csfd = str_replace(["https://www.csfd.cz/film/", "/prehled/"], "", $csfdString);
-			} else { $csfd = null; }
+			} else {
+				$csfd = null;
+			}
 			
 			$itemsQuery = $xpath->query(".//div[@class='right']//p[@class='popisek']", $event);
 			$itemString = $itemsQuery->item(0)->nodeValue;
@@ -38,11 +38,16 @@ class Spilberk extends Parser {
 			switch(true) {
 				case(strpos($itemString, "Česko") !== false):
 				case(strpos($itemString, "český dabing") !== false):
-					$dubbing = "český"; $subtitles = null; break;
+					$dubbing = "český";
+					$subtitles = null;
+					break;
 				case(strpos($itemString, "čes. titulky") !== false):
-					$dubbing = null; $subtitles = "české"; break;
+					$dubbing = null;
+					$subtitles = "české";
+					break;
 				default:
-					$dubbing = null; $subtitles = null;
+					$dubbing = null;
+					$subtitles = null;
 					break;
 			}
 			
@@ -73,10 +78,12 @@ class Spilberk extends Parser {
 			$screening->setPrice($price);
 			$screening->setShowtimes($datetimes);
 			
-			$this->screenings[] = $screening;
+			$this->parserService->getEntityManager()->persist($screening);
+			$this->cinema->addScreening($screening);
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		$this->cinema->setParsed(new \DateTime());
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
 	}
 }

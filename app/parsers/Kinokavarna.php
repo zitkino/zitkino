@@ -97,6 +97,7 @@ class Kinokavarna extends Parser {
 			$this->cinema->addScreening($screening);
 		}
 		
+		$this->cinema->setParsed(new \DateTime());
 		$this->parserService->getEntityManager()->persist($this->cinema);
 		$this->parserService->getEntityManager()->flush();
 	}

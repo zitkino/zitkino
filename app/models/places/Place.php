@@ -3,7 +3,6 @@ namespace Zitkino;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
-use Nette\Utils\Strings;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Screenings\Screenings;
 

@@ -118,6 +118,7 @@ abstract class CinemaCity extends Parser {
 			$this->cinema->addScreening($screening);
 		}
 		
+		$this->cinema->setParsed(new \DateTime());
 		$this->parserService->getEntityManager()->persist($this->cinema);
 		$this->parserService->getEntityManager()->flush();
 		
@@ -128,6 +129,8 @@ abstract class CinemaCity extends Parser {
 	 * @param \DateTime $datetime
 	 * @return bool
 	 * @throws JsonException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 * @throws ParserException
 	 */
 	public function getOneDay(\DateTime $datetime) {
@@ -139,6 +142,8 @@ abstract class CinemaCity extends Parser {
 	
 	/**
 	 * @throws JsonException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 * @throws ParserException
 	 */
 	public function parse(): void {

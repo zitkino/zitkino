@@ -5,23 +5,21 @@ use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 use Zitkino\Screenings\Screenings;
-use Zitkino\Screenings\Showtime;
 
 /**
  * Rubin parser.
  */
 class Rubin extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.kdrubin.cz/program");
-		$this->parse();
 	}
-
+	
 	/**
 	 * @return Screenings
 	 * @throws \Exception
 	 */
-	public function parse(): Screenings {
+	public function parse(): void {
 		$movies = [];
 		
 		$xpath = $this->getXpath();
@@ -49,19 +47,18 @@ class Rubin extends Parser {
 				$time = trim($dateArray[2]);
 				$datetime = \DateTime::createFromFormat("d. m Y H:i", $date.$time);
 				
-				
 				$movie = new Movie($name);
 				
 				$screening = new Screening($movie, $this->cinema);
 				$screening->setLink($link);
 				$screening->setShowtimes([$datetime]);
 				
-				$movie->addScreening($screening);
-				$this->screenings[] = $screening;
+				$this->parserService->getEntityManager()->persist($screening);
+				$this->cinema->addScreening($screening);
 			}
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
 	}
 }

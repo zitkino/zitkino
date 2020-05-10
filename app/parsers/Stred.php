@@ -1,24 +1,21 @@
 <?php
 namespace Zitkino\Parsers;
-use ICal\ICal;
-use Tracy\Debugger;
+
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 use Zitkino\Screenings\ScreeningType;
 
 /**
  * Stred parser.
  */
 class Stred extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://kinobude.cz/program/");
-		$this->parse();
 	}
 	
-	public function parse(): Screenings {
+	public function parse(): void {
 		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@class='contentContent']//a[@class='programPolozka row']");
@@ -69,31 +66,52 @@ class Stred extends Parser {
 				
 				$language[0] = trim($meta[4]);
 				
-				switch (true) {
+				switch(true) {
 					case (strpos($language[0], "CZ") !== false):
 					case (strpos($language[0], "česky") !== false):
-						$dubbing = "česky"; break;
+						$dubbing = "česky";
+						break;
 					case (strpos($language[0], "DE") !== false):
 					case (strpos($language[0], "německy") !== false):
-						$dubbing = "německy"; break;
+						$dubbing = "německy";
+						break;
 					case (strpos($language[0], "DA") !== false):
 					case (strpos($language[0], "DN") !== false):
 					case (strpos($language[0], "dánsky") !== false):
-						$dubbing = "dánsky"; break;
+						$dubbing = "dánsky";
+						break;
 					case (strpos($language[0], "EN") !== false):
 					case (strpos($language[0], "anglicky") !== false):
-						$dubbing = "anglicky"; break;
-					case (strpos($language[0], "ES") !== false): $dubbing = "španělsky"; break;
-					case (strpos($language[0], "FA") !== false): $dubbing = "persky"; break;
-					case (strpos($language[0], "FR") !== false): $dubbing = "francouzsky"; break;
-					case (strpos($language[0], "HE") !== false): $dubbing = "hebrejsky"; break;
-					case (strpos($language[0], "NO") !== false): $dubbing = "norsky"; break;
-					case (strpos($language[0], "HU") !== false): $dubbing = "maďarsky"; break;
-					case (strpos($language[0], "IT") !== false): $dubbing = "italsky"; break;
+						$dubbing = "anglicky";
+						break;
+					case (strpos($language[0], "ES") !== false):
+						$dubbing = "španělsky";
+						break;
+					case (strpos($language[0], "FA") !== false):
+						$dubbing = "persky";
+						break;
+					case (strpos($language[0], "FR") !== false):
+						$dubbing = "francouzsky";
+						break;
+					case (strpos($language[0], "HE") !== false):
+						$dubbing = "hebrejsky";
+						break;
+					case (strpos($language[0], "NO") !== false):
+						$dubbing = "norsky";
+						break;
+					case (strpos($language[0], "HU") !== false):
+						$dubbing = "maďarsky";
+						break;
+					case (strpos($language[0], "IT") !== false):
+						$dubbing = "italsky";
+						break;
 					case (strpos($language[0], "SW") !== false):
 					case (strpos($language[0], "švédsky") !== false):
-						$dubbing = "švédsky"; break;
-					default: $dubbing = $language[0]; break;
+						$dubbing = "švédsky";
+						break;
+					default:
+						$dubbing = $language[0];
+						break;
 				}
 			}
 			
@@ -102,7 +120,8 @@ class Stred extends Parser {
 					case (strpos(end($meta), "CZ tit") !== false):
 					case (strpos(end($meta), "CZE tit") !== false):
 					case (strpos(end($meta), "CT tit") !== false):
-						$subtitles = "české"; break;
+						$subtitles = "české";
+						break;
 				}
 			}
 			
@@ -132,10 +151,12 @@ class Stred extends Parser {
 			$screening->setLink($link);
 			$screening->setShowtimes($datetimes);
 			
-			$this->screenings[] = $screening;
+			$this->parserService->getEntityManager()->persist($screening);
+			$this->cinema->addScreening($screening);
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		$this->cinema->setParsed(new \DateTime());
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
 	}
 }

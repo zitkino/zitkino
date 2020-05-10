@@ -1,23 +1,20 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 
 /**
  * Letní kino na Dvoře Městského divadla parser.
  */
 class Mdb extends Parser {
-	public function __construct(Cinema $cinema) {
-		$this->cinema = $cinema;
+	public function __construct(ParserService $parserService, Cinema $cinema) {
+		parent::__construct($parserService, $cinema);
 		$this->setUrl("https://www.letnikinobrno.cz/program-kina/");
-		$this->parse();
 	}
 	
-	public function parse(): Screenings {
+	public function parse(): void {
 		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@class='wpb_wrapper']//div[@class='table-events-content']");
@@ -47,9 +44,15 @@ class Mdb extends Parser {
 			$datetime = \DateTime::createFromFormat("d. m Y", $date);
 			if($datetime != false) {
 				$month = $datetime->format("m");
-				switch ($month) {
-					case "6": case "7": $datetime->setTime(21, 30); break;
-					case "8": case "9": $datetime->setTime(21, 0); break;
+				switch($month) {
+					case "6":
+					case "7":
+						$datetime->setTime(21, 30);
+						break;
+					case "8":
+					case "9":
+						$datetime->setTime(21, 0);
+						break;
 				}
 			}
 			$datetimes = [$datetime];
@@ -63,10 +66,12 @@ class Mdb extends Parser {
 			$screening->setLink($link);
 			$screening->setShowtimes($datetimes);
 			
-			$this->screenings[] = $screening;
+			$this->parserService->getEntityManager()->persist($screening);
+			$this->cinema->addScreening($screening);
 		}
 		
-		$this->setScreenings($this->screenings);
-		return $this->screenings;
+		$this->cinema->setParsed(new \DateTime());
+		$this->parserService->getEntityManager()->persist($this->cinema);
+		$this->parserService->getEntityManager()->flush();
 	}
 }

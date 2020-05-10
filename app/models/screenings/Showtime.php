@@ -28,13 +28,11 @@ class Showtime {
 	 */
 	protected $datetime;
 	
-	
 	public function __construct(Screening $screening, \DateTime $datetime) {
 		$this->screening = $screening;
 		$this->datetime = $datetime;
 		$this->fixDatetime();
 	}
-	
 	
 	public function fixDatetime() {
 		$currentDate = new \DateTime();

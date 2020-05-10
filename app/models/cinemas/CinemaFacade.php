@@ -2,9 +2,13 @@
 namespace Zitkino\Cinemas;
 
 use Dobine\Facades\DobineFacade;
-use Nettrine\ORM\EntityManagerDecorator;
 use Doctrine\ORM\EntityRepository;
+use Nettrine\ORM\EntityManagerDecorator;
 
+/**
+ * Class CinemaFacade
+ * @property CinemaRepository $repository
+ */
 class CinemaFacade extends DobineFacade {
 	use Cinemas;
 	
