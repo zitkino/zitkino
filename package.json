@@ -1,23 +1,26 @@
 {
 	"name": "zitkino",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zitkino/zitkino"
+	},
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.1.1",
-		"@hermajan/booty": "https://github.com/hermajan/booty",
+		"@hermajan/booty": "git+https://github.com/hermajan/booty.git",
 		"@hermajan/facolors": "^0.1.0",
 		"jquery": "^3.4.0",
 		"nette-forms": "^3.0.3"
 	},
 	"devDependencies": {
+		"glob": "^7.1.6",
 		"gulp": "^4.0.2",
 		"gulp-autoprefixer": "^6.1.0",
 		"gulp-cli": "^2.2.0",
 		"gulp-concat": "^2.6.1",
 		"gulp-postcss": "^8.0.0",
-		"gulp-sass": "^4.0.2",
+		"gulp-sass": "^4.1.0",
 		"gulp-sourcemaps": "^2.6.5",
-		"gulp-uglify": "^3.0.2"
-	},
-	"scripts": {
-		"postinstall": "yarn autoclean --force"
+		"gulp-uglify": "^3.0.2",
+		"node-sass": "^4.14.1"
 	}
 }
