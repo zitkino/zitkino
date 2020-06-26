@@ -4,6 +4,7 @@ namespace Zitkino;
 use Dobine\Facades\DobineFacade;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityRepository;
+use Nette\Utils\Strings;
 use Nettrine\ORM\EntityManagerDecorator;
 use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
@@ -32,10 +33,10 @@ class ScreeningFacade extends DobineFacade {
 	 * @return ScreeningType|object
 	 */
 	public function getType(?string $type = null) {
-		if(!isset($type)) {
+		if(empty($type)) {
 			return $this->repositoryType->findOneBy(["code" => "2D"]);
 		} else {
-			return $this->repositoryType->findOneBy(["code" => $type]);
+			return $this->repositoryType->findOneBy(["code" => Strings::webalize($type)]);
 		}
 	}
 	

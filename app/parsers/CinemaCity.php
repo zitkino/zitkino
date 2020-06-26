@@ -18,6 +18,12 @@ abstract class CinemaCity extends Parser {
 	/** @var string */
 	private $id;
 	
+	/**
+	 * CinemaCity constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 * @param string $id
+	 */
 	public function __construct(ParserService $parserService, Cinema $cinema, string $id) {
 		parent::__construct($parserService, $cinema);
 		$this->id = $id;

@@ -16,8 +16,11 @@ class CronPresenter extends BasePresenter {
 	/** @var ParserService @inject */
 	public $parserService;
 	
+	/**
+	 * @throws AbortException
+	 */
 	public function actionDefault() {
-		$this->redirect(":Homepage:default");
+		$this->redirect(":Home:default");
 	}
 	
 	/**

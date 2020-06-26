@@ -3,6 +3,7 @@ namespace Zitkino\Screenings;
 
 use Dobine\Entities\Identifier;
 use Doctrine\ORM\Mapping as ORM;
+use Nette\Utils\Strings;
 
 /**
  * ScreeningType
@@ -15,7 +16,7 @@ class ScreeningType {
 	
 	/**
 	 * @var string
-	 * @ORM\Column(name="code", type="string", length=10, nullable=false)
+	 * @ORM\Column(name="code", type="string", length=255, nullable=false)
 	 */
 	private $code;
 	
@@ -26,7 +27,7 @@ class ScreeningType {
 	private $name;
 	
 	public function __construct(string $code) {
-		$this->code = $code;
+		$this->setCode($code);
 		$this->name = $code;
 	}
 	
@@ -46,7 +47,7 @@ class ScreeningType {
 	 * @return ScreeningType
 	 */
 	public function setCode(string $code): ScreeningType {
-		$this->code = $code;
+		$this->code = Strings::webalize($code);
 		return $this;
 	}
 	

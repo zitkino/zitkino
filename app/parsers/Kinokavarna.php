@@ -12,6 +12,11 @@ use Zitkino\Screenings\Screening;
  * Kinokavarna parser.
  */
 class Kinokavarna extends Parser {
+	/**
+	 * Kinokavarna constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.kinokavarna.cz/program.html");

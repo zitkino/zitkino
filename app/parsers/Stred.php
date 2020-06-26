@@ -1,7 +1,10 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Zitkino\Cinemas\Cinema;
+use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 use Zitkino\Screenings\ScreeningType;
@@ -10,11 +13,21 @@ use Zitkino\Screenings\ScreeningType;
  * Stred parser.
  */
 class Stred extends Parser {
+	/**
+	 * Stred constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://kinobude.cz/program/");
 	}
 	
+	/**
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws ParserException
+	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
 		
@@ -141,15 +154,25 @@ class Stred extends Parser {
 				}
 			}
 			
-			$movie = new Movie($name);
-			$movie->setLength($length);
+			$movie = $this->parserService->getMovieFacade()->getByName($name);
+			if(!isset($movie)) {
+				$movie = new Movie($name);
+				$movie->setLength($length);
+				$this->parserService->getMovieFacade()->save($movie);
+			}
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setType(new ScreeningType($cycle));
 			$screening->setLanguages($dubbing, $subtitles);
 			$screening->setPrice($price);
 			$screening->setLink($link);
 			$screening->setShowtimes($datetimes);
+			
+			$screeningType = $this->parserService->getScreeningFacade()->getType($cycle);
+			if(!isset($screeningType)) {
+				$screeningType = new ScreeningType($cycle);
+				$this->parserService->getScreeningFacade()->save($screeningType);
+			}
+			$screening->setType($screeningType);
 			
 			$this->parserService->getEntityManager()->persist($screening);
 			$this->cinema->addScreening($screening);

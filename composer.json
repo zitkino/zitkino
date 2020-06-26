@@ -2,14 +2,12 @@
 	"name": "zitkino/zitkino",
 	"description": "Brno's cinemas",
 	"type": "project",
-	
 	"config": {
 		"vendor-dir": "vendor",
 		"preferred-install": "dist",
 		"sort-packages": true,
 		"optimize-autoloader": true
 	},
-	
 	"require": {
 		"php": "^7.3",
 		"ext-curl": "*",

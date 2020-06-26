@@ -13,6 +13,11 @@ use Zitkino\Screenings\Screening;
  * Art parser.
  */
 class Art extends Parser {
+	/**
+	 * Art constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("https://kinoart.cz/cs/program/");

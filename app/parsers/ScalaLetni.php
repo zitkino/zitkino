@@ -1,7 +1,10 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Zitkino\Cinemas\Cinema;
+use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 
@@ -9,11 +12,21 @@ use Zitkino\Screenings\Screening;
  * Scalní letňák parser.
  */
 class ScalaLetni extends Parser {
+	/**
+	 * ScalaLetni constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("https://www.kinoscala.cz/cz/cyklus/scalni-letnak-251");
 	}
 	
+	/**
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws ParserException
+	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
 		
@@ -48,7 +61,11 @@ class ScalaLetni extends Parser {
 			$priceString = htmlentities($priceItem, null, "utf-8");
 			$price = trim(str_replace("&nbsp;Kč", "", $priceString));
 			
-			$movie = new Movie($name);
+			$movie = $this->parserService->getMovieFacade()->getByName($name);
+			if(!isset($movie)) {
+				$movie = new Movie($name);
+				$this->parserService->getMovieFacade()->save($movie);
+			}
 			
 			$screening = new Screening($movie, $this->cinema);
 			$screening->setLanguages($dubbing, null);

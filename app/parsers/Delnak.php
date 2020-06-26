@@ -1,7 +1,11 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Nette\Utils\Strings;
 use Zitkino\Cinemas\Cinema;
+use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 
@@ -9,11 +13,21 @@ use Zitkino\Screenings\Screening;
  * Delnak parser.
  */
 class Delnak extends Parser {
+	/**
+	 * Delnak constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.delnickydumbrno.cz/cely-program.html");
 	}
 	
+	/**
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws ParserException
+	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
 		
@@ -58,7 +72,12 @@ class Delnak extends Parser {
 				$date = $dateQuery->item($movieItems)->nodeValue;
 				
 				$timeQuery = $xpath->query("//p[@class='start']", $event);
-				$time = explode(":", $timeQuery->item($movieItems)->nodeValue);
+				$timeString = $timeQuery->item($movieItems)->nodeValue;
+				if(Strings::contains($timeString, "°°")) {
+					$time = [str_replace("°°", "", $timeString), "00"];
+				} else {
+					$time = explode(":", $timeString);
+				}
 				
 				$datetime = \DateTime::createFromFormat("j.m.Y", $date);
 				$datetime->setTime(intval($time[0]), intval($time[1]));
@@ -68,8 +87,12 @@ class Delnak extends Parser {
 				$priceString = $priceQuery->item($movieItems)->nodeValue;
 				$price = str_replace(["Vstupné: ", " Kč"], "", $priceString);
 				
-				$movie = new Movie($name);
-				$movie->setLength($length);
+				$movie = $this->parserService->getMovieFacade()->getByName($name);
+				if(!isset($movie)) {
+					$movie = new Movie($name);
+					$movie->setLength($length);
+					$this->parserService->getMovieFacade()->save($movie);
+				}
 				
 				$screening = new Screening($movie, $this->cinema);
 				$screening->setLanguages($dubbing, $subtitles);

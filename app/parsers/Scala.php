@@ -12,6 +12,11 @@ use Zitkino\Screenings\Screening;
  * Scala parser.
  */
 class Scala extends Parser {
+	/**
+	 * Scala constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("https://www.kinoscala.cz/cz/program");

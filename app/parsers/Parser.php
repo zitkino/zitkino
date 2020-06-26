@@ -111,7 +111,7 @@ abstract class Parser {
 	abstract public function parse(): void;
 	
 	/**
-	 * @param $cinema
+	 * @param string $cinema
 	 * @return array
 	 * @deprecated
 	 */

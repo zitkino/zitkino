@@ -13,6 +13,11 @@ use Zitkino\Screenings\ScreeningType;
  * Lucerna parser.
  */
 class Lucerna extends Parser {
+	/**
+	 * Lucerna constructor.
+	 * @param ParserService $parserService
+	 * @param Cinema $cinema
+	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.kinolucerna.info");
@@ -26,13 +31,13 @@ class Lucerna extends Parser {
 	public function parse(): void {
 		$xpath = $this->getXpath();
 		
-		$days = $xpath->query("//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
+		$days = $xpath->query("//div[@class='tabs programtabs']//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
 		foreach($days as $day) {
 			$dayQuery = $xpath->query("./a", $day);
 			$dayId = $dayQuery->item(0)->getAttribute("data-den");
 			$dayString = $dayQuery->item(0)->getElementsByTagName("span")->item(0)->nodeValue;
 			
-			$events = $xpath->query("//div[@id='den_".$dayId."']//div[@class='item']");
+			$events = $xpath->query("//div[@class='tabs programtabs']//div[@id='den_".$dayId."']//div[@class='item']");
 			foreach($events as $key => $event) {
 				$info = "./div[@class='heading']";
 				
@@ -124,6 +129,7 @@ class Lucerna extends Parser {
 				$screeningType = $this->parserService->getScreeningFacade()->getType($type);
 				if(!isset($screeningType)) {
 					$screeningType = new ScreeningType($type);
+					$this->parserService->getScreeningFacade()->save($screeningType);
 				}
 				
 				$screening = new Screening($movie, $this->cinema);

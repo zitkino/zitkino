@@ -12,6 +12,7 @@ dbal:
 tracy:
 	strictMode: true
 	showBar: true
+	showLocation: true
 	editorMapping:
 		/var/www/html: c:\OneDrive\github\zitkino
 	bar:
