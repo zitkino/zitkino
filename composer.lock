@@ -1796,39 +1796,40 @@
         },
         {
             "name": "nette/application",
-            "version": "v3.0.2.1",
+            "version": "v3.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/application.git",
-                "reference": "5d542d8fecda61ed1dae7fc62c2a270f47563256"
+                "reference": "783ad6fc6444f63314175131885c04b3dd0291dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/application/zipball/5d542d8fecda61ed1dae7fc62c2a270f47563256",
-                "reference": "5d542d8fecda61ed1dae7fc62c2a270f47563256",
+                "url": "https://api.github.com/repos/nette/application/zipball/783ad6fc6444f63314175131885c04b3dd0291dd",
+                "reference": "783ad6fc6444f63314175131885c04b3dd0291dd",
                 "shasum": ""
             },
             "require": {
                 "nette/component-model": "^3.0",
                 "nette/http": "^3.0.2",
                 "nette/routing": "~3.0.0",
-                "nette/utils": "^3.0",
+                "nette/utils": "^3.1",
                 "php": ">=7.1"
             },
             "conflict": {
-                "latte/latte": "<2.4",
+                "latte/latte": "<2.6",
                 "nette/di": "<3.0-stable",
                 "nette/forms": "<3.0",
                 "tracy/tracy": "<2.5"
             },
             "require-dev": {
-                "latte/latte": "^2.5.1",
+                "latte/latte": "^2.6.2",
                 "mockery/mockery": "^1.0",
                 "nette/di": "^v3.0",
                 "nette/forms": "^3.0",
                 "nette/robot-loader": "^3.2",
                 "nette/security": "^3.0",
-                "nette/tester": "^2.0.1",
+                "nette/tester": "^2.3.1",
+                "phpstan/phpstan-nette": "^0.12",
                 "tracy/tracy": "^2.6"
             },
             "suggest": {
@@ -1844,16 +1845,13 @@
             "autoload": {
                 "classmap": [
                     "src/"
-                ],
-                "files": [
-                    "src/compatibility.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
+                "GPL-2.0-only",
+                "GPL-3.0-only"
             ],
             "authors": [
                 {
@@ -1879,7 +1877,7 @@
                 "routing",
                 "seo"
             ],
-            "time": "2020-10-04T16:55:13+00:00"
+            "time": "2020-08-25T01:52:08+00:00"
         },
         {
             "name": "nette/bootstrap",
@@ -2361,28 +2359,30 @@
         },
         {
             "name": "nette/http",
-            "version": "v3.0.3.1",
+            "version": "v3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/http.git",
-                "reference": "90a34a9e32911bb537f9e9b31676675944b25e52"
+                "reference": "e4d8d360c66c8af9512ca13ab629d312af2b3ce3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/http/zipball/90a34a9e32911bb537f9e9b31676675944b25e52",
-                "reference": "90a34a9e32911bb537f9e9b31676675944b25e52",
+                "url": "https://api.github.com/repos/nette/http/zipball/e4d8d360c66c8af9512ca13ab629d312af2b3ce3",
+                "reference": "e4d8d360c66c8af9512ca13ab629d312af2b3ce3",
                 "shasum": ""
             },
             "require": {
-                "nette/utils": "^3.0",
+                "nette/utils": "^3.1",
                 "php": ">=7.1"
             },
             "conflict": {
-                "nette/di": "<3.0.0-stable"
+                "nette/di": "<3.0.3"
             },
             "require-dev": {
                 "nette/di": "^3.0",
+                "nette/security": "^3.0",
                 "nette/tester": "^2.0",
+                "phpstan/phpstan": "^0.12",
                 "tracy/tracy": "^2.4"
             },
             "suggest": {
@@ -2403,8 +2403,8 @@
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
+                "GPL-2.0-only",
+                "GPL-3.0-only"
             ],
             "authors": [
                 {
@@ -2429,7 +2429,7 @@
                 "session",
                 "url"
             ],
-            "time": "2020-06-03T09:26:03+00:00"
+            "time": "2020-03-31T13:31:41+00:00"
         },
         {
             "name": "nette/mail",
