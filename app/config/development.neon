@@ -2,7 +2,7 @@ application:
 	debugger: true
 	silentLinks: false
 	
-dbal:
+nettrine.dbal:
 	connection:
 		host: 'db'
 		user: root
