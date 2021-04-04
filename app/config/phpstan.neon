@@ -1,0 +1,10 @@
+parameters:
+	level: 1
+	scanDirectories:
+		- %currentWorkingDirectory%/app/
+		- %currentWorkingDirectory%/tests/
+
+includes:
+	- %currentWorkingDirectory%/vendor/phpstan/phpstan-nette/extension.neon
+	- %currentWorkingDirectory%/vendor/phpstan/phpstan-nette/rules.neon
+	- %currentWorkingDirectory%/vendor/phpstan/phpstan-doctrine/extension.neon

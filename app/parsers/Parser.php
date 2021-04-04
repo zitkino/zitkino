@@ -4,7 +4,6 @@ namespace Zitkino\Parsers;
 use Dobine\Connections\DBAL;
 use Doctrine\DBAL\{Connection, DBALException};
 use DOMDocument;
-use DOMXPath;
 use Nette\Utils\{Json, JsonException};
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
@@ -36,17 +35,18 @@ abstract class Parser {
 		$this->cinema = $cinema;
 	}
 	
-	public function getUrl() {
+	public function getUrl(): string {
 		return $this->url;
 	}
 	
-	public function setUrl($url) {
+	public function setUrl(string $url): Parser {
 		$this->url = $url;
+		return $this;
 	}
 	
 	/**
 	 * Downloads data from internet.
-	 * @return bool|DOMXPath|string
+	 * @return bool|\DOMXPath|string
 	 * @throws ParserException
 	 */
 	private function downloadData() {
@@ -68,10 +68,10 @@ abstract class Parser {
 	}
 	
 	/**
-	 * @return DOMXPath
+	 * @return \DOMXPath
 	 * @throws ParserException
 	 */
-	public function getXpath() {
+	public function getXpath(): \DOMXPath {
 		$data = $this->downloadData();
 		libxml_use_internal_errors(true); // Prevent HTML errors from displaying
 		
@@ -82,7 +82,7 @@ abstract class Parser {
 		$html = mb_convert_encoding($data, "HTML-ENTITIES", "UTF-8");
 		$document->loadHTML($html);
 		
-		return new DOMXPath($document);
+		return new \DOMXPath($document);
 	}
 	
 	/**
@@ -90,7 +90,7 @@ abstract class Parser {
 	 * @throws ParserException
 	 * @throws JsonException
 	 */
-	public function getJson() {
+	public function getJson(): array {
 		$data = $this->downloadData();
 		
 		return Json::decode($data, Json::FORCE_ARRAY);
@@ -115,7 +115,7 @@ abstract class Parser {
 	 * @return array
 	 * @deprecated
 	 */
-	public function getContentFromDB($cinema) {
+	public function getContentFromDB(string $cinema): array {
 		$today = date("Y-m-d", strtotime("now"));
 		$events = $this->connection->fetchAll("
 			SELECT s.*, m.*, l.czech AS dubbing, ls.czech AS subtitles, stype.name as type, st.datetime FROM screenings AS s

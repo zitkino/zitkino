@@ -14,8 +14,8 @@
 *-data.sql
 
 app/config/keys.neon
-app/config/stage.neon
-app/config/production.neon
+app/config/env/stage.neon
+app/config/env/production.neon
 
 .docker/mysql
 /admin

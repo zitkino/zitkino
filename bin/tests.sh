@@ -13,7 +13,7 @@ function help() {
 # Runs PHPStan
 function phpstan() {
     echo -e "PHPStan"
-    vendor/bin/phpstan analyse app tests -c phpstan.neon
+    ./vendor/bin/phpstan analyse app -c app/config/phpstan.neon
 }
 
 # Validates entities
@@ -24,8 +24,9 @@ function doctrine() {
 
 # Runs Nette Tester tests
 function tester() {
+	echo -e "Nette Tester"
+
     # Default shell script for running tests from `tests` folder
-    echo -e "Nette Tester"
     vendor/bin/tester -C -s tests tests
 
     # PHP version of script for running tests

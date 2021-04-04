@@ -13,9 +13,9 @@ class MovieFacade extends DobineFacade {
 	
 	/**
 	 * @param string $name
-	 * @return Movie|object
+	 * @return Movie|object|null
 	 */
-	public function getByName(string $name) {
+	public function getByName(string $name): ?Movie {
 		return $this->repository->findOneBy(["name" => $name]);
 	}
 }

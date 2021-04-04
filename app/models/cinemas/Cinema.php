@@ -327,7 +327,7 @@ class Cinema {
 				$nextDate->modify("+1 days");
 				
 				$showtimes = $screening->getShowtimes();
-				if(isset($showtimes)) {
+				if(!empty($showtimes)) {
 					/** @var Showtime $showtime */
 					foreach($showtimes as $showtime) {
 						// checks if movie is played from now to +1 day
@@ -380,7 +380,7 @@ class Cinema {
 			/** @var Screening $screening */
 			foreach($this->screenings as $screening) {
 				$showtimes = $screening->getShowtimes();
-				if(isset($showtimes)) {
+				if(!empty($showtimes)) {
 					/** @var Showtime $showtime */
 					foreach($showtimes as $showtime) {
 						if($currentDate < $showtime->getDatetime()) {

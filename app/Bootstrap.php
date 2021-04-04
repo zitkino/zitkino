@@ -49,7 +49,7 @@ class Bootstrap {
 		$configurator->addConfig(__DIR__."/config/services.neon");
 		$configurator->addConfig(__DIR__."/config/keys.neon");
 		$configurator->addConfig(__DIR__."/config/parameters.neon");
-		$configurator->addConfig(__DIR__."/config/".$_ENV["APP_ENV"].".neon");
+		$configurator->addConfig(__DIR__."/config/env/".$_ENV["APP_ENV"].".neon");
 		
 		return $configurator;
 	}

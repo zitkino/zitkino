@@ -2,9 +2,9 @@
 namespace Zitkino\Parsers;
 
 use Zitkino\Cinemas\Cinema;
+use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 use Zitkino\Screenings\Showtime;
 
 /**
@@ -16,25 +16,32 @@ class Bvv extends Parser {
 		$this->setUrl("http://www.bvv.cz/letni-kino/");
 	}
 	
+	/**
+	 * @throws ParserException
+	 */
 	public function parse(): void {
+		$movieItems = 0;
+		$screenings = [];
+		
 		$xpath = $this->getXpath();
 		$events = "//*[@id='content']/div[1]/div[2]";
-		
-		$movieItems = 0;
 		$titles = $xpath->query($events."//h2");
 		foreach($titles as $title) {
 			if(!isset($title->nodeValue) or empty(trim($title->nodeValue))) {
 				continue;
 			}
 			
-			$value = str_replace(["&nbsp;", "  ", " "]," ", $title->nodeValue);
+			$value = str_replace(["&nbsp;", "  ", " "], " ", $title->nodeValue);
 			$items = preg_split("/\s+/", $value, 4); //explode(" ", $title->nodeValue, 4);
 			
 			$nameQuery = $xpath->query(".//a", $title);
 			$nameItem = $nameQuery->item(0);
 			if(isset($nameItem)) {
 				$name = $nameItem->nodeValue;
-			} else { $name = null; continue; }
+			} else {
+				$name = null;
+				continue;
+			}
 			
 			$dateString = "";
 			foreach($items as $item) {
@@ -62,8 +69,10 @@ class Bvv extends Parser {
 			$csfdItem = $nameQuery->item(0);
 			if(isset($csfdItem)) {
 				$csfdString = $csfdItem->getAttribute("href");
-				$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);	
-			} else { $csfd = null; }
+				$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);
+			} else {
+				$csfd = null;
+			}
 			
 			$movie = new Movie($name);
 //			$movie->csfd = $csfd;
@@ -77,7 +86,7 @@ class Bvv extends Parser {
 			}
 			
 			$movie->addScreening($screening);
-			$this->screenings[] = $screening;
+			$screenings[$movieItems] = $screening;
 			
 			$movieItems++;
 		}
@@ -105,21 +114,26 @@ class Bvv extends Parser {
 						
 						if(strpos($lengthArray[0], ",") !== false) {
 							$length = $lengthArray[2];
-						} else { $length = $lengthArray[0]; }
+						} else {
+							$length = $lengthArray[0];
+						}
 						
 						break;
 					}
 				}
 				
-				$this->screenings[$movieItems]->setDubbing($dubbing);
-				$this->screenings[$movieItems]->movie->setLength($length);
+				$screenings[$movieItems]->setDubbing($dubbing);
+				$screenings[$movieItems]->getMovie()->setLength($length);
 			}
 			
 			$movieItems++;
 		}
 		
-		$this->cinema->setScreenings($this->screenings);
+		foreach($screenings as $screening) {
+			$this->cinema->addScreening($screening);
+		}
 		$this->cinema->setParsed(new \DateTime());
+		
 		$this->parserService->getEntityManager()->persist($this->cinema);
 		$this->parserService->getEntityManager()->flush();
 	}

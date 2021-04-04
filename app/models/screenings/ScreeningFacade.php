@@ -30,9 +30,9 @@ class ScreeningFacade extends DobineFacade {
 	
 	/**
 	 * @param string|null $type
-	 * @return ScreeningType|object
+	 * @return ScreeningType|object|null
 	 */
-	public function getType(?string $type = null) {
+	public function getType(?string $type = null): ?ScreeningType {
 		if(empty($type)) {
 			return $this->repositoryType->findOneBy(["code" => "2D"]);
 		} else {
@@ -40,7 +40,7 @@ class ScreeningFacade extends DobineFacade {
 		}
 	}
 	
-	public function removeScreenings(Cinema $cinema) {
+	public function removeScreenings(Cinema $cinema): ScreeningType {
 		return $this->repository->createQueryBuilder("s")->delete()
 			->where("s.cinema = :cinema")->setParameter("cinema", $cinema)
 			->getQuery()->getResult();
