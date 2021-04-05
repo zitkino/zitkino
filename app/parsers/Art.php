@@ -53,11 +53,11 @@ class Art extends Parser {
 				$nameQuery = $xpath->query(".//h3[contains(@class, 'events-calendar__event-title')]//a", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
-				$link = $nameQuery->item(0)->getAttribute("href");
+				$link = $nameQuery->item(0)->attributes["href"];
 				
 				$placeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--custom']", $event);
 				$placeName = $placeQuery->item(0)->nodeValue;
-				$placeLink = $placeQuery->item(0)->getAttribute("href");
+				$placeLink = $placeQuery->item(0)->attributes["href"];
 				
 				if(isset($month)) {
 					$timeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--black']", $event);

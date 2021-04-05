@@ -70,7 +70,6 @@ class ParserService {
 		try {
 			$parserClass = "\Zitkino\Parsers\\".ucfirst($cinema->getCode());
 			if(class_exists($parserClass)) {
-				/** @var Parser $parser */
 				$this->parser = new $parserClass($this, $cinema);
 				$this->getScreeningFacade()->removeScreenings($cinema);
 				$this->parser->parse();

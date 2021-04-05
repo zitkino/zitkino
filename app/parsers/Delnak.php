@@ -66,7 +66,7 @@ class Delnak extends Parser {
 					}
 				}
 				
-				$link = "http://www.delnickydumbrno.cz".$itemQuery->item($movieItems)->getAttribute("href");
+				$link = "http://www.delnickydumbrno.cz".$itemQuery->item($movieItems)->attributes["href"];
 				
 				$dateQuery = $xpath->query("//p[@class='date']", $event);
 				$date = $dateQuery->item($movieItems)->nodeValue;

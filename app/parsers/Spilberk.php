@@ -40,7 +40,7 @@ class Spilberk extends Parser {
 			$csfdQuery = $xpath->query(".//a[@class='vice']", $event);
 			$csfdItem = $csfdQuery->item(0);
 			if(isset($csfdItem)) {
-				$csfdString = $csfdItem->getAttribute("href");
+				$csfdString = $csfdItem->attributes["href"];
 				$csfd = str_replace(["https://www.csfd.cz/film/", "/prehled/"], "", $csfdString);
 			}
 			
@@ -48,7 +48,7 @@ class Spilberk extends Parser {
 			$linkQuery = $xpath->query(".//a[@class='goout']", $event);
 			$linkItem = $linkQuery->item(0);
 			if(isset($linkItem)) {
-				$link = $linkItem->getAttribute("href");
+				$link = $linkItem->attributes["href"];
 			}
 			
 			$itemsQuery = $xpath->query(".//div[@class='right']//p[@class='popisek']", $event);

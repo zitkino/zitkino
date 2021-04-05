@@ -34,7 +34,7 @@ class Lucerna extends Parser {
 		$days = $xpath->query("//div[@class='tabs programtabs']//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
 		foreach($days as $day) {
 			$dayQuery = $xpath->query("./a", $day);
-			$dayId = $dayQuery->item(0)->getAttribute("data-den");
+			$dayId = $dayQuery->item(0)->attributes["data-den"];
 			$dayString = $dayQuery->item(0)->getElementsByTagName("span")->item(0)->nodeValue;
 			
 			$events = $xpath->query("//div[@class='tabs programtabs']//div[@id='den_".$dayId."']//div[@class='item']");
@@ -53,7 +53,7 @@ class Lucerna extends Parser {
 				}
 				$name = str_replace($small, "", $name);
 				
-				$link = "http://www.kinolucerna.info".$nameQuery->item(0)->getAttribute("href");
+				$link = "http://www.kinolucerna.info".$nameQuery->item(0)->attributes["href"];
 				
 				$lengthQuery = $xpath->query($info."//div[@class='eventlenght']", $event);
 				$lengthString = $lengthQuery->item(0)->nodeValue;
@@ -111,7 +111,7 @@ class Lucerna extends Parser {
 					$a = $timeElement->getElementsByTagName("a");
 					if($a->length == 1) {
 						if($a->item(0)->hasAttribute("title")) {
-							$priceString = $a->item(0)->getAttribute("title");
+							$priceString = $a->item(0)->attributes["title"];
 							$price = str_replace(["Koupit / rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
 						}
 					} else {

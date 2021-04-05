@@ -9,11 +9,11 @@ use Tracy\Debugger;
  */
 class ErrorPresenter extends BasePresenter {
 	/**
-	 * @param \Exception
+	 * @param \Exception $exception
 	 * @return void
 	 * @throws AbortException
 	 */
-	public function renderDefault($exception) {
+	public function renderDefault(\Exception $exception) {
 		if($this->isAjax()) { // AJAX request? Just note this error in payload.
 			$this->payload->error = true;
 			$this->terminate();

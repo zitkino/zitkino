@@ -46,7 +46,7 @@ abstract class Parser {
 	
 	/**
 	 * Downloads data from internet.
-	 * @return bool|\DOMXPath|string
+	 * @return bool|string
 	 * @throws ParserException
 	 */
 	private function downloadData() {

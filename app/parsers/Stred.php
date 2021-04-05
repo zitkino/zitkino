@@ -34,7 +34,7 @@ class Stred extends Parser {
 		$events = $xpath->query("//div[@class='contentContent']//a[@class='programPolozka row']");
 		foreach($events as $event) {
 			$linkQuery = $xpath->query(".", $event);
-			$link = $linkQuery->item(0)->getAttribute("href");
+			$link = $linkQuery->item(0)->attributes["href"];
 			
 			$timeQuery = $xpath->query(".//div[contains(@class, 'dateTime')]//div[@class='dayAndTime']", $event);
 			$days = ["po, ", "út, ", "st, ", "čt, ", "pá, ", "so, ", "ne, "];
@@ -62,7 +62,7 @@ class Stred extends Parser {
 			
 			$length = null;
 			if(isset($meta[3])) {
-				$length = str_replace("min", "", intval($meta[3]));
+				$length = (int)str_replace("min", "", intval($meta[3]));
 				if($length == 0) {
 					$length = null;
 				}

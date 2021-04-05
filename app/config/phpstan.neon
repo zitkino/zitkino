@@ -1,5 +1,7 @@
 parameters:
-	level: 1
+	level: 2
+	ignoreErrors:
+		- '#PHPDoc tag @return with type object\|null is not subtype of native type#'
 	scanDirectories:
 		- %currentWorkingDirectory%/app/
 		- %currentWorkingDirectory%/tests/

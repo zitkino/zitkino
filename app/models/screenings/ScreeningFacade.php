@@ -8,9 +8,7 @@ use Nette\Utils\Strings;
 use Nettrine\ORM\EntityManagerDecorator;
 use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
-use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\ScreeningType;
-use Zitkino\Screenings\Showtime;
+use Zitkino\Screenings\{Screening, ScreeningType, Showtime};
 
 /**
  * Class ScreeningFacade

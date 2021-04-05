@@ -285,13 +285,10 @@ class Cinema {
 			case "all":
 			default:
 				return $this->screenings;
-				break;
 			case "soonest":
 				return $this->getSoonestScreenings();
-				break;
 			case "new":
 				return $this->getNewScreenings();
-				break;
 		}
 	}
 	

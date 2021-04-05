@@ -68,14 +68,14 @@ class Bvv extends Parser {
 			
 			$csfdItem = $nameQuery->item(0);
 			if(isset($csfdItem)) {
-				$csfdString = $csfdItem->getAttribute("href");
+				$csfdString = $csfdItem->attributes["href"];
 				$csfd = str_replace("https://www.csfd.cz/film/", "", $csfdString);
 			} else {
 				$csfd = null;
 			}
 			
 			$movie = new Movie($name);
-//			$movie->csfd = $csfd;
+			$movie->setCsfd($csfd);
 			
 			$screening = new Screening($movie, $this->cinema);
 			$screening->setPrice($price);
