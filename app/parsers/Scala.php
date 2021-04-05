@@ -72,7 +72,7 @@ class Scala extends Parser {
 					$datetimes[] = $datetime;
 				}
 				
-				$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->attributes["href"];
+				$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->attributes["href"]->nodeValue;
 				
 				$priceQuery = $xpath->query("//td[@class='col_price']", $event);
 				$priceItem = $priceQuery->item($movieItems)->nodeValue;

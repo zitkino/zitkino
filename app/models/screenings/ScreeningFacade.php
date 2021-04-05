@@ -38,7 +38,7 @@ class ScreeningFacade extends DobineFacade {
 		}
 	}
 	
-	public function removeScreenings(Cinema $cinema): ScreeningType {
+	public function removeScreenings(Cinema $cinema): int {
 		return $this->repository->createQueryBuilder("s")->delete()
 			->where("s.cinema = :cinema")->setParameter("cinema", $cinema)
 			->getQuery()->getResult();

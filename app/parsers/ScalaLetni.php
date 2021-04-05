@@ -38,7 +38,7 @@ class ScalaLetni extends Parser {
 			$nameString = $nameQuery->item($movieItems)->nodeValue;
 			$name = str_replace("feat. Kmeny90/BU2R", "", $nameString);
 			
-			$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->attributes["href"];
+			$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->attributes["href"]->nodeValue;
 			
 			$dubbing = null;
 			if(\Lib\Strings::endsWith($name, "- cz dabing")) {

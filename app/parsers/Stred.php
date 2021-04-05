@@ -34,7 +34,7 @@ class Stred extends Parser {
 		$events = $xpath->query("//div[@class='contentContent']//a[@class='programPolozka row']");
 		foreach($events as $event) {
 			$linkQuery = $xpath->query(".", $event);
-			$link = $linkQuery->item(0)->attributes["href"];
+			$link = $linkQuery->item(0)->attributes["href"]->nodeValue;
 			
 			$timeQuery = $xpath->query(".//div[contains(@class, 'dateTime')]//div[@class='dayAndTime']", $event);
 			$days = ["po, ", "út, ", "st, ", "čt, ", "pá, ", "so, ", "ne, "];

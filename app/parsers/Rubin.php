@@ -34,7 +34,7 @@ class Rubin extends Parser {
 				$nameQuery = $xpath->query(".//div[@class='catItemIntroText']/p/strong", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
-				$linkString = $itemQuery->item(0)->attributes["href"];
+				$linkString = $itemQuery->item(0)->attributes["href"]->nodeValue;
 				$link = "http://www.kdrubin.cz".$linkString;
 				
 				$datetimeQuery = $xpath->query(".//span[@class='catItemDateCreated']", $event);
