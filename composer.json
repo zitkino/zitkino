@@ -15,8 +15,9 @@
 		"ext-libxml": "*",
 		"contributte/console": "^0.7.1",
 		"contributte/guzzlette": "^3.0",
+		"contributte/logging": "^0.5.0",
 		"hermajan/dobine": "dev-master",
-		"hermajan/fazette": "^0.1.0",
+		"hermajan/fazette": "^0.3.0",
 		"hermajan/lib": "dev-master",
 		"johngrogg/ics-parser": "^2.1",
 		"latte/latte": "^2.5",
@@ -24,6 +25,7 @@
 		"nette/nette": "^3.0",
 		"nettrine/orm": "^0.7.1",
 		"nextras/mail-panel": "^2.5",
+		"sentry/sdk": "^2.0",
 		"tracy/tracy": "^2.7",
 		"vlucas/phpdotenv": "^4.1"
 	},

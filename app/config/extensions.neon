@@ -10,6 +10,9 @@ extensions:
 	nettrine.orm.cache: Nettrine\ORM\DI\OrmCacheExtension
 	nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension(%consoleMode%)
 
+	logging: Contributte\Logging\DI\TracyLoggingExtension
+	sentry: Contributte\Logging\DI\SentryLoggingExtension
+
 nettrine.orm:
 	configuration:
 		autoGenerateProxyClasses: %debugMode%
@@ -33,3 +36,6 @@ search:
 		classes:
 			- Zitkino\*Facade
 			- Zitkino\*\*Facade
+
+logging:
+	logDir: %appDir%/../_log
