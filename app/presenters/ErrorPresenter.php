@@ -13,7 +13,7 @@ class ErrorPresenter extends BasePresenter {
 	 * @return void
 	 * @throws AbortException
 	 */
-	public function renderDefault(\Exception $exception) {
+	public function renderDefault($exception) {
 		if($this->isAjax()) { // AJAX request? Just note this error in payload.
 			$this->payload->error = true;
 			$this->terminate();

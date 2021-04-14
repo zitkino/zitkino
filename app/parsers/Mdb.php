@@ -45,7 +45,7 @@ class Mdb extends Parser {
 //				$linkItem = $linkQuery->item(0);
 //				$link = null;
 //				if($linkItem != null) {
-//					$link = $linkQuery->item(0)->attributes["href"]->nodeValue;
+//					$link = $linkQuery->item(0)->attributes->getNamedItem("href")->nodeValue;
 //				}
 				
 				$dateQuery = $xpath->query(".//strong[1]", $event);

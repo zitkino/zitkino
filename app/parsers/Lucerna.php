@@ -56,7 +56,7 @@ class Lucerna extends Parser {
 				}
 				$name = str_replace($small, "", $name);
 				
-				$link = "http://www.kinolucerna.info".$nameQuery->item(0)->attributes["href"]->nodeValue;
+				$link = "http://www.kinolucerna.info".$nameQuery->item(0)->attributes->getNamedItem("href")->nodeValue;
 				
 				$lengthQuery = $xpath->query($info."//div[@class='eventlenght']", $event);
 				$lengthString = $lengthQuery->item(0)->nodeValue;
