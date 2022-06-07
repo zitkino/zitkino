@@ -32,15 +32,6 @@ class ParserService {
 	/** @var EntityManagerDecorator */
 	private $entityManager;
 	
-	/**
-	 * ParserService constructor.
-	 * @param EntityManagerDecorator $entityManager
-	 * @param CinemaFacade $cinemaFacade
-	 * @param LanguageFacade $languageFacade
-	 * @param MovieFacade $movieFacade
-	 * @param PlaceFacade $placeFacade
-	 * @param ScreeningFacade $screeningFacade
-	 */
 	public function __construct(EntityManagerDecorator $entityManager, CinemaFacade $cinemaFacade, LanguageFacade $languageFacade, MovieFacade $movieFacade, PlaceFacade $placeFacade, ScreeningFacade $screeningFacade) {
 		$this->cinemaFacade = $cinemaFacade;
 		$this->languageFacade = $languageFacade;
@@ -50,17 +41,10 @@ class ParserService {
 		$this->entityManager = $entityManager;
 	}
 	
-	/**
-	 * @return Parser
-	 */
 	public function getParser(): Parser {
 		return $this->parser;
 	}
 	
-	/**
-	 * @param Parser $parser
-	 * @return ParserService
-	 */
 	public function setParser(Parser $parser): ParserService {
 		$this->parser = $parser;
 		return $this;
@@ -83,44 +67,26 @@ class ParserService {
 		}
 	}
 	
-	/**
-	 * @return EntityManagerDecorator
-	 */
 	public function getEntityManager(): EntityManagerDecorator {
 		return $this->entityManager;
 	}
 	
-	/**
-	 * @return CinemaFacade
-	 */
 	public function getCinemaFacade(): CinemaFacade {
 		return $this->cinemaFacade;
 	}
 	
-	/**
-	 * @return LanguageFacade
-	 */
 	public function getLanguageFacade(): LanguageFacade {
 		return $this->languageFacade;
 	}
 	
-	/**
-	 * @return MovieFacade
-	 */
 	public function getMovieFacade(): MovieFacade {
 		return $this->movieFacade;
 	}
 	
-	/**
-	 * @return PlaceFacade
-	 */
 	public function getPlaceFacade(): PlaceFacade {
 		return $this->placeFacade;
 	}
 	
-	/**
-	 * @return ScreeningFacade
-	 */
 	public function getScreeningFacade(): ScreeningFacade {
 		return $this->screeningFacade;
 	}

@@ -7,7 +7,8 @@ use Doctrine\ORM\QueryBuilder;
 class CinemaRepository extends EntityRepository {
 	public function active(): QueryBuilder {
 		return $this->createQueryBuilder("c")
-			->where("c.activeUntil is null");
+			->where("c.activeUntil is null or c.activeUntil >= :today")
+			->setParameter("today", new \DateTime());
 	}
 	
 	public function visible(): QueryBuilder {

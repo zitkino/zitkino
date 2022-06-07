@@ -25,11 +25,6 @@ abstract class Parser {
 	/** @var ParserService */
 	protected $parserService;
 	
-	/**
-	 * Parser constructor.
-	 * @param ParserService $parserService
-	 * @param Cinema $cinema
-	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		$this->parserService = $parserService;
 		$this->cinema = $cinema;
@@ -68,7 +63,6 @@ abstract class Parser {
 	}
 	
 	/**
-	 * @return \DOMXPath
 	 * @throws ParserException
 	 */
 	public function getXpath(): \DOMXPath {
@@ -86,7 +80,6 @@ abstract class Parser {
 	}
 	
 	/**
-	 * @return array
 	 * @throws ParserException
 	 * @throws JsonException
 	 */
@@ -111,8 +104,6 @@ abstract class Parser {
 	abstract public function parse(): void;
 	
 	/**
-	 * @param string $cinema
-	 * @return array
 	 * @deprecated
 	 */
 	public function getContentFromDB(string $cinema): array {
