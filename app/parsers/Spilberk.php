@@ -1,22 +1,16 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 
 /**
- * Spilberk parser.
+ * Špilberk parser.
  */
 class Spilberk extends Parser {
-	/**
-	 * Spilberk constructor.
-	 * @param ParserService $parserService
-	 * @param Cinema $cinema
-	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.letnikinospilberk.cz");
@@ -30,14 +24,14 @@ class Spilberk extends Parser {
 	public function parse(): void {
 		$xpath = $this->getXpath();
 		
-		$events = $xpath->query("//div[@id='page-program']/div[@class='film']");
+		$events = $xpath->query("//div[@id='page-program']/div[@class='film typ-0']");
 		foreach($events as $event) {
-			$nameQuery = $xpath->query(".//div[@class='right']//h2", $event);
+			$nameQuery = $xpath->query(".//h2", $event);
 			$nameString = $nameQuery->item(0)->nodeValue;
 			$name = str_replace([" - repríza"], "", $nameString);
 			
 			$csfd = null;
-			$csfdQuery = $xpath->query(".//a[@class='vice']", $event);
+			$csfdQuery = $xpath->query(".//p[@class='csfd']//a", $event);
 			$csfdItem = $csfdQuery->item(0);
 			if(isset($csfdItem)) {
 				$csfdString = $csfdItem->attributes->getNamedItem("href")->nodeValue;
@@ -51,7 +45,7 @@ class Spilberk extends Parser {
 				$link = $linkItem->attributes->getNamedItem("href")->nodeValue;
 			}
 			
-			$itemsQuery = $xpath->query(".//div[@class='right']//p[@class='popisek']", $event);
+			$itemsQuery = $xpath->query(".//p[@class='popisek']", $event);
 			$itemString = $itemsQuery->item(0)->nodeValue;
 			
 			switch(true) {
@@ -87,14 +81,19 @@ class Spilberk extends Parser {
 				$length = null;
 			}
 			
-			$priceQuery = $xpath->query(".//div[@class='right']//p[@class='cena']", $event);
+			$priceQuery = $xpath->query(".//p[@class='cena']", $event);
 			$priceString = $priceQuery->item(0)->nodeValue;
-			$price = str_replace([",- Kč"], "", $priceString);
+			$price = str_replace(["na místě", ",- Kč"], "", $priceString);
 			
 			$movie = $this->parserService->getMovieFacade()->getByName($name);
 			if(!isset($movie)) {
 				$movie = new Movie($name);
 				$movie->setLength($length);
+				$movie->setCsfd($csfd);
+				$this->parserService->getMovieFacade()->save($movie);
+			}
+			
+			if(!empty($csfd) and empty($movie->getCsfd())) {
 				$movie->setCsfd($csfd);
 				$this->parserService->getMovieFacade()->save($movie);
 			}

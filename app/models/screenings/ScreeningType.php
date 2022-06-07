@@ -16,7 +16,7 @@ class ScreeningType {
 	
 	/**
 	 * @var string
-	 * @ORM\Column(name="code", type="string", length=255, nullable=false)
+	 * @ORM\Column(name="code", type="string", length=191, nullable=false)
 	 */
 	private $code;
 	

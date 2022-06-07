@@ -1,23 +1,16 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
-use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\ScreeningType;
+use Zitkino\Screenings\{Screening, ScreeningType};
 
 /**
  * Lucerna parser.
  */
 class Lucerna extends Parser {
-	/**
-	 * Lucerna constructor.
-	 * @param ParserService $parserService
-	 * @param Cinema $cinema
-	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("http://www.kinolucerna.info");
@@ -34,7 +27,7 @@ class Lucerna extends Parser {
 		$days = $xpath->query("//div[@class='tabs programtabs']//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
 		foreach($days as $day) {
 			$dayQuery = $xpath->query("./a", $day);
-			$dayId = $dayQuery->item(0)->attributes["data-den"]->nodeValue;
+			$dayId = $dayQuery->item(0)->getAttribute("data-den");
 			
 			/** @var \DOMElement $dayStringElement */
 			$dayStringElement = $dayQuery->item(0);
@@ -114,7 +107,7 @@ class Lucerna extends Parser {
 					$a = $timeElement->getElementsByTagName("a");
 					if($a->length == 1) {
 						if($a->item(0)->hasAttribute("title")) {
-							$priceString = $a->item(0)->attributes["title"]->nodeValue;
+							$priceString = $a->item(0)->getAttribute("title");
 							$price = str_replace(["Koupit / rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
 						}
 					} else {

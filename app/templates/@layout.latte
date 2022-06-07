@@ -11,10 +11,10 @@
 	<title>{ifset title}{include title|stripHtml} {$meta["separator"]}{else}{$meta["title"]}{/ifset} {$meta["name"]}</title>
 
 	<link rel="shortcut icon" href="{$baseUrl}/favicon.ico">
-	<link rel="stylesheet" media="screen" href="{$baseUrl}/dist/style.css">
+	<link rel="stylesheet" media="screen" href="{$baseUrl}/www/css/styles.css?v={filemtime(WWW_DIR.'/www/css/styles.css')}">
 	{*<link rel="stylesheet" media="print" href="{$baseUrl}/print.css">*}
 
-	<script src="{$baseUrl}/node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="{$baseUrl}/www/js/scripts.js?v={filemtime(WWW_DIR.'/www/js/scripts.js')}"></script>
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-80065906-1"></script>

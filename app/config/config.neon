@@ -4,6 +4,12 @@
 # If you don't protect this directory from direct web access, anybody will be able to see your passwords.
 # http://nette.org/security-warning
 #
+includes:
+	- keys.neon
+	- parameters.neon
+	- services.neon
+	- extensions.neon
+
 php:
 	date.timezone: Europe/Prague
 	zlib.output_compression: yes
@@ -16,10 +22,10 @@ application:
 
 di:
 	debugger: true
-	
+
 http:
 	frames: yes
-	
+
 latte:
 	macros:
 		- Fazette\Latte\Fa
@@ -31,7 +37,7 @@ latte:
 services:
 	- Zitkino\RouterFactory
 	router: @Zitkino\RouterFactory::createRouter
-	
+
 	latte.latteFactory:
 		setup:
 			- setAutoRefresh(true)

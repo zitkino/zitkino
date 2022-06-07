@@ -20,3 +20,5 @@ app/config/env/production.neon
 .docker/mysql
 /admin
 /db
+
+/www

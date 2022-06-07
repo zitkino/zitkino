@@ -1,8 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
@@ -12,11 +11,6 @@ use Zitkino\Screenings\Screening;
  * Scala parser.
  */
 class Scala extends Parser {
-	/**
-	 * Scala constructor.
-	 * @param ParserService $parserService
-	 * @param Cinema $cinema
-	 */
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		parent::__construct($parserService, $cinema);
 		$this->setUrl("https://www.kinoscala.cz/cz/program");

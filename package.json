@@ -4,6 +4,9 @@
 		"type": "git",
 		"url": "https://github.com/zitkino/zitkino"
 	},
+	"scripts": {
+		"postinstall": "npx gulp setup"
+	},
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.5.0",
 		"@hermajan/booty": "git+https://github.com/hermajan/booty.git",
@@ -14,13 +17,14 @@
 	},
 	"devDependencies": {
 		"gulp": "^4.0.2",
-		"gulp-autoprefixer": "^7.0.1",
+		"gulp-autoprefixer": "^8.0.0",
 		"gulp-cli": "^2.3.0",
 		"gulp-concat": "^2.6.1",
 		"gulp-postcss": "^8.0.0",
 		"gulp-rename": "^2.0.0",
-		"gulp-sass": "^4.1.0",
+		"gulp-sass": "^5.1.0",
 		"gulp-sourcemaps": "^2.6.5",
-		"gulp-terser-js": "^5.2.2"
+		"gulp-terser-js": "^5.2.2",
+		"sass": "^1.52.2"
 	}
 }

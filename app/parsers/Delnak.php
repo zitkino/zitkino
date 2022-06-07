@@ -84,8 +84,11 @@ class Delnak extends Parser {
 				$datetimes = [$datetime];
 				
 				$priceQuery = $xpath->query("//p[@class='entry']", $event);
-				$priceString = $priceQuery->item($movieItems)->nodeValue;
-				$price = str_replace(["Vstupné: ", " Kč"], "", $priceString);
+				$priceItem = $priceQuery->item($movieItems);
+				if(isset($priceItem)) {
+					$priceString = $priceItem->nodeValue;
+					$price = str_replace(["Vstupné: ", " Kč"], "", $priceString);
+				}
 				
 				$movie = $this->parserService->getMovieFacade()->getByName($name);
 				if(!isset($movie)) {
