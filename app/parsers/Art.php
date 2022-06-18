@@ -25,7 +25,7 @@ class Art extends Parser {
 	public function parse(): void {
 		$xpath = $this->getXpath();
 		
-		$days = $xpath->query("//div[@class='events-calendar']//div[@class='grid events-calendar__day']");
+		$days = $xpath->query("//div[contains(@class, 'events-calendar')]//div[@class='grid events-calendar__day']");
 		foreach($days as $day) {
 			$dateQuery = $xpath->query(".//h2[@class='events-calendar__day-date']", $day);
 			$dateArray = explode(" ", $dateQuery->item(0)->nodeValue);
