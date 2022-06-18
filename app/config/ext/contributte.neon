@@ -1,0 +1,38 @@
+# Contributte extensions
+extensions:
+	console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+	console.extra: Contributte\Console\Extra\DI\ConsoleBridgesExtension(%consoleMode%)
+	guzzle: Contributte\Guzzlette\DI\GuzzleExtension
+	sentry: Contributte\Sentry\DI\SentryExtension
+	translation: Contributte\Translation\DI\TranslationExtension
+
+console:
+	lazy: true
+
+console.extra:
+	cache:
+		purge:
+			- %tempDir%/cache
+			- %tempDir%/proxies
+
+guzzle:
+	debug: %debugMode%
+	client: # config for GuzzleHttp\Client
+		timeout: 30
+
+sentry:
+	enable: true
+
+translation:
+	locales:
+		default: cs
+		fallback: [cs, en]
+		whitelist: [cs, en]
+	dirs:
+		- %appDir%/locale
+	returnOriginalMessage: true
+	loaders:
+		neon: Contributte\Translation\Loaders\Neon
+
+#	localeResolvers:
+#		- Contributte\Translation\LocalesResolvers\Session

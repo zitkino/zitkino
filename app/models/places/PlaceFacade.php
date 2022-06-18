@@ -11,10 +11,9 @@ class PlaceFacade extends DobineFacade {
 	}
 	
 	/**
-	 * @param string $name
 	 * @return Place|object|null
 	 */
-	public function getByName(string $name): ?Place {
+	public function getByName(string $name) {
 		return $this->repository->findOneBy(["name" => $name]);
 	}
 }

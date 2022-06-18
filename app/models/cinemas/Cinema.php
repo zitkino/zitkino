@@ -1,7 +1,9 @@
 <?php
 namespace Zitkino\Cinemas;
 
-use Dobine\Entities\Identifier;
+use Dobine\Attributes\Id;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Zitkino\Screenings\{Screening, Screenings, Showtime};
 
@@ -12,7 +14,7 @@ use Zitkino\Screenings\{Screening, Screenings, Showtime};
  * @ORM\Entity(repositoryClass="Zitkino\Cinemas\CinemaRepository")
  */
 class Cinema {
-	use Identifier;
+	use Id;
 	
 	/**
 	 * @var string
@@ -25,12 +27,6 @@ class Cinema {
 	 * @ORM\Column(name="code", type="string", length=20, nullable=false)
 	 */
 	protected $code;
-	
-	/**
-	 * @var bool
-	 * @ORM\Column(name="parsable", type="boolean", options={"default": 0}, nullable=false)
-	 */
-	protected $parsable;
 	
 	/**
 	 * @var CinemaType
@@ -120,6 +116,18 @@ class Cinema {
 	protected $activeUntil;
 	
 	/**
+	 * @var bool
+	 * @ORM\Column(name="parsable", type="boolean", options={"default": 0}, nullable=false)
+	 */
+	protected $parsable;
+	
+	/**
+	 * @var string|null
+	 * @ORM\Column(name="parsing", type="string", length=255, nullable=true)
+	 */
+	protected $parsing;
+	
+	/**
 	 * @var \DateTime|null
 	 * @ORM\Column(name="parsed", type="datetime", nullable=true)
 	 */
@@ -131,156 +139,110 @@ class Cinema {
 	 */
 	private $screenings;
 	
+	/**
+	 * @var Collection
+	 * @ORM\OneToMany(targetEntity="\Zitkino\Place", mappedBy="cinema")
+	 */
+	private $places;
+	
 	public function __construct(string $code) {
 		$this->code = $code;
 		$this->name = $code;
-		$this->screenings = new Screenings(null);
+		$this->screenings = new Screenings([]);
+		$this->places = new ArrayCollection();
 	}
 	
 	public function __toString() {
 		return $this->getCode();
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->name;
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getCode(): string {
 		return $this->code;
 	}
 	
-	/**
-	 * @return bool
-	 */
-	public function isParsable(): bool {
-		return $this->parsable;
-	}
-	
-	/**
-	 * @return CinemaType
-	 */
 	public function getType(): CinemaType {
 		return $this->type;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getAddress(): ?string {
 		return $this->address;
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getCity(): string {
 		return $this->city;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getPhone(): ?string {
 		return $this->phone;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getEmail(): ?string {
 		return $this->email;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getUrl(): ?string {
 		return $this->url;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getGmaps(): ?string {
 		return $this->gmaps;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getProgramme(): ?string {
 		return $this->programme;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getFacebook(): ?string {
 		return $this->facebook;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getGooglePlus(): ?string {
 		return $this->googlePlus;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getInstagram(): ?string {
 		return $this->instagram;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getTwitter(): ?string {
 		return $this->twitter;
 	}
 	
-	/**
-	 * @return \DateTime|null
-	 */
 	public function getActiveSince(): ?\DateTime {
 		return $this->activeSince;
 	}
 	
-	/**
-	 * @return \DateTime|null
-	 */
 	public function getActiveUntil(): ?\DateTime {
 		return $this->activeUntil;
 	}
 	
-	/**
-	 * @return \DateTime|null
-	 */
+	public function isParsable(): bool {
+		return $this->parsable;
+	}
+	
+	public function getParsing(): ?string {
+		return $this->parsing;
+	}
+	
+	public function setParsing(?string $parsing): Cinema {
+		$this->parsing = $parsing;
+		return $this;
+	}
+	
 	public function getParsed(): ?\DateTime {
 		return $this->parsed;
 	}
 	
-	/**
-	 * @param \DateTime|null $parsed
-	 * @return Cinema
-	 */
 	public function setParsed(?\DateTime $parsed): Cinema {
 		$this->parsed = $parsed;
 		return $this;
 	}
 	
-	/**
-	 * @param string $type
-	 * @return Screenings
-	 */
-	public function getScreenings($type = "all"): Screenings {
+	public function getScreenings(string $type = "all"): Screenings {
 		switch($type) {
 			case "all":
 			default:
@@ -292,21 +254,17 @@ class Cinema {
 		}
 	}
 	
-	/**
-	 * @param Screenings $screenings
-	 * @return Cinema
-	 */
 	public function setScreenings(Screenings $screenings): Cinema {
 		$this->screenings = $screenings;
 		return $this;
 	}
 	
-	public function addScreening(Screening $screening) {
+	public function addScreening(Screening $screening): void {
 		$this->screenings->add($screening);
 	}
 	
 	public function hasScreenings(): bool {
-		if(isset($this->screenings) and !empty($this->screenings->toArray())) {
+		if(!empty($this->screenings->toArray())) {
 			return true;
 		} else {
 			return false;
@@ -315,7 +273,7 @@ class Cinema {
 	
 	public function getSoonestScreenings(): Screenings {
 		$soonest = [];
-		if(isset($this->screenings)) {
+		if(!$this->screenings->isEmpty()) {
 			$currentDate = new \DateTime();
 			
 			/** @var Screening $screening */
@@ -324,7 +282,7 @@ class Cinema {
 				$nextDate->modify("+1 days");
 				
 				$showtimes = $screening->getShowtimes();
-				if(!empty($showtimes)) {
+				if(!$showtimes->isEmpty()) {
 					/** @var Showtime $showtime */
 					foreach($showtimes as $showtime) {
 						// checks if movie is played from now to +1 day
@@ -371,13 +329,13 @@ class Cinema {
 	
 	public function getNewScreenings(): Screenings {
 		$new = [];
-		if(isset($this->screenings)) {
+		if(!$this->screenings->isEmpty())  {
 			$currentDate = new \DateTime();
 			
 			/** @var Screening $screening */
 			foreach($this->screenings as $screening) {
 				$showtimes = $screening->getShowtimes();
-				if(!empty($showtimes)) {
+				if(!$showtimes->isEmpty()) {
 					/** @var Showtime $showtime */
 					foreach($showtimes as $showtime) {
 						if($currentDate < $showtime->getDatetime()) {
@@ -389,5 +347,14 @@ class Cinema {
 			}
 		}
 		return new Screenings($new);
+	}
+	
+	public function getPlaces(): Collection {
+		return $this->places;
+	}
+	
+	public function setPlaces(Collection $places): Cinema {
+		$this->places = $places;
+		return $this;
 	}
 }

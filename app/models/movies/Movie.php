@@ -1,10 +1,9 @@
 <?php
 namespace Zitkino\Movies;
 
-use Dobine\Entities\Identifier;
+use Dobine\Attributes\Id;
 use Doctrine\ORM\Mapping as ORM;
-use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
+use Zitkino\Screenings\{Screening, Screenings};
 
 /**
  * Movie
@@ -13,7 +12,7 @@ use Zitkino\Screenings\Screenings;
  * @ORM\Entity
  */
 class Movie {
-	use Identifier;
+	use Id;
 	
 	/**
 	 * @var string
@@ -54,86 +53,52 @@ class Movie {
 		$this->screenings = new Screenings();
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->name;
 	}
 	
-	/**
-	 * @return Screenings
-	 */
 	public function getScreenings(): Screenings {
 		return $this->screenings;
 	}
 	
-	/**
-	 * @param Screenings $screenings
-	 * @return Movie
-	 */
 	public function setScreenings(Screenings $screenings): Movie {
 		$this->screenings = $screenings;
 		return $this;
 	}
 	
-	/**
-	 * @return int|null
-	 */
 	public function getLength(): ?int {
 		return $this->length;
 	}
 	
-	/**
-	 * @param int|null $length
-	 * @return Movie
-	 */
 	public function setLength(?int $length): Movie {
 		$this->length = $length;
 		return $this;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getCsfd(): ?string {
 		return $this->csfd;
 	}
 	
-	/**
-	 * @param string|null $csfd
-	 * @return Movie
-	 */
 	public function setCsfd(?string $csfd): Movie {
 		$this->csfd = $csfd;
 		return $this;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getImdb(): ?string {
 		return $this->imdb;
 	}
 	
-	/**
-	 * @param string|null $imdb
-	 * @return Movie
-	 */
 	public function setImdb(?string $imdb): Movie {
 		$this->imdb = $imdb;
 		return $this;
 	}
 	
-	/**
-	 * @return array|null
-	 */
 	public function getDatabases(): ?array {
 		$this->setDatabases();
 		return $this->databases;
 	}
 	
-	public function setDatabases() {
+	public function setDatabases(): void {
 		$csfdUrl = "https://www.csfd.cz";
 		if(isset($this->csfd)) {
 			$this->databases["csfd"] = $csfdUrl."/film/".$this->csfd;
@@ -149,7 +114,7 @@ class Movie {
 		}
 	}
 	
-	public function addScreening(Screening $screening) {
+	public function addScreening(Screening $screening): void {
 		$this->screenings[] = $screening;
 	}
 }

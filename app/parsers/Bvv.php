@@ -1,11 +1,11 @@
 <?php
 namespace Zitkino\Parsers;
 
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
-use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Showtime;
+use Zitkino\Screenings\{Screening, Showtime};
 
 /**
  * BVV parser.
@@ -18,6 +18,8 @@ class Bvv extends Parser {
 	
 	/**
 	 * @throws ParserException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function parse(): void {
 		$movieItems = 0;
@@ -117,6 +119,7 @@ class Bvv extends Parser {
 						} else {
 							$length = $lengthArray[0];
 						}
+						$length = (int)$length;
 						
 						break;
 					}
@@ -134,7 +137,6 @@ class Bvv extends Parser {
 		}
 		$this->cinema->setParsed(new \DateTime());
 		
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

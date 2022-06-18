@@ -23,7 +23,7 @@ class CinemaFacade extends DobineFacade {
 	
 	/**
 	 * @param int|string $id
-	 * @return object|Cinema
+	 * @return Cinema|object|null
 	 */
 	public function getById($id) {
 		if(is_numeric($id)) {
@@ -33,7 +33,17 @@ class CinemaFacade extends DobineFacade {
 		}
 	}
 	
-	public function getType($type) {
+	/**
+	 * @return CinemaType|object|null
+	 */
+	public function getType(string $type) {
 		return $this->repositoryType->findOneBy(["code" => $type]);
+	}
+	
+	public function save($entity) {
+		$this->entityManager->persist($entity);
+		$this->entityManager->flush();
+		
+		return $entity->getId();
 	}
 }

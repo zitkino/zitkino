@@ -1,10 +1,8 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Nette\Utils\Strings;
-use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
@@ -13,16 +11,6 @@ use Zitkino\Screenings\Screening;
  * Letní kino na Dvoře Městského divadla parser.
  */
 class Mdb extends Parser {
-	/**
-	 * Mdb constructor.
-	 * @param ParserService $parserService
-	 * @param Cinema $cinema
-	 */
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("https://www.letnikinobrno.cz/program-kina/");
-	}
-	
 	/**
 	 * @throws ORMException
 	 * @throws OptimisticLockException
@@ -40,7 +28,7 @@ class Mdb extends Parser {
 				if(isset($nameItem)) {
 					$name = trim($nameItem->nodeValue);
 				}
-				
+
 //				$linkQuery = $xpath->query(".//a", $event);
 //				$linkItem = $linkQuery->item(0);
 //				$link = null;
@@ -82,17 +70,16 @@ class Mdb extends Parser {
 				}
 				
 				$screening = new Screening($movie, $this->cinema);
-				$screening->setPrice($price);
-//				$screening->setLink($link);
-				$screening->setShowtimes($datetimes);
+				$screening->setPrice($price)
+//				->setLink($link)
+					->setShowtimes($datetimes);
 				
-				$this->parserService->getEntityManager()->persist($screening);
+				$this->parserService->getScreeningFacade()->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

@@ -1,16 +1,18 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Nettrine\ORM\EntityManagerDecorator;
+use Contributte\Guzzlette\ClientFactory;
 use Tracy\Debugger;
-use Zitkino\Cinemas\Cinema;
-use Zitkino\Cinemas\CinemaFacade;
+use Zitkino\Cinemas\{Cinema, CinemaFacade};
 use Zitkino\LanguageFacade;
 use Zitkino\MovieFacade;
 use Zitkino\PlaceFacade;
 use Zitkino\ScreeningFacade;
 
 class ParserService {
+	/** @var ClientFactory */
+	private $clientFactory;
+	
 	/** @var Parser */
 	private $parser;
 	
@@ -29,16 +31,17 @@ class ParserService {
 	/** @var ScreeningFacade */
 	private $screeningFacade;
 	
-	/** @var EntityManagerDecorator */
-	private $entityManager;
-	
-	public function __construct(EntityManagerDecorator $entityManager, CinemaFacade $cinemaFacade, LanguageFacade $languageFacade, MovieFacade $movieFacade, PlaceFacade $placeFacade, ScreeningFacade $screeningFacade) {
+	public function __construct(ClientFactory $clientFactory, CinemaFacade $cinemaFacade, LanguageFacade $languageFacade, MovieFacade $movieFacade, PlaceFacade $placeFacade, ScreeningFacade $screeningFacade) {
+		$this->clientFactory = $clientFactory;
 		$this->cinemaFacade = $cinemaFacade;
 		$this->languageFacade = $languageFacade;
 		$this->movieFacade = $movieFacade;
 		$this->placeFacade = $placeFacade;
 		$this->screeningFacade = $screeningFacade;
-		$this->entityManager = $entityManager;
+	}
+	
+	public function getClientFactory(): ClientFactory {
+		return $this->clientFactory;
 	}
 	
 	public function getParser(): Parser {
@@ -50,7 +53,7 @@ class ParserService {
 		return $this;
 	}
 	
-	public function initParser(Cinema $cinema) {
+	public function initParser(Cinema $cinema): void {
 		try {
 			$parserClass = "\Zitkino\Parsers\\".ucfirst($cinema->getCode());
 			if(class_exists($parserClass)) {
@@ -65,10 +68,6 @@ class ParserService {
 			Debugger::barDump($exception);
 			Debugger::log($exception, Debugger::EXCEPTION);
 		}
-	}
-	
-	public function getEntityManager(): EntityManagerDecorator {
-		return $this->entityManager;
 	}
 	
 	public function getCinemaFacade(): CinemaFacade {

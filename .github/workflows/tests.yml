@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.3']
+        dependencies: ['', '--prefer-lowest']
+    
+    name: PHP ${{ matrix.php }} ${{ matrix.dependencies }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, json, mbstring, tokenizer
+          coverage: none
+        
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+      
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+            
+      - name: Remove composer.lock
+        run: rm -rf composer.lock
+
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --no-progress ${{ matrix.dependecies }}
+        
+      - run: vendor/bin/phpstan analyse src -c tests/phpstan.neon
+#      - run: vendor/bin/tester -C tests

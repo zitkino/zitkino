@@ -2,13 +2,13 @@
 namespace Zitkino;
 
 use Dobine\Facades\DobineFacade;
-use Doctrine\DBAL\ConnectionException;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\DBAL\{ConnectionException, Exception as DBALException};
+use Doctrine\ORM\{EntityManager, EntityRepository, Mapping\ClassMetadata};
 use Nette\Utils\Strings;
 use Nettrine\ORM\EntityManagerDecorator;
 use Tracy\Debugger;
 use Zitkino\Cinemas\Cinema;
-use Zitkino\Screenings\{Screening, ScreeningType, Showtime};
+use Zitkino\Screenings\{Screening, ScreeningType};
 
 /**
  * Class ScreeningFacade
@@ -17,20 +17,19 @@ use Zitkino\Screenings\{Screening, ScreeningType, Showtime};
  */
 class ScreeningFacade extends DobineFacade {
 	/** @var EntityRepository */
-	private $repositoryType, $repositoryShowtime;
+	private $repositoryType;
 	
 	public function __construct(EntityManagerDecorator $entityManager) {
 		$this->entityManager = $entityManager;
 		$this->repository = $this->entityManager->getRepository(Screening::class);
 		$this->repositoryType = $this->entityManager->getRepository(ScreeningType::class);
-		$this->repositoryShowtime = $this->entityManager->getRepository(Showtime::class);
+		//$this->repositoryShowtime = $this->entityManager->getRepository(Showtime::class);
 	}
 	
 	/**
-	 * @param string|null $type
 	 * @return ScreeningType|object|null
 	 */
-	public function getType(?string $type = null): ?ScreeningType {
+	public function getType(?string $type = null) {
 		if(empty($type)) {
 			return $this->repositoryType->findOneBy(["code" => "2D"]);
 		} else {
@@ -46,11 +45,10 @@ class ScreeningFacade extends DobineFacade {
 	
 	/**
 	 * Cleanup any needed table abroad TRUNCATE SQL function
-	 *
-	 * @param string $className
-	 * @return bool
+	 * @throws DBALException
 	 */
 	public function truncateTable(string $className): bool {
+		/** @var ClassMetadata $cmd */
 		$cmd = $this->entityManager->getClassMetadata($className);
 		$connection = $this->entityManager->getConnection();
 		$connection->beginTransaction();

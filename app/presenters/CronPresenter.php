@@ -2,8 +2,7 @@
 namespace Zitkino\Presenters;
 
 use Nette\Application\AbortException;
-use Zitkino\Cinemas\Cinema;
-use Zitkino\Cinemas\CinemaFacade;
+use Zitkino\Cinemas\{Cinema, CinemaFacade};
 use Zitkino\Parsers\ParserService;
 
 /**

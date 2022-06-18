@@ -1,7 +1,7 @@
 <?php
 namespace Zitkino\Screenings;
 
-use Dobine\Entities\Identifier;
+use Dobine\Attributes\Id;
 use Doctrine\ORM\Mapping as ORM;
 use Nette\Utils\Strings;
 
@@ -12,7 +12,7 @@ use Nette\Utils\Strings;
  * @ORM\Entity
  */
 class ScreeningType {
-	use Identifier;
+	use Id;
 	
 	/**
 	 * @var string
@@ -35,33 +35,19 @@ class ScreeningType {
 		return $this->getCode();
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getCode(): string {
 		return $this->code;
 	}
 	
-	/**
-	 * @param string $code
-	 * @return ScreeningType
-	 */
 	public function setCode(string $code): ScreeningType {
 		$this->code = Strings::webalize($code);
 		return $this;
 	}
 	
-	/**
-	 * @return null|string
-	 */
 	public function getName(): ?string {
 		return $this->name;
 	}
 	
-	/**
-	 * @param null|string $name
-	 * @return ScreeningType
-	 */
 	public function setName(?string $name): ScreeningType {
 		$this->name = $name;
 		return $this;

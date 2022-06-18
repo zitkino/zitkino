@@ -1,6 +1,7 @@
 <?php
 namespace Zitkino\Presenters;
 
+use Tracy\Debugger;
 use Zitkino\Cinemas\CinemaFacade;
 
 /**
@@ -33,7 +34,7 @@ class CinemaPresenter extends BasePresenter {
 		}
 		$this->template->gmap = $param;
 		
-		$this->template->gmapKey = $this->context->getParameters()["google-maps-key"];
+		$this->template->gmapKey = $this->getContainer()->getParameters()["google-maps-key"];
 	}
 	
 	public function renderClassic($id) {

@@ -10,7 +10,7 @@ trait Cinemas {
 		return $this->repository->visible()->getQuery()->getResult();
 	}
 	
-	public function getCurrent() {
+	public function getCurrent(): array {
 		$qb = $this->repository->visible();
 		
 		$month = (int)date("m");
@@ -22,11 +22,11 @@ trait Cinemas {
 		return $qb->getQuery()->getResult();
 	}
 	
-	public function getParsable() {
+	public function getParsable(): array {
 		return $this->repository->parsable()->getQuery()->getResult();
 	}
 	
-	public function getByType($type): array {
+	public function getByType(string $type): array {
 		switch($type) {
 			case "all":
 				return $this->getAll();
@@ -39,7 +39,7 @@ trait Cinemas {
 		}
 	}
 	
-	public function getWithMovies($type = "all"): array {
+	public function getWithMovies(string $type = "all"): array {
 		$output = [];
 		
 		$cinemas = $this->getByType($type);

@@ -1,3 +1,5 @@
+{varType Zitkino\Cinemas\Cinema $cinema}
+
 {block title}{$cinema->getName()}{/block}
 
 {block content}
@@ -9,24 +11,24 @@
 <div>
 	<div class="float-right">
 		<a href="{$cinema->getProgramme()}" title="Program na webu kina.">{fa book} podrobný program</a><br>
-		
+
 		<span class="float-right">
-			{php $facebook = $cinema->getFacebook();}
+			{var $facebook = $cinema->getFacebook()}
 			{ifset $facebook}
 				<a href="https://www.facebook.com/{$facebook}">{fa b, facebook, "2x"}</a>
 			{/ifset}
-			
-			{php $googlePlus = $cinema->getGooglePlus();}
+
+			{var $googlePlus = $cinema->getGooglePlus()}
 			{ifset $googlePlus}
 				<a href="https://plus.google.com/{$googlePlus}">{fa b, google-plus-g, "2x"}</a>
 			{/ifset}
-			
-			{php $instagram = $cinema->getInstagram();}
+
+			{var $instagram = $cinema->getInstagram()}
 			{ifset $instagram}
 				<a href="https://www.instagram.com/{$instagram}">{fa b, instagram, "2x"}</a>
 			{/ifset}
-			
-			{php $twitter = $cinema->getTwitter();}
+
+			{var $twitter = $cinema->getTwitter()}
 			{ifset $twitter}
 				<a href="https://twitter.com/{$twitter}">{fa b, twitter, "2x"}</a>
 			{/ifset}
@@ -43,7 +45,7 @@
 		{/if}
 		{fa link} <a href="{$cinema->getUrl()}">{$cinema->getUrl()}</a>
 	</address>
-	
+
 	<a href="#cinemaMap" onClick="showCinemaMap();" id="cinemaMapButton" class="btn btn-danger collapsed" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cinemaMap">
 		{fa r, map} <span id="cinemaMapButtonText">Zobrazit</span> kino na mapě
 	</a><br><br>
@@ -59,7 +61,7 @@
 	// if($("#desktopTest").is(":hidden")) {
 	// 	$("#cinemaMapButton").click();
 	// }
-	
+
 	function showCinemaMap() {
 		if($("#cinemaMap").css("display") === "block") {
 			$("#cinemaMap").css("display", "none");

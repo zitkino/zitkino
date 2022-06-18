@@ -2,7 +2,6 @@
 namespace Zitkino\Parsers;
 
 use Doctrine\ORM\{OptimisticLockException, ORMException};
-use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
@@ -11,11 +10,6 @@ use Zitkino\Screenings\Screening;
  * Špilberk parser.
  */
 class Spilberk extends Parser {
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("http://www.letnikinospilberk.cz");
-	}
-	
 	/**
 	 * @throws ORMException
 	 * @throws OptimisticLockException
@@ -83,13 +77,13 @@ class Spilberk extends Parser {
 			
 			$priceQuery = $xpath->query(".//p[@class='cena']", $event);
 			$priceString = $priceQuery->item(0)->nodeValue;
-			$price = str_replace(["na místě", ",- Kč"], "", $priceString);
+			$price = (int)str_replace(["na místě", ",- Kč"], "", $priceString);
 			
 			$movie = $this->parserService->getMovieFacade()->getByName($name);
 			if(!isset($movie)) {
 				$movie = new Movie($name);
-				$movie->setLength($length);
-				$movie->setCsfd($csfd);
+				$movie->setLength($length)
+					->setCsfd($csfd);
 				$this->parserService->getMovieFacade()->save($movie);
 			}
 			
@@ -99,17 +93,16 @@ class Spilberk extends Parser {
 			}
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages($dubbing, $subtitles);
-			$screening->setPrice($price);
-			$screening->setLink($link);
-			$screening->setShowtimes($datetimes);
+			$screening->setLanguages($dubbing, $subtitles)
+				->setPrice($price)
+				->setLink($link)
+				->setShowtimes($datetimes);
 			
-			$this->parserService->getEntityManager()->persist($screening);
+			$this->parserService->getScreeningFacade()->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

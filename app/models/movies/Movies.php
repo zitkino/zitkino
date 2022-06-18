@@ -7,14 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Movies.
  */
 class Movies extends ArrayCollection {
-	/**
-	 * @return Movie[]
-	 */
 	public function getMovies(): array {
 		return $this->toArray();
 	}
 	
-	public function hasLengths() {
+	public function hasLengths(): bool {
 		/** @var Movie $movie */
 		foreach($this->toArray() as $movie) {
 			$length = $movie->getLength();

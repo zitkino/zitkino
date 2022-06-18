@@ -1,10 +1,8 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Nette\Utils\Strings;
-use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
@@ -13,16 +11,6 @@ use Zitkino\Screenings\Screening;
  * Delnak parser.
  */
 class Delnak extends Parser {
-	/**
-	 * Delnak constructor.
-	 * @param ParserService $parserService
-	 * @param Cinema $cinema
-	 */
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("http://www.delnickydumbrno.cz/cely-program.html");
-	}
-	
 	/**
 	 * @throws ORMException
 	 * @throws OptimisticLockException
@@ -61,7 +49,7 @@ class Delnak extends Parser {
 								}
 							}
 							
-							$length = str_replace("min.", "", $data[2]);
+							$length = (int)str_replace("min.", "", $data[2]);
 						}
 					}
 				}
@@ -83,11 +71,12 @@ class Delnak extends Parser {
 				$datetime->setTime(intval($time[0]), intval($time[1]));
 				$datetimes = [$datetime];
 				
+				$price = null;
 				$priceQuery = $xpath->query("//p[@class='entry']", $event);
 				$priceItem = $priceQuery->item($movieItems);
 				if(isset($priceItem)) {
 					$priceString = $priceItem->nodeValue;
-					$price = str_replace(["Vstupné: ", " Kč"], "", $priceString);
+					$price = (int)str_replace(["Vstupné: ", " Kč"], "", $priceString);
 				}
 				
 				$movie = $this->parserService->getMovieFacade()->getByName($name);
@@ -98,12 +87,12 @@ class Delnak extends Parser {
 				}
 				
 				$screening = new Screening($movie, $this->cinema);
-				$screening->setLanguages($dubbing, $subtitles);
-				$screening->setPrice($price);
-				$screening->setLink($link);
-				$screening->setShowtimes($datetimes);
+				$screening->setLanguages($dubbing, $subtitles)
+					->setPrice($price)
+					->setLink($link)
+					->setShowtimes($datetimes);
 				
-				$this->parserService->getEntityManager()->persist($screening);
+				$this->parserService->getScreeningFacade()->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 			
@@ -111,7 +100,6 @@ class Delnak extends Parser {
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

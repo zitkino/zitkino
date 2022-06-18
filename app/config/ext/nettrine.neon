@@ -1,0 +1,52 @@
+# Nettrine extensions
+extensions:
+	nettrine.annotations: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrine.cache: Nettrine\Cache\DI\CacheExtension
+
+	nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
+	nettrine.dbal.console: Nettrine\DBAL\DI\DbalConsoleExtension(%consoleMode%)
+
+	nettrine.orm: Nettrine\ORM\DI\OrmExtension
+	nettrine.orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrine.orm.cache: Nettrine\ORM\DI\OrmCacheExtension
+	nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension(%consoleMode%)
+
+	nettrine.extensions.atlantic18: Nettrine\Extensions\Atlantic18\DI\Atlantic18BehaviorExtension
+
+nettrine.dbal:
+	debug:
+		panel: %debugMode%
+		sourcePaths: [%appDir%]
+	connection:
+		charset: utf8mb4
+		driver: pdo_mysql
+
+nettrine.orm:
+	configuration:
+		autoGenerateProxyClasses: ::constant(Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS)
+
+nettrine.orm.annotations:
+	mapping:
+		Zitkino: %appDir%/models
+
+		Gedmo\Translatable: %appDir%/../vendor/gedmo/doctrine-extensions/src/Translatable/Entity
+#		Gedmo\Loggable: %appDir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity
+#		Gedmo\Tree: %appDir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity
+
+nettrine.extensions.atlantic18:
+	loggable: false
+	sluggable: false
+	softDeleteable: false
+	treeable: false
+	blameable: false
+	timestampable: false
+	uploadable: false
+	sortable: false
+	ipTraceable: false
+
+	translatable:
+		translatable: en
+		default: en
+		translationFallback: false
+		persistDefaultTranslation: false
+		skipOnLoad: false

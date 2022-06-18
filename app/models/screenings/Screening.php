@@ -1,9 +1,8 @@
 <?php
 namespace Zitkino\Screenings;
 
-use Dobine\Entities\Identifier;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Dobine\Attributes\Id;
+use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
@@ -16,7 +15,7 @@ use Zitkino\Place;
  * @ORM\Entity
  */
 class Screening {
-	use Identifier;
+	use Id;
 	
 	/**
 	 * @var Movie
@@ -94,32 +93,19 @@ class Screening {
 		return $this->getMovie()->getId()."-".$this->getCinema()."-".$this->getType()."-".$this->getDubbing()."-".$this->getSubtitles();
 	}
 	
-	/**
-	 * @return Movie
-	 */
 	public function getMovie(): Movie {
 		return $this->movie;
 	}
 	
-	/**
-	 * @return Cinema
-	 */
 	public function getCinema(): Cinema {
 		return $this->cinema;
 	}
 	
-	/**
-	 * @return int|null
-	 */
 	public function getPrice(): ?int {
 		return $this->price;
 	}
 	
-	/**
-	 * @param int|string|null $price
-	 * @return Screening
-	 */
-	public function setPrice($price): Screening {
+	public function setPrice(?int $price): Screening {
 		if(isset($price) and !empty($price)) {
 			$this->price = intval($price);
 		} else {
@@ -129,7 +115,7 @@ class Screening {
 		return $this;
 	}
 	
-	public function fixPrice() {
+	public function fixPrice(): ?string {
 		if(!isset($this->price) or !is_numeric($this->price)) {
 			return null;
 		} else {
@@ -141,109 +127,62 @@ class Screening {
 		}
 	}
 	
-	/**
-	 * @return null|string
-	 */
 	public function getLink(): ?string {
 		return $this->link;
 	}
 	
-	/**
-	 * @param null|string $link
-	 * @return Screening
-	 */
 	public function setLink(?string $link): Screening {
 		$this->link = $link;
 		return $this;
 	}
 	
-	/**
-	 * @return string|null
-	 */
-	public function getDubbing() {
+	public function getDubbing(): ?string {
 		return $this->dubbing;
 	}
 	
-	/**
-	 * @param string|null $dubbing
-	 * @return Screening
-	 */
-	public function setDubbing($dubbing): Screening {
+	public function setDubbing(?string $dubbing): Screening {
 		$this->dubbing = $dubbing;
 		return $this;
 	}
 	
-	/**
-	 * @return string|null
-	 */
-	public function getSubtitles() {
+	public function getSubtitles(): ?string {
 		return $this->subtitles;
 	}
 	
-	/**
-	 * @param string|null $subtitles
-	 * @return Screening
-	 */
-	public function setSubtitles($subtitles): Screening {
+	public function setSubtitles(?string $subtitles): Screening {
 		$this->subtitles = $subtitles;
 		return $this;
 	}
 	
-	/**
-	 * @return ScreeningType|null
-	 */
 	public function getType(): ?ScreeningType {
 		return $this->type;
 	}
 	
-	/**
-	 * @param ScreeningType|null $type
-	 * @return Screening
-	 */
 	public function setType(?ScreeningType $type): Screening {
 		$this->type = $type;
 		return $this;
 	}
 	
-	/**
-	 * @return Place|null
-	 */
 	public function getPlace(): ?Place {
 		return $this->place;
 	}
 	
-	/**
-	 * @param Place|null $place
-	 * @return Screening
-	 */
 	public function setPlace(?Place $place): Screening {
 		$this->place = $place;
 		return $this;
 	}
 	
-	/**
-	 * @param string|null $dubbing
-	 * @param string|null $subtitles
-	 * @return Screening
-	 */
-	public function setLanguages($dubbing, $subtitles): Screening {
+	public function setLanguages(?string $dubbing, ?string $subtitles): Screening {
 		$this->dubbing = $dubbing;
 		$this->subtitles = $subtitles;
 		return $this;
 	}
 	
-	/**
-	 * @return Collection
-	 */
 	public function getShowtimes(): Collection {
 		return $this->showtimes;
 	}
 	
-	/**
-	 * @param \DateTime[] $datetimes
-	 * @param bool $actual
-	 */
-	public function setShowtimes($datetimes, $actual = true) {
+	public function setShowtimes(array $datetimes, bool $actual = true): void {
 		foreach($datetimes as $datetime) {
 			$showtime = new Showtime($this, $datetime);
 			
@@ -259,7 +198,7 @@ class Screening {
 		}
 	}
 	
-	public function addShowtime($showtime) {
+	public function addShowtime(Showtime $showtime): void {
 		$this->showtimes[] = $showtime;
 	}
 }

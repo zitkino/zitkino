@@ -1,7 +1,7 @@
 <?php
 namespace Zitkino\Cinemas;
 
-use Dobine\Entities\Identifier;
+use Dobine\Attributes\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  */
 class CinemaType {
-	use Identifier;
+	use Id;
 	
 	/**
 	 * @var string
@@ -30,24 +30,14 @@ class CinemaType {
 		$this->name = $code;
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getCode(): string {
 		return $this->code;
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->name;
 	}
 	
-	/**
-	 * @param string $name
-	 * @return CinemaType
-	 */
 	public function setName(string $name): CinemaType {
 		$this->name = $name;
 		return $this;

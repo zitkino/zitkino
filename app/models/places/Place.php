@@ -1,7 +1,7 @@
 <?php
 namespace Zitkino;
 
-use Dobine\Entities\Identifier;
+use Dobine\Attributes\Id;
 use Doctrine\ORM\Mapping as ORM;
 use Zitkino\Cinemas\Cinema;
 use Zitkino\Screenings\Screenings;
@@ -9,11 +9,11 @@ use Zitkino\Screenings\Screenings;
 /**
  * Place
  *
- * @ORM\Table(name="place", uniqueConstraints={@ORM\UniqueConstraint(name="code", columns={"code"})})
+ * @ORM\Table(name="places")
  * @ORM\Entity
  */
 class Place {
-	use Identifier;
+	use Id;
 	
 	/**
 	 * @var string
@@ -29,7 +29,7 @@ class Place {
 	
 	/**
 	 * @var Cinema
-	 * @ORM\ManyToOne(targetEntity="\Zitkino\Cinemas\Cinema")
+	 * @ORM\ManyToOne(targetEntity="\Zitkino\Cinemas\Cinema", inversedBy="places")
 	 * @ORM\JoinColumns({
 	 *   @ORM\JoinColumn(name="cinema", referencedColumnName="id", nullable=false)
 	 * })
@@ -46,51 +46,39 @@ class Place {
 		$this->name = $name;
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->name;
 	}
 	
-	/**
-	 * @param string $name
-	 * @return Place
-	 */
 	public function setName(string $name): Place {
 		$this->name = $name;
 		return $this;
 	}
 	
-	/**
-	 * @return string|null
-	 */
 	public function getLink(): ?string {
 		return $this->link;
 	}
 	
-	/**
-	 * @param string|null $link
-	 * @return Place
-	 */
 	public function setLink(?string $link): Place {
 		$this->link = $link;
 		return $this;
 	}
 	
-	/**
-	 * @return Cinema
-	 */
 	public function getCinema(): Cinema {
 		return $this->cinema;
 	}
 	
-	/**
-	 * @param Cinema $cinema
-	 * @return Place
-	 */
 	public function setCinema(Cinema $cinema): Place {
 		$this->cinema = $cinema;
+		return $this;
+	}
+	
+	public function getScreenings(): Screenings {
+		return $this->screenings;
+	}
+	
+	public function setScreenings(Screenings $screenings): Place {
+		$this->screenings = $screenings;
 		return $this;
 	}
 }
