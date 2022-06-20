@@ -42,5 +42,5 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --no-progress ${{ matrix.dependecies }}
         
-      - run: vendor/bin/phpstan analyse src -c tests/phpstan.neon
+      - run: vendor/bin/phpstan analyse app -c app/config/phpstan.neon
 #      - run: vendor/bin/tester -C tests
