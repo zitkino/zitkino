@@ -3,37 +3,37 @@ parameters:
 		-
 			message: "#^Property Dobine\\\\Facades\\\\DobineFacade\\:\\:\\$entityManager \\(Doctrine\\\\ORM\\\\EntityManager\\) does not accept Nettrine\\\\ORM\\\\EntityManagerDecorator\\.$#"
 			count: 1
-			path: app/models/cinemas/CinemaFacade.php
+			path: app/Models/cinemas/CinemaFacade.php
 
 		-
 			message: "#^Property Zitkino\\\\Cinemas\\\\CinemaFacade\\:\\:\\$repository \\(Zitkino\\\\Cinemas\\\\CinemaRepository\\) does not accept Doctrine\\\\ORM\\\\EntityRepository\\<Zitkino\\\\Cinemas\\\\Cinema\\>\\.$#"
 			count: 1
-			path: app/models/cinemas/CinemaFacade.php
+			path: app/Models/cinemas/CinemaFacade.php
 
 		-
 			message: "#^Property Dobine\\\\Facades\\\\DobineFacade\\:\\:\\$entityManager \\(Doctrine\\\\ORM\\\\EntityManager\\) does not accept Nettrine\\\\ORM\\\\EntityManagerDecorator\\.$#"
 			count: 1
-			path: app/models/languages/LanguageFacade.php
+			path: app/Models/languages/LanguageFacade.php
 
 		-
 			message: "#^Property Dobine\\\\Facades\\\\DobineFacade\\:\\:\\$entityManager \\(Doctrine\\\\ORM\\\\EntityManager\\) does not accept Nettrine\\\\ORM\\\\EntityManagerDecorator\\.$#"
 			count: 1
-			path: app/models/movies/MovieFacade.php
+			path: app/Models/movies/MovieFacade.php
 
 		-
 			message: "#^Property Dobine\\\\Facades\\\\DobineFacade\\:\\:\\$entityManager \\(Doctrine\\\\ORM\\\\EntityManager\\) does not accept Nettrine\\\\ORM\\\\EntityManagerDecorator\\.$#"
 			count: 1
-			path: app/models/places/PlaceFacade.php
+			path: app/Models/places/PlaceFacade.php
 
 		-
 			message: "#^Property Dobine\\\\Facades\\\\DobineFacade\\:\\:\\$entityManager \\(Doctrine\\\\ORM\\\\EntityManager\\) does not accept Nettrine\\\\ORM\\\\EntityManagerDecorator\\.$#"
 			count: 1
-			path: app/models/screenings/ScreeningFacade.php
+			path: app/Models/screenings/ScreeningFacade.php
 
 		-
 			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\ORM\\\\EntityManager\\:\\:getClassMetadata\\(\\)$#"
 			count: 1
-			path: app/models/screenings/ScreeningFacade.php
+			path: app/Models/screenings/ScreeningFacade.php
 
 		-
 			message: "#^Parameter \\#1 \\$price of method Zitkino\\\\Screenings\\\\Screening\\:\\:setPrice\\(\\) expects int\\|null, float given\\.$#"
