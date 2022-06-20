@@ -10,7 +10,7 @@ class HomePresenter extends BasePresenter {
 	/** @var CinemaFacade @inject */
 	public $cinemaFacade;
 	
-	public function renderDefault() {
+	public function renderDefault(): void {
 		$cinemas = $this->cinemaFacade->getWithMovies("current");
 		$this->template->cinemas = $cinemas;
 	}

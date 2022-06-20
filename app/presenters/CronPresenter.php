@@ -18,14 +18,14 @@ class CronPresenter extends BasePresenter {
 	/**
 	 * @throws AbortException
 	 */
-	public function actionDefault() {
+	public function actionDefault(): void {
 		$this->redirect(":Home:default");
 	}
 	
 	/**
 	 * @throws AbortException
 	 */
-	public function actionParse() {
+	public function actionParse(): void {
 		$cinemas = $this->cinemaFacade->getParsable();
 		
 		/** @var Cinema $cinema */

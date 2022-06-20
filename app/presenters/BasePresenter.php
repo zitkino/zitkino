@@ -44,7 +44,7 @@ abstract class BasePresenter extends Presenter {
 	/**
 	 * @throws AbortException
 	 */
-	public function handleChangeLocale($locale): void {
+	public function handleChangeLocale(string $locale): void {
 		$this->translatorSessionResolver->setLocale($locale);
 		$this->translator->setLocale($locale);
 		$this->redirect("this");

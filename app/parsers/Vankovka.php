@@ -40,7 +40,7 @@ class Vankovka extends Parser {
 			$datetimes = [$datetime];
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setPrice(0.001)
+			$screening->setPrice(0)
 				->setLink("https://www.galerie-vankovka.cz/novinky-a-akce-centra/letni-kino-e34068/")
 				->setShowtimes($datetimes);
 			
