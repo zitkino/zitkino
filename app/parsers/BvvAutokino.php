@@ -1,9 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Zitkino\Cinemas\Cinema;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Place;
@@ -13,11 +11,6 @@ use Zitkino\Screenings\{Screening, Showtime};
  * BVV parser.
  */
 class BvvAutokino extends Parser {
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("https://www.ibvv.cz/cs/akce/brno-autokino-21594/doprovody-program");
-	}
-	
 	/**
 	 * @throws ParserException
 	 * @throws ORMException
@@ -58,7 +51,7 @@ class BvvAutokino extends Parser {
 			
 			$priceQuery = $xpath->query(".//*[contains(@class, 'accompanying-program-item')]/*[contains(@class, 'info')]/*[contains(@class, 'price')]", $event);
 			$priceValue = trim($priceQuery->item(0)->nodeValue);
-			$price = str_replace(" Kč", "", $priceValue);
+			$price = (int)str_replace(" Kč", "", $priceValue);
 			
 			$linkQuery = $xpath->query(".//*[contains(@class, 'accompanying-program-item')]/*[contains(@class, 'detail')]//a[contains(@class, 'copy-to-clipboard')]", $event);
 			$link = $linkQuery->item(0)->attributes->getNamedItem("href")->nodeValue;
@@ -66,12 +59,12 @@ class BvvAutokino extends Parser {
 			$movie = $this->parserService->getMovieFacade()->getByName($name);
 			if(!isset($movie)) {
 				$movie = new Movie($name);
-				$movie->setLength($length);
+				$movie->setLength($length ? (int)$length : null);
 				$this->parserService->getMovieFacade()->save($movie);
 			}
 			
 			if(empty($movie->getLength())) {
-				$movie->setLength($length);
+				$movie->setLength($length ? (int)$length : null);
 				$this->parserService->getMovieFacade()->save($movie);
 			}
 			
@@ -80,8 +73,7 @@ class BvvAutokino extends Parser {
 				$place = new Place($placeName);
 				$place->setCinema($this->cinema);
 				
-				$this->parserService->getEntityManager()->persist($place);
-				$this->parserService->getEntityManager()->flush($place);
+				$this->parserService->getPlaceFacade()->save($place);
 			}
 			
 			$screening = new Screening($movie, $this->cinema);
@@ -96,12 +88,11 @@ class BvvAutokino extends Parser {
 			
 			$movie->addScreening($screening);
 			
-			$this->parserService->getEntityManager()->persist($screening);
+			$this->parserService->getScreeningFacade()->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

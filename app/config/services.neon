@@ -4,3 +4,5 @@ services:
 		tags: [nettrine.subscriber]
 
 	parser: Zitkino\Parsers\ParserService
+
+	metaService: App\Services\MetaService(%meta%)

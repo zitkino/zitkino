@@ -1,4 +1,4 @@
-{block title}Klasická kina{/block}
+{block title}{_"cinemas.$type.title"|firstUpper}{/block}
 
 {block #content}
 <h1 n:tag-if="title" class="page-header">{include title}</h1>
@@ -13,7 +13,7 @@
 <nav>
 	<ul class="pagination">
 		<li class="page-item">
-			<a n:href="Cinema:classic_programme" class="page-link">{fa book} program klasických kin <span aria-hidden="true">&rarr;</span></a>
+			<a n:href="Cinema:programme type=>$type" class="page-link">{fa book} {_"cinemas.$type.programme"} <span aria-hidden="true">&rarr;</span></a>
 		</li>
 	</ul>
 </nav>

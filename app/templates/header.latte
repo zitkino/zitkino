@@ -1,7 +1,7 @@
 {block #header}
 <nav class="navbar-header">
 	<a href="{$basePath}/index.php" class="navbar-brand">
-		{*<img src="{$basePath}/favicon.ico" class="logo" alt="logo">*}	{$meta["name"]}
+		{*<img src="{$basePath}/favicon.ico" class="logo" alt="logo">*}	{$meta->get("name")}
 	</a>
 
 	<button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -18,13 +18,13 @@
 			<a n:href="Cinema:default" class="nav-link">{fa list}&nbsp;Seznam kin</a>
 		</li>
 		<li class="nav-item">
-			<a n:href="Cinema:classic_programme" class="nav-link">{fa r, building}&nbsp;Klasická kina</a>
+			<a n:href="Cinema:programme type=>'classic'" class="nav-link">{fa r, building}&nbsp;Klasická kina</a>
 		</li>
 		<li class="nav-item">
-			<a n:href="Cinema:multiplex_programme" class="nav-link">{fa building}&nbsp;Multiplexy</a>
+			<a n:href="Cinema:programme type=>'multiplex'" class="nav-link">{fa building}&nbsp;Multiplexy</a>
 		</li>
 		<li class="nav-item">
-			<a n:href="Cinema:summer_programme" class="nav-link">{fa r, sun}&nbsp;Letní kina</a>
+			<a n:href="Cinema:programme type=>'summer'" class="nav-link">{fa r, sun}&nbsp;Letní kina</a>
 		</li>
 		<li class="nav-item">
 			<a n:href="Home:map" class="nav-link">{fa r, map}&nbsp;Mapa</a>

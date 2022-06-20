@@ -1,8 +1,7 @@
 <?php
 namespace Zitkino\Cinemas;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\{EntityRepository, QueryBuilder};
 
 class CinemaRepository extends EntityRepository {
 	public function active(): QueryBuilder {

@@ -1,7 +1,7 @@
 <?php
 namespace Zitkino;
 
-use Dobine\Entities\Identifier;
+use Dobine\Attributes\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  */
 class Language {
-	use Identifier;
+	use Id;
 	
 	/**
 	 * @var string
@@ -35,40 +35,23 @@ class Language {
 		$this->code = $code;
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getCode(): string {
 		return $this->code;
 	}
 	
-	/**
-	 * @return null|string
-	 */
 	public function getCzech(): ?string {
 		return $this->czech;
 	}
 	
-	/**
-	 * @param null|string $czech
-	 * @return Language
-	 */
 	public function setCzech(?string $czech): Language {
 		$this->czech = $czech;
 		return $this;
 	}
 	
-	/**
-	 * @return null|string
-	 */
 	public function getEnglish(): ?string {
 		return $this->english;
 	}
 	
-	/**
-	 * @param null|string $english
-	 * @return Language
-	 */
 	public function setEnglish(?string $english): Language {
 		$this->english = $english;
 		return $this;

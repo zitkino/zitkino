@@ -1,14 +1,16 @@
+{templateType App\Templates\BaseTemplate}
+
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="{$locale}">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="theme-color" content="{$meta["color"]}">
-	<meta name="description" content="{$meta["description"]}">
-	<meta name="author" content="{$meta["author"]}">
-	<meta name="robots" content="{$meta["robots"]}" n:ifset="$meta['robots']">
+	<meta name="theme-color" content="{$meta->get("color")}">
+	<meta name="description" content="{$meta->get("description")}">
+	<meta name="author" content="{$meta->get("author")}">
+	<meta name="robots" content="{$meta->get("robots")}" n:if="$meta->get('robots')">
 
-	<title>{ifset title}{include title|stripHtml} {$meta["separator"]}{else}{$meta["title"]}{/ifset} {$meta["name"]}</title>
+	<title>{ifset title}{include title|stripHtml} {$meta->get("separator")}{else}{$meta->get("title")}{/ifset} {$meta->get("name")}</title>
 
 	<link rel="shortcut icon" href="{$baseUrl}/favicon.ico">
 	<link rel="stylesheet" media="screen" href="{$baseUrl}/www/css/styles.css?v={filemtime(WWW_DIR.'/www/css/styles.css')}">
@@ -30,7 +32,7 @@
 	</script>
 </head>
 
-<body>
+<body class="{if isset($presenter)}{$presenter->getName()|lower}-{$presenter->getParameter('action')|lower}{/if}">
 <header id="header" class="navbar navbar-dark navbar-expand-md">
 	<div class="container-fluid">
 		{include 'header.latte'}

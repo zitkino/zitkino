@@ -30,13 +30,21 @@ latte:
 	macros:
 		- Fazette\Latte\Fa
 
-#session:
-	#autoStart: smart
-	#expiration: 14 days
+search:
+	facades:
+		in: %appDir%/Models
+		extends: Dobine\Facades\DobineFacade
+		classes:
+			- Zitkino\*Facade
+			- Zitkino\*\*Facade
+
+session:
+	autoStart: true
+	expiration: 14 days
 
 services:
-	- Zitkino\RouterFactory
-	router: @Zitkino\RouterFactory::createRouter
+	- Zitkino\Routers\RouterFactory
+	router: @Zitkino\Routers\RouterFactory::createRouter
 
 	latte.latteFactory:
 		setup:

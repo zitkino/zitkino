@@ -1,9 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Zitkino\Cinemas\Cinema;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
@@ -12,16 +10,6 @@ use Zitkino\Screenings\Screening;
  * Kinokavarna parser.
  */
 class Kinokavarna extends Parser {
-	/**
-	 * Kinokavarna constructor.
-	 * @param ParserService $parserService
-	 * @param Cinema $cinema
-	 */
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("http://www.kinokavarna.cz/program.html");
-	}
-	
 	/**
 	 * @throws ORMException
 	 * @throws OptimisticLockException
@@ -93,17 +81,16 @@ class Kinokavarna extends Parser {
 			}
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages($dubbing, $subtitles);
-			$screening->setPrice($price);
-			$screening->setLink($link);
-			$screening->setShowtimes($datetimes);
+			$screening->setLanguages($dubbing, $subtitles)
+				->setPrice($price)
+				->setLink($link)
+				->setShowtimes($datetimes);
 			
-			$this->parserService->getEntityManager()->persist($screening);
+			$this->parserService->getScreeningFacade()->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

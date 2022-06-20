@@ -2,7 +2,6 @@
 namespace Zitkino\Parsers;
 
 use Doctrine\ORM\{OptimisticLockException, ORMException};
-use Zitkino\Cinemas\Cinema;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
 
@@ -10,11 +9,6 @@ use Zitkino\Screenings\Screening;
  * Galerie Vaňkovka parser.
  */
 class Vankovka extends Parser {
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("https://www.galerie-vankovka.cz/novinky-a-akce-centra/letni-kino-e34068/");
-	}
-	
 	/**
 	 * @throws OptimisticLockException
 	 * @throws ORMException
@@ -46,16 +40,15 @@ class Vankovka extends Parser {
 			$datetimes = [$datetime];
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setPrice(0.001);
-			$screening->setLink("https://www.galerie-vankovka.cz/novinky-a-akce-centra/letni-kino-e34068/");
-			$screening->setShowtimes($datetimes);
+			$screening->setPrice(0.001)
+				->setLink("https://www.galerie-vankovka.cz/novinky-a-akce-centra/letni-kino-e34068/")
+				->setShowtimes($datetimes);
 			
-			$this->parserService->getEntityManager()->persist($screening);
+			$this->parserService->getScreeningFacade()->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

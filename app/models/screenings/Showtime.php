@@ -1,7 +1,7 @@
 <?php
 namespace Zitkino\Screenings;
 
-use Dobine\Entities\Identifier;
+use Dobine\Attributes\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,13 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  */
 class Showtime {
-	use Identifier;
+	use Id;
 	
 	/**
 	 * @var Screening
-	 * @ORM\ManyToOne(targetEntity="Screening")
+	 * @ORM\ManyToOne(targetEntity="Screening", inversedBy="showtimes")
 	 * @ORM\JoinColumns({
-	 *   @ORM\JoinColumn(name="screening", referencedColumnName="id", nullable=false)
+	 *   @ORM\JoinColumn(name="screening", referencedColumnName="id", nullable=false, onDelete="CASCADE")
 	 * })
 	 */
 	protected $screening;
@@ -34,7 +34,7 @@ class Showtime {
 		$this->fixDatetime();
 	}
 	
-	public function fixDatetime() {
+	public function fixDatetime(): void {
 		$currentDate = new \DateTime();
 		if($currentDate->format("m") == "12" and $this->datetime->format("m") == "01") {
 			$year = (int)$this->datetime->format("Y");
@@ -44,13 +44,10 @@ class Showtime {
 				$year++;
 			}
 			
-			$this->datetime->setDate($year, $this->datetime->format("m"), $this->datetime->format("d"));
+			$this->datetime->setDate($year, (int)$this->datetime->format("m"), (int)$this->datetime->format("d"));
 		}
 	}
 	
-	/**
-	 * @return \DateTime
-	 */
 	public function getDatetime(): \DateTime {
 		return $this->datetime;
 	}

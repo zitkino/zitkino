@@ -25,9 +25,9 @@ class ErrorPresenter extends BasePresenter {
 				$this->setView(in_array($code, [403, 404, 405, 410, 500]) ? $code : '4xx');
 				
 				// log to access.log
-				Debugger::log("HTTP code $code: {$exception->getMessage()} in {$exception->getFile()}:{$exception->getLine()}", 'access');
+				Debugger::log("HTTP code $code: {$exception->getMessage()} in {$exception->getFile()}:{$exception->getLine()}", "access");
 			} else {
-				$this->setView('500'); // load template 500.latte
+				$this->setView("500"); // load template 500.latte
 				Debugger::log($exception, Debugger::ERROR); // and log exception
 			}
 		}

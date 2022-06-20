@@ -1,9 +1,7 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Zitkino\Cinemas\Cinema;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
@@ -12,16 +10,6 @@ use Zitkino\Screenings\Screening;
  * Scalní letňák parser.
  */
 class ScalaLetni extends Parser {
-	/**
-	 * ScalaLetni constructor.
-	 * @param ParserService $parserService
-	 * @param Cinema $cinema
-	 */
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("https://www.kinoscala.cz/cz/cyklus/scalni-letnak-251");
-	}
-	
 	/**
 	 * @throws ORMException
 	 * @throws OptimisticLockException
@@ -58,8 +46,8 @@ class ScalaLetni extends Parser {
 			
 			$priceQuery = $xpath->query("//td[@class='col_price']", $event);
 			$priceItem = $priceQuery->item($movieItems)->nodeValue;
-			$priceString = htmlentities($priceItem, null, "utf-8");
-			$price = trim(str_replace("&nbsp;Kč", "", $priceString));
+			$priceString = htmlentities($priceItem, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, "utf-8");
+			$price = (int)trim(str_replace("&nbsp;Kč", "", $priceString));
 			
 			$movie = $this->parserService->getMovieFacade()->getByName($name);
 			if(!isset($movie)) {
@@ -68,12 +56,12 @@ class ScalaLetni extends Parser {
 			}
 			
 			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages($dubbing, null);
-			$screening->setPrice($price);
-			$screening->setLink($link);
-			$screening->setShowtimes($datetimes);
+			$screening->setLanguages($dubbing, null)
+				->setPrice($price)
+				->setLink($link)
+				->setShowtimes($datetimes);
 			
-			$this->parserService->getEntityManager()->persist($screening);
+			$this->parserService->getScreeningFacade()->save($screening);
 			$this->cinema->addScreening($screening);
 			
 			$movieItems++;
@@ -81,7 +69,6 @@ class ScalaLetni extends Parser {
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

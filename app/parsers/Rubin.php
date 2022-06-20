@@ -1,24 +1,19 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Zitkino\Cinemas\Cinema;
+use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\Screenings;
 
 /**
  * Rubin parser.
  */
 class Rubin extends Parser {
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("http://www.kdrubin.cz/program");
-	}
-	
 	/**
-	 * @return void
 	 * @throws ParserException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function parse(): void {
 		$movies = [];
@@ -51,15 +46,15 @@ class Rubin extends Parser {
 				$movie = new Movie($name);
 				
 				$screening = new Screening($movie, $this->cinema);
-				$screening->setLink($link);
-				$screening->setShowtimes([$datetime]);
+				$screening->setLink($link)
+					->setShowtimes([$datetime]);
 				
-				$this->parserService->getEntityManager()->persist($screening);
+				$this->parserService->getScreeningFacade()->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}
 		
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->cinema->setParsed(new \DateTime());
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

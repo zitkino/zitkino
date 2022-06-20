@@ -2,7 +2,6 @@
 namespace Zitkino\Parsers;
 
 use Doctrine\ORM\{OptimisticLockException, ORMException};
-use Zitkino\Cinemas\Cinema;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Screenings\{Screening, ScreeningType};
@@ -11,15 +10,10 @@ use Zitkino\Screenings\{Screening, ScreeningType};
  * Lucerna parser.
  */
 class Lucerna extends Parser {
-	public function __construct(ParserService $parserService, Cinema $cinema) {
-		parent::__construct($parserService, $cinema);
-		$this->setUrl("http://www.kinolucerna.info");
-	}
-	
 	/**
+	 * @throws ParserException
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @throws ParserException
 	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
@@ -27,7 +21,9 @@ class Lucerna extends Parser {
 		$days = $xpath->query("//div[@class='tabs programtabs']//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
 		foreach($days as $day) {
 			$dayQuery = $xpath->query("./a", $day);
-			$dayId = $dayQuery->item(0)->getAttribute("data-den");
+			/** @var \DOMElement $dayElement */
+			$dayElement = $dayQuery->item(0);
+			$dayId = $dayElement->getAttribute("data-den");
 			
 			/** @var \DOMElement $dayStringElement */
 			$dayStringElement = $dayQuery->item(0);
@@ -53,7 +49,7 @@ class Lucerna extends Parser {
 				
 				$lengthQuery = $xpath->query($info."//div[@class='eventlenght']", $event);
 				$lengthString = $lengthQuery->item(0)->nodeValue;
-				$length = str_replace("&nbsp;min", "", htmlentities($lengthString, null, "utf-8"));
+				$length = (int)str_replace("&nbsp;min", "", htmlentities($lengthString, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, "utf-8"));
 				
 				$type = null;
 				$typeQuery = $xpath->query($info."//div[@class='left']/div/span[1]", $event);
@@ -108,7 +104,7 @@ class Lucerna extends Parser {
 					if($a->length == 1) {
 						if($a->item(0)->hasAttribute("title")) {
 							$priceString = $a->item(0)->getAttribute("title");
-							$price = str_replace(["Koupit / rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
+							$price = (int)str_replace(["Koupit / rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
 						}
 					} else {
 						$price = null;
@@ -129,19 +125,18 @@ class Lucerna extends Parser {
 				}
 				
 				$screening = new Screening($movie, $this->cinema);
-				$screening->setType($screeningType);
-				$screening->setLanguages($dubbing, $subtitles);
-				$screening->setPrice($price);
-				$screening->setLink($link);
-				$screening->setShowtimes($datetimes);
+				$screening->setType($screeningType)
+					->setLanguages($dubbing, $subtitles)
+					->setPrice($price)
+					->setLink($link)
+					->setShowtimes($datetimes);
 				
-				$this->parserService->getEntityManager()->persist($screening);
+				$this->parserService->getScreeningFacade()->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getEntityManager()->persist($this->cinema);
-		$this->parserService->getEntityManager()->flush();
+		$this->parserService->getCinemaFacade()->save($this->cinema);
 	}
 }

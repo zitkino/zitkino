@@ -1,12 +1,17 @@
 parameters:
-	level: 2
+	level: 6
+
+	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
-		- '#PHPDoc tag @return with type object\|null is not subtype of native type#'
+#		- '#PHPDoc tag @return with type object\|null is not subtype of native type#'
+
 	scanDirectories:
 		- %currentWorkingDirectory%/app/
 		- %currentWorkingDirectory%/tests/
 
 includes:
+	- %currentWorkingDirectory%/phpstan-baseline.neon
 	- %currentWorkingDirectory%/vendor/phpstan/phpstan-nette/extension.neon
 	- %currentWorkingDirectory%/vendor/phpstan/phpstan-nette/rules.neon
 	- %currentWorkingDirectory%/vendor/phpstan/phpstan-doctrine/extension.neon

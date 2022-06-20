@@ -1,0 +1,14 @@
+classic:
+	title: "Klasická kina"
+	programme: "program klasických kin"
+	list: "seznam klasických kin"
+
+multiplex:
+	title: "Multiplexy"
+	programme: "program multiplexů"
+	list: "seznam multiplexů"
+
+summer:
+	title: "Letní kina"
+	programme: "program letních kin"
+	list: "seznam letních kin"

@@ -1,3 +1,5 @@
+{varType Zitkino\Cinemas\Cinema $cinema}
+
 {define cinemaList}
 	{ifset $cinema}
 		<li class="list-group-item">
@@ -14,11 +16,11 @@
 
 	<ul class="list-inline">
 		<li class="list-inline-item">
-			{var $address = $cinema->getAddress().", ".$cinema->getCity();}
-			<a href="https://www.google.cz/maps/place/{$address|escapeurl}">{fa map-marker-alt} {$address}</a>
+			{var $address = $cinema->getAddress().", ".$cinema->getCity()}
+			<a href="https://www.google.cz/maps/place/{$address|escapeUrl}">{fa map-marker-alt} {$address}</a>
 		</li>
 		<li class="list-inline-item">
-			{php $url = $cinema->getUrl();}
+			{var $url = $cinema->getUrl()}
 			<a href="{$url}">{fa link} {$url}</a>
 		</li>
 	</ul>
@@ -90,7 +92,7 @@
 					<tr n:foreach="$screenings as $screening" n:if="!empty($screening->getShowtimes())">
 						{varType Zitkino\Screenings\Screening $screening}
 						<td title="Název filmu">
-							{php $link = $screening->getLink()}
+							{var $link = $screening->getLink()}
 							{ifset $link}<a href="{$link}">{/ifset}
 								{$screening->getMovie()->getName()}
 								{ifset $link}</a>{/ifset}
@@ -115,9 +117,9 @@
 						</td>
 
 						<td n:if="$screenings->hasPlaces()" title="Místo">
-							{php $place = $screening->getPlace()}
+							{var $place = $screening->getPlace()}
 							{ifset $place}
-								{php $placeLink = $place->getLink()}
+								{var $placeLink = $place->getLink()}
 								{ifset $placeLink}<a href="{$placeLink}">{/ifset}
 								{$place->getName()|trim}
 								{ifset $placeLink}</a>{/ifset}
@@ -125,24 +127,24 @@
 						</td>
 
 						<td n:if="$screenings->hasLanguages()" title="Jazyk">
-							{php $dubbing = $screening->getDubbing()}
+							{var $dubbing = $screening->getDubbing()}
 							{ifset $dubbing}
 								<span class="badge badge-language" title="Dabing">{fa headphones}&nbsp;{$dubbing}</span>
 							{/ifset}
 							<br class="d-md-none d-lg-none">
-							{php $subtitles = $screening->getSubtitles()}
+							{var $subtitles = $screening->getSubtitles()}
 							{ifset $subtitles}
 								<span class="badge badge-subtitles" title="Titulky">{fa paragraph}&nbsp;{$subtitles}</span>
 							{/ifset}
 						</td>
 
 						<td n:if="$screenings->getMovies()->hasLengths()" title="Délka">
-							{php $length = $screening->getMovie()->getLength()}
+							{var $length = $screening->getMovie()->getLength()}
 							{ifset $length}{$length|trim} min.{/ifset}
 						</td>
 
 						<td n:if="$screenings->hasPrices()" title="Cena">
-							{php $price = $screening->fixPrice()}
+							{var $price = $screening->fixPrice()}
 							{ifset $price}{$price|trim}{/ifset}
 						</td>
 

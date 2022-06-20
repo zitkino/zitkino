@@ -33,30 +33,16 @@ class CinemaPresenter extends BasePresenter {
 		}
 		$this->template->gmap = $param;
 		
-		$this->template->gmapKey = $this->context->getParameters()["google-maps-key"];
+		$this->template->gmapKey = $this->getContainer()->getParameters()["google-maps-key"];
 	}
 	
-	public function renderClassic($id) {
-		$this->template->cinemas = $this->cinemaFacade->getByType("classic");
+	public function renderType($type) {
+		$this->template->cinemas = $this->cinemaFacade->getByType($type);
+		$this->template->type = $type;
 	}
 	
-	public function renderClassic_programme($id) {
-		$this->template->cinemas = $this->cinemaFacade->getWithMovies("classic");
-	}
-	
-	public function renderMultiplex($id) {
-		$this->template->cinemas = $this->cinemaFacade->getByType("multiplex");
-	}
-	
-	public function renderMultiplex_programme($id) {
-		$this->template->cinemas = $this->cinemaFacade->getWithMovies("multiplex");
-	}
-	
-	public function renderSummer($id) {
-		$this->template->cinemas = $this->cinemaFacade->getByType("summer");
-	}
-	
-	public function renderSummer_programme($id) {
-		$this->template->cinemas = $this->cinemaFacade->getWithMovies("summer");
+	public function renderProgramme($type) {
+		$this->template->cinemas = $this->cinemaFacade->getWithMovies($type);
+		$this->template->type = $type;
 	}
 }
