@@ -27,7 +27,7 @@ nettrine.orm:
 
 nettrine.orm.annotations:
 	mapping:
-		Zitkino: %appDir%/models
+		Zitkino: %appDir%/Models
 
 		Gedmo\Translatable: %appDir%/../vendor/gedmo/doctrine-extensions/src/Translatable/Entity
 #		Gedmo\Loggable: %appDir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity
