@@ -38,9 +38,9 @@ search:
 			- Zitkino\*Facade
 			- Zitkino\*\*Facade
 
-#session:
-	#autoStart: smart
-	#expiration: 14 days
+session:
+	autoStart: true
+	expiration: 14 days
 
 services:
 	- Zitkino\Routers\RouterFactory

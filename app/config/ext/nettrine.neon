@@ -45,8 +45,8 @@ nettrine.extensions.atlantic18:
 	ipTraceable: false
 
 	translatable:
-		translatable: en
-		default: en
+		translatable: cs
+		default: cs
 		translationFallback: false
 		persistDefaultTranslation: false
 		skipOnLoad: false

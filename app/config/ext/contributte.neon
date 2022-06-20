@@ -33,6 +33,3 @@ translation:
 	returnOriginalMessage: true
 	loaders:
 		neon: Contributte\Translation\Loaders\Neon
-
-#	localeResolvers:
-#		- Contributte\Translation\LocalesResolvers\Session
