@@ -39,11 +39,4 @@ class CinemaFacade extends DobineFacade {
 	public function getType(string $type) {
 		return $this->repositoryType->findOneBy(["code" => $type]);
 	}
-	
-	public function save($entity) {
-		$this->entityManager->persist($entity);
-		$this->entityManager->flush();
-		
-		return $entity->getId();
-	}
 }

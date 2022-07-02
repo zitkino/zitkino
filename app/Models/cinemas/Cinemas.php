@@ -6,7 +6,7 @@ namespace Zitkino\Cinemas;
  * @property CinemaRepository $repository
  */
 trait Cinemas {
-	public function getAll() {
+	public function getAll(): array {
 		return $this->repository->visible()->getQuery()->getResult();
 	}
 	

@@ -42,7 +42,7 @@ abstract class Parser {
 	 * Downloads data from internet.
 	 * @throws ParserException
 	 */
-	private function downloadData(): string {
+	protected function downloadData(): string {
 		try {
 			$response = $this->parserService->getClientFactory()->createClient()->get($this->url);
 			$body = (string)$response->getBody();

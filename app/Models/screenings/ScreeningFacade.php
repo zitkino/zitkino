@@ -3,7 +3,7 @@ namespace Zitkino;
 
 use Dobine\Facades\DobineFacade;
 use Doctrine\DBAL\{ConnectionException, Exception as DBALException};
-use Doctrine\ORM\{EntityManager, EntityRepository, Mapping\ClassMetadata};
+use Doctrine\ORM\{EntityRepository, Mapping\ClassMetadata};
 use Nette\Utils\Strings;
 use Nettrine\ORM\EntityManagerDecorator;
 use Tracy\Debugger;

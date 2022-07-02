@@ -1,71 +1,113 @@
 <?php
 namespace Zitkino\Parsers;
 
-use Doctrine\ORM\{OptimisticLockException, ORMException};
+use GuzzleHttp\Exception\GuzzleException;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
+use Zitkino\Place;
 use Zitkino\Screenings\Screening;
+use Zitkino\Screenings\ScreeningType;
 
 /**
  * Scala parser.
  */
 class Scala extends Parser {
+	protected function downloadData(): string {
+		try {
+			$parameters = ["cinema" => ["5"], "hall" => ["4"], "d" => 6, "_locale" => "cs"];
+			$response = $this->parserService->getClientFactory()->createClient()->post($this->getUrl(), ["form_params" => $parameters]);
+			$body = (string)$response->getBody();
+		} catch(GuzzleException $e) {
+			$e = new ParserException($e->getMessage());
+			$e->setUrl($this->getUrl());
+			throw $e;
+		}
+		
+		return $body ?: "";
+	}
+	
 	/**
 	 * @throws ParserException
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
+		$weekdays = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"];
 		
-		$events = $xpath->query("//div[@id='content']/table//tr");
-		$days = 0;
-		$movieItems = 0;
-		foreach($events as $event) {
-			$datetimes = [];
+		$days = $xpath->query("//div[@class='program']");
+		$dayItems = 0;
+		foreach($days as $day) {
+			$dateQuery = $xpath->query(".//div[@class='program__day']//span[@class='desktop']", $day);
+			$dateString = $dateQuery->item(0)->nodeValue;
+			switch($dateString) {
+				case "Dnes":
+					$datetime = new \DateTime();
+					break;
+				case "Zítra":
+					$datetime = new \DateTime("tomorrow");
+					break;
+				default:
+					$date = trim(str_replace($weekdays, "", $dateString));
+					$datetime = \DateTime::createFromFormat("d/m", $date);
+					break;
+			}
 			
-			if($event->getAttribute("class") === "day") {
-				$dateQuery = $xpath->query("//tr[@class='day']//h2", $event);
-				$dateFullString = explode(",", $dateQuery->item($days)->nodeValue);
-				$dateString = explode(".", $dateFullString[1]);
+			$events = $xpath->query(".//div[@class='program__info']//div[@class='program__info-row']", $day);
+			foreach($events as $event) {
+				$hourQuery = $xpath->query(".//div[@class='program__hour']", $event);
+				$hourString = $hourQuery->item(0)->nodeValue;
+				$hour = explode(":", $hourString);
+				$datetime->setTime((int)$hour[0], (int)$hour[1]);
 				
-				$day = $dateString[0];
+				$datetimes = [$datetime];
 				
-				$monthString = $dateString[1];
-				$monthArray = ["ledna", "února", "března", "dubna", "května", "června", "července", "srpna", "září", "října", "listopadu", "prosince"];
-				$monthNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-				$month = str_replace($monthArray, $monthNumbers, $monthString);
+				$placeQuery = $xpath->query(".//div[contains(@class, 'program__place--desktop')]", $event);
+				$placeValue = $placeQuery->item(0)->nodeValue;
+				$placeString = trim(str_replace(PHP_EOL, "", $placeValue));
+				$placeName = preg_replace("/\s+/", " ", $placeString);
 				
-				$year = date("Y");
+				$place = $this->parserService->getPlaceFacade()->getByName($placeName);
+				if(!isset($place)) {
+					$place = new Place($placeName);
+					$place->setCinema($this->cinema);
+				}
+				$this->parserService->getPlaceFacade()->save($place);
 				
-				$date = trim($day).".".trim($month).".".$year;
-				$days++;
-			} else {
-				$nameQuery = $xpath->query("//td[@class='col_movie_name']//a", $event);
-				$nameString = $nameQuery->item($movieItems)->nodeValue;
-				$name = str_replace("feat. Kmeny90/BU2R", "", $nameString);
+				$nameQuery = $xpath->query(".//div[contains(@class, 'program__movie-name')]", $event);
+				$name = $nameQuery->item(0)->nodeValue;
 				
-				$dubbing = null;
-				if(\Lib\Strings::endsWith($name, "- cz dabing")) {
-					$dubbing = "česky";
-					$name = str_replace(" - cz dabing", "", $name);
+				$screeningType = null;
+				$tags = $xpath->query(".//div[@class='program__tags']//span[@class='program__tag']", $event);
+				foreach($tags as $tag) {
+					$type = trim($tag->nodeValue);
+					switch($type) {
+						case "Scalní letňák":
+							break;
+						default:
+							$screeningType = $this->parserService->getScreeningFacade()->getType($type);
+							if(!isset($screeningType)) {
+								$screeningType = new ScreeningType($type);
+								$this->parserService->getScreeningFacade()->save($screeningType);
+							}
+							break;
+					}
 				}
 				
-				$timeQuery = $xpath->query("//td[@class='col_time_reservation']", $event);
-				$time = explode(":", $timeQuery->item($movieItems)->nodeValue);
-				
-				if(isset($date)) {
-					$datetime = \DateTime::createFromFormat("j.n.Y", $date);
-					$datetime->setTime(intval($time[0]), intval($time[1]));
-					$datetimes[] = $datetime;
+				$priceQuery = $xpath->query(".//div[@class='program__price']//button[@class='program__ticket']//span", $event);
+				if($priceQuery->count() > 0) {
+					$priceString = $priceQuery->item(0)->nodeValue;
+					$price = (int)str_replace(" Kč", "", $priceString);
+				} else {
+					$price = null;
 				}
 				
-				$link = "http://www.kinoscala.cz".$nameQuery->item($movieItems)->attributes->getNamedItem("href")->nodeValue;
-				
-				$priceQuery = $xpath->query("//td[@class='col_price']", $event);
-				$priceItem = $priceQuery->item($movieItems)->nodeValue;
-				$priceString = htmlentities($priceItem, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, "utf-8");
-				$price = (int)trim(str_replace("&nbsp;Kč", "", $priceString));
+				$linkQuery = $xpath->query(".//div[@class='program__price']//input[@name='successredirect']", $event);
+				if($linkQuery->count() > 0) {
+					/** @var \DOMElement $linkItem */
+					$linkItem = $linkQuery->item(0);
+					$link = $linkItem->getAttribute("value");
+				} else {
+					$link = null;
+				}
 				
 				$movie = $this->parserService->getMovieFacade()->getByName($name);
 				if(!isset($movie)) {
@@ -74,16 +116,17 @@ class Scala extends Parser {
 				}
 				
 				$screening = new Screening($movie, $this->cinema);
-				$screening->setLanguages($dubbing, null)
+				$screening->setPlace($place)
+					->setType($screeningType)
 					->setPrice($price)
 					->setLink($link)
 					->setShowtimes($datetimes);
 				
 				$this->parserService->getScreeningFacade()->save($screening);
 				$this->cinema->addScreening($screening);
-				
-				$movieItems++;
 			}
+			
+			$dayItems++;
 		}
 		
 		$this->cinema->setParsed(new \DateTime());

@@ -21,10 +21,8 @@ abstract class CinemaCity extends Parser {
 	}
 	
 	/**
-	 * @throws OptimisticLockException
 	 * @throws JsonException
 	 * @throws ParserException
-	 * @throws ORMException
 	 */
 	public function getContent(): bool {
 		$json = $this->getJson();
@@ -121,9 +119,7 @@ abstract class CinemaCity extends Parser {
 	}
 	
 	/**
-	 * @throws OptimisticLockException
 	 * @throws JsonException
-	 * @throws ORMException
 	 * @throws ParserException
 	 */
 	public function getOneDay(\DateTime $datetime): bool {
@@ -134,9 +130,7 @@ abstract class CinemaCity extends Parser {
 	}
 	
 	/**
-	 * @throws OptimisticLockException
 	 * @throws JsonException
-	 * @throws ORMException
 	 * @throws ParserException
 	 */
 	public function parse(): void {
