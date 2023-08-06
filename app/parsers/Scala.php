@@ -5,8 +5,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Zitkino\Exceptions\ParserException;
 use Zitkino\Movies\Movie;
 use Zitkino\Place;
-use Zitkino\Screenings\Screening;
-use Zitkino\Screenings\ScreeningType;
+use Zitkino\Screenings\{Screening, ScreeningType};
 
 /**
  * Scala parser.
@@ -14,7 +13,7 @@ use Zitkino\Screenings\ScreeningType;
 class Scala extends Parser {
 	protected function downloadData(): string {
 		try {
-			$parameters = ["cinema" => ["5"], "hall" => ["4"], "d" => 6, "_locale" => "cs"];
+			$parameters = ["cinema" => ["5"], "hall" => [["4"], ["16"]], "_locale" => "cs"];
 			$response = $this->parserService->getClientFactory()->createClient()->post($this->getUrl(), ["form_params" => $parameters]);
 			$body = (string)$response->getBody();
 		} catch(GuzzleException $e) {
@@ -65,6 +64,10 @@ class Scala extends Parser {
 				$placeString = trim(str_replace(PHP_EOL, "", $placeValue));
 				$placeName = preg_replace("/\s+/", " ", $placeString);
 				
+				if(!str_contains($placeName, "Scala") or $placeName === "Scala Studio Scala") {
+					continue;
+				}
+				
 				$place = $this->parserService->getPlaceFacade()->getByName($placeName);
 				if(!isset($place)) {
 					$place = new Place($placeName);
@@ -75,10 +78,17 @@ class Scala extends Parser {
 				$nameQuery = $xpath->query(".//div[contains(@class, 'program__movie-name')]", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
+				$scalaType = "classic";
 				$screeningType = null;
 				$tags = $xpath->query(".//div[@class='program__tags']//span[@class='program__tag']", $event);
 				foreach($tags as $tag) {
 					$type = trim($tag->nodeValue);
+					
+					if(str_contains($type, "Scalní letňák")) {
+						$scalaType = "summer";
+						continue;
+					}
+					
 					switch($type) {
 						case "Scalní letňák":
 							break;
@@ -89,6 +99,12 @@ class Scala extends Parser {
 								$this->parserService->getScreeningFacade()->save($screeningType);
 							}
 							break;
+					}
+				}
+				
+				if(get_class($this) == ScalaLetni::class) {
+					if($scalaType !== "summer") {
+						continue;
 					}
 				}
 				

@@ -19,9 +19,9 @@ class Art extends Parser {
 	public function parse(): void {
 		$xpath = $this->getXpath();
 		
-		$days = $xpath->query("//div[contains(@class, 'events-calendar')]//div[@class='grid events-calendar__day']");
+		$days = $xpath->query("//div[contains(@class, 'events-calendar')]//div[contains(@class, 'events-calendar grid')]");
 		foreach($days as $day) {
-			$dateQuery = $xpath->query(".//h2[@class='events-calendar__day-date']", $day);
+			$dateQuery = $xpath->query(".//h3[@class='events-calendar__day-date']", $day);
 			$dateArray = explode(" ", $dateQuery->item(0)->nodeValue);
 			
 			$months = [
@@ -38,7 +38,7 @@ class Art extends Parser {
 			
 			$events = $xpath->query(".//div[@class='events-calendar__events']//div[@class='events-calendar__event']", $day);
 			foreach($events as $event) {
-				$nameQuery = $xpath->query(".//h3[contains(@class, 'events-calendar__event-title')]//a", $event);
+				$nameQuery = $xpath->query(".//div[contains(@class, 'events-calendar__event-title')]//a", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
 				$link = $nameQuery->item(0)->attributes->getNamedItem("href")->nodeValue;
@@ -46,6 +46,12 @@ class Art extends Parser {
 				$placeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--custom']", $event);
 				$placeName = $placeQuery->item(0)->nodeValue;
 				$placeLink = $placeQuery->item(0)->attributes->getNamedItem("href")->nodeValue;
+				
+				if(get_class($this) == Zbrojovka::class) {
+					if($placeName !== "Letní kino Nová Zbrojovka") {
+						continue;
+					}
+				}
 				
 				if(isset($month)) {
 					$timeQuery = $xpath->query(".//p[@class='events-calendar__event-time--desktop']//a[@class='boxed boxed--black']", $event);

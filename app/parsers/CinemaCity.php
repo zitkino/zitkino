@@ -73,17 +73,17 @@ abstract class CinemaCity extends Parser {
 			$length = (int)$film["length"];
 			
 			$dayOfWeek = $datetime->format("w");
-			if($dayOfWeek == 1) {
-				$price = 175;
+//			if($dayOfWeek == 1) {
+//				$price = 175;
+//				if($type == "3D") {
+//					$price = 225;
+//				}
+//			} else {
+				$price = 249;
 				if($type == "3D") {
-					$price = 225;
+					$price = 299;
 				}
-			} else {
-				$price = 215;
-				if($type == "3D") {
-					$price = 265;
-				}
-			}
+//			}
 			
 			$movie = $this->parserService->getMovieFacade()->getByName($name);
 			if(!isset($movie)) {

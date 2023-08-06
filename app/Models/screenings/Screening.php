@@ -106,7 +106,7 @@ class Screening {
 	}
 	
 	public function setPrice(?int $price): Screening {
-		if(isset($price) and !empty($price)) {
+		if(isset($price) and (!empty($price) or $price === 0)) {
 			$this->price = intval($price);
 		} else {
 			$this->price = null;

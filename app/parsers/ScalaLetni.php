@@ -10,7 +10,7 @@ use Zitkino\Exceptions\ParserException;
 class ScalaLetni extends Scala {
 	protected function downloadData(): string {
 		try {
-			$parameters = ["cinema" => ["5"], "hall" => ["6"], "d" => 4, "_locale" => "cs"];
+			$parameters = ["cinema" => ["5"], "hall" => [["26"], ["27"]], "_locale" => "cs"];
 			$response = $this->parserService->getClientFactory()->createClient()->post($this->getUrl(), ["form_params" => $parameters]);
 			$body = (string)$response->getBody();
 		} catch(GuzzleException $e) {
