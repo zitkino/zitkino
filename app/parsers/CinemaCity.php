@@ -39,6 +39,9 @@ abstract class CinemaCity extends Parser {
 			
 			$type = "2D";
 			switch(true) {
+				case (in_array("4dx", $event["attributeIds"])):
+					$type = "4DX";
+					break;
 				case (in_array("2d", $event["attributeIds"])):
 					$type = "2D";
 					break;
@@ -71,19 +74,7 @@ abstract class CinemaCity extends Parser {
 			$datetimes[$key][] = $datetime;
 			
 			$length = (int)$film["length"];
-			
-			$dayOfWeek = $datetime->format("w");
-//			if($dayOfWeek == 1) {
-//				$price = 175;
-//				if($type == "3D") {
-//					$price = 225;
-//				}
-//			} else {
-				$price = 249;
-				if($type == "3D") {
-					$price = 299;
-				}
-//			}
+			$price = null;
 			
 			$movie = $this->parserService->getMovieFacade()->getByName($name);
 			if(!isset($movie)) {

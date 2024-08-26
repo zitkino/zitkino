@@ -35,7 +35,7 @@ class Scala extends Parser {
 		$days = $xpath->query("//div[@class='program']");
 		$dayItems = 0;
 		foreach($days as $day) {
-			$dateQuery = $xpath->query(".//div[@class='program__day']//span[@class='desktop']", $day);
+			$dateQuery = $xpath->query(".//a[@class='program__day']//span[@class='desktop']", $day);
 			$dateString = $dateQuery->item(0)->nodeValue;
 			switch($dateString) {
 				case "Dnes":
@@ -108,12 +108,19 @@ class Scala extends Parser {
 					}
 				}
 				
-				$priceQuery = $xpath->query(".//div[@class='program__price']//button[@class='program__ticket']//span", $event);
+				$price = null;
+				$priceQuery = $xpath->query(".//div[@class='program__price']//button[contains(@class, 'program__ticket')]//span", $event);
 				if($priceQuery->count() > 0) {
 					$priceString = $priceQuery->item(0)->nodeValue;
 					$price = (int)str_replace(" Kč", "", $priceString);
 				} else {
-					$price = null;
+					$priceQuery = $xpath->query(".//div[@class='program__price']//span[contains(@class, 'program__ticket--zero')]", $event);
+					if($priceQuery->count() > 0) {
+						$priceString = $priceQuery->item(0)->nodeValue;
+						if(trim($priceString) === "Zdarma") {
+							$price = 0;
+						}
+					}
 				}
 				
 				$linkQuery = $xpath->query(".//div[@class='program__price']//input[@name='successredirect']", $event);

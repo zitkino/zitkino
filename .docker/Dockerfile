@@ -49,5 +49,5 @@ RUN echo "Package: *\nPin: origin deb.nodesource.com\nPin-Priority: 600" > "/etc
 RUN rm -rf /var/lib/apt/lists/ && \
     curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -&& \
     apt-get clean && apt-get update && apt-get install -y nodejs && \
-    npm install npm@latest -g && \
+    npm install npm@8.* -g && \
     npm install gulp-cli -g

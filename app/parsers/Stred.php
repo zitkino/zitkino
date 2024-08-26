@@ -125,7 +125,7 @@ class Stred extends Parser {
 				}
 			}
 			
-			$price = 100;
+			$price = 140;
 			if(strpos($name, "Swingový večer") !== false) {
 				$price = 50;
 			}
@@ -138,6 +138,10 @@ class Stred extends Parser {
 				
 				if(strpos($cycle, "Das Sommerkino") !== false) {
 					$price = 50;
+				}
+				
+				if(strpos($cycle, "Vstup zdarma") !== false) {
+					$price = 0;
 				}
 			}
 			
