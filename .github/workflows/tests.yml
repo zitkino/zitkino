@@ -34,9 +34,6 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
-            
-      - name: Remove composer.lock
-        run: rm -rf composer.lock
 
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
