@@ -19,3 +19,6 @@ indent_style = tab
 
 [{*.sh, crontab, *.crontab, Makefile}]
 end_of_line = lf
+
+[{compose.yaml,compose.*.yaml}]
+indent_size = 2

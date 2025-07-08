@@ -2,19 +2,33 @@
 	"name": "zitkino/zitkino",
 	"description": "Brno's cinemas",
 	"type": "project",
+	"minimum-stability": "stable",
+	"prefer-stable": true,
 	"config": {
-		"vendor-dir": "vendor",
+		"allow-plugins": {
+			"php-http/discovery": true,
+			"symfony/flex": true,
+			"symfony/runtime": true
+		},
+		"bump-after-update": true,
 		"platform-check": true,
 		"preferred-install": "dist",
 		"sort-packages": true,
 		"optimize-autoloader": true
 	},
 	"scripts": {
+		"auto-scripts": {
+			"cache:clear": "symfony-cmd",
+			"assets:install %PUBLIC_DIR%": "symfony-cmd"
+		},
 		"pre-install-cmd": [
 			"composer check-platform-reqs"
 		],
-		"pre-update-cmd": [
-			"composer self-update"
+		"post-install-cmd": [
+			"@auto-scripts"
+		],
+		"post-update-cmd": [
+			"@auto-scripts"
 		],
 		"fixer": [
 			"vendor/bin/php-cs-fixer fix --diff --dry-run -v --config fixer.php"
@@ -27,40 +41,72 @@
 		],
 		"phpstan-baseline": [
 			"vendor/bin/phpstan analyse app -c app/config/phpstan.neon --generate-baseline"
-		],
-		"tester": [
-			"php ./vendor/nette/tester/src/tester.php -C -s tests"
 		]
 	},
 	"require": {
-		"php": "^7.3",
+		"php": "8.3.*",
+		"ext-ctype": "*",
 		"ext-curl": "*",
 		"ext-dom": "*",
+		"ext-iconv": "*",
 		"ext-libxml": "*",
-		"contributte/console": "^0.9.2",
-		"contributte/console-extra": "^0.7.2",
-		"contributte/guzzlette": "^3.2",
-		"contributte/sentry": "^0.1.2",
-		"contributte/translation": "^0.9.3",
-		"hermajan/dobine": "dev-master",
-		"hermajan/fazette": "^0.3.0",
-		"hermajan/lib": "dev-master",
-		"johngrogg/ics-parser": "^2.1",
-		"latte/latte": "^2.11",
-		"nette/application": "^3.0",
-		"nette/nette": "^3.1",
-		"nettrine/annotations": "^0.7.0",
-		"nettrine/extensions-atlantic18": "^0.6.0",
-		"nettrine/orm": "^0.8.3",
-		"nextras/mail-panel": "^2.6",
-		"tracy/tracy": "^2.9",
-		"vlucas/phpdotenv": "^5.4"
+		"doctrine/annotations": "^1.0",
+		"doctrine/dbal": "^3",
+		"doctrine/doctrine-bundle": "2.*",
+		"doctrine/doctrine-migrations-bundle": "^3.2",
+		"doctrine/orm": "^2.10",
+		"guzzlehttp/guzzle": "^7.9",
+		"johngrogg/ics-parser": "^3.4",
+		"symfony/asset": "7.3.*",
+		"symfony/console": "7.3.*",
+		"symfony/debug-bundle": "7.3.*",
+		"symfony/dotenv": "7.3.*",
+		"symfony/flex": "^2",
+		"symfony/framework-bundle": "7.3.*",
+		"symfony/http-client": "7.3.*",
+		"symfony/runtime": "7.3.*",
+		"symfony/translation": "7.3.*",
+		"symfony/twig-bundle": "7.3.*",
+		"symfony/validator": "7.3.*",
+		"symfony/yaml": "7.3.*",
+		"twig/extra-bundle": "*",
+		"twig/twig": "^2.12|^3.0"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.4",
-		"nette/tester": "^2.4",
-		"phpstan/phpstan": "^1.7",
-		"phpstan/phpstan-doctrine": "^1.3",
-		"phpstan/phpstan-nette": "^1.0"
+		"phpstan/phpstan": "^2.1",
+		"phpstan/phpstan-doctrine": "^2.0",
+		"symfony/maker-bundle": "^1.64",
+		"symfony/stopwatch": "7.3.*",
+		"symfony/web-profiler-bundle": "7.3.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"App\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"App\\Tests\\": "tests/"
+		}
+	},
+	"replace": {
+		"symfony/polyfill-ctype": "*",
+		"symfony/polyfill-iconv": "*",
+		"symfony/polyfill-php72": "*",
+		"symfony/polyfill-php73": "*",
+		"symfony/polyfill-php74": "*",
+		"symfony/polyfill-php80": "*",
+		"symfony/polyfill-php81": "*",
+		"symfony/polyfill-php82": "*"
+	},
+	"conflict": {
+		"symfony/symfony": "*"
+	},
+	"extra": {
+		"symfony": {
+			"allow-contrib": false,
+			"require": "7.3.*"
+		}
 	}
 }

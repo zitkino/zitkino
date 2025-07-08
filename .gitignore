@@ -27,13 +27,23 @@ app/config/env/production.neon
 /.env.local
 /.env.local.php
 /.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+
+###> symfony test ###
 /_symfony/config/secrets/prod/prod.decrypt.private.php
 /_symfony/public/bundles/
 /_symfony/var/
 /_symfony/vendor/
-###< symfony/framework-bundle ###
-
-###> friendsofphp/php-cs-fixer ###
 /_symfony/.php-cs-fixer.php
 /_symfony/.php-cs-fixer.cache
-###< friendsofphp/php-cs-fixer ###
+###< symfony test ###
