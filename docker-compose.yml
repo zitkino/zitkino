@@ -1,39 +1,28 @@
-version: "3.3"
-
-networks:
-    docker_network:
-        driver: bridge
-
 services:
     db:
         container_name: zitkino_db
-        image: mysql:5.7
-        restart: always
-        networks:
-            - docker_network
+        build:
+            context: .docker/mysql
         ports:
             - "3306:3306"
         volumes:
-            - ./.docker/mysql:/var/lib/mysql
+            - ./.docker/db:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: heslo
             MYSQL_DATABASE: zitkino
-            MYSQL_USER: root
             MYSQL_PASSWORD: heslo
 
     www:
         container_name: zitkino_www
-        networks:
-            - docker_network
+        build:
+            context: .docker/php
         depends_on:
             - db
-        build: .docker
-        ports:
-            - "80:80"
-        restart: always
-        volumes:
-            - ./:/var/www/html
-            - ./.docker/apache.conf:/etc/apache2/sites-enabled/000-default.conf
-            - ./.docker/php.ini:/usr/local/etc/php/php.ini
         links:
             - db
+        ports:
+            - "80:80"
+        volumes:
+            - ./:/var/www/html
+            - ./.docker/php/apache.conf:/etc/apache2/sites-enabled/000-default.conf
+            - ./.docker/php/php.ini:/usr/local/etc/php/php.ini
