@@ -11,6 +11,7 @@
 {#    {% endif %}#}
 
 {#    <title>{% block title %}{% endblock %} {{ meta.get('separator') }} {{ meta.get('name') }}</title>#}
+	{% block importmap %}{{ importmap('app') }}{% endblock %}
 
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="stylesheet" media="screen" href="{{ asset('www/css/styles.css') }}?v={{ 'now'|date('U') }}">

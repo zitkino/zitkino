@@ -12,7 +12,7 @@ class CinemaFacade
     /** @var EntityManagerInterface */
     private $entityManager;
 
-    /** @var CinemaRepository */
+    /** @var \Doctrine\ORM\EntityRepository */
     private $repository;
 
     /** @var \Doctrine\ORM\EntityRepository */
