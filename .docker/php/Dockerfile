@@ -1,45 +1,50 @@
-FROM php:7.3-apache
+FROM php:8.3-apache
 
 # System packages
 RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
-    gnupg \
-    sudo \
-    vim \
-    imagemagick \
-    git \
-    memcached \
-    libmemcached-tools \
-    libmemcached-dev \
-    libfreetype6-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    curl libcurl4-openssl-dev \
-    default-mysql-client \
-    zip \
-    wget \
-    linux-libc-dev \
-    libssl-dev \
-    libzip-dev \
-    libicu-dev \
-    g++ \
-	nodejs
+	curl libcurl4-openssl-dev \
+	default-mysql-client \
+	g++ \
+	git \
+	gnupg \
+	libfreetype6-dev \
+	libicu-dev \
+	libjpeg62-turbo-dev \
+	libmagickwand-dev \
+	libonig-dev \
+	libpng-dev \
+	libssl-dev \
+	libwebp-dev \
+	libxml2-dev \
+	linux-libc-dev \
+	locales \
+	sudo \
+	vim \
+	wget \
+	zip libzip-dev
 
-# PHP extensions
+# Apache
 RUN a2enmod rewrite ssl headers
 
-RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-configure zip --with-libzip
-
+# PHP extensions
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install \
 	curl \
-    gd \
-    mbstring \
-    zip \
-    pdo \
-    pdo_mysql \
-    mysqli \
-    intl
+	exif \
+	gettext \
+	gd \
+	intl \
+	mbstring \
+	mysqli \
+	pdo \
+	pdo_mysql \
+	soap \
+	xml \
+	xmlwriter \
+	zip
+
+# Imagick
+RUN pecl install imagick && docker-php-ext-enable imagick
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
@@ -47,7 +52,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 # Node.js and npm
 RUN echo "Package: *\nPin: origin deb.nodesource.com\nPin-Priority: 600" > "/etc/apt/preferences.d/nodesource" && sudo apt-cache policy nodejs
 RUN rm -rf /var/lib/apt/lists/ && \
-    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -&& \
-    apt-get clean && apt-get update && apt-get install -y nodejs && \
-    npm install npm@8.* -g && \
-    npm install gulp-cli -g
+	curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -&& \
+	apt-get clean && apt-get update && apt-get install -y nodejs && \
+	npm install npm@8.* -g && \
+	npm install gulp-cli -g
