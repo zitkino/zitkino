@@ -13,47 +13,43 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CronController extends AbstractController
 {
-    /** @var CinemaFacade */
-    private $cinemaFacade;
+	/** @var CinemaFacade */
+	private $cinemaFacade;
     
-    /** @var ParserService */
-    private $parserService;
+	/** @var ParserService */
+	private $parserService;
     
-    public function __construct(
-        CinemaFacade $cinemaFacade,
-        ParserService $parserService,
-        \Symfony\Contracts\Translation\TranslatorInterface $translator,
-        \Symfony\Component\HttpFoundation\RequestStack $requestStack,
-        \App\Service\MetaService $metaService,
-        \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $parameterBag
-    ) {
-        parent::__construct($translator, $requestStack, $metaService, $parameterBag);
-        $this->cinemaFacade = $cinemaFacade;
-        $this->parserService = $parserService;
-    }
-    
-    /**
-     * @Route("/cron", name="cron_default")
-     */
-    public function index(): Response
-    {
-        return $this->redirectToRoute('home_default');
-    }
-    
-    /**
-     * @Route("/cron/parse", name="cron_parse")
-     */
-    public function parse(): Response
-    {
-        $cinemas = $this->cinemaFacade->getParsable();
+	public function __construct(
+		CinemaFacade $cinemaFacade,
+		ParserService $parserService,
+		\Symfony\Contracts\Translation\TranslatorInterface $translator,
+		\Symfony\Component\HttpFoundation\RequestStack $requestStack,
+		\App\Service\MetaService $metaService,
+		\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $parameterBag
+	) {
+		parent::__construct($translator, $requestStack, $metaService, $parameterBag);
+		$this->cinemaFacade = $cinemaFacade;
+		$this->parserService = $parserService;
+	}
+	
+	#[Route("/cron", name: "cron_default")]
+	public function index(): Response
+	{
+		return $this->redirectToRoute('home_index');
+	}
+	
+	#[Route("/cron/parse", name: "cron_parse")]
+	public function parse(): Response
+	{
+		$cinemas = $this->cinemaFacade->getParsable();
         
-        /** @var Cinema $cinema */
-        foreach ($cinemas as $cinema) {
-            $this->parserService->initParser($cinema);
+		/** @var Cinema $cinema */
+		foreach ($cinemas as $cinema) {
+			$this->parserService->initParser($cinema);
             
-            $parser = $this->parserService->getParser();
-        }
+			$parser = $this->parserService->getParser();
+		}
         
-        return new Response('Parsing completed');
-    }
+		return new Response('Parsing completed');
+	}
 }
