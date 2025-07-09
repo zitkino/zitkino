@@ -13,15 +13,18 @@
 *.config
 *-data.sql
 
-app/config/keys.neon
-app/config/env/stage.neon
-app/config/env/production.neon
+_nette/app/config/keys.neon
+_nette/app/config/env/stage.neon
+_nette/app/config/env/production.neon
 
 .docker/db
-/admin
 /db
-
 /www
+
+/public/build/fonts/glyphicons-*
+/public/build/images/glyphicons-*
+
+.php-version
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -33,27 +36,21 @@ app/config/env/production.neon
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> friendsofphp/php-cs-fixer ###
-/.php-cs-fixer.php
-/.php-cs-fixer.cache
-###< friendsofphp/php-cs-fixer ###
-
-
-###> symfony test ###
-/_symfony/config/secrets/prod/prod.decrypt.private.php
-/_symfony/public/bundles/
-/_symfony/var/
-/_symfony/vendor/
-/_symfony/.php-cs-fixer.php
-/_symfony/.php-cs-fixer.cache
-###< symfony test ###
-
-###> phpunit/phpunit ###
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
 /phpunit.xml
-/.phpunit.cache/
-###< phpunit/phpunit ###
+###< symfony/phpunit-bridge ###
 
 ###> symfony/asset-mapper ###
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
