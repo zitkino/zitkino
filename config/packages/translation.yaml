@@ -1,6 +1,10 @@
 # See https://symfony.com/doc/current/translation.html
 framework:
-    default_locale: '%app.locale%'
+    # this defines the codes of the locales (languages) available in the application
+    # https://symfony.com/doc/current/reference/configuration/framework.html#enabled-locales
+    enabled_locales: [ 'cs', 'en' ]
+    default_locale: 'cs'
+    
     translator:
         # Translations are defined using the ICU Message Format
         # See https://symfony.com/doc/current/translation/message_format.html

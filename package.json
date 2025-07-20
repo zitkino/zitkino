@@ -16,10 +16,6 @@
 		"nette-forms": "^3.0.3"
 	},
 	"devDependencies": {
-		"@hotwired/stimulus": "^3.0.0",
-		"@hotwired/turbo": "^7.1.1 || ^8.0",
-		"@symfony/stimulus-bridge": "^3.2.0 || ^4.0.0",
-		"@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets",
 		"gulp": "^4.0.2",
 		"gulp-autoprefixer": "^8.0.0",
 		"gulp-cli": "^2.3.0",

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'home.default.title'|trans }}{% endblock %}
+{% block title %}{{ 'default.title'|trans({}, 'home') }}{% endblock %}
 
 {% block content %}
 <h1 class="page-header">{{ block('title') }}</h1>

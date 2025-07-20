@@ -1,7 +1,7 @@
 {% block header %}
 <nav class="navbar-header">
-    <a href="{{ path('home_index') }}" class="navbar-brand">
-{#        #}{# <img src="{{ asset('favicon.ico') }}" class="logo" alt="logo"> #}{# {{ meta.get("name") }}#}
+    <a href="{{ path('homepage') }}" class="navbar-brand">
+         <img src="{{ asset('favicon.ico') }}" class="logo" alt="logo">  {{ meta.get("name") }}
     </a>
 
     <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -12,7 +12,7 @@
 <nav class="collapse navbar-collapse">
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a href="{{ path('home_index') }}" class="nav-link"><i class="fas fa-home fa-lg"></i></a>
+            <a href="{{ path('homepage') }}" class="nav-link"><i class="fas fa-home fa-lg"></i></a>
         </li>
         <li class="nav-item">
             <a href="{{ path('cinema_default') }}" class="nav-link"><i class="fas fa-list"></i>&nbsp;Seznam kin</a>

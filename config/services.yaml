@@ -6,7 +6,18 @@
 parameters:
     app.locale: 'en'
     app.notifications.email_sender: anonymous@example.com
-
+    google-maps-key: AIzaSyAC3TNpVQ-XbwRJcuInXsp_aDf_jaYj3uY
+    
+    meta:
+        color: "#ba1b0a"
+        description: "List of Brno's cinemas"
+        author: "hermajan"
+        robots: "all,follow"
+        
+        title: ""
+        separator: "-"
+        name: "Žít kino"
+    
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -30,3 +41,6 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\MetaService:
+        arguments:
+            - '%meta%'
