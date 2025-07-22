@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Service\MetaService;
+use App\Services\MetaService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;

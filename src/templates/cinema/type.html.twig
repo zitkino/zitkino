@@ -1,22 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}{{ (type ~ '.title')|trans({}, 'cinemas')|capitalize }}{% endblock %}
+{% block title %}{{ ("cinemas." ~ type ~ ".title")|trans|capitalize }}{% endblock %}
 
 {% block content %}
-<h1 class="page-header">{{ block('title') }}</h1>
+	<h1 class="page-header">{{ block("title") }}</h1>
 
-<ul class="list-group">
-    {% from 'cinema/list.html.twig' import cinemaList %}
-    {% for cinemaItem in cinemas %}
-        {{ cinemaList(cinemaItem) }}
-    {% endfor %}
-</ul><br>
+	<ul class="list-group">
+		{% from "cinema/list.html.twig" import cinemaList %}
+		{% for cinemaItem in cinemas %}
+			{{ cinemaList(cinemaItem) }}
+		{% endfor %}
+	</ul><br>
 
-<nav>
-    <ul class="pagination">
-        <li class="page-item">
-            <a href="{{ path('cinema_programme_' ~ type) }}" class="page-link"><i class="fas fa-book"></i> {{ (type ~ '.programme')|trans({}, 'cinemas') }} <span aria-hidden="true">&rarr;</span></a>
-        </li>
-    </ul>
-</nav>
+	<nav>
+		<ul class="pagination">
+			<li class="page-item">
+				<a href="{{ path("cinema_programme_" ~ type) }}" class="page-link"><i class="fas fa-book"></i> {{ ("cinemas." ~ type ~ ".programme")|trans }} <span aria-hidden="true">&rarr;</span></a>
+			</li>
+		</ul>
+	</nav>
 {% endblock %}

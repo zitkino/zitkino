@@ -1,0 +1,16 @@
+default:
+    title: __default.title
+map:
+    title: __map.title
+    header: __map.header
+cinemas:
+    profile: __cinemas.profile
+    list: __cinemas.list
+    classic:
+        title: __cinemas.classic.title
+info:
+    title: __info.title
+facebook:
+    view: __facebook.view
+github:
+    view: __github.view

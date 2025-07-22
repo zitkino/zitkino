@@ -2,38 +2,28 @@
 
 namespace App\Facades;
 
-use App\Entity\Language;
-use App\Repository\LanguageRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entities\Language;
+use App\Repositories\LanguageRepository;
+use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 
-class LanguageFacade
-{
-	/** @var EntityManagerInterface */
-	private $entityManager;
-
-	/** @var LanguageRepository */
-	private $repository;
-
-	public function __construct(EntityManagerInterface $entityManager)
-	{
+class LanguageFacade {
+	private EntityManagerInterface $entityManager;
+	
+	private LanguageRepository|EntityRepository $repository;
+	
+	public function __construct(EntityManagerInterface $entityManager) {
 		$this->entityManager = $entityManager;
 		$this->repository = $entityManager->getRepository(Language::class);
 	}
-
-	/**
-	 * @param string $code
-	 * @return Language|object|null
-	 */
-	public function getByCode(string $code)
-	{
+	
+	public function grabByCode(string $code): ?Language {
 		return $this->repository->findOneBy(["code" => $code]);
 	}
-
+	
 	/**
 	 * @return Language[]
 	 */
-	public function getAll(): array
-	{
+	public function grabAll(): array {
 		return $this->repository->findAll();
 	}
 }

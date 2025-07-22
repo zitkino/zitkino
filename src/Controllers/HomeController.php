@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Facades\CinemaFacade;
-use App\Service\MetaService;
+use App\Services\MetaService;
 use Symfony\Component\HttpFoundation\{RequestStack, Response};
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -21,7 +21,7 @@ class HomeController extends BaseController {
 	
 	#[Route("/", name: "homepage")]
 	public function index(): Response {
-		$cinemas = $this->cinemaFacade->getWithMovies("current");
+		$cinemas = $this->cinemaFacade->gatherWithMovies("current");
 		
 		return $this->render('home/index.html.twig', ['cinemas' => $cinemas]);
 	}

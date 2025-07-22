@@ -2,24 +2,20 @@
 
 namespace App\Controllers;
 
-use App\Service\MetaService;
+use App\Services\MetaService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{RequestStack, Response};
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Base controller for all application controllers.
  */
 abstract class BaseController extends AbstractController {
-	/** @var TranslatorInterface */
-	protected $translator;
+	protected TranslatorInterface $translator;
 	
-	/** @var RequestStack */
-	protected $requestStack;
+	protected RequestStack $requestStack;
 	
-	/** @var MetaService */
-	protected $metaService;
+	protected MetaService $metaService;
 	
 	public function __construct(TranslatorInterface $translator, RequestStack $requestStack, MetaService $metaService) {
 		$this->translator = $translator;

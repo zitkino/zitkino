@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ (type ~ '.programme')|trans({}, 'cinemas')|capitalize }}{% endblock %}
+{% block title %}{{ ("cinemas."~type ~ ".programme")|trans|capitalize }}{% endblock %}
 
 {% block content %}
-<h1 class="page-header">{{ block('title') }}</h1>
-{% from 'cinema/list.html.twig' import cinemaMovieList %}
+	<h1 class="page-header">{{ block('title') }}</h1>
+	{% from 'cinema/list.html.twig' import cinemaMovieList %}
 
-{{ cinemaMovieList(cinemas) }}<br>
+	{{ cinemaMovieList(cinemas) }}<br>
 
-<nav>
-    <ul class="pagination">
-        <li class="previous"><a href="{{ path('cinema_type_' ~ type) }}" class="page-link"><span aria-hidden="true">&larr;</span> <i class="fas fa-list"></i> {{ (type ~ '.list')|trans({}, 'cinemas') }}</a></li>
-    </ul>
-</nav>
+	<nav>
+		<ul class="pagination">
+			<li class="previous"><a href="{{ path('cinema_type_' ~ type) }}" class="page-link"><span aria-hidden="true">&larr;</span> <i class="fas fa-list"></i> {{ ("cinemas."~type ~ ".list")|trans }}</a></li>
+		</ul>
+	</nav>
 {% endblock %}

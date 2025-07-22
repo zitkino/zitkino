@@ -43,10 +43,13 @@
 		],
 		"phpstan-baseline": [
 			"vendor/bin/phpstan analyse app -c app/config/phpstan.neon --generate-baseline"
+		],
+		"translations": [
+			"php bin/console translation:extract --force --format=yaml --as-tree=4 --sort=asc cs && php bin/console translation:extract --force --format=yaml --as-tree=4 --sort=asc en"
 		]
 	},
 	"require": {
-		"php": "8.3.*",
+		"php": "8.4.*",
 		"ext-ctype": "*",
 		"ext-curl": "*",
 		"ext-dom": "*",

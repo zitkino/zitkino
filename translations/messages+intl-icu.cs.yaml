@@ -1,0 +1,86 @@
+cinemas:
+    empty:
+        title: 'žádná kina'
+        message: 'Žádná kina nebyla nalezena.'
+    classic:
+        list: 'seznam klasických kin'
+        programme: 'program klasických kin'
+        title: 'Klasická kina'
+    list:
+        title: 'Seznam kin'
+        empty: 'Žádná kina nebyla nalezena.'
+    multiplex:
+        list: 'seznam multiplexů'
+        programme: 'program multiplexů'
+        title: Multiplexy
+    profile: 'profil kina'
+    programme:
+        full: 'podrobný program'
+        title: 'Program kina'
+        web:
+            title: 'Program na webu kina'
+            next: "Program na další dny je na webu kina"
+            info: "Další program a podrobné informace o filmech naleznete na webu kina"
+    summer:
+        list: 'seznam letních kin'
+        programme: 'program letních kin'
+        title: 'Letní kina'
+contact:
+    header: 'Kontaktujte nás'
+    title: Kontakt
+default:
+    description: 'Aktuální program kin v Brně. Klasická kina, multiplexy a letní kina.'
+    title: 'Program brněnských kin'
+facebook:
+    title: Facebook
+    view: 'Zobrazit na Facebooku'
+github:
+    title: GitHub
+    view: 'Zobrazit na GitHubu'
+info:
+    header: Informace
+    title: Info
+map:
+    cinema: 'kino na mapě'
+    header: 'Mapa kin'
+    hide: Skrýt
+    show: Zobrazit
+    title: Mapa
+
+screenings:
+    empty:
+        title: 'Žádné promítání nebylo nalezeno.'
+        today: "Dnes kino asi nepromítá. &#9785;"
+        todays: Dnes nepromítají žádná kina.
+    
+details:
+    movie:
+        short: Film
+        long: Název filmu
+    type:
+        short: Typ
+        long: Typ filmu
+    showtime:
+        short: Promítání
+        long: Datum a čas promítání
+    place:
+        short: Místo
+        long: Místo promítání
+    dabing:
+        short: Dabing
+        long: Dabing
+    subtitles:
+        short: Titulky
+        long: Titulky
+    language:
+        short: Jazyk
+        long: Jazyk filmu
+    length:
+        short: Délka
+        long: Délka filmu
+    price:
+        short: Cena
+        long: Cena vstupenky
+    database:
+        short: Databáze
+        long: Filmové databáze

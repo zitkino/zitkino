@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-{#    <meta name="theme-color" content="{{ meta.get('color') }}">#}
-{#    <meta name="description" content="{{ meta.get('description') }}">#}
-{#    <meta name="author" content="{{ meta.get('author') }}">#}
-{#    {% if meta.get('robots') %}#}
-{#    <meta name="robots" content="{{ meta.get('robots') }}">#}
-{#    {% endif %}#}
+    <meta name="theme-color" content="{{ meta.get('color') }}">
+    <meta name="description" content="{{ meta.get('description') }}">
+    <meta name="author" content="{{ meta.get('author') }}">
+    {% if meta.get('robots') %}
+    <meta name="robots" content="{{ meta.get('robots') }}">
+    {% endif %}
 
-{#    <title>{% block title %}{% endblock %} {{ meta.get('separator') }} {{ meta.get('name') }}</title>#}
+    <title>{% block title %}{% endblock %} {{ meta.get('separator') }} {{ meta.get('name') }}</title>
 {#	{% block importmap %}{{ importmap('app') }}{% endblock %}#}
 
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
@@ -55,10 +55,10 @@
     </div>
 </main>
 
-<footer id="footer">
-    <div class="container-fluid">
-        {% include 'footer.html.twig' %}
-    </div>
-</footer>
+{#<footer id="footer">#}
+{#    <div class="container-fluid">#}
+{#        {% include 'footer.html.twig' %}#}
+{#    </div>#}
+{#</footer>#}
 </body>
 </html>

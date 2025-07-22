@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Facades\CinemaFacade;
-use App\Service\MetaService;
+use App\Services\MetaService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,9 +26,9 @@ class CinemaController extends BaseController {
 	#[Route("/kino", name: "cinema_default_alt")]
 	public function index(): Response {
 		return $this->render('cinema/default.html.twig', [
-			'classicCinemas' => $this->cinemaFacade->getByType("classic"),
-			'multiplexCinemas' => $this->cinemaFacade->getByType("multiplex"),
-			'summerCinemas' => $this->cinemaFacade->getByType("summer")
+			'classicCinemas' => $this->cinemaFacade->grabByType("classic"),
+			'multiplexCinemas' => $this->cinemaFacade->grabByType("multiplex"),
+			'summerCinemas' => $this->cinemaFacade->grabByType("summer")
 		]);
 	}
 	
@@ -38,7 +38,7 @@ class CinemaController extends BaseController {
 	 */
 	#[Route("/kino/{id}", name: "cinema_profile")]
 	public function profile($id): Response {
-		$cinema = $this->cinemaFacade->getById($id);
+		$cinema = $this->cinemaFacade->grabById($id);
 		$screenings = $cinema->getNewScreenings();
 		
 		$gmaps = $cinema->getGmaps();
@@ -76,7 +76,7 @@ class CinemaController extends BaseController {
 		}
 		
 		return $this->render('cinema/type.html.twig', [
-			'cinemas' => $this->cinemaFacade->getByType($type),
+			'cinemas' => $this->cinemaFacade->grabByType($type),
 			'type' => $type
 		]);
 	}
@@ -104,7 +104,7 @@ class CinemaController extends BaseController {
 		}
 		
 		return $this->render('cinema/programme.html.twig', [
-			'cinemas' => $this->cinemaFacade->getWithMovies($type),
+			'cinemas' => $this->cinemaFacade->gatherWithMovies($type),
 			'type' => $type
 		]);
 	}

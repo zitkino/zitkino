@@ -1,48 +1,48 @@
 {% block header %}
-<nav class="navbar-header">
-    <a href="{{ path('homepage') }}" class="navbar-brand">
-         <img src="{{ asset('favicon.ico') }}" class="logo" alt="logo">  {{ meta.get("name") }}
-    </a>
+	<nav class="navbar-header">
+		<a href="{{ path('homepage') }}" class="navbar-brand">
+			<img src="{{ asset('favicon.ico') }}" class="logo" alt="logo"> {{ meta.get("name") }}
+		</a>
 
-    <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</nav>
+		<button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	</nav>
 
-<nav class="collapse navbar-collapse">
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a href="{{ path('homepage') }}" class="nav-link"><i class="fas fa-home fa-lg"></i></a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ path('cinema_default') }}" class="nav-link"><i class="fas fa-list"></i>&nbsp;Seznam kin</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ path('cinema_programme_classic') }}" class="nav-link"><i class="far fa-building"></i>&nbsp;Klasická kina</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ path('cinema_programme_multiplex') }}" class="nav-link"><i class="fas fa-building"></i>&nbsp;Multiplexy</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ path('cinema_programme_summer') }}" class="nav-link"><i class="far fa-sun"></i>&nbsp;Letní kina</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ path('home_map') }}" class="nav-link"><i class="far fa-map"></i>&nbsp;Mapa</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ path('home_about') }}" class="nav-link"><i class="fas fa-info"></i>&nbsp;Info</a>
-        </li>
-    </ul>
+	<nav class="collapse navbar-collapse">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a href="{{ path('homepage') }}" class="nav-link"><i class="fas fa-home fa-lg"></i></a>
+			</li>
+			<li class="nav-item">
+				<a href="{{ path('cinema_default') }}" class="nav-link"><i class="fas fa-list"></i>&nbsp;{{ "cinemas.list.title"|trans }}</a>
+			</li>
+			<li class="nav-item">
+				<a href="{{ path('cinema_programme_classic') }}" class="nav-link"><i class="far fa-building"></i>&nbsp;{{ "cinemas.classic.title"|trans }}</a>
+			</li>
+			<li class="nav-item">
+				<a href="{{ path('cinema_programme_multiplex') }}" class="nav-link"><i class="fas fa-building"></i>&nbsp;{{ "cinemas.classic.title"|trans }}</a>
+			</li>
+			<li class="nav-item">
+				<a href="{{ path('cinema_programme_summer') }}" class="nav-link"><i class="far fa-sun"></i>&nbsp;{{ "cinemas.classic.title"|trans }}</a>
+			</li>
+			<li class="nav-item">
+				<a href="{{ path('home_map') }}" class="nav-link"><i class="far fa-map"></i>&nbsp;{{ "map.title"|trans }}</a>
+			</li>
+			<li class="nav-item">
+				<a href="{{ path('home_about') }}" class="nav-link"><i class="fas fa-info"></i>&nbsp;{{ "info.title"|trans }}</a>
+			</li>
+		</ul>
 
-    <div class="navbar-right">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="https://www.facebook.com/zitkino.cz" title="Facebook profil" class="nav-link github-link"><i class="fab fa-facebook fa-2x octicon"></i></a>
-            </li>
-            <li class="nav-item">
-                <a href="https://github.com/zitkino/zitkino" title="View this project on GitHub." class="nav-link github-link"><i class="fab fa-github fa-2x octicon"></i></a>
-            </li>
-        </ul>
-    </div>
-</nav>
+		<div class="navbar-right">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a href="https://www.facebook.com/zitkino.cz" title="{{ "facebook.view"|trans }}" class="nav-link github-link"><i class="fab fa-facebook fa-2x octicon"></i></a>
+				</li>
+				<li class="nav-item">
+					<a href="https://github.com/zitkino/zitkino" title="{{ "github.view"|trans }}" class="nav-link github-link"><i class="fab fa-github fa-2x octicon"></i></a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 {% endblock %}

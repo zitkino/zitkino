@@ -1,9 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}{{ 'map.title'|trans({}, 'home') }}{% endblock %}
+{% block title %}{{ "map.title"|trans }}{% endblock %}
 
 {% block content %}
-<div class="embed-responsive embed-responsive-16by9 map">
-    <iframe src="https://www.google.com/maps/d/embed?mid=1bGbx0udf8xIA5FhKAZgDhgm0WvY" class="embed-responsive-item"></iframe>
-</div>
+	<h1 class="page-header">{{ "map.header"|trans }}</h1>
+	
+	<div class="embed-responsive embed-responsive-16by9 map">
+		<iframe src="https://www.google.com/maps/d/embed?mid=1bGbx0udf8xIA5FhKAZgDhgm0WvY" class="embed-responsive-item"></iframe>
+	</div>
 {% endblock %}
