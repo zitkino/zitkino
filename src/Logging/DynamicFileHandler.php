@@ -11,7 +11,7 @@ class DynamicFileHandler extends StreamHandler {
 	
 	private string $fileExtension;
 	
-	public function __construct(string $baseDir, string $fileExtension = '.log', int|string|Level $level = Level::Debug, bool $bubble = true) {
+	public function __construct(string $baseDir, string $fileExtension = '.log', int|string|Level $level = Level::Debug, bool $bubble = false) {
 		$this->baseDir = rtrim($baseDir, '/');
 		$this->fileExtension = $fileExtension;
 		

@@ -67,7 +67,7 @@ class ParserService {
 	public function initParser(Cinema $cinema): void {
 //		$cinemaLogger = $this->logger->pushHandler(new StreamHandler(__DIR__.'/'.$cinema->getCode().".log", Level::Debug, false));
 		
-		$cinemaLogger = $this->logger->createLogger($cinema->getCode());
+		$cinemaLogger = $this->logger->filename($cinema->getCode());
 		
 		
 		try {
