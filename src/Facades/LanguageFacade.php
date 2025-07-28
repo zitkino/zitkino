@@ -4,12 +4,13 @@ namespace App\Facades;
 
 use App\Entities\Language;
 use App\Repositories\LanguageRepository;
+use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 
-class LanguageFacade {
-	private EntityManagerInterface $entityManager;
+class LanguageFacade extends DobineFacade {
+	protected EntityManagerInterface $entityManager;
 	
-	private LanguageRepository|EntityRepository $repository;
+	protected LanguageRepository|EntityRepository $repository;
 	
 	public function __construct(EntityManagerInterface $entityManager) {
 		$this->entityManager = $entityManager;
@@ -18,12 +19,5 @@ class LanguageFacade {
 	
 	public function grabByCode(string $code): ?Language {
 		return $this->repository->findOneBy(["code" => $code]);
-	}
-	
-	/**
-	 * @return Language[]
-	 */
-	public function grabAll(): array {
-		return $this->repository->findAll();
 	}
 }

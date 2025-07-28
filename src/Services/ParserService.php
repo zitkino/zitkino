@@ -3,28 +3,54 @@ namespace App\Services;
 
 use App\Entities\Cinema;
 use App\Facades\{CinemaFacade, LanguageFacade, MovieFacade, PlaceFacade, ScreeningFacade};
+use App\Logging\CinemaLoggerFactory;
 use App\Parsers\Parser;
-use Psr\Log\LoggerInterface;
+use Monolog\Attribute\WithMonologChannel;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+#[WithMonologChannel('parsers')]
 class ParserService {
 	private HttpClientInterface $httpClient;
 	
-	private Parser $parser;
+	public Parser $parser {
+		get {
+			return $this->parser;
+		}
+	}
 	
-	private CinemaFacade $cinemaFacade;
+	public CinemaFacade $cinemaFacade {
+		get {
+			return $this->cinemaFacade;
+		}
+	}
 	
-	private LanguageFacade $languageFacade;
+	private LanguageFacade $languageFacade {
+		get {
+			return $this->languageFacade;
+		}
+	}
 	
-	private MovieFacade $movieFacade;
+	public MovieFacade $movieFacade {
+		get {
+			return $this->movieFacade;
+		}
+	}
 	
-	private PlaceFacade $placeFacade;
+	public PlaceFacade $placeFacade {
+		get {
+			return $this->placeFacade;
+		}
+	}
 	
-	private ScreeningFacade $screeningFacade;
+	public ScreeningFacade $screeningFacade {
+		get {
+			return $this->screeningFacade;
+		}
+	}
 	
-	private LoggerInterface $logger;
+	private CinemaLoggerFactory $logger;
 	
-	public function __construct(HttpClientInterface $httpClient, CinemaFacade $cinemaFacade, LanguageFacade $languageFacade, MovieFacade $movieFacade, PlaceFacade $placeFacade, ScreeningFacade $screeningFacade, LoggerInterface $logger) {
+	public function __construct(HttpClientInterface $httpClient, CinemaFacade $cinemaFacade, LanguageFacade $languageFacade, MovieFacade $movieFacade, PlaceFacade $placeFacade, ScreeningFacade $screeningFacade, CinemaLoggerFactory $logger) {
 		$this->httpClient = $httpClient;
 		$this->cinemaFacade = $cinemaFacade;
 		$this->languageFacade = $languageFacade;
@@ -38,50 +64,27 @@ class ParserService {
 		return $this->httpClient;
 	}
 	
-	public function getParser(): Parser {
-		return $this->parser;
-	}
-	
-	public function setParser(Parser $parser): ParserService {
-		$this->parser = $parser;
-		return $this;
-	}
-	
 	public function initParser(Cinema $cinema): void {
+//		$cinemaLogger = $this->logger->pushHandler(new StreamHandler(__DIR__.'/'.$cinema->getCode().".log", Level::Debug, false));
+		
+		$cinemaLogger = $this->logger->createLogger($cinema->getCode());
+		
+		
 		try {
 			$parserClass = "\App\Parsers\\".ucfirst($cinema->getCode());
 			if(class_exists($parserClass)) {
 				$this->parser = new $parserClass($this, $cinema);
-				$this->getScreeningFacade()
-						->removeScreenings($cinema);
+				$this->screeningFacade->removeScreenings($cinema);
 				$this->parser->parse();
+			} else {
+				$cinemaLogger->error(sprintf("Parser class %s does not exist for cinema %s", $parserClass, $cinema->getCode()));
 			}
 		} catch(\Error $error) {
 			dump($error);
-			$this->logger->error(sprintf("Error initializing parser for cinema %s: %s", $cinema->getCode(), $error->getMessage()));
+			$cinemaLogger->error(sprintf("Error initializing parser for cinema %s: %s", $cinema->getCode(), $error->getMessage()), ['error' => $error]);
 		} catch(\Exception $exception) {
 			dump($exception);
-			$this->logger->error(sprintf("Error initializing parser for cinema %s: %s", $cinema->getCode(), $exception->getMessage()));
+			$cinemaLogger->error(sprintf("Error initializing parser for cinema %s: %s", $cinema->getCode(), $exception->getMessage()), ['exception' => $exception]);
 		}
-	}
-	
-	public function getCinemaFacade(): CinemaFacade {
-		return $this->cinemaFacade;
-	}
-	
-	public function getLanguageFacade(): LanguageFacade {
-		return $this->languageFacade;
-	}
-	
-	public function getMovieFacade(): MovieFacade {
-		return $this->movieFacade;
-	}
-	
-	public function getPlaceFacade(): PlaceFacade {
-		return $this->placeFacade;
-	}
-	
-	public function getScreeningFacade(): ScreeningFacade {
-		return $this->screeningFacade;
 	}
 }

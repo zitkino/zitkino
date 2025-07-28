@@ -1,11 +1,8 @@
 <?php
 namespace App\Parsers;
 
-use App\Parsers\Parser;
-use App\Parsers\Zbrojovka;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
-use App\Exceptions\ParserException;
 use App\Entities\{Movie, Place, Screening};
+use App\Exceptions\ParserException;
 
 /**
  * Art parser.
@@ -13,8 +10,6 @@ use App\Entities\{Movie, Place, Screening};
 class Art extends Parser {
 	/**
 	 * @throws ParserException
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
@@ -24,7 +19,20 @@ class Art extends Parser {
 			$dateQuery = $xpath->query(".//h3[@class='events-calendar__day-date']", $day);
 			$dateArray = explode(" ", $dateQuery->item(0)->nodeValue);
 			
-			$months = [1 => "ledna", 2 => "února", 3 => "března", 4 => "dubna", 5 => "května", 6 => "června", 7 => "července", 8 => "srpna", 9 => "září", 10 => "října", 11 => "listopadu", 12 => "prosince"];
+			$months = [
+				1 => "ledna",
+				2 => "února",
+				3 => "března",
+				4 => "dubna",
+				5 => "května",
+				6 => "června",
+				7 => "července",
+				8 => "srpna",
+				9 => "září",
+				10 => "října",
+				11 => "listopadu",
+				12 => "prosince"
+			];
 			
 			$key = array_search(trim($dateArray[1]), $months);
 			if($key === false) {
@@ -89,24 +97,20 @@ class Art extends Parser {
 				$lengthString = $lengthQuery->item(0)->nodeValue ?? null;
 				$length = $lengthString ? (int)str_replace("min", "", $lengthString) : null;
 				
-				$movie = $this->parserService->getMovieFacade()
-					->grabByName($name);
+				$movie = $this->parserService->movieFacade->grabByName($name);
 				if(!isset($movie)) {
 					$movie = new Movie($name);
 					$movie->setLength($length);
-					$this->parserService->getMovieFacade()
-						->save($movie);
+					$this->parserService->movieFacade->save($movie);
 				}
 				
-				$place = $this->parserService->getPlaceFacade()
-					->grabByName($placeName);
+				$place = $this->parserService->placeFacade->grabByName($placeName);
 				if(!isset($place)) {
 					$place = new Place($placeName);
 					$place->setCinema($this->cinema);
 				}
 				$place->setLink($placeLink);
-				$this->parserService->getPlaceFacade()
-					->save($place);
+				$this->parserService->placeFacade->save($place);
 				
 				$screening = new Screening($movie, $this->cinema);
 				$screening->setPlace($place)
@@ -114,14 +118,12 @@ class Art extends Parser {
 					->setLink($link)
 					->setShowtimes($datetimes);
 				
-				$this->parserService->getScreeningFacade()
-					->save($screening);
+				$this->parserService->screeningFacade->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

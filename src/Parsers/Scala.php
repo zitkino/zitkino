@@ -1,6 +1,7 @@
 <?php
 namespace App\Parsers;
 
+use Monolog\Attribute\WithMonologChannel;
 use App\Entities\{Movie, Place, Screening, ScreeningType};
 use App\Exceptions\ParserException;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,12 +10,13 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 /**
  * Scala parser.
  */
+#[WithMonologChannel("scala")]
 class Scala extends Parser {
 	protected function downloadData(): string {
 		try {
 			$parameters = ["cinema" => ["5"], "hall" => [["4"], ["16"]], "_locale" => "cs"];
 			$response = $this->parserService->getHttpClient()
-				->request(Request::METHOD_POST, $this->getUrl(), ["form_params" => $parameters]);
+				->request(Request::METHOD_POST, $this->getUrl(), ["body" => $parameters]);
 			$body = $response->getContent();
 		} catch(ExceptionInterface $e) {
 			$e = new ParserException($e->getMessage());
@@ -30,7 +32,6 @@ class Scala extends Parser {
 	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
-		$weekdays = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"];
 		
 		$days = $xpath->query("//div[@class='program']");
 		$dayItems = 0;
@@ -45,6 +46,7 @@ class Scala extends Parser {
 					$datetime = new \DateTime("tomorrow");
 					break;
 				default:
+					$weekdays = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"];
 					$date = trim(str_replace($weekdays, "", $dateString));
 					$datetime = \DateTime::createFromFormat("d/m", $date);
 					break;
@@ -68,14 +70,12 @@ class Scala extends Parser {
 					continue;
 				}
 				
-				$place = $this->parserService->getPlaceFacade()
-					->grabByName($placeName);
+				$place = $this->parserService->placeFacade->grabByName($placeName);
 				if(!isset($place)) {
 					$place = new Place($placeName);
 					$place->setCinema($this->cinema);
 				}
-				$this->parserService->getPlaceFacade()
-					->save($place);
+				$this->parserService->placeFacade->save($place);
 				
 				$nameQuery = $xpath->query(".//div[contains(@class, 'program__movie-name')]", $event);
 				$name = $nameQuery->item(0)->nodeValue;
@@ -95,12 +95,10 @@ class Scala extends Parser {
 						case "Scalní letňák":
 							break;
 						default:
-							$screeningType = $this->parserService->getScreeningFacade()
-								->getType($type);
+							$screeningType = $this->parserService->screeningFacade->grabType($type);
 							if(!isset($screeningType)) {
 								$screeningType = new ScreeningType($type);
-								$this->parserService->getScreeningFacade()
-									->save($screeningType);
+								$this->parserService->screeningFacade->save($screeningType);
 							}
 							break;
 					}
@@ -136,12 +134,10 @@ class Scala extends Parser {
 					$link = null;
 				}
 				
-				$movie = $this->parserService->getMovieFacade()
-					->grabByName($name);
+				$movie = $this->parserService->movieFacade->grabByName($name);
 				if(!isset($movie)) {
 					$movie = new Movie($name);
-					$this->parserService->getMovieFacade()
-						->save($movie);
+					$this->parserService->movieFacade->save($movie);
 				}
 				
 				$screening = new Screening($movie, $this->cinema);
@@ -151,8 +147,7 @@ class Scala extends Parser {
 					->setLink($link)
 					->setShowtimes($datetimes);
 				
-				$this->parserService->getScreeningFacade()
-					->save($screening);
+				$this->parserService->screeningFacade->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 			
@@ -160,7 +155,6 @@ class Scala extends Parser {
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

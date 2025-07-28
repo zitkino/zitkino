@@ -13,7 +13,7 @@ class ScalaLetni extends Scala {
 		try {
 			$parameters = ["cinema" => ["5"], "hall" => [["26"], ["27"]], "_locale" => "cs"];
 			$response = $this->parserService->getHttpClient()
-				->request(Request::METHOD_POST, $this->getUrl(), ["form_params" => $parameters]);
+				->request(Request::METHOD_POST, $this->getUrl(), ["body" => $parameters]);
 			$body = $response->getContent();
 		} catch(ExceptionInterface $e) {
 			$e = new ParserException($e->getMessage());

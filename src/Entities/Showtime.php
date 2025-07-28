@@ -3,15 +3,13 @@
 namespace App\Entities;
 
 use App\Repositories\ShowtimeRepository;
+use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ShowtimeRepository::class)]
 #[ORM\Table(name: "zk_showtimes", indexes: [new ORM\Index(columns: ["screening"], name: "screening")])]
 class Showtime {
-	#[ORM\Column(name: "id", type: "integer", nullable: false)]
-	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: "IDENTITY")]
-	private $id;
+	use Id;
 	
 	#[ORM\ManyToOne(targetEntity: Screening::class, inversedBy: "showtimes")]
 	#[ORM\JoinColumn(name: "screening", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
@@ -24,10 +22,6 @@ class Showtime {
 		$this->screening = $screening;
 		$this->datetime = $datetime;
 		$this->fixDatetime();
-	}
-	
-	public function getId(): ?int {
-		return $this->id;
 	}
 	
 	public function getScreening(): ?Screening {

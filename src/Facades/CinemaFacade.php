@@ -4,14 +4,15 @@ namespace App\Facades;
 
 use App\Repositories\CinemaRepository;
 use App\Entities\{Cinema, CinemaType};
+use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 
-class CinemaFacade {
-	private EntityManagerInterface $entityManager;
+class CinemaFacade extends DobineFacade {
+	protected EntityManagerInterface $entityManager;
 	
-	private CinemaRepository|EntityRepository $repository;
+	protected CinemaRepository|EntityRepository $repository;
 	
-	private EntityRepository $repositoryType;
+	protected EntityRepository $repositoryType;
 	
 	public function __construct(EntityManagerInterface $entityManager) {
 		$this->entityManager = $entityManager;
@@ -19,7 +20,10 @@ class CinemaFacade {
 		$this->repositoryType = $entityManager->getRepository(CinemaType::class);
 	}
 	
-	public function grabById(int|string $id): Cinema|null {
+	/**
+	 * @return Cinema|null
+	 */
+	public function grabById($id) {
 		if(is_numeric($id)) {
 			return $this->repository->findOneBy(["id" => $id]);
 		} else {

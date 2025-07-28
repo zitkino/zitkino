@@ -42,7 +42,8 @@ abstract class Parser {
 	 */
 	protected function downloadData(): string {
 		try {
-			$response = $this->parserService->getHttpClient()->request(Request::METHOD_GET, $this->url);
+			$response = $this->parserService->getHttpClient()
+				->request(Request::METHOD_GET, $this->url);
 			$body = $response->getContent();
 		} catch(ExceptionInterface $e) {
 			$e = new ParserException($e->getMessage());
@@ -63,9 +64,9 @@ abstract class Parser {
 		$document = new \DOMDocument("1.0", "UTF-8");
 		$document->formatOutput = true;
 		$document->preserveWhiteSpace = true;
-		
-		$html = mb_convert_encoding($data, "HTML-ENTITIES", "UTF-8");
-		$document->loadHTML($html);
+
+//		$html = htmlspecialchars_decode(iconv("UTF-8", "ISO-8859-1", htmlentities($data, ENT_COMPAT, "UTF-8")), ENT_QUOTES);
+		$document->loadHTML($data);
 		
 		return new \DOMXPath($document);
 	}

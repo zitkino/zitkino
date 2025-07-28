@@ -2,15 +2,13 @@
 
 namespace App\Entities;
 
+use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "zk_cinemas_types", uniqueConstraints: [new ORM\UniqueConstraint(name: "code", columns: ["code"])])]
 class CinemaType {
-	#[ORM\Column(name: "id", type: "integer", nullable: false)]
-	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: "IDENTITY")]
-	private $id;
+	use Id;
 	
 	#[ORM\Column(name: "code", type: "string", length: 191, nullable: false)]
 	private string $code;
@@ -21,10 +19,6 @@ class CinemaType {
 	public function __construct(string $code) {
 		$this->code = $code;
 		$this->name = $code;
-	}
-	
-	public function getId(): ?int {
-		return $this->id;
 	}
 	
 	public function getCode(): string {

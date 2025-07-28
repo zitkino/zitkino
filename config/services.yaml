@@ -43,3 +43,13 @@ services:
     App\Services\MetaService:
         arguments:
             - '%meta%'
+            
+    App\Logging\DynamicFileHandler:
+        arguments:
+            $baseDir: '%kernel.logs_dir%/parsers'
+            $level: !php/const Monolog\Level::Debug
+            $bubble: false
+            
+    App\Logging\CinemaLoggerFactory:
+        arguments:
+            $baseLogger: '@monolog.logger.parsers'

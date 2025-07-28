@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use App\Repositories\ScreeningRepository;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
+use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ScreeningRepository::class)]
@@ -15,10 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 	new ORM\Index(columns: ["subtitles"], name: "subtitles")
 ])]
 class Screening {
-	#[ORM\Column(name: "id", type: "integer", nullable: false)]
-	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: "IDENTITY")]
-	private $id;
+	use Id;
 	
 	#[ORM\ManyToOne(targetEntity: Movie::class, inversedBy: "screenings")]
 	#[ORM\JoinColumn(name: "movie", referencedColumnName: "id", nullable: false)]

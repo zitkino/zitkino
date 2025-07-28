@@ -3,7 +3,6 @@ namespace App\Parsers;
 
 use App\Entities\{Movie, Screening};
 use App\Exceptions\ParserException;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Nette\Utils\Strings;
 
 /**
@@ -11,8 +10,6 @@ use Nette\Utils\Strings;
  */
 class Mdb extends Parser {
 	/**
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @throws ParserException
 	 */
 	public function parse(): void {
@@ -37,7 +34,7 @@ class Mdb extends Parser {
 				
 				$dateQuery = $xpath->query(".//strong[1]", $event);
 				$datetime = \DateTime::createFromFormat("j.n.", trim($dateQuery->item(0)->nodeValue));
-				if($datetime != false) {
+				if($datetime !== false) {
 					$month = $datetime->format("m");
 					switch($month) {
 						case "6":
@@ -61,13 +58,11 @@ class Mdb extends Parser {
 				
 				$price = 99;
 				
-				$movie = $this->parserService->getMovieFacade()
-					->grabByName($name);
+				$movie = $this->parserService->movieFacade->grabByName($name);
 				if(!isset($movie)) {
 					$movie = new Movie($name);
 					$movie->setLength($length);
-					$this->parserService->getMovieFacade()
-						->save($movie);
+					$this->parserService->movieFacade->save($movie);
 				}
 				
 				$screening = new Screening($movie, $this->cinema);
@@ -75,14 +70,12 @@ class Mdb extends Parser {
 //				->setLink($link)
 					->setShowtimes($datetimes);
 				
-				$this->parserService->getScreeningFacade()
-					->save($screening);
+				$this->parserService->screeningFacade->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

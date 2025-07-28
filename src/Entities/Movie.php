@@ -4,15 +4,13 @@ namespace App\Entities;
 
 use App\Repositories\MovieRepository;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
+use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ORM\Table(name: "zk_movies", uniqueConstraints: [new ORM\UniqueConstraint(name: "name", columns: ["name"])])]
 class Movie {
-	#[ORM\Column(name: "id", type: "integer", nullable: false)]
-	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: "IDENTITY")]
-	private $id;
+	use Id;
 	
 	#[ORM\Column(name: "name", type: "string", length: 191, nullable: false)]
 	private string $name;
@@ -29,16 +27,12 @@ class Movie {
 	private array $databases;
 	
 	#[ORM\OneToMany(mappedBy: "movie", targetEntity: Screening::class, cascade: ["persist", "remove"])]
-	private ArrayCollection $screenings;
+	private Collection $screenings;
 	
 	public function __construct(string $name) {
 		$this->name = $name;
 		$this->setDatabases();
 		$this->screenings = new ArrayCollection();
-	}
-	
-	public function getId(): ?int {
-		return $this->id;
 	}
 	
 	public function getName(): string {

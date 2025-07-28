@@ -73,17 +73,14 @@ abstract class CinemaCity extends Parser {
 			$length = (int)$film["length"];
 			$price = null;
 			
-			$movie = $this->parserService->getMovieFacade()
-				->grabByName($name);
+			$movie = $this->parserService->movieFacade->grabByName($name);
 			if(!isset($movie)) {
 				$movie = new Movie($name);
 				$movie->setLength($length);
-				$this->parserService->getMovieFacade()
-					->save($movie);
+				$this->parserService->movieFacade->save($movie);
 			}
 			
-			$screeningType = $this->parserService->getScreeningFacade()
-				->getType($type);
+			$screeningType = $this->parserService->screeningFacade->grabType($type);
 			if(!isset($screeningType)) {
 				$screeningType = new ScreeningType($type);
 			}
@@ -99,14 +96,12 @@ abstract class CinemaCity extends Parser {
 		
 		foreach($screenings as $key => $screening) {
 			$screening->setShowtimes($datetimes[$key]);
-			$this->parserService->getScreeningFacade()
-				->save($screening);
+			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 		
 		return true;
 	}

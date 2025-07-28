@@ -3,15 +3,12 @@ namespace App\Parsers;
 
 use App\Entities\{Movie, Screening};
 use App\Exceptions\ParserException;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
 
 /**
  * Špilberk parser.
  */
 class Spilberk extends Parser {
 	/**
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @throws ParserException
 	 */
 	public function parse(): void {
@@ -31,30 +28,39 @@ class Spilberk extends Parser {
 				$csfd = str_replace(["https://www.csfd.cz/film/", "/prehled/"], "", $csfdString);
 			}
 			
-			$link = null;
 			$linkQuery = $xpath->query(".//a[@class='goout']", $event);
 			$linkItem = $linkQuery->item(0);
-			if(isset($linkItem)) {
-				$link = $linkItem->attributes->getNamedItem("href")->nodeValue;
-			}
+			$link = $linkItem?->attributes->getNamedItem("href")->nodeValue;
 			
-			$itemsQuery = $xpath->query(".//p[@class='popisek']", $event);
-			$itemString = $itemsQuery->item(0)->nodeValue;
-			
-			switch(true) {
-				case(strpos($itemString, "Česko") !== false):
-				case(strpos($itemString, "český dabing") !== false):
-					$dubbing = "český";
-					$subtitles = null;
-					break;
-				case(strpos($itemString, "čes. titulky") !== false):
-					$dubbing = null;
-					$subtitles = "české";
-					break;
-				default:
-					$dubbing = null;
-					$subtitles = null;
-					break;
+			$descriptionQuery = $xpath->query(".//p[@class='popisek']", $event);
+			$descriptionItem = $descriptionQuery->item(0);
+			if(isset($descriptionItem)) {
+				$descriptionString = $descriptionItem->nodeValue;
+				switch(true) {
+					case(str_contains($descriptionString, "Česko")):
+					case(str_contains($descriptionString, "český dabing")):
+						$dubbing = "český";
+						$subtitles = null;
+						break;
+					case(str_contains($descriptionString, "čes. titulky")):
+						$dubbing = null;
+						$subtitles = "české";
+						break;
+					default:
+						$dubbing = null;
+						$subtitles = null;
+						break;
+				}
+				
+				$lengthString = explode("min", $descriptionString);
+				$length = (int)trim($lengthString[0]);
+				if($length == 0) {
+					$length = null;
+				}
+			} else {
+				$dubbing = null;
+				$subtitles = null;
+				$length = null;
 			}
 			
 			$dateQuery = $xpath->query(".//div[@class='left']//p", $event);
@@ -68,30 +74,22 @@ class Spilberk extends Parser {
 			$datetime->setTime(intval($time[0]), intval($time[1]));
 			$datetimes = [$datetime];
 			
-			$lengthString = explode("min", $itemString);
-			$length = (int)trim($lengthString[0]);
-			if($length == 0) {
-				$length = null;
-			}
 			
 			$priceQuery = $xpath->query(".//p[@class='cena']", $event);
 			$priceString = $priceQuery->item(0)->nodeValue;
 			$price = (int)str_replace(["na místě", ",- Kč"], "", $priceString);
 			
-			$movie = $this->parserService->getMovieFacade()
-				->grabByName($name);
+			$movie = $this->parserService->movieFacade->grabByName($name);
 			if(!isset($movie)) {
 				$movie = new Movie($name);
 				$movie->setLength($length)
 					->setCsfd($csfd);
-				$this->parserService->getMovieFacade()
-					->save($movie);
+				$this->parserService->movieFacade->save($movie);
 			}
 			
 			if(!empty($csfd) and empty($movie->getCsfd())) {
 				$movie->setCsfd($csfd);
-				$this->parserService->getMovieFacade()
-					->save($movie);
+				$this->parserService->movieFacade->save($movie);
 			}
 			
 			$screening = new Screening($movie, $this->cinema);
@@ -100,13 +98,11 @@ class Spilberk extends Parser {
 				->setLink($link)
 				->setShowtimes($datetimes);
 			
-			$this->parserService->getScreeningFacade()
-				->save($screening);
+			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

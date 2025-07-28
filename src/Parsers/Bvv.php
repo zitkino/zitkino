@@ -4,7 +4,6 @@ namespace App\Parsers;
 use App\Entities\{Cinema, Movie, Screening, Showtime};
 use App\Exceptions\ParserException;
 use App\Services\ParserService;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
 
 /**
  * BVV parser.
@@ -17,8 +16,6 @@ class Bvv extends Parser {
 	
 	/**
 	 * @throws ParserException
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 */
 	public function parse(): void {
 		$movieItems = 0;
@@ -100,7 +97,7 @@ class Bvv extends Parser {
 			}
 			
 			$dubbing = null;
-			if((strpos($info->nodeValue, ", ČR,") !== false) or (strpos($info->nodeValue, "Česko") !== false)) {
+			if((str_contains($info->nodeValue, ", ČR,")) or (str_contains($info->nodeValue, "Česko"))) {
 				$dubbing = "česky";
 			}
 			
@@ -110,10 +107,10 @@ class Bvv extends Parser {
 			if(count($items) > 2) {
 				$lengthItems = [1, 2, 3, 4, 5];
 				foreach($lengthItems as $item) {
-					if(isset($items[$item]) and (strpos($items[$item], " min") !== false)) {
+					if(isset($items[$item]) and (str_contains($items[$item], " min"))) {
 						$lengthArray = explode(" ", $items[$item]);
 						
-						if(strpos($lengthArray[0], ",") !== false) {
+						if(str_contains($lengthArray[0], ",")) {
 							$length = $lengthArray[2];
 						} else {
 							$length = $lengthArray[0];
@@ -137,7 +134,6 @@ class Bvv extends Parser {
 		}
 		$this->cinema->setParsed(new \DateTime());
 		
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

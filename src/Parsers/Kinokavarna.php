@@ -3,15 +3,12 @@ namespace App\Parsers;
 
 use App\Entities\{Movie, Screening};
 use App\Exceptions\ParserException;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
 
 /**
  * Kinokavarna parser.
  */
 class Kinokavarna extends Parser {
 	/**
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @throws ParserException
 	 */
 	public function parse(): void {
@@ -32,7 +29,7 @@ class Kinokavarna extends Parser {
 			
 			$name = mb_substr($nameString, strlen($date));
 			$badNames = ["", "ZAVŘENO", "Zavřeno", "STÁTNÍ SVÁTEK- ZAVŘENO"];
-			if(($time == " ") and (in_array($name, $badNames) or (strpos($name, "OTEVÍRACÍ DOBA-") !== false))) {
+			if(($time == " ") and (in_array($name, $badNames) or (str_contains($name, "OTEVÍRACÍ DOBA-")))) {
 				continue;
 			}
 			
@@ -50,11 +47,11 @@ class Kinokavarna extends Parser {
 			$dubbing = null;
 			$subtitles = null;
 			foreach($infoQuery as $lang) {
-				if(strpos($lang->nodeValue, ", ČR,") !== false) {
+				if(str_contains($lang->nodeValue, ", ČR,")) {
 					$dubbing = "česky";
 					break;
 				}
-				if(strpos($lang->nodeValue, "čes. tit") !== false) {
+				if(str_contains($lang->nodeValue, "čes. tit")) {
 					$subtitles = "české";
 					break;
 				}
@@ -72,13 +69,11 @@ class Kinokavarna extends Parser {
 				$price = null;
 			}
 			
-			$movie = $this->parserService->getMovieFacade()
-				->grabByName($name);
+			$movie = $this->parserService->movieFacade->grabByName($name);
 			if(!isset($movie)) {
 				$movie = new Movie($name);
 				$movie->setLength($length);
-				$this->parserService->getMovieFacade()
-					->save($movie);
+				$this->parserService->movieFacade->save($movie);
 			}
 			
 			$screening = new Screening($movie, $this->cinema);
@@ -87,13 +82,11 @@ class Kinokavarna extends Parser {
 				->setLink($link)
 				->setShowtimes($datetimes);
 			
-			$this->parserService->getScreeningFacade()
-				->save($screening);
+			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

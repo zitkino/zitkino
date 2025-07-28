@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24002d530482984df1cb87cc63c0d716",
+    "content-hash": "cbc1408b062884d048a709add3990d26",
     "packages": [
         {
             "name": "composer/semver",
@@ -1981,6 +1981,61 @@
                 "source": "https://github.com/hermajan/booty/tree/v0.4.0"
             },
             "time": "2023-03-21T01:21:15+00:00"
+        },
+        {
+            "name": "hermajan/dobine",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./dobine",
+                "reference": "130641449a076f864e629eb683ed83678c2970ba"
+            },
+            "require": {
+                "doctrine/orm": "^2.2",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "knplabs/doctrine-behaviors": "dev-sf7.0 as 2.6.3",
+                "nette/neon": "^3.3",
+                "nette/tester": "^2.4",
+                "nette/utils": "^4.0",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-doctrine": "^2.0",
+                "phpstan/phpstan-nette": "^2.0",
+                "vlucas/phpdotenv": "^2.5"
+            },
+            "suggest": {
+                "knplabs/doctrine-behaviors": "For translating entities.",
+                "nette/neon": "For parsing connection parameters from .neon files.",
+                "nette/utils": "For using with Nette.",
+                "vlucas/phpdotenv": "For loading connection environment from .env file."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dobine\\": "src"
+                }
+            },
+            "scripts": {
+                "phpstan": [
+                    "vendor/bin/phpstan analyse src -c phpstan.neon"
+                ],
+                "tester": [
+                    "php ./vendor/nette/tester/src/tester.php -C -s tests"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Doctrine extensions.",
+            "homepage": "https://hermajan.net/dobine",
+            "support": {
+                "issues": "https://github.com/hermajan/dobine/issues"
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "hermajan/facolors",
@@ -11590,11 +11645,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "hermajan/dobine": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "8.3.*",
+        "php": "8.4.*",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",

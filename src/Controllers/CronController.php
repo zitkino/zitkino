@@ -38,7 +38,7 @@ class CronController extends BaseController {
 		foreach($cinemas as $cinema) {
 			$this->parserService->initParser($cinema);
 			
-			$parser = $this->parserService->getParser();
+			$parser = $this->parserService->parser;
 		}
 		
 		return new Response('Parsing completed');

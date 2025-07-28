@@ -3,7 +3,6 @@ namespace App\Parsers;
 
 use App\Entities\{Movie, Screening};
 use App\Exceptions\ParserException;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
 
 /**
  * Rubin parser.
@@ -11,8 +10,6 @@ use Doctrine\ORM\{OptimisticLockException, ORMException};
 class Rubin extends Parser {
 	/**
 	 * @throws ParserException
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 */
 	public function parse(): void {
 		$movies = [];
@@ -24,7 +21,7 @@ class Rubin extends Parser {
 			$itemQuery = $xpath->query(".//h2[@class='tagItemTitle']/a", $event);
 			$itemString = $itemQuery->item(0)->nodeValue;
 			
-			if(strpos($itemString, "Letní kino") !== false) {
+			if(str_contains($itemString, "Letní kino")) {
 				$nameQuery = $xpath->query(".//div[@class='catItemIntroText']/p/strong", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
@@ -48,14 +45,12 @@ class Rubin extends Parser {
 				$screening->setLink($link)
 					->setShowtimes([$datetime]);
 				
-				$this->parserService->getScreeningFacade()
-					->save($screening);
+				$this->parserService->screeningFacade->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

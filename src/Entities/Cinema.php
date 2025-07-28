@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use App\Repositories\CinemaRepository;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
+use Dobine\Properties\{Ids\Id, Sortable};
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,10 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 	new ORM\UniqueConstraint(name: "code", columns: ["code"])
 ])]
 class Cinema {
-	#[ORM\GeneratedValue(strategy: "IDENTITY")]
-	#[ORM\Id]
-	#[ORM\Column(name: "id", type: "integer", nullable: false)]
-	private $id;
+	use Id, Sortable;
 	
 	#[ORM\Column(name: "name", type: "string", length: 255, nullable: false)]
 	private string $name;
@@ -34,7 +32,7 @@ class Cinema {
 	private ?string $address = null;
 	
 	#[ORM\Column(name: "city", type: "string", length: 255, nullable: false, options: ["default" => "Brno"])]
-	private string $city = 'Brno';
+	private string $city = "Brno";
 	
 	#[ORM\Column(name: "phone", type: "string", length: 100, nullable: true)]
 	private ?string $phone = null;
@@ -93,10 +91,6 @@ class Cinema {
 	
 	public function __toString() {
 		return $this->getCode();
-	}
-	
-	public function getId(): ?int {
-		return $this->id;
 	}
 	
 	public function getName(): string {

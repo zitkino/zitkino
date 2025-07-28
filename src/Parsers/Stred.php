@@ -3,15 +3,12 @@ namespace App\Parsers;
 
 use App\Entities\{Movie, Screening, ScreeningType};
 use App\Exceptions\ParserException;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
 
 /**
  * Stred parser.
  */
 class Stred extends Parser {
 	/**
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @throws ParserException
 	 */
 	public function parse(): void {
@@ -65,67 +62,35 @@ class Stred extends Parser {
 				
 				$language[0] = trim($meta[4]);
 				
-				switch(true) {
-					case (strpos($language[0], "CZ") !== false):
-					case (strpos($language[0], "česky") !== false):
-						$dubbing = "česky";
-						break;
-					case (strpos($language[0], "DE") !== false):
-					case (strpos($language[0], "německy") !== false):
-						$dubbing = "německy";
-						break;
-					case (strpos($language[0], "DA") !== false):
-					case (strpos($language[0], "DN") !== false):
-					case (strpos($language[0], "dánsky") !== false):
-						$dubbing = "dánsky";
-						break;
-					case (strpos($language[0], "EN") !== false):
-					case (strpos($language[0], "anglicky") !== false):
-						$dubbing = "anglicky";
-						break;
-					case (strpos($language[0], "ES") !== false):
-						$dubbing = "španělsky";
-						break;
-					case (strpos($language[0], "FA") !== false):
-						$dubbing = "persky";
-						break;
-					case (strpos($language[0], "FR") !== false):
-						$dubbing = "francouzsky";
-						break;
-					case (strpos($language[0], "HE") !== false):
-						$dubbing = "hebrejsky";
-						break;
-					case (strpos($language[0], "NO") !== false):
-						$dubbing = "norsky";
-						break;
-					case (strpos($language[0], "HU") !== false):
-						$dubbing = "maďarsky";
-						break;
-					case (strpos($language[0], "IT") !== false):
-						$dubbing = "italsky";
-						break;
-					case (strpos($language[0], "SW") !== false):
-					case (strpos($language[0], "švédsky") !== false):
-						$dubbing = "švédsky";
-						break;
-					default:
-						$dubbing = $language[0];
-						break;
-				}
+				$dubbing = match (true) {
+					str_contains($language[0], "CZ"), str_contains($language[0], "česky") => "česky",
+					str_contains($language[0], "DE"), str_contains($language[0], "německy") => "německy",
+					str_contains($language[0], "DA"), str_contains($language[0], "DN"), str_contains($language[0], "dánsky") => "dánsky",
+					str_contains($language[0], "EN"), str_contains($language[0], "anglicky") => "anglicky",
+					str_contains($language[0], "ES") => "španělsky",
+					str_contains($language[0], "FA") => "persky",
+					str_contains($language[0], "FR") => "francouzsky",
+					str_contains($language[0], "HE") => "hebrejsky",
+					str_contains($language[0], "NO") => "norsky",
+					str_contains($language[0], "HU") => "maďarsky",
+					str_contains($language[0], "IT") => "italsky",
+					str_contains($language[0], "SW"), str_contains($language[0], "švédsky") => "švédsky",
+					default => $language[0],
+				};
 			}
 			
 			if(count($meta) >= 5) {
 				switch(true) {
-					case (strpos(end($meta), "CZ tit") !== false):
-					case (strpos(end($meta), "CZE tit") !== false):
-					case (strpos(end($meta), "CT tit") !== false):
+					case (str_contains(end($meta), "CZ tit")):
+					case (str_contains(end($meta), "CZE tit")):
+					case (str_contains(end($meta), "CT tit")):
 						$subtitles = "české";
 						break;
 				}
 			}
 			
 			$price = 140;
-			if(strpos($name, "Swingový večer") !== false) {
+			if(str_contains($name, "Swingový večer")) {
 				$price = 50;
 			}
 			
@@ -135,22 +100,20 @@ class Stred extends Parser {
 			if(isset($cycleItem)) {
 				$cycle = $cycleItem->nodeValue;
 				
-				if(strpos($cycle, "Das Sommerkino") !== false) {
+				if(str_contains($cycle, "Das Sommerkino")) {
 					$price = 50;
 				}
 				
-				if(strpos($cycle, "Vstup zdarma") !== false) {
+				if(str_contains($cycle, "Vstup zdarma")) {
 					$price = 0;
 				}
 			}
 			
-			$movie = $this->parserService->getMovieFacade()
-				->grabByName($name);
+			$movie = $this->parserService->movieFacade->grabByName($name);
 			if(!isset($movie)) {
 				$movie = new Movie($name);
 				$movie->setLength($length);
-				$this->parserService->getMovieFacade()
-					->save($movie);
+				$this->parserService->movieFacade->save($movie);
 			}
 			
 			$screening = new Screening($movie, $this->cinema);
@@ -159,22 +122,18 @@ class Stred extends Parser {
 				->setLink($link)
 				->setShowtimes($datetimes);
 			
-			$screeningType = $this->parserService->getScreeningFacade()
-				->getType($cycle);
+			$screeningType = $this->parserService->screeningFacade->grabType($cycle);
 			if(!isset($screeningType)) {
 				$screeningType = new ScreeningType($cycle);
-				$this->parserService->getScreeningFacade()
-					->save($screeningType);
+				$this->parserService->screeningFacade->save($screeningType);
 			}
 			$screening->setType($screeningType);
 			
-			$this->parserService->getScreeningFacade()
-				->save($screening);
+			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

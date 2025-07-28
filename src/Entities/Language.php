@@ -3,15 +3,13 @@
 namespace App\Entities;
 
 use App\Repositories\LanguageRepository;
+use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
 #[ORM\Table(name: "zk_languages", uniqueConstraints: [new ORM\UniqueConstraint(name: "code", columns: ["code"])])]
 class Language {
-	#[ORM\Column(name: "id", type: "integer", nullable: false)]
-	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: "IDENTITY")]
-	private $id;
+	use Id;
 	
 	#[ORM\Column(name: "code", type: "string", length: 10, nullable: false)]
 	private string $code;
@@ -24,10 +22,6 @@ class Language {
 	
 	public function __construct(string $code) {
 		$this->code = $code;
-	}
-	
-	public function getId(): ?int {
-		return $this->id;
 	}
 	
 	public function getCode(): string {

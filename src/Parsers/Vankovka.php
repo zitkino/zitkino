@@ -20,12 +20,10 @@ class Vankovka extends Parser {
 		];
 		
 		foreach($events as $event) {
-			$movie = $this->parserService->getMovieFacade()
-				->grabByName($event[1]);
+			$movie = $this->parserService->movieFacade->grabByName($event[1]);
 			if(!isset($movie)) {
 				$movie = new Movie($event[1]);
-				$this->parserService->getMovieFacade()
-					->save($movie);
+				$this->parserService->movieFacade->save($movie);
 			}
 			
 			$datetime = \DateTime::createFromFormat("d.m.Y H:i", $event[0]);
@@ -36,13 +34,11 @@ class Vankovka extends Parser {
 				->setLink("https://www.galerie-vankovka.cz/novinky-a-akce-centra/letni-kino-e34068/")
 				->setShowtimes($datetimes);
 			
-			$this->parserService->getScreeningFacade()
-				->save($screening);
+			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

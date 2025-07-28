@@ -3,7 +3,6 @@ namespace App\Parsers;
 
 use App\Entities\{Movie, Screening};
 use App\Exceptions\ParserException;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
 use Nette\Utils\Strings;
 
 /**
@@ -11,8 +10,6 @@ use Nette\Utils\Strings;
  */
 class Delnak extends Parser {
 	/**
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @throws ParserException
 	 */
 	public function parse(): void {
@@ -24,26 +21,26 @@ class Delnak extends Parser {
 			$itemQuery = $xpath->query("//h4//a", $event);
 			$itemString = $itemQuery->item($movieItems)->nodeValue;
 			
-			if(strpos($itemString, "Letní kino") !== false) {
+			if(str_contains($itemString, "Letní kino")) {
 				$name = str_replace("Letní kino - ", "", $itemString);
 				$dubbing = $subtitles = $length = $csfd = null;
 				
 				$details = $xpath->query(".//div//p", $event);
 				foreach($details as $detail) {
-					if(strpos($detail->nodeValue, "min.") !== false) {
+					if(str_contains($detail->nodeValue, "min.")) {
 						$matches = [];
 						preg_match_all("/\((.*?)\)/", $detail->nodeValue, $matches);
 						if(!empty($matches[1])) {
 							$data = explode(",", $matches[1][0]);
 							
 							$dubbing = null;
-							if(strpos($data[0], "CZ") !== false) {
+							if(str_contains($data[0], "CZ")) {
 								$dubbing = "česky";
 							}
 							
 							$subtitles = null;
 							if(isset($data[3])) {
-								if(strpos($data[3], "české titulky") !== false) {
+								if(str_contains($data[3], "české titulky")) {
 									$subtitles = "české";
 								}
 							}
@@ -78,13 +75,11 @@ class Delnak extends Parser {
 					$price = (int)str_replace(["Vstupné: ", " Kč"], "", $priceString);
 				}
 				
-				$movie = $this->parserService->getMovieFacade()
-					->grabByName($name);
+				$movie = $this->parserService->movieFacade->grabByName($name);
 				if(!isset($movie)) {
 					$movie = new Movie($name);
 					$movie->setLength($length);
-					$this->parserService->getMovieFacade()
-						->save($movie);
+					$this->parserService->movieFacade->save($movie);
 				}
 				
 				$screening = new Screening($movie, $this->cinema);
@@ -93,8 +88,7 @@ class Delnak extends Parser {
 					->setLink($link)
 					->setShowtimes($datetimes);
 				
-				$this->parserService->getScreeningFacade()
-					->save($screening);
+				$this->parserService->screeningFacade->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 			
@@ -102,7 +96,6 @@ class Delnak extends Parser {
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

@@ -40,15 +40,13 @@ class Vlnena extends Parser {
 		];
 		
 		foreach($items as $item) {
-			$movie = $this->parserService->getMovieFacade()
-				->grabByName($item["name"]);
+			$movie = $this->parserService->movieFacade->grabByName($item["name"]);
 			if(!isset($movie)) {
 				$movie = new Movie($item["name"]);
 			}
 			$movie->setLength($item["length"])
 				->setCsfd($item["csfd"]);
-			$this->parserService->getMovieFacade()
-				->save($movie);
+			$this->parserService->movieFacade->save($movie);
 			
 			$datetime = \DateTime::createFromFormat("Y-m-d H:i", trim($item["showtime"]));
 			
@@ -57,13 +55,11 @@ class Vlnena extends Parser {
 				->setLink($item["link"])
 				->setShowtimes([$datetime]);
 			
-			$this->parserService->getScreeningFacade()
-				->save($screening);
+			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

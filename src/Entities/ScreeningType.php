@@ -3,16 +3,14 @@
 namespace App\Entities;
 
 use App\Repositories\ScreeningTypeRepository;
+use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\Entity(repositoryClass: ScreeningTypeRepository::class)]
 #[ORM\Table(name: "zk_screenings_types", uniqueConstraints: [new ORM\UniqueConstraint(name: "code", columns: ["code"])])]
 class ScreeningType {
-	#[ORM\Column(name: "id", type: "integer", nullable: false)]
-	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: "IDENTITY")]
-	private $id;
+	use Id;
 	
 	#[ORM\Column(name: "code", type: "string", length: 191, nullable: false)]
 	private string $code;
@@ -27,10 +25,6 @@ class ScreeningType {
 	
 	public function __toString() {
 		return $this->getCode();
-	}
-	
-	public function getId(): ?int {
-		return $this->id;
 	}
 	
 	public function getCode(): string {

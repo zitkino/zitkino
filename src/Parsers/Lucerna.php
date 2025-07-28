@@ -3,7 +3,6 @@ namespace App\Parsers;
 
 use App\Entities\{Movie, Screening, ScreeningType};
 use App\Exceptions\ParserException;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
 
 /**
  * Lucerna parser.
@@ -11,8 +10,6 @@ use Doctrine\ORM\{OptimisticLockException, ORMException};
 class Lucerna extends Parser {
 	/**
 	 * @throws ParserException
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 */
 	public function parse(): void {
 		$xpath = $this->getXpath();
@@ -85,6 +82,7 @@ class Lucerna extends Parser {
 						default:
 							$dubbing = null;
 							$subtitles = null;
+							break;
 					}
 				}
 				
@@ -113,21 +111,17 @@ class Lucerna extends Parser {
 					}
 				}
 				
-				$movie = $this->parserService->getMovieFacade()
-					->grabByName($name);
+				$movie = $this->parserService->movieFacade->grabByName($name);
 				if(!isset($movie)) {
 					$movie = new Movie($name);
 					$movie->setLength($length);
-					$this->parserService->getMovieFacade()
-						->save($movie);
+					$this->parserService->movieFacade->save($movie);
 				}
 				
-				$screeningType = $this->parserService->getScreeningFacade()
-					->getType($type);
+				$screeningType = $this->parserService->screeningFacade->grabType($type);
 				if(!isset($screeningType)) {
 					$screeningType = new ScreeningType($type);
-					$this->parserService->getScreeningFacade()
-						->save($screeningType);
+					$this->parserService->screeningFacade->save($screeningType);
 				}
 				
 				$screening = new Screening($movie, $this->cinema);
@@ -137,14 +131,12 @@ class Lucerna extends Parser {
 					->setLink($link)
 					->setShowtimes($datetimes);
 				
-				$this->parserService->getScreeningFacade()
-					->save($screening);
+				$this->parserService->screeningFacade->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}
 		
 		$this->cinema->setParsed(new \DateTime());
-		$this->parserService->getCinemaFacade()
-			->save($this->cinema);
+		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

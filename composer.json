@@ -48,6 +48,15 @@
 			"php bin/console translation:extract --force --format=yaml --as-tree=4 --sort=asc cs && php bin/console translation:extract --force --format=yaml --as-tree=4 --sort=asc en"
 		]
 	},
+	"repositories": [
+		{
+			"type": "path",
+			"url": "./dobine",
+			"options": {
+				"symlink": true
+			}
+		}
+	],
 	"require": {
 		"php": "8.4.*",
 		"ext-ctype": "*",
@@ -63,6 +72,7 @@
 		"doctrine/orm": "^2.10",
 		"guzzlehttp/guzzle": "^7.9",
 		"hermajan/booty": "^0.4.0",
+		"hermajan/dobine": "dev-master",
 		"hermajan/facolors": "*",
 		"johngrogg/ics-parser": "^3.4",
 		"league/commonmark": "^2.1",
