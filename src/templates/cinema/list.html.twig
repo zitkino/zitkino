@@ -77,9 +77,7 @@
 
 					{% if screenings.hasLanguages() %}
 						<th>
-							<abbr title="{{ "details.dabing.long"|trans }}"><i class="fas fa-headphones"></i></abbr> <span
-								class="d-none d-sm-none d-md-inline">{{ "details.dabing.short"|trans }}</span> a <abbr title="{{ "details.subtitles.long"|trans }}"><i
-									class="fas fa-paragraph"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.subtitles.short"|trans }}</span>
+							<abbr title="{{ "details.dabing.long"|trans }}"><i class="fas fa-headphones"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.dabing.short"|trans }}</span> a <abbr title="{{ "details.subtitles.long"|trans }}"><i class="fas fa-paragraph"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.subtitles.short"|trans }}</span>
 						</th>
 					{% endif %}
 
@@ -144,29 +142,25 @@
 
 						{% if screenings.hasLanguages() %}
 							<td title="{{ "details.language.long"|trans }}">
-								{% set dubbing = screening.dubbing %}
-								{% if dubbing is defined %}
-									<span class="badge badge-language" title="{{ "details.dabing.long"|trans }}"><i class="fas fa-headphones"></i>&nbsp;{{ dubbing }}</span>
+								{% if screening.dubbing is not empty %}
+									<span class="badge badge-language" title="{{ "details.dabing.long"|trans }}"><i class="fas fa-headphones"></i>&nbsp;{{ screening.dubbing }}</span>
 								{% endif %}
 								<br class="d-md-none d-lg-none">
-								{% set subtitles = screening.subtitles %}
-								{% if subtitles is defined %}
-									<span class="badge badge-subtitles" title="{{ "details.subtitles.long"|trans }}"><i class="fas fa-paragraph"></i>&nbsp;{{ subtitles }}</span>
+								{% if screening.subtitles is not empty %}
+									<span class="badge badge-subtitles" title="{{ "details.subtitles.long"|trans }}"><i class="fas fa-paragraph"></i>&nbsp;{{ screening.subtitles }}</span>
 								{% endif %}
 							</td>
 						{% endif %}
 
 						{% if screenings.movies.hasLengths() %}
 							<td title="{{ "details.length.long"|trans }}">
-								{% set length = screening.movie.length %}
-								{% if length is defined %}{{ length|trim }} min.{% endif %}
+								{% if screening.movie.length is not empty %}{{ screening.movie.length|trim }} min.{% endif %}
 							</td>
 						{% endif %}
 
 						{% if screenings.hasPrices() %}
 							<td title="{{ "details.price.long"|trans }}">
-								{% set price = screening.fixPrice %}
-								{% if price is defined %}{{ price|trim }}{% endif %}
+								{% if screening.fixPrice is not empty %}{{ screening.fixPrice|trim }}{% endif %}
 							</td>
 						{% endif %}
 

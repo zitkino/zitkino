@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Entities\Cinema;
 use App\Facades\{CinemaFacade, LanguageFacade, MovieFacade, PlaceFacade, ScreeningFacade};
-use App\Logging\CinemaLoggerFactory;
+use App\Logging\FileLoggerFactory;
 use App\Parsers\Parser;
 use Monolog\Attribute\WithMonologChannel;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -48,9 +48,9 @@ class ParserService {
 		}
 	}
 	
-	private CinemaLoggerFactory $logger;
+	private FileLoggerFactory $logger;
 	
-	public function __construct(HttpClientInterface $httpClient, CinemaFacade $cinemaFacade, LanguageFacade $languageFacade, MovieFacade $movieFacade, PlaceFacade $placeFacade, ScreeningFacade $screeningFacade, CinemaLoggerFactory $logger) {
+	public function __construct(HttpClientInterface $httpClient, CinemaFacade $cinemaFacade, LanguageFacade $languageFacade, MovieFacade $movieFacade, PlaceFacade $placeFacade, ScreeningFacade $screeningFacade, FileLoggerFactory $logger) {
 		$this->httpClient = $httpClient;
 		$this->cinemaFacade = $cinemaFacade;
 		$this->languageFacade = $languageFacade;

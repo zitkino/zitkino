@@ -13,26 +13,22 @@
 			<a href="{{ cinema.programme }}" title="Program na webu kina."><i class="fas fa-book"></i> podrobný program</a><br>
 
 			<span class="float-right">
-			{% set facebook = cinema.facebook %}
-				{% if facebook is defined %}
-					<a href="https://www.facebook.com/{{ facebook }}"><i class="fab fa-facebook fa-2x"></i></a>
+				{% if cinema.facebook is defined %}
+					<a href="https://www.facebook.com/{{ cinema.facebook }}"><i class="fab fa-facebook fa-2x"></i></a>
 				{% endif %}
 
-				{# {% set googlePlus = cinema.googlePlus %} #}
-				{# {% if googlePlus is defined %} #}
-				{#     <a href="https://plus.google.com/{{ googlePlus }}"><i class="fab fa-google-plus-g fa-2x"></i></a> #}
+				{# {% if cinema.googlePlus is defined %} #}
+				{#     <a href="https://plus.google.com/{{ cinema.googlePlus }}"><i class="fab fa-google-plus-g fa-2x"></i></a> #}
 				{# {% endif %} #}
 
-				{% set instagram = cinema.instagram %}
-				{% if instagram is defined %}
-					<a href="https://www.instagram.com/{{ instagram }}"><i class="fab fa-instagram fa-2x"></i></a>
+				{% if cinema.instagram is defined %}
+					<a href="https://www.instagram.com/{{ cinema.instagram }}"><i class="fab fa-instagram fa-2x"></i></a>
 				{% endif %}
 
-				{# {% set twitter = cinema.twitter %} #}
-				{# {% if twitter is defined %} #}
-				{#     <a href="https://twitter.com/{{ twitter }}"><i class="fab fa-twitter fa-2x"></i></a> #}
+				{# {% if cinema.twitter is defined %} #}
+				{#     <a href="https://twitter.com/{{ cinema.twitter }}"><i class="fab fa-twitter fa-2x"></i></a> #}
 				{# {% endif %} #}
-		</span>
+			</span>
 		</div>
 		<address>
 			<strong>{{ cinema.name }}</strong><br>
@@ -63,14 +59,18 @@
 		// }
 
 		function showCinemaMap() {
-			if($("#cinemaMap").css("display") === "block") {
-				$("#cinemaMap").css("display", "none");
-				$("#cinemaMapButtonText").text("Zobrazit");
-				$("#cinemaMapIframe").attr("src", "");
+			const cinemaMap = document.getElementById('cinemaMap');
+			const mapButton = document.getElementById('cinemaMapButtonText');
+			const mapIframe = document.getElementById('cinemaMapIframe');
+
+			if(cinemaMap.style.display === "block") {
+				cinemaMap.style.display = "none";
+				mapButton.textContent = "Zobrazit";
+				mapIframe.setAttribute("src", "");
 			} else {
-				$("#cinemaMap").css("display", "block");
-				$("#cinemaMapButtonText").text("Skrýt");
-				$("#cinemaMapIframe").attr("src", "https://www.google.com/maps/embed/v1/place?q={{ gmap|raw }}&key={{ gmapKey|raw }}");
+				cinemaMap.style.display = "block";
+				mapButton.textContent = "Skrýt";
+				mapIframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q={{ gmap|raw }}&key={{ gmapKey|raw }}");
 			}
 		}
 	</script>

@@ -50,7 +50,7 @@ services:
 #            $level: !php/const Monolog\Level::Debug
 #            $bubble: false
             
-    App\Logging\CinemaLoggerFactory:
+    App\Logging\FileLoggerFactory:
         arguments:
             $baseDir: '%kernel.logs_dir%/parsers'
 #            $baseLogger: '@monolog.logger.parsers'

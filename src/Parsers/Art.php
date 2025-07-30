@@ -69,17 +69,19 @@ class Art extends Parser {
 				}
 				
 				$languagesQuery = $xpath->query(".//div[@class='credits__event-movie-languages']//a", $event);
-				$dubbing = null;
-				$dubbingLanguages = [];
-				$subtitles = null;
 				switch($languagesQuery->length) {
 					case 0:
 						$dubbing = null;
+						$subtitles = null;
 						break;
 					case 1:
 						$dubbing = $languagesQuery->item(0)->nodeValue;
+						$subtitles = null;
 						break;
 					default:
+						$dubbingLanguages = [];
+						$subtitles = null;
+						
 						for($i = 0; $i < $languagesQuery->length; $i++) {
 							if($i == $languagesQuery->length - 1) {
 								$subtitles = $languagesQuery->item($i)->nodeValue;

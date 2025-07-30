@@ -6,7 +6,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\LogRecord;
 
-class DynamicFileHandler extends StreamHandler {
+class FileHandler extends StreamHandler {
 	private string $baseDir;
 	
 	private string $fileExtension;
@@ -17,6 +17,14 @@ class DynamicFileHandler extends StreamHandler {
 		
 		// Initialize with a temporary path that will be updated later
 		parent::__construct('php://memory', $level, $bubble);
+	}
+	
+	public function getFileExtension(): string {
+		return $this->fileExtension;
+	}
+	
+	public function setFileExtension(string $fileExtension): void {
+		$this->fileExtension = $fileExtension;
 	}
 	
 	public function setFilename(string $filename): void {
