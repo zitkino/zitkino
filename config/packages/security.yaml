@@ -4,6 +4,7 @@ security:
         # 'auto' means to let Symfony choose the best possible password hasher (Argon2 or Bcrypt)
         # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        App\Entities\User: 'auto'
 
     # https://symfony.com/doc/current/security.html#a-authentication-firewalls
     firewalls:
@@ -14,10 +15,25 @@ security:
         main:
             # this firewall does not have a 'pattern' option because it applies to all URLs
             lazy: true
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
 
     # The ROLE_ADMIN role inherits from the ROLE_USER role
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
+
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entities\User
+                property: email
 
 when@test:
     # this configuration simplifies testing URLs protected by the security mechanism
