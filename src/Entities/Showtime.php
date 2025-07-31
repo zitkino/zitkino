@@ -18,17 +18,22 @@ class Showtime {
 	#[ORM\Column(name: "datetime", type: "datetime", nullable: false)]
 	private \DateTime $datetime;
 	
-	public function __construct(Screening $screening, \DateTime $datetime) {
-		$this->screening = $screening;
-		$this->datetime = $datetime;
-		$this->fixDatetime();
+	public function __construct(?Screening $screening = null, ?\DateTime $datetime = null) {
+		if(isset($screening)) {
+			$this->screening = $screening;
+		}
+		
+		if(isset($datetime)) {
+			$this->datetime = $datetime;
+			$this->fixDatetime();
+		}
 	}
 	
-	public function getScreening(): ?Screening {
+	public function getScreening(): Screening {
 		return $this->screening;
 	}
 	
-	public function setScreening(?Screening $screening): self {
+	public function setScreening(Screening $screening): self {
 		$this->screening = $screening;
 		return $this;
 	}

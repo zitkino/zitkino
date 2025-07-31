@@ -25,9 +25,15 @@ class Place {
 	#[ORM\OneToMany(mappedBy: "place", targetEntity: Screening::class)]
 	private Collection $screenings;
 	
-	public function __construct(string $name) {
-		$this->name = $name;
+	public function __construct(string $name = '') {
+		if(!empty($name)) {
+			$this->name = $name;
+		}
 		$this->screenings = new ArrayCollection();
+	}
+	
+	public function __toString(): string {
+		return $this->name;
 	}
 	
 	public function getName(): string {

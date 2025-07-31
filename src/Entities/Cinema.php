@@ -3,8 +3,8 @@
 namespace App\Entities;
 
 use App\Repositories\CinemaRepository;
-use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Dobine\Properties\{Ids\Id, Sortable};
+use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -82,15 +82,18 @@ class Cinema {
 	#[ORM\OneToMany(mappedBy: "cinema", targetEntity: "Place")]
 	private Collection $places;
 	
-	public function __construct(string $code) {
-		$this->code = $code;
-		$this->name = $code;
+	public function __construct(string $code = '') {
+		if(!empty($code)) {
+			$this->code = $code;
+			$this->name = $code;
+		}
+		
 		$this->screenings = new ArrayCollection();
 		$this->places = new ArrayCollection();
 	}
 	
 	public function __toString() {
-		return $this->getCode();
+		return $this->getName();
 	}
 	
 	public function getName(): string {
