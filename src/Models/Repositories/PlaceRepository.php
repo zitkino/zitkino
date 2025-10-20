@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Models\Repositories;
 
-use App\Entities\Language;
+use App\Models\Entities\Place;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class LanguageRepository extends ServiceEntityRepository {
+class PlaceRepository extends ServiceEntityRepository {
 	public function __construct(ManagerRegistry $registry) {
-		parent::__construct($registry, Language::class);
+		parent::__construct($registry, Place::class);
 	}
 }

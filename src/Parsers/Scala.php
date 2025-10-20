@@ -1,9 +1,12 @@
 <?php
 namespace App\Parsers;
 
-use Monolog\Attribute\WithMonologChannel;
-use App\Entities\{Movie, Place, Screening, ScreeningType};
 use App\Exceptions\ParserException;
+use App\Models\Entities\{Place};
+use App\Models\Entities\Movie;
+use App\Models\Entities\Screening;
+use App\Models\Entities\ScreeningType;
+use Monolog\Attribute\WithMonologChannel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Facades;
+namespace App\Models\Facades;
 
-use App\Entities\{Cinema, Movie, Place, Screening, ScreeningType};
-use App\Repositories\{ScreeningRepository, ScreeningTypeRepository};
+use App\Models\Entities\{Cinema, Movie, Place, Screening, ScreeningType};
+use App\Models\Repositories\{ScreeningRepository};
+use App\Models\Repositories\ScreeningTypeRepository;
 use Dobine\Facades\DobineFacade;
 use Doctrine\DBAL\{ConnectionException, Exception as DBALException};
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository, Mapping\ClassMetadata};

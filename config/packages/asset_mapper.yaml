@@ -3,7 +3,7 @@ framework:
         # The paths to make available to the asset mapper.
         paths:
             - assets/
-            - node_modules/@fortawesome/fontawesome-free
+            - vendor/twbs/bootstrap-icons/font/fonts
         missing_import_mode: strict
 
 when@prod:

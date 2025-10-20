@@ -1,7 +1,8 @@
 <?php
 namespace App\Parsers;
 
-use App\Entities\{Movie, Screening};
+use App\Models\Entities\{Screening};
+use App\Models\Entities\Movie;
 use Doctrine\ORM\{OptimisticLockException, ORMException};
 
 /**

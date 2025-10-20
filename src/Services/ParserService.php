@@ -1,9 +1,13 @@
 <?php
 namespace App\Services;
 
-use App\Entities\Cinema;
-use App\Facades\{CinemaFacade, LanguageFacade, MovieFacade, PlaceFacade, ScreeningFacade};
 use App\Logging\FileLoggerFactory;
+use App\Models\Entities\Cinema;
+use App\Models\Facades\{LanguageFacade};
+use App\Models\Facades\CinemaFacade;
+use App\Models\Facades\MovieFacade;
+use App\Models\Facades\PlaceFacade;
+use App\Models\Facades\ScreeningFacade;
 use App\Parsers\Parser;
 use Monolog\Attribute\WithMonologChannel;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

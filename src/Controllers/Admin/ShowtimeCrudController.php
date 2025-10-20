@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Entities\Showtime;
+use App\Models\Entities\Showtime;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;

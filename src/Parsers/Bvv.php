@@ -1,8 +1,11 @@
 <?php
 namespace App\Parsers;
 
-use App\Entities\{Cinema, Movie, Screening, Showtime};
 use App\Exceptions\ParserException;
+use App\Models\Entities\{Screening};
+use App\Models\Entities\Cinema;
+use App\Models\Entities\Movie;
+use App\Models\Entities\Showtime;
 use App\Services\ParserService;
 
 /**

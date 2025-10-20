@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Entities;
+namespace App\Models\Entities;
 
-use App\Repositories\CinemaRepository;
-use Dobine\Properties\{Ids\Id, Sortable};
+use App\Models\Repositories\CinemaRepository;
+use Dobine\Properties\{Ids\Id, Knp\Translatable as KnpTranslatable, Sortable};
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 
 /**
  * Cinema
@@ -15,8 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 	new ORM\UniqueConstraint(name: "id", columns: ["id"]),
 	new ORM\UniqueConstraint(name: "code", columns: ["code"])
 ])]
-class Cinema {
-	use Id, Sortable;
+class Cinema implements TranslatableInterface {
+	use Id, KnpTranslatable, Sortable;
 	
 	#[ORM\Column(name: "name", type: "string", length: 255, nullable: false)]
 	private string $name;

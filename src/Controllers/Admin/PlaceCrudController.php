@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Entities\Place;
+use App\Models\Entities\Place;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, IdField, TextField, UrlField};
 

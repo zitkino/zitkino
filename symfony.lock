@@ -80,6 +80,9 @@
             "config/routes/easyadmin.yaml"
         ]
     },
+    "knplabs/doctrine-behaviors": {
+        "version": "v3.0.0"
+    },
     "phpstan/phpstan": {
         "version": "1.12",
         "recipe": {

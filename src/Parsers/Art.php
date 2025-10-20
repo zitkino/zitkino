@@ -1,8 +1,10 @@
 <?php
 namespace App\Parsers;
 
-use App\Entities\{Movie, Place, Screening};
 use App\Exceptions\ParserException;
+use App\Models\Entities\{Place};
+use App\Models\Entities\Movie;
+use App\Models\Entities\Screening;
 
 /**
  * Art parser.

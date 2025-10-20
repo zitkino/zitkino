@@ -1,8 +1,8 @@
 <?php
 namespace App\Parsers;
 
-use App\Entities\Cinema;
 use App\Exceptions\ParserException;
+use App\Models\Entities\Cinema;
 use App\Services\ParserService;
 use Doctrine\DBAL\Connection;
 use Nette\Utils\{Json, JsonException};

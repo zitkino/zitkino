@@ -4,7 +4,7 @@ security:
         # 'auto' means to let Symfony choose the best possible password hasher (Argon2 or Bcrypt)
         # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-        App\Entities\User: 'auto'
+        App\Models\Entities\User: 'auto'
 
     # https://symfony.com/doc/current/security.html#a-authentication-firewalls
     firewalls:
@@ -32,7 +32,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entities\User
+                class: App\Models\Entities\User
                 property: email
 
 when@test:

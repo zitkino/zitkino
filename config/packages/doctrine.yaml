@@ -21,8 +21,8 @@ doctrine:
             App:
                 type: attribute
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entities'
-                prefix: 'App\Entities'
+                dir: '%kernel.project_dir%/src/Models/Entities'
+                prefix: 'App\Models\Entities'
                 alias: App
         controller_resolver:
             auto_mapping: false

@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Entities\CinemaType;
+use App\Models\Entities\CinemaType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class CinemaTypeCrudController extends AbstractCrudController {

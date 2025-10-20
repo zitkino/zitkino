@@ -1,8 +1,11 @@
 <?php
 namespace App\Parsers;
 
-use App\Entities\{Cinema, Movie, Screening, ScreeningType};
 use App\Exceptions\ParserException;
+use App\Models\Entities\{Screening};
+use App\Models\Entities\Cinema;
+use App\Models\Entities\Movie;
+use App\Models\Entities\ScreeningType;
 use App\Services\ParserService;
 use Nette\Utils\{JsonException, Strings};
 

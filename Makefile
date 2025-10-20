@@ -17,7 +17,7 @@ tests: ## Runs all tests for project
 entities: ## Generates entities from database to classes
 	php "index.php" orm:convert-mapping --namespace="App\Models\\" --force --from-database annotation ".temp"
 
-database.update:
+update:
 	bash bin/database.sh update
 
 validate: ## Validates project
@@ -27,3 +27,8 @@ validate: ## Validates project
 clean: ## Cleans cache
 	php "index.php" orm:clear-cache:metadata
 	php "index.php" nette:cache:purge
+
+.PHONY: assets
+assets: ## Build assets
+	php bin/console asset-map:compile
+#	php bin/console cache:clear

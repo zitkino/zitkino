@@ -11,17 +11,17 @@
 {% macro cinemaListContent(cinema) %}
 	<strong>{{ cinema.name }}</strong>
 	<div class="float-right">
-		<a href="{{ path('cinema_profile', {'id': cinema.code}) }}"><i class="far fa-list-alt fa-lg"></i> {{ "cinemas.profile"|trans }}</a>
+		<a href="{{ path('cinema_profile', {'id': cinema.code}) }}">{{ "cinemas.profile"|trans }} <i class="bi bi-caret-right"></i></a>
 	</div>
 
 	<ul class="list-inline">
 		<li class="list-inline-item">
 			{% set address = cinema.address ~ ", " ~ cinema.city %}
-			<a href="https://www.google.cz/maps/place/{{ address|url_encode }}"><i class="fas fa-map-marker-alt"></i> {{ address }}</a>
+			<a href="https://www.google.cz/maps/place/{{ address|url_encode }}"><i class="bi bi-geo-alt"></i> {{ address }}</a>
 		</li>
 		<li class="list-inline-item">
 			{% set url = cinema.url %}
-			<a href="{{ url }}"><i class="fas fa-link"></i> {{ url }}</a>
+			<a href="{{ url }}"><i class="bi bi-link"></i> {{ url }}</a>
 		</li>
 	</ul>
 {% endmacro %}
@@ -55,48 +55,48 @@
 				<thead>
 				<tr>
 					<th>
-						<abbr title="{{ "details.movie.long"|trans }}"><i class="fas fa-film"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.movie.short"|trans }}</span>
+						<abbr title="{{ "details.movie.long"|trans }}"><i class="bi bi-film"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.movie.short"|trans }}</span>
 					</th>
 
 					{% if screenings.hasTypes() %}
 						<th>
-							<abbr title="{{ "details.type.long"|trans }}"><i class="fas fa-video"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.type.short"|trans }}</span>
+							<abbr title="{{ "details.type.long"|trans }}"><i class="bi bi-camera-video"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.type.short"|trans }}</span>
 						</th>
 					{% endif %}
 
 					<th>
-						<abbr title="{{ "details.showtime.long"|trans }}"><i class="far fa-calendar-alt"></i></abbr> <span
+						<abbr title="{{ "details.showtime.long"|trans }}"><i class="bi bi-calendar2-week-alt"></i></abbr> <span
 							class="d-none d-sm-none d-md-inline">{{ "details.showtime.short"|trans }}</span>
 					</th>
 
 					{% if screenings.hasPlaces() %}
 						<th>
-							<abbr title="{{ "details.place.long"|trans }}"><i class="fas fa-warehouse"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.place.short"|trans }}</span>
+							<abbr title="{{ "details.place.long"|trans }}"><i class="bi bi-door-open"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.place.short"|trans }}</span>
 						</th>
 					{% endif %}
 
 					{% if screenings.hasLanguages() %}
 						<th>
-							<abbr title="{{ "details.dabing.long"|trans }}"><i class="fas fa-headphones"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.dabing.short"|trans }}</span> a <abbr title="{{ "details.subtitles.long"|trans }}"><i class="fas fa-paragraph"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.subtitles.short"|trans }}</span>
+							<abbr title="{{ "details.dabing.long"|trans }}"><i class="bi bi-headphones"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.dabing.short"|trans }}</span> a <abbr title="{{ "details.subtitles.long"|trans }}"><i class="bi bi-paragraph"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.subtitles.short"|trans }}</span>
 						</th>
 					{% endif %}
 
 					{% if screenings.movies.hasLengths() %}
 						<th>
-							<abbr title="{{ "details.length.long"|trans }}"><i class="fas fa-hourglass-end"></i></abbr> <span
+							<abbr title="{{ "details.length.long"|trans }}"><i class="bi bi-hourglass-split"></i></abbr> <span
 								class="d-none d-sm-none d-md-inline">{{ "details.length.short"|trans }}</span>
 						</th>
 					{% endif %}
 
 					{% if screenings.hasPrices() %}
 						<th>
-							<abbr title="{{ "details.price.long"|trans }}"><i class="far fa-money-bill-alt"></i></abbr> <span
+							<abbr title="{{ "details.price.long"|trans }}"><i class="bi bi-cash"></i></abbr> <span
 								class="d-none d-sm-none d-md-inline">{{ "details.price.short"|trans }}</span>
 						</th>
 					{% endif %}
 
 					<th>
-						<abbr title="{{ "details.database.long"|trans }}"><i class="fas fa-database"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.database.short"|trans }}</span>
+						<abbr title="{{ "details.database.long"|trans }}"><i class="bi bi-database"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.database.short"|trans }}</span>
 					</th>
 				</tr>
 				</thead>
@@ -118,10 +118,10 @@
 
 						<td title="{{ "details.showtime.long"|trans }}">
 							{% if screening.showtimes is not empty %}
-								<i class="far fa-calendar"></i>
+								<i class="bi bi-calendar2-week"></i>
 								{% for showtime in screening.showtimes %}
 									{% if loop.first %}
-										{{ showtime.datetime|date('d.m.Y') }} <br class="d-md-none d-lg-none"><i class="far fa-clock"></i>
+										{{ showtime.datetime|date('d.m.Y') }} <br class="d-md-none d-lg-none"><i class="bi bi-clock"></i>
 									{% endif %}
 									{{ showtime.datetime|date('H:i') }}{% if not loop.last %}, {% endif %}
 								{% endfor %}
@@ -143,11 +143,11 @@
 						{% if screenings.hasLanguages() %}
 							<td title="{{ "details.language.long"|trans }}">
 								{% if screening.dubbing is not empty %}
-									<span class="badge badge-language" title="{{ "details.dabing.long"|trans }}"><i class="fas fa-headphones"></i>&nbsp;{{ screening.dubbing }}</span>
+									<span class="badge badge-language" title="{{ "details.dabing.long"|trans }}"><i class="bi bi-headphones"></i>&nbsp;{{ screening.dubbing }}</span>
 								{% endif %}
 								<br class="d-md-none d-lg-none">
 								{% if screening.subtitles is not empty %}
-									<span class="badge badge-subtitles" title="{{ "details.subtitles.long"|trans }}"><i class="fas fa-paragraph"></i>&nbsp;{{ screening.subtitles }}</span>
+									<span class="badge badge-subtitles" title="{{ "details.subtitles.long"|trans }}"><i class="bi bi-paragraph"></i>&nbsp;{{ screening.subtitles }}</span>
 								{% endif %}
 							</td>
 						{% endif %}

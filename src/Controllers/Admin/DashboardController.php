@@ -2,14 +2,14 @@
 
 namespace App\Controllers\Admin;
 
-use App\Entities\Cinema;
-use App\Entities\CinemaType;
-use App\Entities\Language;
-use App\Entities\Movie;
-use App\Entities\Place;
-use App\Entities\Screening;
-use App\Entities\ScreeningType;
-use App\Entities\Showtime;
+use App\Models\Entities\Cinema;
+use App\Models\Entities\CinemaType;
+use App\Models\Entities\Language;
+use App\Models\Entities\Movie;
+use App\Models\Entities\Place;
+use App\Models\Entities\Screening;
+use App\Models\Entities\ScreeningType;
+use App\Models\Entities\Showtime;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Dashboard, MenuItem};
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;

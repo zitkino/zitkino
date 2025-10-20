@@ -1,5 +1,5 @@
 <?php
-namespace App\Entities;
+namespace App\Models\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 

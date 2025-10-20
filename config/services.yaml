@@ -28,18 +28,23 @@ services:
             # defined/created in this file; if some argument is used rarely, instead of defining
             # it here you can use the #[Autowire] attribute to inject it manually in the service constructor
             array $enabledLocales: '%kernel.enabled_locales%'
-            string $defaultLocale: '%app.locale%'
+            string $defaultLocale: '%kernel.default_locale%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
-            - '../src/Entities/'
+            - '../src/Models/Entities/'
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Twig\LocaleRouteExtension:
+        arguments:
+            $enabledLocales: '%kernel.enabled_locales%'
+        tags: ['twig.extension']
     App\Services\MetaService:
         arguments:
             - '%meta%'

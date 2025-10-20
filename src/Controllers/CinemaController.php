@@ -2,11 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Facades\CinemaFacade;
+use App\Models\Facades\CinemaFacade;
 use App\Services\MetaService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{RequestStack, Response};
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -14,16 +12,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Cinema controller.
  */
 class CinemaController extends BaseController {
-	/** @var CinemaFacade */
-	private $cinemaFacade;
+	private CinemaFacade $cinemaFacade;
 	
 	public function __construct(CinemaFacade $cinemaFacade, TranslatorInterface $translator, RequestStack $requestStack, MetaService $metaService) {
 		parent::__construct($translator, $requestStack, $metaService);
 		$this->cinemaFacade = $cinemaFacade;
 	}
 	
-	#[Route("/kina", name: "cinema_default")]
-	#[Route("/kino", name: "cinema_default_alt")]
+	#[Route("/{_locale}/kina", name: "cinema_default", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/kino", name: "cinema_default_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
 	public function index(): Response {
 		return $this->render('cinema/default.html.twig', [
 			'classicCinemas' => $this->cinemaFacade->grabByType("classic"),
@@ -36,7 +33,7 @@ class CinemaController extends BaseController {
 	 *
 	 * @param string|int $id
 	 */
-	#[Route("/kino/{id}", name: "cinema_profile")]
+	#[Route("/{_locale}/kino/{id}", name: "cinema_profile", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
 	public function profile($id): Response {
 		$cinema = $this->cinemaFacade->grabById($id);
 		$screenings = $cinema->getNewScreenings();
@@ -57,11 +54,11 @@ class CinemaController extends BaseController {
 		]);
 	}
 	
-	#[Route("/klasicka", name: "cinema_type_classic")]
-	#[Route("/klasicky", name: "cinema_type_classic_alt")]
-	#[Route("/multiplexy", name: "cinema_type_multiplex")]
-	#[Route("/multiplex", name: "cinema_type_multiplex_alt")]
-	#[Route("/letni", name: "cinema_type_summer")]
+	#[Route("/{_locale}/klasicka", name: "cinema_type_classic", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/klasicky", name: "cinema_type_classic_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/multiplexy", name: "cinema_type_multiplex", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/multiplex", name: "cinema_type_multiplex_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/letni", name: "cinema_type_summer", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
 	public function type(?string $type = null): Response {
 		// Determine type from route
 		if($type === null) {
@@ -81,16 +78,12 @@ class CinemaController extends BaseController {
 		]);
 	}
 	
-	/**
-	 *
-	 * @param string $type
-	 */
-	#[Route("/klasicky/program", name: "cinema_programme_classic")]
-	#[Route("/klasicka/program", name: "cinema_programme_classic_alt")]
-	#[Route("/multiplexy/program", name: "cinema_programme_multiplex")]
-	#[Route("/multiplex/program", name: "cinema_programme_multiplex_alt")]
-	#[Route("/letni/program", name: "cinema_programme_summer")]
-	public function programme(string $type = null): Response {
+	#[Route("/{_locale}/klasicky/program", name: "cinema_programme_classic", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/klasicka/program", name: "cinema_programme_classic_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/multiplexy/program", name: "cinema_programme_multiplex", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/multiplex/program", name: "cinema_programme_multiplex_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/{_locale}/letni/program", name: "cinema_programme_summer", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	public function programme(?string $type = null): Response {
 		// Determine type from route
 		if($type === null) {
 			$route = $this->requestStack->getCurrentRequest()->attributes->get('_route');

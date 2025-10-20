@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Models\Repositories;
 
-use App\Entities\ScreeningType;
+use App\Models\Entities\Showtime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class ScreeningTypeRepository extends ServiceEntityRepository {
+class ShowtimeRepository extends ServiceEntityRepository {
 	public function __construct(ManagerRegistry $registry) {
-		parent::__construct($registry, ScreeningType::class);
+		parent::__construct($registry, Showtime::class);
 	}
 }

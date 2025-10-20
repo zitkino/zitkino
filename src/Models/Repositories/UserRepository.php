@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Repositories;
+namespace App\Models\Repositories;
 
-use App\Entities\User;
+use App\Models\Entities\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;

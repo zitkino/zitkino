@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entities;
+namespace App\Models\Entities;
 
-use App\Repositories\ShowtimeRepository;
+use App\Models\Repositories\ShowtimeRepository;
 use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 

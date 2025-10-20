@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Facades;
+namespace App\Models\Facades;
 
-use App\Entities\Language;
-use App\Repositories\LanguageRepository;
+use App\Models\Entities\Language;
+use App\Models\Repositories\LanguageRepository;
 use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 

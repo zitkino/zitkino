@@ -1,8 +1,11 @@
 <?php
 namespace App\Parsers;
 
-use App\Entities\{Movie, Place, Screening, Showtime};
 use App\Exceptions\ParserException;
+use App\Models\Entities\{Place};
+use App\Models\Entities\Movie;
+use App\Models\Entities\Screening;
+use App\Models\Entities\Showtime;
 
 /**
  * BVV parser.

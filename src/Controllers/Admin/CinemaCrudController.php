@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Entities\Cinema;
+use App\Models\Entities\Cinema;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, BooleanField, DateTimeField, FormField, IdField, IntegerField, SlugField, TelephoneField, TextField, UrlField};
 

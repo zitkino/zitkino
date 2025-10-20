@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entities;
+namespace App\Models\Entities;
 
-use App\Repositories\ScreeningTypeRepository;
+use App\Models\Repositories\ScreeningTypeRepository;
 use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\String\Slugger\AsciiSlugger;

@@ -76,9 +76,9 @@ final class RedirectToPreferredLocaleSubscriber implements EventSubscriberInterf
 
         $preferredLanguage = $request->getPreferredLanguage($this->enabledLocales);
 
-        if ($preferredLanguage !== $this->defaultLocale) {
-            $response = new RedirectResponse($this->urlGenerator->generate('homepage', ['_locale' => $preferredLanguage]));
-            $event->setResponse($response);
-        }
+//        if ($preferredLanguage !== $this->defaultLocale) {
+//            $response = new RedirectResponse($this->urlGenerator->generate('homepage', ['_locale' => $preferredLanguage]));
+//            $event->setResponse($response);
+//        }
     }
 }

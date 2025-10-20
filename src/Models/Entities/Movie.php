@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entities;
+namespace App\Models\Entities;
 
-use App\Repositories\MovieRepository;
-use Doctrine\Common\Collections\{ArrayCollection, Collection};
+use App\Models\Repositories\MovieRepository;
 use Dobine\Properties\Ids\Id;
+use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]

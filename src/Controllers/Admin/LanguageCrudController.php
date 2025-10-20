@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Entities\Language;
+use App\Models\Entities\Language;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class LanguageCrudController extends AbstractCrudController {

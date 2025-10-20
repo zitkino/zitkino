@@ -1,16 +1,88 @@
-default:
-    title: __default.title
-map:
-    title: __map.title
-    header: __map.header
 cinemas:
-    profile: __cinemas.profile
-    list: __cinemas.list
+    default:
+        title: 'Brno cinemas'
+    empty:
+        title: 'No cinemas'
+        message: 'No cinemas were found.'
     classic:
-        title: __cinemas.classic.title
-info:
-    title: __info.title
+        list: 'list of classic cinemas'
+        programme: 'classic cinema programme'
+        title: 'Classic cinemas'
+    list:
+        title: 'Cinema List'
+        empty: 'No cinemas were found.'
+    multiplex:
+        list: 'list of multiplexes'
+        programme: 'multiplexes programme'
+        title: Multiplexes
+    profile: 'cinema profile'
+    programme:
+        full: 'detailed programme'
+        title: 'Cinemas programme'
+        web:
+            title: 'Programme on cinema website'
+            next: "The programme for the coming days is on the cinema's website"
+            info: "Further programme and detailed information about films can be found on the cinema's website"
+    summer:
+        list: 'list of summer cinemas'
+        programme: 'summer cinemas programme'
+        title: 'Summer cinemas'
+contact:
+    header: 'Contact Us'
+    title: Contact
+default:
+    description: 'Current cinema program in Brno. Classic cinemas, multiplexes and summer cinemas.'
+    title: 'Programme of Brno cinemas'
 facebook:
-    view: __facebook.view
+    title: Facebook
+    view: 'View on Facebook'
 github:
-    view: __github.view
+    title: GitHub
+    view: 'View on GitHub'
+info:
+    header: Information
+    title: Info
+map:
+    cinema: 'cinema on map'
+    header: 'Cinema map'
+    hide: Hide
+    show: Show
+    title: Map
+
+screenings:
+    empty:
+        title: 'No screenings were found.'
+        today: "The cinema probably isn't showing today. &#9785;"
+        todays: No cinemas are showing today.
+
+details:
+    movie:
+        short: Movie
+        long: Movie title
+    type:
+        short: Type
+        long: Movie type
+    showtime:
+        short: Screening
+        long: Date and time of screening
+    place:
+        short: Place
+        long: Place of screening
+    dabing:
+        short: Dubbing
+        long: Dubbing
+    subtitles:
+        short: Subtitles
+        long: Subtitles
+    language:
+        short: Language
+        long: Movie language
+    length:
+        short: Length
+        long: Movie length
+    price:
+        short: Price
+        long: Ticket price
+    database:
+        short: Database
+        long: Movie databases

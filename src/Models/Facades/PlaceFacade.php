@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Facades;
+namespace App\Models\Facades;
 
-use App\Entities\{Cinema, Place};
-use App\Repositories\PlaceRepository;
+use App\Models\Entities\{Place, Cinema};
+use App\Models\Repositories\PlaceRepository;
 use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 

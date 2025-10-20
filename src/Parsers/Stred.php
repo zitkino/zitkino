@@ -1,8 +1,10 @@
 <?php
 namespace App\Parsers;
 
-use App\Entities\{Movie, Screening, ScreeningType};
 use App\Exceptions\ParserException;
+use App\Models\Entities\{Screening};
+use App\Models\Entities\Movie;
+use App\Models\Entities\ScreeningType;
 
 /**
  * Stred parser.

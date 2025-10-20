@@ -1,4 +1,6 @@
 cinemas:
+    default:
+        title: 'Brněnská kina'
     empty:
         title: 'žádná kina'
         message: 'Žádná kina nebyla nalezena.'

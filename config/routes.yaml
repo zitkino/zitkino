@@ -2,13 +2,23 @@
 # the route (FrameworkBundle:Template:template) is a convenient shortcut when
 # the template can be rendered without executing any logic in your own controller.
 # See https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route
+#homepage:
+#    path: /
+#    controller: App\Controllers\HomeController::index
+#    defaults:
+##        template: default/homepage.html.twig
+#        _locale: cs
+#    requirements:
+#        _locale: cs
+        
 controllers:
     resource:
         path: '../src/Controllers/'
         namespace: App\Controllers
     type: attribute
-    prefix:
-        cs: '/cs' # don't prefix URLs for the default locale
-        en: '/en'
+#    prefix: /
+#    condition: "'%app.locale%' != 'cs'"
     defaults:
-        _locale: '%app.locale%'
+        _locale: cs
+#    requirements:
+#        _locale: en|cs

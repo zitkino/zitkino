@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Models\Repositories;
 
-use App\Entities\Cinema;
+use App\Models\Entities\Cinema;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;

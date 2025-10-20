@@ -2,13 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Entities\Cinema;
-use App\Facades\CinemaFacade;
+use App\Models\Entities\Cinema;
+use App\Models\Facades\CinemaFacade;
 use App\Services\MetaService;
 use App\Services\ParserService;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\{RequestStack, Response};
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

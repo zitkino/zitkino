@@ -14,7 +14,7 @@
 {#	{% block importmap %}{{ importmap('app') }}{% endblock %}#}
 
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-    <link rel="stylesheet" media="screen" href="{{ asset('styles/app.scss') }}?v={{ 'now'|date('U') }}">
+    <link rel="stylesheet" media="screen" href="/public{{ asset('styles/app.scss') }}?v={{ 'now'|date('U') }}">
     {# <link rel="stylesheet" media="print" href="{{ asset('print.css') }}"> #}
 
 {#    <script src="{{ asset('www/js/scripts.js') }}?v={{ 'now'|date('U') }}"></script>#}

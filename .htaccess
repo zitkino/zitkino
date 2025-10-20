@@ -10,27 +10,29 @@ RewriteEngine On
 #RewriteCond %{HTTPS} !=on
 #RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+#RewriteRule (.*) public/$1 [L]
+
 # domains (aliases)
-RewriteCond %{REQUEST_URI} !^domains/
-RewriteCond %{REQUEST_URI} !^/domains/
-RewriteCond %{HTTP_HOST} ^(www\.)?(.*)$
-RewriteCond %{DOCUMENT_ROOT}/domains/%2 -d
-RewriteRule (.*) domains/%2/$1 [DPI]
-
-# subdomains (with or without www on beginning)
-RewriteCond %{REQUEST_URI} !^subdom/
-RewriteCond %{REQUEST_URI} !^/subdom/
-RewriteCond %{HTTP_HOST} ^(www\.)?(.*)\.([^\.]*)\.([^\.]*)$
-RewriteCond %{DOCUMENT_ROOT}/subdom/%2 -d
-RewriteRule (.*) subdom/%2/$1 [DPI]
-
-# aliases - correct redirection with missing /
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^domains/[^/]+/(.+[^/])$ /$1/ [R]
-
-# subdomains - correct redirection with missing /
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^subdom/[^/]+/(.+[^/])$ /$1/ [R]
+#RewriteCond %{REQUEST_URI} !^domains/
+#RewriteCond %{REQUEST_URI} !^/domains/
+#RewriteCond %{HTTP_HOST} ^(www\.)?(.*)$
+#RewriteCond %{DOCUMENT_ROOT}/domains/%2 -d
+#RewriteRule (.*) domains/%2/$1 [DPI]
+#
+## subdomains (with or without www on beginning)
+#RewriteCond %{REQUEST_URI} !^subdom/
+#RewriteCond %{REQUEST_URI} !^/subdom/
+#RewriteCond %{HTTP_HOST} ^(www\.)?(.*)\.([^\.]*)\.([^\.]*)$
+#RewriteCond %{DOCUMENT_ROOT}/subdom/%2 -d
+#RewriteRule (.*) subdom/%2/$1 [DPI]
+#
+## aliases - correct redirection with missing /
+#RewriteCond %{REQUEST_FILENAME} -d
+#RewriteRule ^domains/[^/]+/(.+[^/])$ /$1/ [R]
+#
+## subdomains - correct redirection with missing /
+#RewriteCond %{REQUEST_FILENAME} -d
+#RewriteRule ^subdom/[^/]+/(.+[^/])$ /$1/ [R]
 
 # disable directory listing
 Options -Indexes
@@ -39,13 +41,18 @@ Options -Indexes
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
+	RewriteBase /public/
+
 	# prevents files starting with dot to be viewed by browser
-	RewriteRule /\.|^\. - [F]
+#	RewriteRule /\.|^\. - [F]
 
 	# front controller
+#	RewriteCond %{REQUEST_URI} !^/public/
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz)$ index.php [L]
+#	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz)$ index.php [L,NC]
+
+	RewriteRule (.+) $1 [L]
 </IfModule>
 
 # enable gzip compression

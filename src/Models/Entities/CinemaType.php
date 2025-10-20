@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Entities;
+namespace App\Models\Entities;
 
-use Dobine\Properties\Ids\Id;
+use Dobine\Properties\{Ids\Id, Knp\Translatable as KnpTranslatable};
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: "zk_cinemas_types", uniqueConstraints: [new ORM\UniqueConstraint(name: "code", columns: ["code"])])]
-class CinemaType {
-	use Id;
+class CinemaType implements TranslatableInterface {
+	use Id, KnpTranslatable;
 	
 	#[ORM\Column(name: "code", type: "string", length: 191, nullable: false)]
 	private string $code;

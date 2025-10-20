@@ -5,9 +5,7 @@ namespace App\Controllers;
 use App\Services\MetaService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request, RequestStack, Response};
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

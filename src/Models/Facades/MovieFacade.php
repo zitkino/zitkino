@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Facades;
+namespace App\Models\Facades;
 
-use App\Entities\Movie;
-use App\Repositories\MovieRepository;
+use App\Models\Entities\Movie;
+use App\Models\Repositories\MovieRepository;
 use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 

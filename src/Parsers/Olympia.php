@@ -1,7 +1,7 @@
 <?php
 namespace App\Parsers;
 
-use App\Entities\Cinema;
+use App\Models\Entities\Cinema;
 use App\Services\ParserService;
 
 /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entities;
+namespace App\Models\Entities;
 
-use App\Repositories\PlaceRepository;
+use App\Models\Repositories\PlaceRepository;
 use Dobine\Properties\Ids\Id;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
