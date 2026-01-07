@@ -4,12 +4,14 @@ namespace App\Models\Entities;
 
 use App\Models\Repositories\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: "zk_user")]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface {
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
@@ -30,6 +32,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
 	 */
 	#[ORM\Column]
 	private ?string $password = null;
+	
+	#[ORM\Column]
+	private bool $isVerified = false;
 	
 	public function getId(): ?int {
 		return $this->id;
@@ -100,5 +105,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
 	#[\Deprecated]
 	public function eraseCredentials(): void {
 		// @deprecated, to be removed when upgrading to Symfony 8
+	}
+	
+	public function isVerified(): bool {
+		return $this->isVerified;
+	}
+	
+	public function setIsVerified(bool $isVerified): static {
+		$this->isVerified = $isVerified;
+		
+		return $this;
 	}
 }

@@ -12,11 +12,10 @@ class PlaceCrudController extends AbstractCrudController {
 	}
 	
 	public function configureFields(string $pageName): iterable {
-		return [
-			IdField::new("id"),
-			TextField::new("name"),
-			AssociationField::new("cinema"),
-			UrlField::new("link")->setRequired(false),
-		];
+		yield IdField::new("id");
+		yield TextField::new("name");
+		yield AssociationField::new("cinema");
+		yield UrlField::new("link")
+			->setRequired(false);
 	}
 }

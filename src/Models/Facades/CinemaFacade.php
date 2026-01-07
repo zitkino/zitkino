@@ -20,10 +20,7 @@ class CinemaFacade extends DobineFacade {
 		$this->repositoryType = $entityManager->getRepository(CinemaType::class);
 	}
 	
-	/**
-	 * @return Cinema|null
-	 */
-	public function grabById($id) {
+	public function grabById($id): ?Cinema {
 		if(is_numeric($id)) {
 			return $this->repository->findOneBy(["id" => $id]);
 		} else {

@@ -4,14 +4,14 @@
 
 {% block content %}
 	<h1 class="page-header">{{ block("title") }}</h1>
-
+	
 	<ul class="list-group">
 		{% from "cinema/list.html.twig" import cinemaList %}
 		{% for cinemaItem in cinemas %}
 			{{ cinemaList(cinemaItem) }}
 		{% endfor %}
 	</ul><br>
-
+	
 	<nav>
 		<ul class="pagination">
 			<li class="page-item">

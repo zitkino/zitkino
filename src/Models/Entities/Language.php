@@ -15,10 +15,10 @@ class Language {
 	private string $code;
 	
 	#[ORM\Column(name: "czech", type: "string", length: 10, nullable: true)]
-	private ?string $czech= null;
+	private ?string $czech = null;
 	
 	#[ORM\Column(name: "english", type: "string", length: 10, nullable: true)]
-	private ?string $english= null;
+	private ?string $english = null;
 	
 	public function __construct(string $code) {
 		$this->code = $code;

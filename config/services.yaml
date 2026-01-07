@@ -59,3 +59,9 @@ services:
         arguments:
             $baseDir: '%kernel.logs_dir%/parsers'
 #            $baseLogger: '@monolog.logger.parsers'
+    
+    App\EasyAdmin\Translations\Configurator:
+        arguments:
+            $fieldConfigurators: !tagged_iterator ea.field_configurator
+        tags:
+            - { name: 'ea.field_configurator', priority: -10 }

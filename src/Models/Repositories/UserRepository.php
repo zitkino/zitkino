@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace App\Models\Repositories;
 
@@ -21,27 +13,26 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 /**
  * @extends ServiceEntityRepository<User>
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, User::class);
 	}
-
+	
 	/**
 	 * Used to upgrade (rehash) the user's password automatically over time.
 	 */
-	public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
-	{
-		if (!$user instanceof User) {
+	public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void {
+		if(!$user instanceof User) {
 			throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
 		}
-
+		
 		$user->setPassword($newHashedPassword);
-		$this->getEntityManager()->persist($user);
-		$this->getEntityManager()->flush();
+		$this->getEntityManager()
+			->persist($user);
+		$this->getEntityManager()
+			->flush();
 	}
-
+	
 	//    /**
 	//     * @return User[] Returns an array of User objects
 	//     */
@@ -56,7 +47,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 	//            ->getResult()
 	//        ;
 	//    }
-
+	
 	//    public function findOneBySomeField($value): ?User
 	//    {
 	//        return $this->createQueryBuilder('u')

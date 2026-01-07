@@ -2,43 +2,29 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\Entities\Cinema;
-use App\Models\Entities\CinemaType;
-use App\Models\Entities\Language;
-use App\Models\Entities\Movie;
-use App\Models\Entities\Place;
-use App\Models\Entities\Screening;
-use App\Models\Entities\ScreeningType;
-use App\Models\Entities\Showtime;
+use App\Models\Entities\{Cinema, CinemaType, Language, Movie, Place, Screening, ScreeningType, Showtime};
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\{Dashboard, MenuItem};
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Asset, Assets, Crud, Dashboard, MenuItem};
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[AdminDashboard(routePath: "/admin", routeName: "admin")]
+#[IsGranted("ROLE_ADMIN")]
 class DashboardController extends AbstractDashboardController {
 	public function index(): Response {
-		return parent::index();
-		
-		// Option 1. You can make your dashboard redirect to some common page of your backend
-		//
-		// 1.1) If you have enabled the "pretty URLs" feature:
-		// return $this->redirectToRoute("admin_user_index");
-		//
-		// 1.2) Same example but using the "ugly URLs" that were used in previous EasyAdmin versions:
-		// $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-		// return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-		
-		// Option 2. You can make your dashboard redirect to different pages depending on the user
-		//
-		// if ("jane" === $this->getUser()->getUsername()) {
-		//     return $this->redirectToRoute("...");
-		// }
-		
-		// Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-		// (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-		//
-		// return $this->render("some/path/my-dashboard.html.twig");
+		return $this->render("admin/dashboard.html.twig");
+	}
+	
+	public function configureAssets(): Assets {
+		return Assets::new()
+			->useCustomIconSet("bi")
+			->addJsFile("js/tiny-mce.js");
+	}
+	
+	public function configureCrud(): Crud {
+		return Crud::new()
+			->setFormThemes(["@Tinymce/form/tinymce_type.html.twig", "@EasyAdmin/crud/form_theme.html.twig"]);
 	}
 	
 	public function configureDashboard(): Dashboard {
@@ -47,18 +33,18 @@ class DashboardController extends AbstractDashboardController {
 	}
 	
 	public function configureMenuItems(): iterable {
-		yield MenuItem::linkToDashboard("Dashboard", "fa fa-home");
+		yield MenuItem::linkToDashboard("Dashboard", "house-door-fill");
 		
 		yield MenuItem::section("Cinemas");
-		yield MenuItem::linkToCrud("Cinema", "fas fa-building", Cinema::class);
-		yield MenuItem::linkToCrud("Cinema Type", "fas fa-warehouse", CinemaType::class);
-		yield MenuItem::linkToCrud("Place", "fas fa-location-dot", Place::class);
+		yield MenuItem::linkToCrud("Cinema", "camera-reels", Cinema::class);
+		yield MenuItem::linkToCrud("Cinema Type", "building-gear", CinemaType::class);
+		yield MenuItem::linkToCrud("Place", "door-open", Place::class);
 		
 		yield MenuItem::section("Movies");
-		yield MenuItem::linkToCrud("Movie", "fa fa-film", Movie::class);
-		yield MenuItem::linkToCrud("Language", "fa fa-language", Language::class);
-		yield MenuItem::linkToCrud("Screening", "fa fa-ticket", Screening::class);
-		yield MenuItem::linkToCrud("Screening Type", "fas fa-ticket-simple", ScreeningType::class);
-		yield MenuItem::linkToCrud("Showtime", "fas fa-calendar-alt", Showtime::class);
+		yield MenuItem::linkToCrud("Movie", "film", Movie::class);
+		yield MenuItem::linkToCrud("Language", "translate", Language::class);
+		yield MenuItem::linkToCrud("Screening", "ticket", Screening::class);
+		yield MenuItem::linkToCrud("Screening Type", "ticket-detailed", ScreeningType::class);
+		yield MenuItem::linkToCrud("Showtime", "calendar2-week", Showtime::class);
 	}
 }

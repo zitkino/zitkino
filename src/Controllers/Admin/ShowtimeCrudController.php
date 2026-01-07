@@ -4,25 +4,19 @@ namespace App\Controllers\Admin;
 
 use App\Models\Entities\Showtime;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, DateTimeField, IdField};
 
 class ShowtimeCrudController extends AbstractCrudController {
 	public static function getEntityFqcn(): string {
 		return Showtime::class;
 	}
 	
-	public function configureFields(string $pageName): iterable
-	{
-		return [
-			IdField::new("id"),
-			DateTimeField::new("datetime"),
-			
-			AssociationField::new("screening")
-				->setRequired(true)
-				->setHelp("Select the screening for this showtime"),
-		];
+	public function configureFields(string $pageName): iterable {
+		yield IdField::new("id");
+		yield DateTimeField::new("datetime");
+		
+		yield AssociationField::new("screening")
+			->setRequired(true)
+			->setHelp("Select the screening for this showtime");
 	}
-	
 }

@@ -41,18 +41,17 @@ Options -Indexes
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
-	RewriteBase /public/
+	RewriteBase /
 
 	# prevents files starting with dot to be viewed by browser
-#	RewriteRule /\.|^\. - [F]
+	RewriteRule /\.|^\. - [F]
 
-	# front controller
-#	RewriteCond %{REQUEST_URI} !^/public/
-	RewriteCond %{REQUEST_FILENAME} !-f
-#	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz)$ index.php [L,NC]
+	RewriteCond %{REQUEST_URI} !^/public/
+	RewriteRule ^(.*)$ /public/$1 [L]
 
-	RewriteRule (.+) $1 [L]
+    Options -MultiViews
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
 # enable gzip compression

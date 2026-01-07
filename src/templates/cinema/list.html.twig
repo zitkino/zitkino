@@ -13,7 +13,7 @@
 	<div class="float-right">
 		<a href="{{ path('cinema_profile', {'id': cinema.code}) }}">{{ "cinemas.profile"|trans }} <i class="bi bi-caret-right"></i></a>
 	</div>
-
+	
 	<ul class="list-inline">
 		<li class="list-inline-item">
 			{% set address = cinema.address ~ ", " ~ cinema.city %}
@@ -36,7 +36,7 @@
 				<header class="card-header" data-toggle="collapse" data-target="#{{ cinemaItem.code }}">
 					{{ _self.cinemaListContent(cinemaItem) }}
 				</header>
-
+				
 				<article id="{{ cinemaItem.code }}" class="card-body collapse show">
 					{{ _self.movieList(screenings, cinemaItem) }}
 				</article>
@@ -57,44 +57,46 @@
 					<th>
 						<abbr title="{{ "details.movie.long"|trans }}"><i class="bi bi-film"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.movie.short"|trans }}</span>
 					</th>
-
+					
 					{% if screenings.hasTypes() %}
 						<th>
 							<abbr title="{{ "details.type.long"|trans }}"><i class="bi bi-camera-video"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.type.short"|trans }}</span>
 						</th>
 					{% endif %}
-
+					
 					<th>
 						<abbr title="{{ "details.showtime.long"|trans }}"><i class="bi bi-calendar2-week-alt"></i></abbr> <span
 							class="d-none d-sm-none d-md-inline">{{ "details.showtime.short"|trans }}</span>
 					</th>
-
+					
 					{% if screenings.hasPlaces() %}
 						<th>
 							<abbr title="{{ "details.place.long"|trans }}"><i class="bi bi-door-open"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.place.short"|trans }}</span>
 						</th>
 					{% endif %}
-
+					
 					{% if screenings.hasLanguages() %}
 						<th>
-							<abbr title="{{ "details.dabing.long"|trans }}"><i class="bi bi-headphones"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.dabing.short"|trans }}</span> a <abbr title="{{ "details.subtitles.long"|trans }}"><i class="bi bi-paragraph"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.subtitles.short"|trans }}</span>
+							<abbr title="{{ "details.dabing.long"|trans }}"><i class="bi bi-headphones"></i></abbr>&nbsp;<span
+								class="d-none d-sm-none d-md-inline">{{ "details.dabing.short"|trans }}</span> a <abbr title="{{ "details.subtitles.long"|trans }}"><i
+									class="bi bi-paragraph"></i></abbr>&nbsp;<span class="d-none d-sm-none d-md-inline">{{ "details.subtitles.short"|trans }}</span>
 						</th>
 					{% endif %}
-
+					
 					{% if screenings.movies.hasLengths() %}
 						<th>
 							<abbr title="{{ "details.length.long"|trans }}"><i class="bi bi-hourglass-split"></i></abbr> <span
 								class="d-none d-sm-none d-md-inline">{{ "details.length.short"|trans }}</span>
 						</th>
 					{% endif %}
-
+					
 					{% if screenings.hasPrices() %}
 						<th>
 							<abbr title="{{ "details.price.long"|trans }}"><i class="bi bi-cash"></i></abbr> <span
 								class="d-none d-sm-none d-md-inline">{{ "details.price.short"|trans }}</span>
 						</th>
 					{% endif %}
-
+					
 					<th>
 						<abbr title="{{ "details.database.long"|trans }}"><i class="bi bi-database"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.database.short"|trans }}</span>
 					</th>
@@ -107,7 +109,7 @@
 							{% set link = screening.link %}
 							{% if link is defined %}<a href="{{ link }}">{% endif %}{{ screening.movie.name }}{% if link is defined %}</a>{% endif %}
 						</td>
-
+						
 						{% if screenings.hasTypes() %}
 							<td title="{{ "details.type.long"|trans }}">
 								{% if screening.type is not empty and screening.type.code != "2D" %}
@@ -115,7 +117,7 @@
 								{% endif %}
 							</td>
 						{% endif %}
-
+						
 						<td title="{{ "details.showtime.long"|trans }}">
 							{% if screening.showtimes is not empty %}
 								<i class="bi bi-calendar2-week"></i>
@@ -127,7 +129,7 @@
 								{% endfor %}
 							{% endif %}
 						</td>
-
+						
 						{% if screenings.hasPlaces() %}
 							<td title="{{ "details.place.long"|trans }}">
 								{% set place = screening.place %}
@@ -139,7 +141,7 @@
 								{% endif %}
 							</td>
 						{% endif %}
-
+						
 						{% if screenings.hasLanguages() %}
 							<td title="{{ "details.language.long"|trans }}">
 								{% if screening.dubbing is not empty %}
@@ -151,19 +153,19 @@
 								{% endif %}
 							</td>
 						{% endif %}
-
+						
 						{% if screenings.movies.hasLengths() %}
 							<td title="{{ "details.length.long"|trans }}">
 								{% if screening.movie.length is not empty %}{{ screening.movie.length|trim }} min.{% endif %}
 							</td>
 						{% endif %}
-
+						
 						{% if screenings.hasPrices() %}
 							<td title="{{ "details.price.long"|trans }}">
 								{% if screening.fixPrice is not empty %}{{ screening.fixPrice|trim }}{% endif %}
 							</td>
 						{% endif %}
-
+						
 						<td title="{{ "details.database.long"|trans }}">
 							{% set databases = screening.movie.databases %}
 							<a href="{{ databases['csfd'] }}" title="ČSFD"> <img src="{{ asset('img/csfd.svg') }}" width="20" alt="ČSFD"> </a> <br class="d-md-none d-lg-none">
@@ -174,7 +176,7 @@
 				</tbody>
 			</table>
 		</div>
-
+		
 		{% if app.request.pathInfo == '/' ~ cinema.code %}
 			<p>{{ "cinemas.programme.web.info"|trans }}: <a href="{{ cinema.programme }}" title="{{ "cinemas.programme.web.title"|trans }}">{{ cinema.programme }}</a></p>
 		{% endif %}

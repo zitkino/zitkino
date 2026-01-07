@@ -1,64 +1,64 @@
 <!DOCTYPE html>
 <html lang="{{ app.request.locale }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="{{ meta.get('color') }}">
-    <meta name="description" content="{{ meta.get('description') }}">
-    <meta name="author" content="{{ meta.get('author') }}">
-    {% if meta.get('robots') %}
-    <meta name="robots" content="{{ meta.get('robots') }}">
-    {% endif %}
-
-    <title>{% block title %}{% endblock %} {{ meta.get('separator') }} {{ meta.get('name') }}</title>
-{#	{% block importmap %}{{ importmap('app') }}{% endblock %}#}
-
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-    <link rel="stylesheet" media="screen" href="/public{{ asset('styles/app.scss') }}?v={{ 'now'|date('U') }}">
-    {# <link rel="stylesheet" media="print" href="{{ asset('print.css') }}"> #}
-
-{#    <script src="{{ asset('www/js/scripts.js') }}?v={{ 'now'|date('U') }}"></script>#}
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-{#    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-80065906-1"></script>#}
-{#    <script>#}
-{#        window.dataLayer = window.dataLayer || [];#}
-
-{#        function gtag() {#}
-{#            dataLayer.push(arguments);#}
-{#        }#}
-{#        gtag('js', new Date());#}
-
-{#        gtag('config', 'UA-80065906-1');#}
-{#    </script>#}
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="{{ meta.get('color') }}">
+	<meta name="description" content="{{ meta.get('description') }}">
+	<meta name="author" content="{{ meta.get('author') }}">
+	{% if meta.get('robots') %}
+		<meta name="robots" content="{{ meta.get('robots') }}">
+	{% endif %}
+	
+	<title>{% block title %}{% endblock %} {{ meta.get('separator') }} {{ meta.get('name') }}</title>
+	{#    {% block importmap %}{{ importmap('app') }}{% endblock %} #}
+	
+	<link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+	<link rel="stylesheet" media="screen" href="{{ asset('styles/app.scss') }}">
+	{# <link rel="stylesheet" media="print" href="{{ asset('print.css') }}"> #}
+	
+	{#    <script src="{{ asset('www/js/scripts.js') }}?v={{ 'now'|date('U') }}"></script> #}
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	{#    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-80065906-1"></script> #}
+	{#    <script> #}
+	{#        window.dataLayer = window.dataLayer || []; #}
+	
+	{#        function gtag() { #}
+	{#            dataLayer.push(arguments); #}
+	{#        } #}
+	{#        gtag('js', new Date()); #}
+	
+	{#        gtag('config', 'UA-80065906-1'); #}
+	{#    </script> #}
 </head>
 
 <body class="{% if app.request.attributes.get('_route') %}{{ app.request.attributes.get('_controller')|lower|replace({'\\\\': '-', '::': '-'}) }}{% endif %}">
 <header id="header" class="navbar navbar-dark navbar-expand-md">
-    <div class="container-fluid">
-        {% include 'header.html.twig' %}
-    </div>
+	<div class="container-fluid">
+		{% include 'header.html.twig' %}
+	</div>
 </header>
 
 <main id="main">
-    <div class="container-fluid">
-        <div class="row">
-            <article class="col-12" id="content">
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }}" role="alert">{{ message }}</div>
-                    {% endfor %}
-                {% endfor %}
-                {% block content %}{% endblock %}
-            </article>
-        </div>
-    </div>
+	<div class="container-fluid">
+		<div class="row">
+			<article class="col-12" id="content">
+				{% for label, messages in app.flashes %}
+					{% for message in messages %}
+						<div class="alert alert-{{ label }}" role="alert">{{ message }}</div>
+					{% endfor %}
+				{% endfor %}
+				{% block content %}{% endblock %}
+			</article>
+		</div>
+	</div>
 </main>
 
-{#<footer id="footer">#}
-{#    <div class="container-fluid">#}
-{#        {% include 'footer.html.twig' %}#}
-{#    </div>#}
-{#</footer>#}
+{# <footer id="footer"> #}
+{#    <div class="container-fluid"> #}
+{#        {% include 'footer.html.twig' %} #}
+{#    </div> #}
+{# </footer> #}
 </body>
 </html>

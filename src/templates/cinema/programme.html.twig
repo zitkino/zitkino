@@ -4,10 +4,10 @@
 
 {% block content %}
 	<h1 class="page-header">{{ block('title') }}</h1>
+	
 	{% from 'cinema/list.html.twig' import cinemaMovieList %}
-
 	{{ cinemaMovieList(cinemas) }}<br>
-
+	
 	<nav>
 		<ul class="pagination">
 			<li class="previous"><a href="{{ path('cinema_type_' ~ type) }}" class="page-link"><span aria-hidden="true">&larr;</span> {{ ("cinemas."~type ~ ".list")|trans }}</a></li>

@@ -2,7 +2,7 @@
 
 namespace App\Models\Facades;
 
-use App\Models\Entities\{Place, Cinema};
+use App\Models\Entities\{Cinema, Place};
 use App\Models\Repositories\PlaceRepository;
 use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository};

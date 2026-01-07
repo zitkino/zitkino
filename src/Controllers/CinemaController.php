@@ -19,8 +19,8 @@ class CinemaController extends BaseController {
 		$this->cinemaFacade = $cinemaFacade;
 	}
 	
-	#[Route("/{_locale}/kina", name: "cinema_default", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/kino", name: "cinema_default_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/kina", name: "cinema_default", requirements: ['_locale' => 'cs'])]
+	#[Route("/cinemas", name: "cinema_default_en", requirements: ['_locale' => 'en'])]
 	public function index(): Response {
 		return $this->render('cinema/default.html.twig', [
 			'classicCinemas' => $this->cinemaFacade->grabByType("classic"),
@@ -33,7 +33,8 @@ class CinemaController extends BaseController {
 	 *
 	 * @param string|int $id
 	 */
-	#[Route("/{_locale}/kino/{id}", name: "cinema_profile", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route("/cinema/{id}", name: "cinema_profile_en", locale: 'en')]
+	#[Route("/kino/{id}", name: "cinema_profile", locale: 'cs')]
 	public function profile($id): Response {
 		$cinema = $this->cinemaFacade->grabById($id);
 		$screenings = $cinema->getNewScreenings();

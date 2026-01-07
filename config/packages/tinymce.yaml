@@ -1,0 +1,4 @@
+tinymce:
+    plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion autoresize'
+    menubar: 'file edit view insert format tools table help'
+    toolbar: "code fullscreen undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor removeformat | align numlist bullist | link image media codesample anchor table | lineheight outdent indent | charmap emoticons | accordion accordionremove | save print preview | pagebreak  ltr rtl"

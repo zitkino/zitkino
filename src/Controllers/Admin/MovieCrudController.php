@@ -13,13 +13,14 @@ class MovieCrudController extends AbstractCrudController {
 	}
 	
 	public function configureFields(string $pageName): iterable {
-		return [
-			IdField::new("id"),
-			TextField::new("name"),
-			IntegerField::new("length")->setRequired(false),
-			TextField::new("csfd")->setRequired(false),
-			TextField::new("imdb")->setRequired(false),
-		];
+		yield IdField::new("id");
+		yield TextField::new("name");
+		yield IntegerField::new("length")
+			->setRequired(false);
+		yield TextField::new("csfd")
+			->setRequired(false);
+		yield TextField::new("imdb")
+			->setRequired(false);
 	}
 	
 	public function configureActions(Actions $actions): Actions {

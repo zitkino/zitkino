@@ -1,4 +1,10 @@
 {
+    "a2lix/auto-form-bundle": {
+        "version": "0.4.8"
+    },
+    "a2lix/translation-form-bundle": {
+        "version": "3.2.4"
+    },
     "dama/doctrine-test-bundle": {
         "version": "8.2",
         "recipe": {
@@ -79,6 +85,9 @@
         "files": [
             "config/routes/easyadmin.yaml"
         ]
+    },
+    "emileperron/tinymce-bundle": {
+        "version": "v3.3.0"
     },
     "knplabs/doctrine-behaviors": {
         "version": "v3.0.0"
@@ -290,21 +299,6 @@
             "config/routes/security.yaml"
         ]
     },
-    "symfony/stimulus-bundle": {
-        "version": "2.23",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "2.20",
-            "ref": "3acc494b566816514a6873a89023a35440b6386d"
-        },
-        "files": [
-            "./assets/bootstrap.js",
-            "./assets/controllers.json",
-            "./assets/controllers/csrf_protection_controller.js",
-            "./assets/controllers/hello_controller.js"
-        ]
-    },
     "symfony/translation": {
         "version": "7.2",
         "recipe": {
@@ -352,18 +346,6 @@
             "./assets/icons/symfony.svg"
         ]
     },
-    "symfony/ux-live-component": {
-        "version": "2.20",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "2.6",
-            "ref": "73e69baf18f47740d6f58688c5464b10cdacae06"
-        },
-        "files": [
-            "config/routes/ux_live_component.yaml"
-        ]
-    },
     "symfony/ux-twig-component": {
         "version": "2.20",
         "recipe": {
@@ -403,6 +385,9 @@
     },
     "symfonycasts/sass-bundle": {
         "version": "v0.7.0"
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.18.0"
     },
     "twig/extra-bundle": {
         "version": "v3.20.0"

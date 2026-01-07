@@ -4,23 +4,26 @@
 
 {% block content %}
 	<h1 class="page-header">{{ block('title') }}</h1>
-
-	<h2><a href="{{ path('cinema_type_classic') }}">{{ "cinemas.classic.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_classic') }}"><i class="bi bi-building"></i></a></small></span></h2>
+	
+	<h2><a href="{{ path('cinema_type_classic') }}">{{ "cinemas.classic.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_classic') }}"><i
+						class="bi bi-building"></i></a></small></span></h2>
 	<ul class="list-group">
 		{% from 'cinema/list.html.twig' import cinemaList %}
 		{% for cinemaItem in classicCinemas %}
 			{{ cinemaList(cinemaItem) }}
 		{% endfor %}
 	</ul>
-
-	<h2><a href="{{ path('cinema_type_multiplex') }}">{{ "cinemas.multiplex.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_multiplex') }}"><i class="bi bi-buildings"></i></a></small></span></h2>
+	
+	<h2><a href="{{ path('cinema_type_multiplex') }}">{{ "cinemas.multiplex.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_multiplex') }}"><i
+						class="bi bi-buildings"></i></a></small></span></h2>
 	<ul class="list-group">
 		{% for cinemaItem in multiplexCinemas %}
 			{{ cinemaList(cinemaItem) }}
 		{% endfor %}
 	</ul>
-
-	<h2><a href="{{ path('cinema_type_summer') }}">{{ "cinemas.summer.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_summer') }}"><i class="bi bi-sun"></i></a></small></span></h2>
+	
+	<h2><a href="{{ path('cinema_type_summer') }}">{{ "cinemas.summer.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_summer') }}"><i class="bi bi-sun"></i></a></small></span>
+	</h2>
 	<ul class="list-group">
 		{% for cinemaItem in summerCinemas %}
 			{{ cinemaList(cinemaItem) }}

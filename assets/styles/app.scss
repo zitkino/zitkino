@@ -1,7 +1,11 @@
 @import "variables";
 
-@import "libraries";
-@import "../../node_modules/@hermajan/facolors/scss/facolors";
-@import "../../node_modules/@hermajan/booty/scss/booty";
+@import "../../vendor/twbs/bootstrap/scss/bootstrap";
+
+$bootstrap-icons-font-dir: "../../vendor/twbs/bootstrap-icons/font/fonts";
+@import "../../vendor/twbs/bootstrap-icons/font/bootstrap-icons";
+
+@import "../../vendor/hermajan/facolors/scss/facolors";
+@import "../../vendor/hermajan/booty/scss/booty";
 
 @import "zitkino";

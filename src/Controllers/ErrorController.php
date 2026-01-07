@@ -38,7 +38,11 @@ class ErrorController extends BaseController {
 		$template = $this->getErrorTemplate($exception->getStatusCode());
 		
 		// Render the template
-		return $this->render($template, ['status_code' => $exception->getStatusCode(), 'status_text' => Response::$statusTexts[$exception->getStatusCode()] ?? 'Unknown Error', 'exception' => $exception,], new Response('', $exception->getStatusCode()));
+		return $this->render($template, [
+			'status_code' => $exception->getStatusCode(),
+			'status_text' => Response::$statusTexts[$exception->getStatusCode()] ?? 'Unknown Error',
+			'exception' => $exception,
+		], new Response('', $exception->getStatusCode()));
 	}
 	
 	/**

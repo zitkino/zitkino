@@ -12,16 +12,17 @@ class ScreeningCrudController extends AbstractCrudController {
 	}
 	
 	public function configureFields(string $pageName): iterable {
-		return [
-			IdField::new("id"),
-			AssociationField::new("movie"),
-			AssociationField::new("cinema"),
-			AssociationField::new("type"),
-			AssociationField::new("place"),
-			TextField::new("dubbing"),
-			TextField::new("subtitles"),
-			MoneyField::new("price")->setCurrency("CZK")->setStoredAsCents(false)->setNumDecimals(0),
-			UrlField::new("link"),
-		];
+		yield IdField::new("id");
+		yield AssociationField::new("movie");
+		yield AssociationField::new("cinema");
+		yield AssociationField::new("type");
+		yield AssociationField::new("place");
+		yield TextField::new("dubbing");
+		yield TextField::new("subtitles");
+		yield MoneyField::new("price")
+			->setCurrency("CZK")
+			->setStoredAsCents(false)
+			->setNumDecimals(0);
+		yield UrlField::new("link");
 	}
 }

@@ -4,29 +4,29 @@
 
 {% block content %}
 	<h1 class="page-header">{{ block('title') }}</h1>
-
+	
 	{{ cinema.translate(app.request.locale).text|raw }}
-
+	
 	{% from 'cinema/list.html.twig' import movieList %}
 	{{ movieList(screenings, cinema) }}
-
+	
 	<div>
 		<div class="float-right">
 			<a href="{{ cinema.programme }}" title="Program na webu kina."><i class="bi bi-book"></i> podrobný program</a><br>
-
+			
 			<span class="float-right">
 				{% if cinema.facebook is defined %}
 					<a href="https://www.facebook.com/{{ cinema.facebook }}"><i class="bi bi-facebook"></i></a>
 				{% endif %}
-
+				
 				{# {% if cinema.googlePlus is defined %} #}
 				{#     <a href="https://plus.google.com/{{ cinema.googlePlus }}"><i class="fab fa-google-plus-g fa-2x"></i></a> #}
 				{# {% endif %} #}
-
+				
 				{% if cinema.instagram is defined %}
 					<a href="https://www.instagram.com/{{ cinema.instagram }}"><i class="bi bi-instagram"></i></a>
 				{% endif %}
-
+				
 				{# {% if cinema.twitter is defined %} #}
 				{#     <a href="https://twitter.com/{{ cinema.twitter }}"><i class="fab fa-twitter fa-2x"></i></a> #}
 				{# {% endif %} #}
@@ -43,28 +43,28 @@
 			{% endif %}
 			<i class="bi bi-link"></i> <a href="{{ cinema.url }}">{{ cinema.url }}</a>
 		</address>
-
+		
 		<a href="#cinemaMap" onClick="showCinemaMap();" id="cinemaMapButton" class="btn btn-danger collapsed" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cinemaMap">
 			<i class="bi bi-map"></i> <span id="cinemaMapButtonText">Zobrazit</span> kino na mapě
 		</a><br><br>
 	</div>
-
+	
 	<div id="cinemaMap" class="embed-responsive embed-responsive-16by9 collapse">
 		<iframe id="cinemaMapIframe" class="embed-responsive-item" src="" allowfullscreen></iframe>
 	</div>
-
+	
 	<div id="desktopTest" class="d-md-none d-lg-none"></div>
 	<script>
 		// shows map on load on desktops only
 		// if($("#desktopTest").is(":hidden")) {
 		// 	$("#cinemaMapButton").click();
 		// }
-
+		
 		function showCinemaMap() {
 			const cinemaMap = document.getElementById('cinemaMap');
 			const mapButton = document.getElementById('cinemaMapButtonText');
 			const mapIframe = document.getElementById('cinemaMapIframe');
-
+			
 			if(cinemaMap.style.display === "block") {
 				cinemaMap.style.display = "none";
 				mapButton.textContent = "Zobrazit";

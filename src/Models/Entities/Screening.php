@@ -56,7 +56,8 @@ class Screening {
 	}
 	
 	public function __toString() {
-		return $this->getMovie()->getId()."-".$this->getCinema()."-".$this->getType()."-".$this->getDubbing()."-".$this->getSubtitles();
+		return $this->getMovie()
+				->getId()."-".$this->getCinema()."-".$this->getType()."-".$this->getDubbing()."-".$this->getSubtitles();
 	}
 	
 	public function getId(): ?int {
