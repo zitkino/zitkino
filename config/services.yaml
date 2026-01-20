@@ -18,6 +18,11 @@ parameters:
         separator: "-"
         name: "Žít kino"
     
+    sluggable_entities:
+        App\Models\Entities\CinemaType:
+            controller: 'App\Controllers\CinemaController::type'
+            route_name_prefix: 'cinema_type_'
+    
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -41,10 +46,6 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Twig\LocaleRouteExtension:
-        arguments:
-            $enabledLocales: '%kernel.enabled_locales%'
-        tags: ['twig.extension']
     App\Services\MetaService:
         arguments:
             - '%meta%'
@@ -65,3 +66,13 @@ services:
             $fieldConfigurators: !tagged_iterator ea.field_configurator
         tags:
             - { name: 'ea.field_configurator', priority: -10 }
+
+    App\Routing\DatabaseSlugLoader:
+        arguments:
+            $sluggableEntities: '%sluggable_entities%'
+        tags: ['routing.loader']
+
+    App\EventSubscribers\RouteSubscriber:
+        arguments:
+            $sluggableEntities: '%sluggable_entities%'
+            $cacheSystem: '@cache.system'

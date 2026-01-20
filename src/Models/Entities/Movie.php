@@ -32,7 +32,7 @@ class Movie {
 	public function __construct(string $name = '') {
 		if(!empty($name)) {
 			$this->name = $name;
-			$this->setDatabases();
+			$this->initDatabases();
 		}
 		
 		$this->screenings = new ArrayCollection();
@@ -103,11 +103,11 @@ class Movie {
 	}
 	
 	public function getDatabases(): ?array {
-		$this->setDatabases();
+		$this->initDatabases();
 		return $this->databases;
 	}
 	
-	public function setDatabases(): void {
+	public function initDatabases(): void {
 		$csfdUrl = "https://www.csfd.cz";
 		if(isset($this->csfd)) {
 			$this->databases["csfd"] = $csfdUrl."/film/".$this->csfd;

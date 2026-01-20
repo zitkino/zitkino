@@ -5,28 +5,39 @@
 {% block content %}
 	<h1 class="page-header">{{ block('title') }}</h1>
 	
-	<h2><a href="{{ path('cinema_type_classic') }}">{{ "cinemas.classic.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_classic') }}"><i
-						class="bi bi-building"></i></a></small></span></h2>
-	<ul class="list-group">
-		{% from 'cinema/list.html.twig' import cinemaList %}
-		{% for cinemaItem in classicCinemas %}
-			{{ cinemaList(cinemaItem) }}
-		{% endfor %}
-	</ul>
+{#	<h2><a href="{{ path('cinema_type_classic') }}">{{ "cinemas.classic.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_classic') }}"><i class="bi bi-building"></i></a></small></span></h2>#}
+{#	<ul class="list-group">#}
+{#		{% from 'cinema/list.html.twig' import cinemaList %}#}
+{#		{% for cinemaItem in classicCinemas %}#}
+{#			{{ cinemaList(cinemaItem) }}#}
+{#		{% endfor %}#}
+{#	</ul>#}
+{#	#}
+{#	<h2><a href="{{ path('cinema_type_multiplex') }}">{{ "cinemas.multiplex.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_multiplex') }}"><i class="bi bi-buildings"></i></a></small></span></h2>#}
+{#	<ul class="list-group">#}
+{#		{% for cinemaItem in multiplexCinemas %}#}
+{#			{{ cinemaList(cinemaItem) }}#}
+{#		{% endfor %}#}
+{#	</ul>#}
+{#	#}
+{#	<h2><a href="{{ path('cinema_type_summer') }}">{{ "cinemas.summer.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_summer') }}"><i class="bi bi-sun"></i></a></small></span>#}
+{#	</h2>#}
+{#	<ul class="list-group">#}
+{#		{% for cinemaItem in summerCinemas %}#}
+{#			{{ cinemaList(cinemaItem) }}#}
+{#		{% endfor %}#}
+{#	</ul>#}
 	
-	<h2><a href="{{ path('cinema_type_multiplex') }}">{{ "cinemas.multiplex.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_multiplex') }}"><i
-						class="bi bi-buildings"></i></a></small></span></h2>
-	<ul class="list-group">
-		{% for cinemaItem in multiplexCinemas %}
-			{{ cinemaList(cinemaItem) }}
-		{% endfor %}
-	</ul>
-	
-	<h2><a href="{{ path('cinema_type_summer') }}">{{ "cinemas.summer.title"|trans }}</a> <span class="float-right"><small><a href="{{ path('cinema_programme_summer') }}"><i class="bi bi-sun"></i></a></small></span>
-	</h2>
-	<ul class="list-group">
-		{% for cinemaItem in summerCinemas %}
-			{{ cinemaList(cinemaItem) }}
-		{% endfor %}
-	</ul>
+	{% for type in types %}
+		<h2>
+			<a href="{{ path('cinema_type_'~ type.code, {'slug': type.translation.slug}) }}">{{ ("cinemas." ~ type.code ~ ".title")|trans }}</a>
+{#			<span class="float-right"><small><a href="{{ path('cinema_programme_' ~ type.code) }}"><i class="{{ type.icon }}"></i></a></small></span>#}
+		</h2>
+		<ul class="list-group">
+			{% from 'cinema/list.html.twig' import cinemaList %}
+			{% for cinemaItem in type.cinemas %}
+				{{ cinemaList(cinemaItem) }}
+			{% endfor %}
+		</ul>
+	{% endfor %}
 {% endblock %}

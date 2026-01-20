@@ -4,8 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Entities\Cinema;
 use App\Models\Facades\CinemaFacade;
-use App\Services\MetaService;
-use App\Services\ParserService;
+use App\Services\{MetaService, ParserService};
 use Symfony\Component\HttpFoundation\{RequestStack, Response};
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -13,6 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Cron controller.
  */
+#[Route("/cron", name: "cron_")]
 class CronController extends BaseController {
 	private CinemaFacade $cinemaFacade;
 	
@@ -24,12 +24,12 @@ class CronController extends BaseController {
 		$this->parserService = $parserService;
 	}
 	
-	#[Route("/cron", name: "cron_index")]
+	#[Route("/", name: "index")]
 	public function index(): Response {
 		return $this->redirectToRoute('homepage');
 	}
 	
-	#[Route("/cron/parse", name: "cron_parse")]
+	#[Route("/parse", name: "parse")]
 	public function parse(): Response {
 		$cinemas = $this->cinemaFacade->grabParsable();
 		

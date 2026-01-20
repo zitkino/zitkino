@@ -24,6 +24,7 @@ class DashboardController extends AbstractDashboardController {
 	
 	public function configureCrud(): Crud {
 		return Crud::new()
+			->showEntityActionsInlined()
 			->setFormThemes(["@Tinymce/form/tinymce_type.html.twig", "@EasyAdmin/crud/form_theme.html.twig"]);
 	}
 	

@@ -5,7 +5,7 @@ namespace App\Models\Facades;
 use App\Models\Entities\{Cinema, CinemaType};
 use App\Models\Repositories\CinemaRepository;
 use Dobine\Facades\DobineFacade;
-use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
+use Doctrine\ORM\{EntityManagerInterface, EntityRepository, NonUniqueResultException};
 
 class CinemaFacade extends DobineFacade {
 	protected EntityManagerInterface $entityManager;
@@ -26,10 +26,6 @@ class CinemaFacade extends DobineFacade {
 		} else {
 			return $this->repository->findOneBy(["code" => $id]);
 		}
-	}
-	
-	public function grabType(string $type): CinemaType|null {
-		return $this->repositoryType->findOneBy(["code" => $type]);
 	}
 	
 	public function grabAll(): array {
@@ -58,16 +54,31 @@ class CinemaFacade extends DobineFacade {
 			->getResult();
 	}
 	
+	public function grabTypes(): array {
+		return $this->repositoryType->findBy(["visible" => true], ["order" => "ASC", "code" => "ASC"]);
+	}
+	
+	public function grabTypeBySlug(string $slug): ?CinemaType {
+		try {
+			return $this->repositoryType->createQueryBuilder("t")
+				->join("t.translations", "tt")
+				->andWhere("tt.slug = :slug")->setParameter("slug", $slug)
+				->getQuery()
+				->getOneOrNullResult();
+		} catch(NonUniqueResultException $e) {
+			return null;
+		}
+	}
+	
 	public function grabByType(string $type): array {
 		return match ($type) {
 			"all" => $this->grabAll(),
 			"current" => $this->grabCurrent(),
 			default => $this->repository->visible()
 				->join("c.type", "ct")
-				->andWhere("ct.code = :type")
-				->setParameter("type", $type)
+				->andWhere("ct.code = :type")->setParameter("type", $type)
 				->getQuery()
-				->getResult(),
+				->getResult()
 		};
 	}
 	

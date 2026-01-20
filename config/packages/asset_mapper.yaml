@@ -4,6 +4,7 @@ framework:
         paths:
             - assets/
             - vendor/twbs/bootstrap-icons/font/fonts
+            - vendor/twbs/bootstrap/dist
         missing_import_mode: strict
 
 when@prod:

@@ -1,6 +1,6 @@
 {% block header %}
 	<nav class="navbar-header">
-		<a href="{{ path('homepage') }}" class="navbar-brand">
+		<a href="{{ path('home_index') }}" class="navbar-brand">
 			<img src="{{ asset('favicon.ico') }}" class="logo" alt="logo"> {{ meta.get("name") }}
 		</a>
 		
@@ -12,48 +12,63 @@
 	<nav class="collapse navbar-collapse">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-				<a href="{{ path(locale_route('homepage')) }}" class="nav-link"><i class="bi bi-house-door-fill"></i></a>
+				<a href="{{ path('home_index') }}" class="nav-link"><i class="bi bi-house-door-fill"></i></a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ path(locale_route('cinema_default')) }}" class="nav-link"><i class="bi bi-camera-reels"></i>&nbsp;{{ "cinemas.list.title"|trans }}</a>
+				<a href="{{ path('cinema_default') }}" class="nav-link"><i class="bi bi-camera-reels"></i>&nbsp;{{ "cinemas.list.title"|trans }}</a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ path(locale_route('cinema_programme_classic')) }}" class="nav-link"><i class="bi bi-building"></i>&nbsp;{{ "cinemas.classic.title"|trans }}</a>
+				<a href="{{ path('cinema_programme_classic') }}" class="nav-link"><i class="bi bi-building"></i>&nbsp;{{ "cinemas.classic.title"|trans }}</a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ path(locale_route('cinema_programme_multiplex')) }}" class="nav-link"><i class="bi bi-buildings"></i>&nbsp;{{ "cinemas.multiplex.title"|trans }}</a>
+				<a href="{{ path('cinema_programme_multiplex') }}" class="nav-link"><i class="bi bi-buildings"></i>&nbsp;{{ "cinemas.multiplex.title"|trans }}</a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ path(locale_route('cinema_programme_summer')) }}" class="nav-link"><i class="bi bi-sun"></i>&nbsp;{{ "cinemas.summer.title"|trans }}</a>
+				<a href="{{ path('cinema_programme_summer') }}" class="nav-link"><i class="bi bi-sun"></i>&nbsp;{{ "cinemas.summer.title"|trans }}</a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ path(locale_route('home_map')) }}" class="nav-link"><i class="bi bi-map"></i>&nbsp;{{ "map.title"|trans }}</a>
+				<a href="{{ path('home_map') }}" class="nav-link"><i class="bi bi-map"></i>&nbsp;{{ "map.title"|trans }}</a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ path(locale_route('home_about')) }}" class="nav-link"><i class="bi bi-info-circle"></i>&nbsp;{{ "info.title"|trans }}</a>
+				<a href="{{ path('home_about') }}" class="nav-link"><i class="bi bi-info-circle"></i>&nbsp;{{ "info.title"|trans }}</a>
 			</li>
 		</ul>
 		
 		<div class="navbar-right">
 			<ul class="navbar-nav">
+				<li class="nav-item dropdown">
+					{% set current_locale = locales()|filter(l => l.code == app.request.locale)|first %}
+					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<span class="{{ current_locale.flag }}"></span>&nbsp;{{ current_locale.name|capitalize }}
+					</a>
+					<ul class="dropdown-menu">
+						{# Locale Switcher #}
+						{% for locale in locales() %}
+							<li>
+								{% set route = app.request.attributes.get('_route') %}
+								{% set route_params = app.request.attributes.get('_route_params')|merge(app.request.query.all) %}
+								{% set canonical = app.request.attributes.get('_canonical_route') %}
+								
+								{#                                     If it's a database route with a canonical name, use that with the locale suffix #}
+								{% if canonical %}
+									<a href="{{ path(canonical ~ '.' ~ locale.code) }}" class="dropdown-item {% if app.request.locale == locale.code %}active{% endif %}">
+										<span class="{{ locale.flag }}"></span>&nbsp;{{ locale.name|capitalize }}
+									</a>
+								{% else %}
+									<a	href="{{ path(route, route_params|merge({'_locale': locale.code})) }}"
+										class="dropdown-item {% if app.request.locale == locale.code %}active{% endif %}">
+										<span class="{{ locale.flag }}"></span>&nbsp;{{ locale.name|capitalize }}
+									</a>
+								{% endif %}
+							</li>
+						{% endfor %}
+					</ul>
+				</li>
 				<li class="nav-item">
 					<a href="https://www.facebook.com/zitkino.cz" title="{{ "facebook.view"|trans }}" class="nav-link github-link"><i class="bi bi-facebook octicon"></i></a>
 				</li>
 				<li class="nav-item">
 					<a href="https://github.com/zitkino/zitkino" title="{{ "github.view"|trans }}" class="nav-link github-link"><i class="bi bi-github octicon"></i></a>
-				</li>
-			</ul>
-			
-			<ul class="navbar-nav language-switcher">
-				<li class="nav-item">
-					<a class="nav-link" href="{{ locale_path('cs') }}" {% if app.request.locale == 'cs' %}style="font-weight: bold;"{% endif %}>
-						{{ 'cs'|trans }}
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{ locale_path('en') }}" {% if app.request.locale == 'en' %}style="font-weight: bold;"{% endif %}>
-						{{ 'en'|trans }}
-					</a>
 				</li>
 			</ul>
 		</div>

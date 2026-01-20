@@ -25,7 +25,7 @@ class Cinema implements TranslatableInterface {
 	#[ORM\Column(name: "code", type: "string", length: 20, nullable: false)]
 	private string $code;
 	
-	#[ORM\ManyToOne(targetEntity: "CinemaType")]
+	#[ORM\ManyToOne(targetEntity: "CinemaType", inversedBy: "cinemas")]
 	#[ORM\JoinColumn(name: "type", referencedColumnName: "id", nullable: true)]
 	private ?CinemaType $type = null;
 	

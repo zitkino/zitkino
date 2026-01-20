@@ -11,6 +11,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Cinema controller.
  */
+#[Route(name: "cinema_")]
 class CinemaController extends BaseController {
 	private CinemaFacade $cinemaFacade;
 	
@@ -19,10 +20,10 @@ class CinemaController extends BaseController {
 		$this->cinemaFacade = $cinemaFacade;
 	}
 	
-	#[Route("/kina", name: "cinema_default", requirements: ['_locale' => 'cs'])]
-	#[Route("/cinemas", name: "cinema_default_en", requirements: ['_locale' => 'en'])]
+	#[Route(path: ["cs" => "/kina", "en" => "/cinemas"], name: "default")]
 	public function index(): Response {
 		return $this->render('cinema/default.html.twig', [
+			"types" => $this->cinemaFacade->grabTypes(),
 			'classicCinemas' => $this->cinemaFacade->grabByType("classic"),
 			'multiplexCinemas' => $this->cinemaFacade->grabByType("multiplex"),
 			'summerCinemas' => $this->cinemaFacade->grabByType("summer")
@@ -33,8 +34,7 @@ class CinemaController extends BaseController {
 	 *
 	 * @param string|int $id
 	 */
-	#[Route("/cinema/{id}", name: "cinema_profile_en", locale: 'en')]
-	#[Route("/kino/{id}", name: "cinema_profile", locale: 'cs')]
+	#[Route(path: ["cs" => "/kino/{id}", "en" => "/cinema/{id}"], name: "profile")]
 	public function profile($id): Response {
 		$cinema = $this->cinemaFacade->grabById($id);
 		$screenings = $cinema->getNewScreenings();
@@ -55,44 +55,52 @@ class CinemaController extends BaseController {
 		]);
 	}
 	
-	#[Route("/{_locale}/klasicka", name: "cinema_type_classic", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/klasicky", name: "cinema_type_classic_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/multiplexy", name: "cinema_type_multiplex", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/multiplex", name: "cinema_type_multiplex_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/letni", name: "cinema_type_summer", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	public function type(?string $type = null): Response {
+//	#[Route(path: ["cs" => "/klasicka", "en" => "/classic"], name: "type_classic")]
+//	#[Route(path: ["/klasicky"], name: "type_classic_alt", alias: ["type_classic"])]
+//	#[Route(path: ["cs" => "/multiplexy", "en" => "/multiplexes"], name: "type_multiplex")]
+//	#[Route(path: ["/multiplex"], name: "type_multiplex_alt", alias: ["type_multiplex"])]
+//	#[Route(path: ["cs" => "/letni", "en" => "/summer"], name: "type_summer")]
+//	#[Route(path: ["cs" => "/{slug}", "en" => "/{slug}"], name: "type")]
+	public function type(?string $slug = null): Response {
+			dump($slug);
+			
+			$type = $this->cinemaFacade->grabTypeBySlug($slug);
+			dump($type);
 		// Determine type from route
-		if($type === null) {
-			$route = $this->requestStack->getCurrentRequest()->attributes->get('_route');
-			if(strpos($route, 'classic') !== false) {
-				$type = 'classic';
-			} else if(strpos($route, 'multiplex') !== false) {
-				$type = 'multiplex';
-			} else if(strpos($route, 'summer') !== false) {
-				$type = 'summer';
-			}
-		}
+//		if($type === null) {
+//			$route = $this->requestStack->getCurrentRequest()->attributes->get('_route');
+//			dump($route);
+//			if(str_contains($route, 'classic')) {
+//				$type = 'classic';
+//			} else if(str_contains($route, 'multiplex')) {
+//				$type = 'multiplex';
+//			} else if(str_contains($route, 'summer')) {
+//				$type = 'summer';
+//			}
+//		}
 		
 		return $this->render('cinema/type.html.twig', [
-			'cinemas' => $this->cinemaFacade->grabByType($type),
-			'type' => $type
+			'cinemas' => $this->cinemaFacade->grabByType($type->getCode()),
+			'type' => $type->getCode()
 		]);
 	}
 	
-	#[Route("/{_locale}/klasicky/program", name: "cinema_programme_classic", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/klasicka/program", name: "cinema_programme_classic_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/multiplexy/program", name: "cinema_programme_multiplex", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/multiplex/program", name: "cinema_programme_multiplex_alt", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
-	#[Route("/{_locale}/letni/program", name: "cinema_programme_summer", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route(path: ["cs" => "/klasicka/program", "en" => "/classic/programme"], name: "programme_classic")]
+	#[Route(path: ["/klasicky/program"], name: "programme_classic_alt", alias: ["programme_classic"])]
+	#[Route(path: ["cs" => "/multiplexy/program", "en" => "/multiplexes/programme"], name: "programme_multiplex")]
+	#[Route(path: ["/multiplex/program"], name: "programme_multiplex_alt", alias: ["programme_multiplex"])]
+	#[Route(path: ["cs" => "/letni/program", "en" => "/summer/programme"], name: "programme_summer")]
 	public function programme(?string $type = null): Response {
+		dump($type);
+		
 		// Determine type from route
 		if($type === null) {
 			$route = $this->requestStack->getCurrentRequest()->attributes->get('_route');
-			if(strpos($route, 'classic') !== false) {
+			if(str_contains($route, 'classic')) {
 				$type = 'classic';
-			} else if(strpos($route, 'multiplex') !== false) {
+			} else if(str_contains($route, 'multiplex')) {
 				$type = 'multiplex';
-			} else if(strpos($route, 'summer') !== false) {
+			} else if(str_contains($route, 'summer')) {
 				$type = 'summer';
 			}
 		}

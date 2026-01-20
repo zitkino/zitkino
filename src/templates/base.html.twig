@@ -11,13 +11,13 @@
 	{% endif %}
 	
 	<title>{% block title %}{% endblock %} {{ meta.get('separator') }} {{ meta.get('name') }}</title>
-	{#    {% block importmap %}{{ importmap('app') }}{% endblock %} #}
 	
 	<link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
 	<link rel="stylesheet" media="screen" href="{{ asset('styles/app.scss') }}">
 	{# <link rel="stylesheet" media="print" href="{{ asset('print.css') }}"> #}
 	
-	{#    <script src="{{ asset('www/js/scripts.js') }}?v={{ 'now'|date('U') }}"></script> #}
+	{{ importmap('app') }}
 	
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	{#    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-80065906-1"></script> #}

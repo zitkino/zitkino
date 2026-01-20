@@ -11,6 +11,10 @@
 #    requirements:
 #        _locale: cs
         
+database_slug_routes:
+    resource: .
+    type: database_slug
+
 controllers:
     resource:
         path: '../src/Controllers/'

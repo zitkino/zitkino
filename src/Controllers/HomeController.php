@@ -11,6 +11,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Homepage controller.
  */
+#[Route("/", name: "home_")]
 class HomeController extends BaseController {
 	private CinemaFacade $cinemaFacade;
 	
@@ -19,26 +20,25 @@ class HomeController extends BaseController {
 		$this->cinemaFacade = $cinemaFacade;
 	}
 	
-	#[Route(path: '/{_locale}', name: 'homepage', requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route(path: '/{_locale}', name: 'index', defaults: ['_locale' => 'cs'])]
 	public function index(): Response {
 		$cinemas = $this->cinemaFacade->gatherWithMovies("current");
 		
 		return $this->render('home/index.html.twig', ['cinemas' => $cinemas]);
 	}
 	
-	#[Route(path: '/mapa', name: 'home_map', requirements: ['_locale' => 'cs'])]
-	#[Route(path: '/map', name: 'home_map_en', requirements: ['_locale' => 'en'])]
+	#[Route(path: ['cs' => '/mapa', 'en' => '/map'], name: 'map')]
 	public function map(): Response {
 		return $this->render('home/map.html.twig');
 	}
 	
-	#[Route("/kontakt", name: "home_contact", requirements: ['_locale' => 'cs'])]
-	#[Route("/contact", name: "home_contact_en", requirements: ['_locale' => 'en'])]
+	#[Route(path: ["cs" => "/kontakt", "en" => "/contact"], name: "contact")]
 	public function contact(): Response {
 		return $this->render('home/contact.html.twig');
 	}
 	
-	#[Route("/{_locale}/info", name: "home_about", requirements: ['_locale' => 'cs|en'], defaults: ['_locale' => 'cs'])]
+	#[Route(path: ["cs" => "/info", 'en' => "/about"], name: "about")]
+//	#[Route(path: ["cs" => "/informace", 'en' => "/information"], name: "about_alt", alias: ["home_about"])]
 	public function about(): Response {
 		return $this->render('home/about.html.twig');
 	}
