@@ -24,8 +24,12 @@ class CinemaFacade extends DobineFacade {
 		if(is_numeric($id)) {
 			return $this->repository->findOneBy(["id" => $id]);
 		} else {
-			return $this->repository->findOneBy(["code" => $id]);
+			return $this->repository->findOneBy(["ident" => $id]);
 		}
+	}
+	
+	public function grabBySlug(string $slug): ?Cinema {
+		return $this->repository->findOneBy(["slug" => $slug]);
 	}
 	
 	public function grabAll(): array {
@@ -40,7 +44,7 @@ class CinemaFacade extends DobineFacade {
 		$month = (int)date("m");
 		if($month < 6 or $month > 9) {
 			$qb->join("c.type", "ct")
-				->andWhere("ct.code != :type")
+				->andWhere("ct.ident != :type")
 				->setParameter("type", "summer");
 		}
 		
@@ -55,7 +59,7 @@ class CinemaFacade extends DobineFacade {
 	}
 	
 	public function grabTypes(): array {
-		return $this->repositoryType->findBy(["visible" => true], ["order" => "ASC", "code" => "ASC"]);
+		return $this->repositoryType->findBy(["visible" => true], ["order" => "ASC", "ident" => "ASC"]);
 	}
 	
 	public function grabTypeBySlug(string $slug): ?CinemaType {
@@ -76,7 +80,7 @@ class CinemaFacade extends DobineFacade {
 			"current" => $this->grabCurrent(),
 			default => $this->repository->visible()
 				->join("c.type", "ct")
-				->andWhere("ct.code = :type")->setParameter("type", $type)
+				->andWhere("ct.ident = :type")->setParameter("type", $type)
 				->getQuery()
 				->getResult()
 		};

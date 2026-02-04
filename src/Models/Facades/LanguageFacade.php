@@ -18,6 +18,6 @@ class LanguageFacade extends DobineFacade {
 	}
 	
 	public function grabByCode(string $code): ?Language {
-		return $this->repository->findOneBy(["code" => $code]);
+		return $this->repository->findOneBy(["ident" => $code]);
 	}
 }

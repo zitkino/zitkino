@@ -1,10 +1,9 @@
 {% extends "base.html.twig" %}
 
 {% block title %}{{ "map.title"|trans }}{% endblock %}
+{% block logo %}<div class="logo"><span>🗺️</span></div>{% endblock %}
 
 {% block content %}
-	<h1 class="page-header">{{ "map.header"|trans }}</h1>
-	
 	<div class="embed-responsive embed-responsive-16by9 map">
 		<iframe src="https://www.google.com/maps/d/embed?mid=1bGbx0udf8xIA5FhKAZgDhgm0WvY" class="embed-responsive-item"></iframe>
 	</div>

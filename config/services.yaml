@@ -18,10 +18,6 @@ parameters:
         separator: "-"
         name: "Žít kino"
     
-    sluggable_entities:
-        App\Models\Entities\CinemaType:
-            controller: 'App\Controllers\CinemaController::type'
-            route_name_prefix: 'cinema_type_'
     
 services:
     # default configuration for services in *this* file
@@ -67,12 +63,18 @@ services:
         tags:
             - { name: 'ea.field_configurator', priority: -10 }
 
+    App\Services\RouteAttributeDiscoveryService:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
     App\Routing\DatabaseSlugLoader:
         arguments:
-            $sluggableEntities: '%sluggable_entities%'
+            $discoveryService: '@App\Services\RouteAttributeDiscoveryService'
         tags: ['routing.loader']
+
+    App\EventSubscribers\TranslationSubscriber: ~
 
     App\EventSubscribers\RouteSubscriber:
         arguments:
-            $sluggableEntities: '%sluggable_entities%'
+            $discoveryService: '@App\Services\RouteAttributeDiscoveryService'
             $cacheSystem: '@cache.system'

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa2d6ce5efdd53163a3e20dc6cfd482d",
+    "content-hash": "0e926fe64d67d8db1bbde4e66d65ae59",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -2333,33 +2333,28 @@
         },
         {
             "name": "hermajan/booty",
-            "version": "v0.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hermajan/booty.git",
-                "reference": "240a8778be63bf0f5bbd00996828ea9854fe1ded"
-            },
+            "version": "dev-master",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hermajan/booty/zipball/240a8778be63bf0f5bbd00996828ea9854fe1ded",
-                "reference": "240a8778be63bf0f5bbd00996828ea9854fe1ded",
-                "shasum": ""
+                "type": "path",
+                "url": "./booty",
+                "reference": "240a8778be63bf0f5bbd00996828ea9854fe1ded"
             },
             "require-dev": {
                 "latte/latte": "^2.9",
                 "php": ">=7.1"
             },
             "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "homepage": "https://hermajan.net/booty",
             "support": {
-                "issues": "https://github.com/hermajan/booty/issues",
-                "source": "https://github.com/hermajan/booty/tree/v0.4.0"
+                "issues": "https://github.com/hermajan/booty/issues"
             },
-            "time": "2023-03-21T01:21:15+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "hermajan/dobine",
@@ -2367,7 +2362,7 @@
             "dist": {
                 "type": "path",
                 "url": "./dobine",
-                "reference": "6fd3b7fa56ffdddda4cc0bcf3aecba26c524d108"
+                "reference": "490f226c2c4e8964c5fbba9e4a911b94a9debc02"
             },
             "require": {
                 "doctrine/orm": "^2.2",
@@ -12683,6 +12678,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "hermajan/booty": 20,
         "hermajan/dobine": 20
     },
     "prefer-stable": true,
@@ -12696,6 +12692,6 @@
         "ext-libxml": "*",
         "ext-pdo_sqlite": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

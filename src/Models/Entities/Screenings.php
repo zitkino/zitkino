@@ -23,7 +23,7 @@ class Screenings extends ArrayCollection {
 		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
 			$type = $screening->getType();
-			if(isset($type) and $type->getCode() !== "2D") {
+			if(isset($type) and $type->getIdent() !== "2D") {
 				return true;
 			}
 		}

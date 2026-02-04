@@ -11,7 +11,7 @@
 {% macro cinemaListContent(cinema) %}
 	<strong>{{ cinema.name }}</strong>
 	<div class="float-right">
-		<a href="{{ path('cinema_profile', {'id': cinema.code}) }}">{{ "cinemas.profile"|trans }} <i class="bi bi-caret-right"></i></a>
+		<a href="{{ path('cinema_profile_'~cinema.ident) }}">{{ "cinemas.profile"|trans }} <i class="bi bi-caret-right"></i></a>
 	</div>
 	
 	<ul class="list-inline">
@@ -33,11 +33,11 @@
 		{% for cinemaItem in cinemas %}
 			{% set screenings = cinemaItem.soonestScreenings %}
 			<section class="card card-default">
-				<header class="card-header" data-toggle="collapse" data-target="#{{ cinemaItem.code }}">
+				<header class="card-header" data-toggle="collapse" data-target="#{{ cinemaItem.ident }}">
 					{{ _self.cinemaListContent(cinemaItem) }}
 				</header>
 				
-				<article id="{{ cinemaItem.code }}" class="card-body collapse show">
+				<article id="{{ cinemaItem.ident }}" class="card-body collapse show">
 					{{ _self.movieList(screenings, cinemaItem) }}
 				</article>
 			</section>
@@ -112,7 +112,7 @@
 						
 						{% if screenings.hasTypes() %}
 							<td title="{{ "details.type.long"|trans }}">
-								{% if screening.type is not empty and screening.type.code != "2D" %}
+								{% if screening.type is not empty and screening.type.ident != "2D" %}
 									<span class="badge badge-type" title="Typ">{{ screening.type.name }}</span>
 								{% endif %}
 							</td>
@@ -177,7 +177,7 @@
 			</table>
 		</div>
 		
-		{% if app.request.pathInfo == '/' ~ cinema.code %}
+		{% if app.request.pathInfo == '/' ~ cinema.ident %}
 			<p>{{ "cinemas.programme.web.info"|trans }}: <a href="{{ cinema.programme }}" title="{{ "cinemas.programme.web.title"|trans }}">{{ cinema.programme }}</a></p>
 		{% endif %}
 	{% endif %}

@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\Entities\{Cinema, CinemaType, Language, Movie, Place, Screening, ScreeningType, Showtime};
+use App\Models\Entities\{Cinema, CinemaType, Language, Movie, Page, Place, Screening, ScreeningType, Showtime};
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Asset, Assets, Crud, Dashboard, MenuItem};
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -47,5 +47,8 @@ class DashboardController extends AbstractDashboardController {
 		yield MenuItem::linkToCrud("Screening", "ticket", Screening::class);
 		yield MenuItem::linkToCrud("Screening Type", "ticket-detailed", ScreeningType::class);
 		yield MenuItem::linkToCrud("Showtime", "calendar2-week", Showtime::class);
+		
+		yield MenuItem::section("Pages");
+		yield MenuItem::linkToCrud("Page", "file-earmark", Page::class);
 	}
 }

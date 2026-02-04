@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 use App\EasyAdmin\Translations\TranslationsField;
 use App\Models\Entities\Cinema;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, BooleanField, DateTimeField, FormField, IdField, IntegerField, SlugField, TelephoneField, TextEditorField, TextField, UrlField};
+use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, BooleanField, DateTimeField, Field, FormField, IdField, IntegerField, SlugField, TelephoneField, TextField, UrlField};
 use EmilePerron\TinymceBundle\Form\Type\TinymceType;
 
 class CinemaCrudController extends AbstractCrudController {
@@ -21,7 +21,9 @@ class CinemaCrudController extends AbstractCrudController {
 		yield FormField::addColumn(8);
 		yield IdField::new("id");
 		yield TextField::new("name");
-		yield SlugField::new("code")
+		yield SlugField::new("ident")
+			->setTargetFieldName("name");
+		yield SlugField::new("slug")
 			->setTargetFieldName("name");
 		yield AssociationField::new("type")
 			->setCrudController(CinemaTypeCrudController::class)
@@ -40,10 +42,10 @@ class CinemaCrudController extends AbstractCrudController {
 			->setHelp("Indicates if the cinema is visible on the site");
 		
 		yield FormField::addColumn(12);
-		yield TranslationsField::new("translations")
-			->addTranslatableField(TextEditorField::new("text")
-				->setFormType(TinymceType::class)
-				->setRequired(false));
+		yield TranslationsField::new('translations')
+			->addTranslatableField(Field::new('text')
+				->setRequired(false)
+				->setFormType(TinymceType::class));
 		
 		/**
 		 * Location tab

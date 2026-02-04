@@ -1,16 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ ("cinemas."~type ~ ".programme")|trans|capitalize }}{% endblock %}
+{% block title %}{{ ("cinemas."~type.ident ~ ".programme")|trans|capitalize }}{% endblock %}
+{% block logo %}<div class="logo">{% if type.icon %}{{ type.iconTag|raw }}{% else %}<span>🎥</span>{% endif %}</div>{% endblock %}
 
 {% block content %}
-	<h1 class="page-header">{{ block('title') }}</h1>
-	
 	{% from 'cinema/list.html.twig' import cinemaMovieList %}
 	{{ cinemaMovieList(cinemas) }}<br>
 	
 	<nav>
 		<ul class="pagination">
-			<li class="previous"><a href="{{ path('cinema_type_' ~ type) }}" class="page-link"><span aria-hidden="true">&larr;</span> {{ ("cinemas."~type ~ ".list")|trans }}</a></li>
+			<li class="previous"><a href="{{ path('cinema_type_' ~ type.ident, {'slug': type.translation.slug}) }}" class="page-link"><span aria-hidden="true">&larr;</span> {{ ("cinemas."~type.ident ~ ".list")|trans }}</a></li>
 		</ul>
 	</nav>
 {% endblock %}

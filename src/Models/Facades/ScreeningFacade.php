@@ -46,9 +46,9 @@ class ScreeningFacade extends DobineFacade {
 	
 	public function grabType(?string $type = null) {
 		if(empty($type)) {
-			return $this->repositoryType->findOneBy(["code" => "2D"]);
+			return $this->repositoryType->findOneBy(["ident" => "2D"]);
 		} else {
-			return $this->repositoryType->findOneBy(["code" => Strings::webalize($type)]);
+			return $this->repositoryType->findOneBy(["ident" => Strings::webalize($type)]);
 		}
 	}
 	

@@ -27,6 +27,7 @@ abstract class BaseController extends AbstractController {
 		// Add global variables for all templates rendered via this controller
 		$parameters['app_locale'] = $this->getLocale();
 		$parameters['meta'] = $this->metaService;
+//		$parameters['cinemasTypes'] = $this->getCinemasTypes();
 		
 		// You can also add parameters from your config/services.yaml like this:
 		// $parameters['app_name'] = $this->getParameter('app.name');

@@ -3,8 +3,6 @@
 {% block title %}{{ cinema.name }}{% endblock %}
 
 {% block content %}
-	<h1 class="page-header">{{ block('title') }}</h1>
-	
 	{{ cinema.translate(app.request.locale).text|raw }}
 	
 	{% from 'cinema/list.html.twig' import movieList %}

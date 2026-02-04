@@ -3,7 +3,8 @@
 namespace App\Models\Entities;
 
 use App\Models\Repositories\CinemaRepository;
-use Dobine\Properties\{Ids\Id, Knp\Translatable as KnpTranslatable, Sortable};
+use Dobine\Properties\{Ids\Id, Knp\Translatable as KnpTranslatable, Sluggable, Sortable};
+use Dobine\Properties\Ids\Identable;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
@@ -12,18 +13,12 @@ use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
  * Cinema
  */
 #[ORM\Entity(repositoryClass: CinemaRepository::class)]
-#[ORM\Table(name: "zk_cinemas", indexes: [new ORM\Index(columns: ["type"], name: "type")], uniqueConstraints: [
-	new ORM\UniqueConstraint(name: "id", columns: ["id"]),
-	new ORM\UniqueConstraint(name: "code", columns: ["code"])
-])]
+#[ORM\Table(name: "zk_cinemas", indexes: [new ORM\Index(columns: ["type"], name: "type")])]
 class Cinema implements TranslatableInterface {
-	use Id, KnpTranslatable, Sortable;
+	use Id, Identable, Sluggable, KnpTranslatable, Sortable;
 	
 	#[ORM\Column(name: "name", type: "string", length: 255, nullable: false)]
 	private string $name;
-	
-	#[ORM\Column(name: "code", type: "string", length: 20, nullable: false)]
-	private string $code;
 	
 	#[ORM\ManyToOne(targetEntity: "CinemaType", inversedBy: "cinemas")]
 	#[ORM\JoinColumn(name: "type", referencedColumnName: "id", nullable: true)]
@@ -83,10 +78,10 @@ class Cinema implements TranslatableInterface {
 	#[ORM\OneToMany(mappedBy: "cinema", targetEntity: "Place")]
 	private Collection $places;
 	
-	public function __construct(string $code = '') {
-		if(!empty($code)) {
-			$this->code = $code;
-			$this->name = $code;
+	public function __construct(string $ident = '') {
+		if(!empty($ident)) {
+			$this->ident = $ident;
+			$this->name = $ident;
 		}
 		
 		$this->screenings = new ArrayCollection();
@@ -103,15 +98,6 @@ class Cinema implements TranslatableInterface {
 	
 	public function setName(string $name): self {
 		$this->name = $name;
-		return $this;
-	}
-	
-	public function getCode(): string {
-		return $this->code;
-	}
-	
-	public function setCode(string $code): self {
-		$this->code = $code;
 		return $this;
 	}
 	

@@ -3,6 +3,7 @@
 namespace App\Models\Entities;
 
 use App\Models\Repositories\UserRepository;
+use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -13,10 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface {
-	#[ORM\Id]
-	#[ORM\GeneratedValue]
-	#[ORM\Column]
-	private ?int $id = null;
+	use Id;
 	
 	#[ORM\Column(length: 180)]
 	private ?string $email = null;
@@ -35,10 +33,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
 	
 	#[ORM\Column]
 	private bool $isVerified = false;
-	
-	public function getId(): ?int {
-		return $this->id;
-	}
 	
 	public function getEmail(): ?string {
 		return $this->email;

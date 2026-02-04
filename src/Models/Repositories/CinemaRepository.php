@@ -20,7 +20,7 @@ class CinemaRepository extends ServiceEntityRepository {
 	
 	public function visible(): QueryBuilder {
 		return $this->active()
-			->orderBy("c.code");
+			->orderBy("c.ident");
 	}
 	
 	public function parsable(): QueryBuilder {
@@ -31,6 +31,6 @@ class CinemaRepository extends ServiceEntityRepository {
 			->andWhere("c.parsable = 1")
 			->andWhere("c.parsed is null or c.parsed < :parseDate")
 			->setParameter("parseDate", $parseDate)
-			->orderBy("c.code");
+			->orderBy("c.ident");
 	}
 }

@@ -3,11 +3,7 @@ namespace App\Services;
 
 use App\Logging\FileLoggerFactory;
 use App\Models\Entities\Cinema;
-use App\Models\Facades\{LanguageFacade};
-use App\Models\Facades\CinemaFacade;
-use App\Models\Facades\MovieFacade;
-use App\Models\Facades\PlaceFacade;
-use App\Models\Facades\ScreeningFacade;
+use App\Models\Facades\{LanguageFacade, CinemaFacade, MovieFacade, PlaceFacade, ScreeningFacade};
 use App\Parsers\Parser;
 use Monolog\Attribute\WithMonologChannel;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -70,25 +66,23 @@ class ParserService {
 	
 	public function initParser(Cinema $cinema): void {
 //		$cinemaLogger = $this->logger->pushHandler(new StreamHandler(__DIR__.'/'.$cinema->getCode().".log", Level::Debug, false));
-		
-		$cinemaLogger = $this->logger->filename($cinema->getCode());
-		
+		$cinemaLogger = $this->logger->filename($cinema->getIdent());
 		
 		try {
-			$parserClass = "\App\Parsers\\".ucfirst($cinema->getCode());
+			$parserClass = "\App\Parsers\\".ucfirst($cinema->getIdent());
 			if(class_exists($parserClass)) {
 				$this->parser = new $parserClass($this, $cinema);
 				$this->screeningFacade->removeScreenings($cinema);
 				$this->parser->parse();
 			} else {
-				$cinemaLogger->error(sprintf("Parser class %s does not exist for cinema %s", $parserClass, $cinema->getCode()));
+				$cinemaLogger->error(sprintf("Parser class %s does not exist for cinema %s", $parserClass, $cinema->getIdent()));
 			}
 		} catch(\Error $error) {
 			dump($error);
-			$cinemaLogger->error(sprintf("Error initializing parser for cinema %s: %s", $cinema->getCode(), $error->getMessage()), ['error' => $error]);
+			$cinemaLogger->error(sprintf("Error initializing parser for cinema %s: %s", $cinema->getIdent(), $error->getMessage()), ['error' => $error]);
 		} catch(\Exception $exception) {
 			dump($exception);
-			$cinemaLogger->error(sprintf("Error initializing parser for cinema %s: %s", $cinema->getCode(), $exception->getMessage()), ['exception' => $exception]);
+			$cinemaLogger->error(sprintf("Error initializing parser for cinema %s: %s", $cinema->getIdent(), $exception->getMessage()), ['exception' => $exception]);
 		}
 	}
 }

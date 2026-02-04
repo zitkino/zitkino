@@ -47,12 +47,22 @@
 		],
 		"translations": [
 			"php bin/console translation:extract --force --format=yaml --as-tree=4 --sort=asc cs && php bin/console translation:extract --force --format=yaml --as-tree=4 --sort=asc en"
+		],
+		"routes": [
+			"php bin/console debug:router"
 		]
 	},
 	"repositories": [
 		{
 			"type": "path",
 			"url": "./dobine",
+			"options": {
+				"symlink": true
+			}
+		},
+		{
+			"type": "path",
+			"url": "./booty",
 			"options": {
 				"symlink": true
 			}
@@ -75,7 +85,7 @@
 		"easycorp/easyadmin-bundle": "^4.25.1",
 		"emileperron/tinymce-bundle": "^3.3",
 		"guzzlehttp/guzzle": "^7.10",
-		"hermajan/booty": "^0.4.0",
+		"hermajan/booty": "dev-master",
 		"hermajan/dobine": "dev-master",
 		"hermajan/facolors": "^1.0",
 		"johngrogg/ics-parser": "^3.4.1",

@@ -34,24 +34,54 @@
 </head>
 
 <body class="{% if app.request.attributes.get('_route') %}{{ app.request.attributes.get('_controller')|lower|replace({'\\\\': '-', '::': '-'}) }}{% endif %}">
-<header id="header" class="navbar navbar-dark navbar-expand-md">
+<nav id="navbar" class="navbar navbar-dark navbar-expand-md">
 	<div class="container-fluid">
-		{% include 'header.html.twig' %}
+		{% include 'navbar.html.twig' %}
 	</div>
-</header>
+</nav>
 
 <main id="main">
 	<div class="container-fluid">
-		<div class="row">
-			<article class="col-12" id="content">
+		<header id="header" class="row">
+			{% if block('header') is defined %}
+				{{ block('header') }}
+			{% else %}
+				{% if block('logo') is defined %}
+					<div class="col-12 {% if block('title') is defined %}col-md-4 col-xl-3 order-sm-2{% endif %} block-logo">
+						{{ block('logo') }}
+					</div>
+				{% endif %}
+				<div class="col-12 {% if block('logo') is defined %}col-md-8 col-xl-9 order-sm-1{% endif %} block-title">
+					<section class="jumbotron jumbotron-header">
+						<hgroup class="page-header">
+							{% if block('pretitle') is defined %}
+								<p class="pretitle">{{ block('pretitle') }}</p>
+							{% endif %}
+							{% if block('title') is defined %}
+								<h1 class="title">{{ block('title') }}</h1>
+							{% endif %}
+							{% if block('subtitle') is defined %}
+								<p class="subtitle">{{ block('subtitle') }}</p>
+							{% endif %}
+						</hgroup>
+						{% if block('perex') is defined %}
+							<div class="lead" id="perex">{{ block('perex') }}</div>
+						{% endif %}
+					</section>
+				</div>
+			{% endif %}
+		</header>
+		
+		<article class="row">
+			<div class="col-12" id="content">
 				{% for label, messages in app.flashes %}
 					{% for message in messages %}
 						<div class="alert alert-{{ label }}" role="alert">{{ message }}</div>
 					{% endfor %}
 				{% endfor %}
 				{% block content %}{% endblock %}
-			</article>
-		</div>
+			</div>
+		</article>
 	</div>
 </main>
 

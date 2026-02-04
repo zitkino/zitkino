@@ -15,7 +15,7 @@ class TranslationsField implements FieldInterface {
 		return new self()->setProperty($propertyName)
 			->setLabel($label)
 			->onlyOnForms()
-			->setRequired(true)
+			->setRequired(false)
 			->addFormTheme('admin/crud/form/field/translations.html.twig')
 			->addCssFiles('build/translations-field.css')
 			->setFormType(TranslationsType::class)

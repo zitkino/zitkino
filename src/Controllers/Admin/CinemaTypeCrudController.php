@@ -16,7 +16,7 @@ class CinemaTypeCrudController extends AbstractCrudController {
 	public function configureFields(string $pageName): iterable {
 		yield IdField::new("id")->hideWhenCreating();
 		yield TextField::new("name");
-		yield SlugField::new("code")
+		yield SlugField::new("ident")
 			->setTargetFieldName("name");
 		yield TextField::new("icon");
 		yield IntegerField::new("order");

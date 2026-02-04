@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Attributes\DatabaseRoute;
 use App\Models\Facades\CinemaFacade;
+use App\Models\Facades\PageFacade;
 use App\Services\MetaService;
 use Symfony\Component\HttpFoundation\{RequestStack, Response};
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,9 +17,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class HomeController extends BaseController {
 	private CinemaFacade $cinemaFacade;
 	
-	public function __construct(CinemaFacade $cinemaFacade, TranslatorInterface $translator, RequestStack $requestStack, MetaService $metaService) {
+	private PageFacade $pageFacade;
+	
+	public function __construct(CinemaFacade $cinemaFacade, TranslatorInterface $translator, RequestStack $requestStack, MetaService $metaService, PageFacade $pageFacade) {
 		parent::__construct($translator, $requestStack, $metaService);
 		$this->cinemaFacade = $cinemaFacade;
+		$this->pageFacade = $pageFacade;
 	}
 	
 	#[Route(path: '/{_locale}', name: 'index', defaults: ['_locale' => 'cs'])]
@@ -37,9 +42,10 @@ class HomeController extends BaseController {
 		return $this->render('home/contact.html.twig');
 	}
 	
-	#[Route(path: ["cs" => "/info", 'en' => "/about"], name: "about")]
+	#[DatabaseRoute(path: null, name: "about_", entityClass: "App\Models\Entities\Page")]
 //	#[Route(path: ["cs" => "/informace", 'en' => "/information"], name: "about_alt", alias: ["home_about"])]
 	public function about(): Response {
-		return $this->render('home/about.html.twig');
+		$page = $this->pageFacade->grabByIdent("info");
+		return $this->render('home/about.html.twig', ['page' => $page]);
 	}
 }
