@@ -2,12 +2,11 @@
 
 namespace App\Models\Entities;
 
-use App\Models\Repositories\PlaceRepository;
 use Dobine\Properties\Ids\Id;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PlaceRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: "zk_places")]
 class Place {
 	use Id;

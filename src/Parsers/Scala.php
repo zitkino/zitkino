@@ -2,10 +2,6 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Place};
-use App\Models\Entities\Movie;
-use App\Models\Entities\Screening;
-use App\Models\Entities\ScreeningType;
 use Monolog\Attribute\WithMonologChannel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
@@ -17,9 +13,8 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 class Scala extends Parser {
 	protected function downloadData(): string {
 		try {
-			$parameters = ["cinema" => ["5"], "hall" => [["4"], ["16"]], "_locale" => "cs"];
-			$response = $this->parserService->getHttpClient()
-				->request(Request::METHOD_POST, $this->getUrl(), ["body" => $parameters]);
+			$parameters = ["cinema" => ["5"], "hall" => [["4"], ["16"], ["31"], ["44"]], "_locale" => "cs"];
+			$response = $this->parserService->httpClient->request(Request::METHOD_POST, $this->getUrl(), ["body" => $parameters]);
 			$body = $response->getContent();
 		} catch(ExceptionInterface $e) {
 			$e = new ParserException($e->getMessage());
@@ -43,7 +38,7 @@ class Scala extends Parser {
 			$dateString = $dateQuery->item(0)->nodeValue;
 			switch($dateString) {
 				case "Dnes":
-					$datetime = new \DateTime();
+					$datetime = new \DateTime("today");
 					break;
 				case "Zítra":
 					$datetime = new \DateTime("tomorrow");
@@ -60,9 +55,12 @@ class Scala extends Parser {
 				$hourQuery = $xpath->query(".//div[@class='program__hour']", $event);
 				$hourString = $hourQuery->item(0)->nodeValue;
 				$hour = explode(":", $hourString);
-				$datetime->setTime((int)$hour[0], (int)$hour[1]);
-				
-				$datetimes = [$datetime];
+				if($datetime) {
+					$datetime->setTime((int)$hour[0], (int)$hour[1]);
+					$datetimes = [$datetime];
+				} else {
+					$datetimes = [];
+				}
 				
 				$placeQuery = $xpath->query(".//div[contains(@class, 'program__place--desktop')]", $event);
 				$placeValue = $placeQuery->item(0)->nodeValue;
@@ -73,37 +71,17 @@ class Scala extends Parser {
 					continue;
 				}
 				
-				$place = $this->parserService->placeFacade->grabByName($placeName);
-				if(!isset($place)) {
-					$place = new Place($placeName);
-					$place->setCinema($this->cinema);
-				}
-				$this->parserService->placeFacade->save($place);
-				
 				$nameQuery = $xpath->query(".//div[contains(@class, 'program__movie-name')]", $event);
 				$name = $nameQuery->item(0)->nodeValue;
 				
 				$scalaType = "classic";
-				$screeningType = null;
+				$type = null;
 				$tags = $xpath->query(".//div[@class='program__tags']//span[@class='program__tag']", $event);
 				foreach($tags as $tag) {
 					$type = trim($tag->nodeValue);
 					
 					if(str_contains($type, "Scalní letňák")) {
 						$scalaType = "summer";
-						continue;
-					}
-					
-					switch($type) {
-						case "Scalní letňák":
-							break;
-						default:
-							$screeningType = $this->parserService->screeningFacade->grabType($type);
-							if(!isset($screeningType)) {
-								$screeningType = new ScreeningType($type);
-								$this->parserService->screeningFacade->save($screeningType);
-							}
-							break;
 					}
 				}
 				
@@ -137,20 +115,10 @@ class Scala extends Parser {
 					$link = null;
 				}
 				
-				$movie = $this->parserService->movieFacade->grabByName($name);
-				if(!isset($movie)) {
-					$movie = new Movie($name);
-					$this->parserService->movieFacade->save($movie);
-				}
-				
-				$screening = new Screening($movie, $this->cinema);
-				$screening->setPlace($place)
-					->setType($screeningType)
-					->setPrice($price)
-					->setLink($link)
-					->setShowtimes($datetimes);
-				
-				$this->parserService->screeningFacade->save($screening);
+				$movie = $this->parserService->builderService->movie(name: $name);
+				$place = $this->parserService->builderService->place(name: $placeName, cinema: $this->cinema);
+				$screeningType = $this->parserService->builderService->screeningType(name: $type);
+				$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, place: $place, type: $screeningType, price: $price, link: $link, showtimes: $datetimes);
 				$this->cinema->addScreening($screening);
 			}
 			

@@ -3,7 +3,7 @@
 namespace App\Models\Entities;
 
 use Dobine\Entities\DobineEntity;
-use Dobine\Properties\{Dates\Dateable, Iconable, Ids\Id, Ids\Identable, Knp\Translatable as KnpTranslatable, Sortable, Treeable};
+use Dobine\Properties\{Dates\Dateable, Iconable, Ids\Id, Ids\Identable, Knp\Translatable as KnpTranslatable, Sortable};
 use Doctrine\Common\Collections\{ArrayCollection};
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
@@ -20,7 +20,7 @@ class Page extends DobineEntity implements TranslatableInterface {
 	use Id, Identable, Iconable, Sortable, Dateable, KnpTranslatable;
 	
 	public function __construct() {
-		$this->currentLocale = 'en';
+		$this->currentLocale = "en";
 		$this->created = new \DateTime();
 		$this->translations = new ArrayCollection();
 	}

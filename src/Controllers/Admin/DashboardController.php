@@ -4,7 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\Entities\{Cinema, CinemaType, Language, Movie, Page, Place, Screening, ScreeningType, Showtime};
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\{Asset, Assets, Crud, Dashboard, MenuItem};
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Assets, Crud, Dashboard, MenuItem};
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\IsGranted;

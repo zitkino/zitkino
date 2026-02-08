@@ -2,9 +2,6 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Place};
-use App\Models\Entities\Movie;
-use App\Models\Entities\Screening;
 
 /**
  * Art parser.
@@ -101,28 +98,10 @@ class Art extends Parser {
 				$lengthString = $lengthQuery->item(0)->nodeValue ?? null;
 				$length = $lengthString ? (int)str_replace("min", "", $lengthString) : null;
 				
-				$movie = $this->parserService->movieFacade->grabByName($name);
-				if(!isset($movie)) {
-					$movie = new Movie($name);
-					$movie->setLength($length);
-					$this->parserService->movieFacade->save($movie);
-				}
+				$movie = $this->parserService->builderService->movie(name: $name, length: $length);
+				$place = $this->parserService->builderService->place(name: $placeName, cinema: $this->cinema, link: $placeLink);
+				$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, place: $place, dubbing: $dubbing, subtitles: $subtitles, link: $link, showtimes: $datetimes);
 				
-				$place = $this->parserService->placeFacade->grabByName($placeName);
-				if(!isset($place)) {
-					$place = new Place($placeName);
-					$place->setCinema($this->cinema);
-				}
-				$place->setLink($placeLink);
-				$this->parserService->placeFacade->save($place);
-				
-				$screening = new Screening($movie, $this->cinema);
-				$screening->setPlace($place)
-					->setLanguages($dubbing, $subtitles)
-					->setLink($link)
-					->setShowtimes($datetimes);
-				
-				$this->parserService->screeningFacade->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}

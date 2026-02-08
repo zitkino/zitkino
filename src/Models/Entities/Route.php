@@ -2,11 +2,10 @@
 
 namespace App\Models\Entities;
 
-use App\Models\Repositories\RouteRepository;
 use Dobine\Properties\{Dates\Dateable, Ids\Id, Localable, Sluggable};
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: RouteRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: "zk_routes")]
 #[ORM\HasLifecycleCallbacks]
 class Route {

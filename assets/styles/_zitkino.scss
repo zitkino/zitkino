@@ -1,10 +1,11 @@
 .navbar-brand {
-	padding: 15px;	
+	padding: 15px;
 }
 
 .github-link {
 	padding: 10px !important;
 }
+
 .octicon {
 	color: inherit !important;
 }
@@ -31,25 +32,33 @@
 	display: none;
 	min-height: 400px;
 }
+
 #cinemaMapButton {
-	background-color: #b10;
+	background-color: #BB1100;
+}
+
+.badge-format {
+	background-color: #3D3D3D;
+	color: white;
 }
 
 .badge-type {
-	background-color: #3d3d3d;
+	background-color: #113EEE;
 	color: white;
 }
+
 .badge-language {
-	background-color: #01a;
+	background-color: #0011AA;
 	color: white;
 }
+
 .badge-subtitles {
-	background-color: #2162a6;
+	background-color: #2162A6;
 	color: white;
 }
 
 a {
-	color: #337ab7;
+	color: #337AB7;
 }
 
 .card {

@@ -38,24 +38,24 @@ class TranslationSubscriber {
 					$reflectionClass = new \ReflectionClass($translation);
 					foreach($reflectionClass->getProperties() as $property) {
 						$name = $property->getName();
-						if(in_array($name, ['id', 'translatable', 'locale'], true)) {
+						if(in_array($name, ["id", "translatable", "locale"], true)) {
 							continue;
 						}
 						
 						// Check if the property is a string
 						$type = $property->getType();
-						if($type instanceof \ReflectionNamedType && $type->getName() !== 'string') {
+						if($type instanceof \ReflectionNamedType && $type->getName() !== "string") {
 							continue;
 						}
 						
 						// Try to set value via setter or property if accessible
-						$setter = 'set'.ucfirst($name);
+						$setter = "set".ucfirst($name);
 						if($reflectionClass->hasMethod($setter)) {
-							$translation->$setter('-');
+							$translation->$setter("-");
 							$created = true;
 							break;
 						} else if($property->isPublic()) {
-							$translation->$name = '-';
+							$translation->$name = "-";
 							$created = true;
 							break;
 						}

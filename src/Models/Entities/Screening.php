@@ -2,15 +2,15 @@
 
 namespace App\Models\Entities;
 
-use App\Models\Repositories\ScreeningRepository;
 use Dobine\Properties\Ids\Id;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ScreeningRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: "zk_screenings", indexes: [
 	new ORM\Index(columns: ["movie"], name: "movie"),
 	new ORM\Index(columns: ["cinema"], name: "cinema"),
+	new ORM\Index(columns: ["format"], name: "format"),
 	new ORM\Index(columns: ["type"], name: "type"),
 	new ORM\Index(columns: ["dubbing"], name: "dubbing"),
 	new ORM\Index(columns: ["subtitles"], name: "subtitles")
@@ -26,9 +26,13 @@ class Screening {
 	#[ORM\JoinColumn(name: "cinema", referencedColumnName: "id", nullable: false)]
 	private Cinema $cinema;
 	
+	#[ORM\ManyToOne(targetEntity: ScreeningFormat::class)]
+	#[ORM\JoinColumn(name: "format", referencedColumnName: "id", nullable: true)]
+	private ?ScreeningFormat $format = null;
+	
 	#[ORM\ManyToOne(targetEntity: ScreeningType::class)]
 	#[ORM\JoinColumn(name: "type", referencedColumnName: "id", nullable: true)]
-	private ?ScreeningType $type;
+	private ?ScreeningType $type = null;
 	
 	#[ORM\ManyToOne(targetEntity: Place::class, inversedBy: "screenings")]
 	#[ORM\JoinColumn(name: "place", referencedColumnName: "id", nullable: true)]
@@ -49,19 +53,14 @@ class Screening {
 	#[ORM\OneToMany(mappedBy: "screening", targetEntity: Showtime::class, cascade: ["persist", "remove"])]
 	private Collection $showtimes;
 	
-	public function __construct(Movie $movie, Cinema $cinema) {
-		$this->movie = $movie;
+	public function __construct(Cinema $cinema, Movie $movie) {
 		$this->cinema = $cinema;
+		$this->movie = $movie;
 		$this->showtimes = new ArrayCollection();
 	}
 	
 	public function __toString() {
-		return $this->getMovie()
-				->getId()."-".$this->getCinema()."-".$this->getType()."-".$this->getDubbing()."-".$this->getSubtitles();
-	}
-	
-	public function getId(): ?int {
-		return $this->id;
+		return $this->getCinema()."-".$this->getMovie()->getId()."-".$this->getType()."-".$this->getDubbing()."-".$this->getSubtitles();
 	}
 	
 	public function getMovie(): ?Movie {
@@ -135,6 +134,15 @@ class Screening {
 		return $this;
 	}
 	
+	public function getFormat(): ?ScreeningFormat {
+		return $this->format;
+	}
+	
+	public function setFormat(?ScreeningFormat $format): self {
+		$this->format = $format;
+		return $this;
+	}
+	
 	public function getType(): ?ScreeningType {
 		return $this->type;
 	}
@@ -173,29 +181,19 @@ class Screening {
 	}
 	
 	public function removeShowtime(Showtime $showtime): self {
-		if($this->showtimes->removeElement($showtime)) {
-			// set the owning side to null (unless already changed)
-			if($showtime->getScreening() === $this) {
-				$showtime->setScreening(null);
-			}
+		if($this->showtimes->contains($showtime)) {
+			$this->showtimes->removeElement($showtime);
 		}
 		
 		return $this;
 	}
 	
-	public function setShowtimes(array $datetimes, bool $actual = true): void {
+	public function setShowtimes(array $datetimes): self {
 		foreach($datetimes as $datetime) {
 			$showtime = new Showtime($this, $datetime);
-			
-			if($actual === true) {
-				if($showtime->isActual()) {
-					$this->addShowtime($showtime);
-				}
-			} else {
-				if($actual === false) {
-					$this->addShowtime($showtime);
-				}
-			}
+			$this->addShowtime($showtime);
 		}
+		
+		return $this;
 	}
 }

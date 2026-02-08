@@ -42,8 +42,7 @@ abstract class Parser {
 	 */
 	protected function downloadData(): string {
 		try {
-			$response = $this->parserService->getHttpClient()
-				->request(Request::METHOD_GET, $this->url);
+			$response = $this->parserService->httpClient->request(Request::METHOD_GET, $this->url);
 			$body = $response->getContent();
 		} catch(ExceptionInterface $e) {
 			$e = new ParserException($e->getMessage());
@@ -64,9 +63,13 @@ abstract class Parser {
 		$document = new \DOMDocument("1.0", "UTF-8");
 		$document->formatOutput = true;
 		$document->preserveWhiteSpace = true;
-
-//		$html = htmlspecialchars_decode(iconv("UTF-8", "ISO-8859-1", htmlentities($data, ENT_COMPAT, "UTF-8")), ENT_QUOTES);
-		$document->loadHTML($data);
+		
+		// Keep data as UTF-8; just strip invalid sequences if any (should be no-op for valid UTF-8)
+		$utf8 = mb_convert_encoding($data, "UTF-8", "UTF-8");
+		
+		// Force libxml/DOMDocument to treat the HTML as UTF-8 (prevents mojibake)
+		$html = '<?xml encoding="UTF-8">'.$utf8;
+		$document->loadHTML($html);
 		
 		return new \DOMXPath($document);
 	}

@@ -2,24 +2,24 @@
 
 namespace App\Models\Facades;
 
-use App\Models\Entities\{Cinema, Movie, Place, Screening, ScreeningType};
-use App\Models\Repositories\{ScreeningRepository};
-use App\Models\Repositories\ScreeningTypeRepository;
+use App\Models\Entities\{Cinema, Movie, Place, Screening, ScreeningFormat, ScreeningType};
 use Dobine\Facades\DobineFacade;
-use Doctrine\DBAL\{ConnectionException, Exception as DBALException};
-use Doctrine\ORM\{EntityManagerInterface, EntityRepository, Mapping\ClassMetadata};
-use Nette\Utils\Strings;
+use Dobine\Utils\Strings;
+use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 
 class ScreeningFacade extends DobineFacade {
 	protected EntityManagerInterface $entityManager;
 	
-	protected ScreeningRepository|EntityRepository $repository;
+	protected EntityRepository $repository;
 	
-	protected ScreeningTypeRepository|EntityRepository $repositoryType;
+	protected EntityRepository $repositoryFormat;
+	
+	protected EntityRepository $repositoryType;
 	
 	public function __construct(EntityManagerInterface $entityManager) {
 		$this->entityManager = $entityManager;
 		$this->repository = $entityManager->getRepository(Screening::class);
+		$this->repositoryFormat = $entityManager->getRepository(ScreeningFormat::class);
 		$this->repositoryType = $entityManager->getRepository(ScreeningType::class);
 	}
 	
@@ -44,12 +44,18 @@ class ScreeningFacade extends DobineFacade {
 		return $this->repository->findBy(["place" => $place]);
 	}
 	
-	public function grabType(?string $type = null) {
-		if(empty($type)) {
-			return $this->repositoryType->findOneBy(["ident" => "2D"]);
-		} else {
-			return $this->repositoryType->findOneBy(["ident" => Strings::webalize($type)]);
+	public function grabFormat(?string $format = null): ?ScreeningFormat {
+		if(empty($format)) {
+			return null;
 		}
+		return $this->repositoryFormat->findOneBy(["ident" => Strings::identify($format)]);
+	}
+	
+	public function grabType(?string $type = null): ?ScreeningType {
+		if(empty($type)) {
+			return null;
+		}
+		return $this->repositoryType->findOneBy(["ident" => Strings::identify($type)]);
 	}
 	
 	public function removeScreenings(Cinema $cinema): int {
@@ -59,34 +65,5 @@ class ScreeningFacade extends DobineFacade {
 			->setParameter("cinema", $cinema)
 			->getQuery()
 			->getResult();
-	}
-	
-	/**
-	 * Cleanup any needed table abroad TRUNCATE SQL function
-	 * @throws DBALException
-	 */
-	public function truncateTable(string $className): bool {
-		/** @var ClassMetadata $cmd */
-		$cmd = $this->entityManager->getClassMetadata($className);
-		$connection = $this->entityManager->getConnection();
-		$connection->beginTransaction();
-		
-		try {
-			$connection->query("SET FOREIGN_KEY_CHECKS=0");
-			$connection->query("TRUNCATE TABLE ".$cmd->getTableName());
-			$connection->query("SET FOREIGN_KEY_CHECKS=1");
-			$connection->commit();
-			$this->entityManager->flush();
-		} catch(\Exception $e) {
-			try {
-				fwrite(STDERR, print_r("Can't truncate table ".$cmd->getTableName().". Reason: ".$e->getMessage(), true));
-				$connection->rollback();
-				return false;
-			} catch(ConnectionException $connectionException) {
-				fwrite(STDERR, print_r("Can't rollback truncating table ".$cmd->getTableName().". Reason: ".$connectionException->getMessage(), true));
-				return false;
-			}
-		}
-		return true;
 	}
 }

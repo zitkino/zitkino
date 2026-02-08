@@ -19,6 +19,7 @@ class CinemaTypeCrudController extends AbstractCrudController {
 		yield SlugField::new("ident")
 			->setTargetFieldName("name");
 		yield TextField::new("icon");
+		
 		yield IntegerField::new("order");
 		yield BooleanField::new("visible")
 			->setHelp("Indicates if it is shown on the site");

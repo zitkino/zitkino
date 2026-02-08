@@ -2,8 +2,6 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Movie;
 
 /**
  * Špilberk parser.
@@ -75,31 +73,12 @@ class Spilberk extends Parser {
 			$datetime->setTime(intval($time[0]), intval($time[1]));
 			$datetimes = [$datetime];
 			
-			
 			$priceQuery = $xpath->query(".//p[@class='cena']", $event);
 			$priceString = $priceQuery->item(0)->nodeValue;
 			$price = (int)str_replace(["na místě", ",- Kč"], "", $priceString);
 			
-			$movie = $this->parserService->movieFacade->grabByName($name);
-			if(!isset($movie)) {
-				$movie = new Movie($name);
-				$movie->setLength($length)
-					->setCsfd($csfd);
-				$this->parserService->movieFacade->save($movie);
-			}
-			
-			if(!empty($csfd) and empty($movie->getCsfd())) {
-				$movie->setCsfd($csfd);
-				$this->parserService->movieFacade->save($movie);
-			}
-			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages($dubbing, $subtitles)
-				->setPrice($price)
-				->setLink($link)
-				->setShowtimes($datetimes);
-			
-			$this->parserService->screeningFacade->save($screening);
+			$movie = $this->parserService->builderService->movie(name: $name, length: $length, csfd: $csfd);
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, dubbing: $dubbing, subtitles: $subtitles, price: $price, link: $link, showtimes: $datetimes);
 			$this->cinema->addScreening($screening);
 		}
 		

@@ -13,8 +13,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Error controller.
  */
 class ErrorController extends BaseController {
-	/** @var LoggerInterface */
-	private $logger;
+	private LoggerInterface $logger;
 	
 	public function __construct(LoggerInterface $logger, TranslatorInterface $translator, RequestStack $requestStack, MetaService $metaService) {
 		parent::__construct($translator, $requestStack, $metaService);
@@ -27,11 +26,11 @@ class ErrorController extends BaseController {
 	 */
 	public function show(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null): Response {
 		// Log the error
-		$this->logger->error(sprintf('Error %s: %s in %s line %s', $exception->getStatusCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+		$this->logger->error(sprintf("Error %s: %s in %s line %s", $exception->getStatusCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
 		
 		// For AJAX requests, return a JSON response
 		if($request->isXmlHttpRequest()) {
-			return $this->json(['error' => true], $exception->getStatusCode());
+			return $this->json(["error" => true], $exception->getStatusCode());
 		}
 		
 		// Determine the template based on the status code
@@ -39,10 +38,10 @@ class ErrorController extends BaseController {
 		
 		// Render the template
 		return $this->render($template, [
-			'status_code' => $exception->getStatusCode(),
-			'status_text' => Response::$statusTexts[$exception->getStatusCode()] ?? 'Unknown Error',
-			'exception' => $exception,
-		], new Response('', $exception->getStatusCode()));
+			"status_code" => $exception->getStatusCode(),
+			"status_text" => Response::$statusTexts[$exception->getStatusCode()] ?? "Unknown Error",
+			"exception" => $exception,
+		], new Response("", $exception->getStatusCode()));
 	}
 	
 	/**
@@ -50,13 +49,13 @@ class ErrorController extends BaseController {
 	 */
 	private function getErrorTemplate(int $statusCode): string {
 		if(in_array($statusCode, [403, 404, 405, 410, 500])) {
-			return sprintf('error/%d.html.twig', $statusCode);
+			return sprintf("error/%d.html.twig", $statusCode);
 		}
 		
 		if($statusCode >= 400 && $statusCode < 500) {
-			return 'error/4xx.html.twig';
+			return "error/4xx.html.twig";
 		}
 		
-		return 'error/500.html.twig';
+		return "error/500.html.twig";
 	}
 }

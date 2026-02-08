@@ -32,10 +32,9 @@ class CinemaFacade extends DobineFacade {
 		return $this->repository->findOneBy(["slug" => $slug]);
 	}
 	
-	public function grabAll(): array {
+	public function grabVisible(): array {
 		return $this->repository->visible()
-			->getQuery()
-			->getResult();
+			->getQuery()->getResult();
 	}
 	
 	public function grabCurrent(): array {
@@ -76,7 +75,7 @@ class CinemaFacade extends DobineFacade {
 	
 	public function grabByType(string $type): array {
 		return match ($type) {
-			"all" => $this->grabAll(),
+			"all" => $this->grabVisible(),
 			"current" => $this->grabCurrent(),
 			default => $this->repository->visible()
 				->join("c.type", "ct")

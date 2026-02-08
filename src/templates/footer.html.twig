@@ -1,6 +1,53 @@
 {% block footer %}
-	<section class="row">
-		<div class="col-12">
+	<section class="row py-4">
+		<div class="col-12 col-md-3">
+			<a href="{{ path('home_index') }}" class="navbar-brand d-flex align-items-center">
+				<img src="{{ asset('favicon.ico') }}" class="logo me-2" alt="logo">
+				<span class="h5 mb-0">{{ meta.get("name") }}</span>
+			</a>
+		</div>
+		<div class="col-12 col-md-3">
+			<ul class="nav nav-pills flex-column">
+				<li class="nav-item">
+					<a href="{{ path('home_index') }}" class="nav-link"><i class="bi bi-info-circle me-1"></i> {{ "info.title"|trans }}</a>
+				</li>
+				<li class="nav-item">
+					<a href="{{ path('cinema_default') }}" class="nav-link"><i class="bi bi-camera-reels me-1"></i> {{ "cinemas.list.title"|trans }}</a>
+				</li>
+				<li class="nav-item">
+					<a href="{{ path('home_map') }}" class="nav-link"><i class="bi bi-map me-1"></i> {{ "map.title"|trans }}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-12 col-md-3">
+			<ul class="nav nav-pills flex-column">
+				<li class="nav-item">
+					<a href="{{ path('cinema_programme_classic') }}" class="nav-link"><i class="bi bi-building me-1"></i> {{ "cinemas.classic.title"|trans }}</a>
+				</li>
+				<li class="nav-item">
+					<a href="{{ path('cinema_programme_multiplex') }}" class="nav-link"><i class="bi bi-buildings me-1"></i> {{ "cinemas.multiplex.title"|trans }}</a>
+				</li>
+				<li class="nav-item">
+					<a href="{{ path('cinema_programme_summer') }}" class="nav-link"><i class="bi bi-sun me-1"></i> {{ "cinemas.summer.title"|trans }}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-12 col-md-3">
+			<ul class="nav nav-pills flex-column">
+				<li class="nav-item">
+					<a href="https://www.facebook.com/zitkino.cz" title="{{ "facebook.view"|trans }}" class="nav-link icon-link"><i class="bi bi-facebook fs-4"></i> Facebook</a>
+				</li>
+				<li class="nav-item">
+					<a href="https://github.com/zitkino/zitkino" title="{{ "github.view"|trans }}" class="nav-link icon-link"><i class="bi bi-github fs-4"></i> GitHub</a>
+				</li>
+			</ul>
+		</div>
+	</section>
+	<section class="row border-top pt-3 mt-2">
+		<div class="col-12 text-center text-md-start">
+			<p class="small">
+				{{ "footer.copyright"|trans({"{year}": "now"|date("Y"), "{name}": meta.get("name")}) }}
+			</p>
 		</div>
 	</section>
 {% endblock %}

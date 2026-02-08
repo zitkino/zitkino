@@ -3,8 +3,7 @@
 namespace App\Models\Entities;
 
 use App\Models\Repositories\CinemaRepository;
-use Dobine\Properties\{Ids\Id, Knp\Translatable as KnpTranslatable, Sluggable, Sortable};
-use Dobine\Properties\Ids\Identable;
+use Dobine\Properties\{Ids\Id, Ids\Identable, Knp\Translatable as KnpTranslatable, Sluggable, Sortable};
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;

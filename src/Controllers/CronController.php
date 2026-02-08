@@ -26,7 +26,7 @@ class CronController extends BaseController {
 	
 	#[Route("/", name: "index")]
 	public function index(): Response {
-		return $this->redirectToRoute('homepage');
+		return $this->redirectToRoute("homepage");
 	}
 	
 	#[Route("/parse", name: "parse")]
@@ -36,10 +36,8 @@ class CronController extends BaseController {
 		/** @var Cinema $cinema */
 		foreach($cinemas as $cinema) {
 			$this->parserService->initParser($cinema);
-			
-			$parser = $this->parserService->parser;
 		}
 		
-		return new Response('Parsing completed');
+		return new Response("Parsing completed");
 	}
 }

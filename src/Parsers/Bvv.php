@@ -2,10 +2,7 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Cinema;
-use App\Models\Entities\Movie;
-use App\Models\Entities\Showtime;
+use App\Models\Entities\{Cinema, Movie, Screening, Showtime};
 use App\Services\ParserService;
 
 /**
@@ -75,11 +72,8 @@ class Bvv extends Parser {
 				$csfd = null;
 			}
 			
-			$movie = new Movie($name);
-			$movie->setCsfd($csfd);
-			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setPrice($price);
+			$movie = $this->parserService->builderService->movie(name: $name, csfd: $csfd);
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, price: $price);
 			
 			foreach($datetimes as $datetime) {
 				$showtime = new Showtime($screening, $datetime);
@@ -125,8 +119,7 @@ class Bvv extends Parser {
 				}
 				
 				$screenings[$movieItems]->setDubbing($dubbing);
-				$screenings[$movieItems]->getMovie()
-					->setLength($length);
+				$screenings[$movieItems]->getMovie()->setLength($length);
 			}
 			
 			$movieItems++;

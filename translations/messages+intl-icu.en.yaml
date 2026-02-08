@@ -48,6 +48,8 @@ map:
     hide: Hide
     show: Show
     title: Map
+footer:
+    copyright: '© {year} {name}'
 
 screenings:
     empty:
@@ -59,6 +61,9 @@ details:
     movie:
         short: Movie
         long: Movie title
+    format:
+        short: Format
+        long: Movie format
     type:
         short: Type
         long: Movie type

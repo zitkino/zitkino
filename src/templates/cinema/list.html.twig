@@ -58,6 +58,12 @@
 						<abbr title="{{ "details.movie.long"|trans }}"><i class="bi bi-film"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.movie.short"|trans }}</span>
 					</th>
 					
+					{% if screenings.hasFormats() %}
+						<th>
+							<abbr title="{{ "details.format.long"|trans }}"><i class="bi bi-camera-reels"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.format.short"|trans }}</span>
+						</th>
+					{% endif %}
+					
 					{% if screenings.hasTypes() %}
 						<th>
 							<abbr title="{{ "details.type.long"|trans }}"><i class="bi bi-camera-video"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.type.short"|trans }}</span>
@@ -65,8 +71,7 @@
 					{% endif %}
 					
 					<th>
-						<abbr title="{{ "details.showtime.long"|trans }}"><i class="bi bi-calendar2-week-alt"></i></abbr> <span
-							class="d-none d-sm-none d-md-inline">{{ "details.showtime.short"|trans }}</span>
+						<abbr title="{{ "details.showtime.long"|trans }}"><i class="bi bi-alarm"></i></abbr> <span class="d-none d-sm-none d-md-inline">{{ "details.showtime.short"|trans }}</span>
 					</th>
 					
 					{% if screenings.hasPlaces() %}
@@ -110,9 +115,17 @@
 							{% if link is defined %}<a href="{{ link }}">{% endif %}{{ screening.movie.name }}{% if link is defined %}</a>{% endif %}
 						</td>
 						
+						{% if screenings.hasFormats() %}
+							<td title="{{ "details.format.long"|trans }}">
+								{% if screening.format is not empty %}
+									<span class="badge badge-format" title="{{ "details.format.long"|trans }}">{{ screening.format.name }}</span>
+								{% endif %}
+							</td>
+						{% endif %}
+						
 						{% if screenings.hasTypes() %}
 							<td title="{{ "details.type.long"|trans }}">
-								{% if screening.type is not empty and screening.type.ident != "2D" %}
+								{% if screening.type is not empty %}
 									<span class="badge badge-type" title="Typ">{{ screening.type.name }}</span>
 								{% endif %}
 							</td>
@@ -133,11 +146,10 @@
 						{% if screenings.hasPlaces() %}
 							<td title="{{ "details.place.long"|trans }}">
 								{% set place = screening.place %}
-								{% if place is defined %}
-									{% set placeLink = place.link %}
-									{% if placeLink is defined %}<a href="{{ placeLink }}">{% endif %}
-									{{ place.name|trim }}
-									{% if placeLink is defined %}</a>{% endif %}
+								{% if place is not empty %}
+									{% if place.link is not empty %}<a href="{{ place.link }}">{% endif %}
+										{{ place.name|trim }}
+									{% if place.link is not empty %}</a>{% endif %}
 								{% endif %}
 							</td>
 						{% endif %}
@@ -168,8 +180,8 @@
 						
 						<td title="{{ "details.database.long"|trans }}">
 							{% set databases = screening.movie.databases %}
-							<a href="{{ databases['csfd'] }}" title="ČSFD"> <img src="{{ asset('img/csfd.svg') }}" width="20" alt="ČSFD"> </a> <br class="d-md-none d-lg-none">
-							<a href="{{ databases['imdb'] }}" title="IMDb"><i class="fab fa-imdb fa-lg"></i></a>
+							<a href="{{ databases['csfd'] }}" title="ČSFD"><img src="{{ asset('img/csfd.svg') }}" width="20" alt="ČSFD"> </a> <br class="d-md-none d-lg-none">
+							<a href="{{ databases['imdb'] }}" title="IMDb"><img src="{{ asset('img/imdb/gold.svg') }}" width="20" alt="IMDb"></a>
 						</td>
 					</tr>
 				{% endfor %}

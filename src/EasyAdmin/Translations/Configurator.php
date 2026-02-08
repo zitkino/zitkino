@@ -9,7 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\{EntityDto, FieldDto};
 use Symfony\Component\Validator\Constraints\Valid;
 
 class Configurator implements FieldConfiguratorInterface {
-	public function __construct(private iterable $fieldConfigurators) {
+	public function __construct(private readonly iterable $fieldConfigurators) {
 	}
 	
 	public function supports(FieldDto $field, EntityDto $entityDto): bool {
@@ -41,14 +41,14 @@ class Configurator implements FieldConfiguratorInterface {
 			$context->getAssets()
 				->mergeWith($dto->getAssets());
 			
-			$dto->setFormTypeOption('field_type', $dto->getFormType());
+			$dto->setFormTypeOption("field_type", $dto->getFormType());
 			$formTypeOptionsFields[$dto->getProperty()] = $dto->getFormTypeOptions();
 		}
 		
 		$field->setFormTypeOptions([
-			'ea_fields' => $fieldsCollection,
-			'fields' => $formTypeOptionsFields,
-			'constraints' => [
+			"ea_fields" => $fieldsCollection,
+			"fields" => $formTypeOptionsFields,
+			"constraints" => [
 				new Valid(),
 			],
 		]);

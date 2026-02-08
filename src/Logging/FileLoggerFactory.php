@@ -17,11 +17,10 @@ class FileLoggerFactory {
 		if($this->logger instanceof Logger) {
 			$fileHandler = new FileHandler($this->baseDir);
 			
-			if(str_ends_with($filename, '.json')) {
+			if(str_ends_with($filename, ".json")) {
 				$fileHandler->setFormatter(new JsonFormatter());
-				
-				$fileHandler->setFileExtension('.json');
-				$filename = str_replace('.json', '', $filename);
+				$fileHandler->fileExtension = ".json";
+				$filename = str_replace(".json", "", $filename);
 			}
 			
 			$fileHandler->setFilename($filename);

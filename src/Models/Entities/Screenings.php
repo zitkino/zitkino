@@ -19,11 +19,22 @@ class Screenings extends ArrayCollection {
 		return new Movies($movies);
 	}
 	
+	public function hasFormats(): bool {
+		/** @var Screening $screening */
+		foreach($this->toArray() as $screening) {
+			$format = $screening->getFormat();
+			if(isset($format) and $format->getIdent() !== "2D") {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public function hasTypes(): bool {
 		/** @var Screening $screening */
 		foreach($this->toArray() as $screening) {
 			$type = $screening->getType();
-			if(isset($type) and $type->getIdent() !== "2D") {
+			if(isset($type)) {
 				return true;
 			}
 		}

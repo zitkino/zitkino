@@ -2,9 +2,6 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Movie;
-use App\Models\Entities\ScreeningType;
 
 /**
  * Stred parser.
@@ -101,37 +98,15 @@ class Stred extends Parser {
 			$cycle = "";
 			if(isset($cycleItem)) {
 				$cycle = $cycleItem->nodeValue;
-				
-				if(str_contains($cycle, "Das Sommerkino")) {
-					$price = 50;
-				}
-				
-				if(str_contains($cycle, "Vstup zdarma")) {
-					$price = 0;
-				}
+				$price = match (true) {
+					str_contains($cycle, "Das Sommerkino") => 50,
+					str_contains($cycle, "Vstup zdarma") => 0,
+					default => $price,
+				};
 			}
 			
-			$movie = $this->parserService->movieFacade->grabByName($name);
-			if(!isset($movie)) {
-				$movie = new Movie($name);
-				$movie->setLength($length);
-				$this->parserService->movieFacade->save($movie);
-			}
-			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages($dubbing, $subtitles)
-				->setPrice($price)
-				->setLink($link)
-				->setShowtimes($datetimes);
-			
-			$screeningType = $this->parserService->screeningFacade->grabType($cycle);
-			if(!isset($screeningType)) {
-				$screeningType = new ScreeningType($cycle);
-				$this->parserService->screeningFacade->save($screeningType);
-			}
-			$screening->setType($screeningType);
-			
-			$this->parserService->screeningFacade->save($screening);
+			$movie = $this->parserService->builderService->movie(name: $name, length: $length);
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, type: $cycle, dubbing: $dubbing, subtitles: $subtitles, price: $price, link: $link, showtimes: $datetimes);
 			$this->cinema->addScreening($screening);
 		}
 		

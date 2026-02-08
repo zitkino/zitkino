@@ -1,9 +1,6 @@
 <?php
 namespace App\Parsers;
 
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Movie;
-
 /**
  * Vlnena parser.
  */
@@ -41,22 +38,11 @@ class Vlnena extends Parser {
 		];
 		
 		foreach($items as $item) {
-			$movie = $this->parserService->movieFacade->grabByName($item["name"]);
-			if(!isset($movie)) {
-				$movie = new Movie($item["name"]);
-			}
-			$movie->setLength($item["length"])
-				->setCsfd($item["csfd"]);
-			$this->parserService->movieFacade->save($movie);
+			$movie = $this->parserService->builderService->movie(name: $item["name"], length: $item["length"], csfd: $item["csfd"]);
 			
 			$datetime = \DateTime::createFromFormat("Y-m-d H:i", trim($item["showtime"]));
 			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages(null, "české")
-				->setLink($item["link"])
-				->setShowtimes([$datetime]);
-			
-			$this->parserService->screeningFacade->save($screening);
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, subtitles: "české", link: $item["link"], showtimes: [$datetime]);
 			$this->cinema->addScreening($screening);
 		}
 		

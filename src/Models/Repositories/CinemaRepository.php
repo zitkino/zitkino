@@ -20,7 +20,9 @@ class CinemaRepository extends ServiceEntityRepository {
 	
 	public function visible(): QueryBuilder {
 		return $this->active()
-			->orderBy("c.ident");
+			->andWhere("c.visible = 1")
+			->orderBy("c.order")
+			->addOrderBy("c.ident");
 	}
 	
 	public function parsable(): QueryBuilder {

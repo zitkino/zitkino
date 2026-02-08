@@ -3,14 +3,13 @@
 namespace App\Models\Facades;
 
 use App\Models\Entities\{Cinema, Place};
-use App\Models\Repositories\PlaceRepository;
 use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 
 class PlaceFacade extends DobineFacade {
 	protected EntityManagerInterface $entityManager;
 	
-	protected PlaceRepository|EntityRepository $repository;
+	protected EntityRepository $repository;
 	
 	public function __construct(EntityManagerInterface $entityManager) {
 		$this->entityManager = $entityManager;

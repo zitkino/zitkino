@@ -2,41 +2,34 @@
 
 namespace App\Models\Entities;
 
-use App\Models\Repositories\LanguageRepository;
-use Dobine\Properties\Ids\Id;
-use Dobine\Properties\Ids\Identable;
+use Dobine\Properties\{Iconable, Ids\Id, Ids\Identable, Knp\Translatable as KnpTranslatable};
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 
-#[ORM\Entity(repositoryClass: LanguageRepository::class)]
+/**
+ * Language
+ * @method LanguageTranslation translate(?string $locale = null, bool $fallbackToDefault = true)
+ */
+#[ORM\Entity]
 #[ORM\Table(name: "zk_languages")]
-class Language {
-	use Id, Identable;
+class Language implements TranslatableInterface {
+	use Id, Identable, Iconable, KnpTranslatable;
 	
-	#[ORM\Column(name: "czech", type: "string", length: 10, nullable: true)]
-	private ?string $czech = null;
-	
-	#[ORM\Column(name: "english", type: "string", length: 10, nullable: true)]
-	private ?string $english = null;
+	#[ORM\Column(name: "name", type: "string", length: 191, nullable: false)]
+	private string $name;
 	
 	public function __construct(string $ident) {
 		$this->ident = $ident;
+		$this->translations = new ArrayCollection();
 	}
 	
-	public function getCzech(): ?string {
-		return $this->czech;
+	public function getName(): string {
+		return $this->name;
 	}
 	
-	public function setCzech(?string $czech): self {
-		$this->czech = $czech;
-		return $this;
-	}
-	
-	public function getEnglish(): ?string {
-		return $this->english;
-	}
-	
-	public function setEnglish(?string $english): self {
-		$this->english = $english;
+	public function setName(string $name): self {
+		$this->name = $name;
 		return $this;
 	}
 }

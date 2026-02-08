@@ -9,17 +9,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 class TranslationsField implements FieldInterface {
 	use FieldTrait;
 	
-	public const string OPTION_FIELDS_CONFIG = 'fieldsConfig';
+	public const string OPTION_FIELDS_CONFIG = "fieldsConfig";
 	
 	public static function new(string $propertyName, ?string $label = null): self {
 		return new self()->setProperty($propertyName)
 			->setLabel($label)
 			->onlyOnForms()
 			->setRequired(false)
-			->addFormTheme('admin/crud/form/field/translations.html.twig')
-			->addCssFiles('build/translations-field.css')
+			->addFormTheme("admin/crud/form/field/translations.html.twig")
+			->addCssFiles("build/translations-field.css")
 			->setFormType(TranslationsType::class)
-			->setFormTypeOption('block_prefix', 'translations_field');
+			->setFormTypeOption("block_prefix", "translations_field");
 	}
 	
 	public function addTranslatableField(FieldInterface $field): self {

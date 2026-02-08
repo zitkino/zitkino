@@ -48,6 +48,8 @@ map:
     hide: Skrýt
     show: Zobrazit
     title: Mapa
+footer:
+    copyright: '© {year} {name}'
 
 screenings:
     empty:
@@ -59,6 +61,9 @@ details:
     movie:
         short: Film
         long: Název filmu
+    format:
+        short: Formát
+        long: Formát filmu
     type:
         short: Typ
         long: Typ filmu

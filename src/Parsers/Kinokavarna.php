@@ -2,8 +2,7 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Movie;
+use App\Models\Entities\{Movie, Screening};
 
 /**
  * Kinokavarna parser.
@@ -70,20 +69,9 @@ class Kinokavarna extends Parser {
 				$price = null;
 			}
 			
-			$movie = $this->parserService->movieFacade->grabByName($name);
-			if(!isset($movie)) {
-				$movie = new Movie($name);
-				$movie->setLength($length);
-				$this->parserService->movieFacade->save($movie);
-			}
+			$movie = $this->parserService->builderService->movie(name: $name, length: $length);
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, dubbing: $dubbing, subtitles: $subtitles, price: $price, link: $link, showtimes: $datetimes);
 			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages($dubbing, $subtitles)
-				->setPrice($price)
-				->setLink($link)
-				->setShowtimes($datetimes);
-			
-			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		

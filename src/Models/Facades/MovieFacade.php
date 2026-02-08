@@ -3,14 +3,13 @@
 namespace App\Models\Facades;
 
 use App\Models\Entities\Movie;
-use App\Models\Repositories\MovieRepository;
 use Dobine\Facades\DobineFacade;
 use Doctrine\ORM\{EntityManagerInterface, EntityRepository};
 
 class MovieFacade extends DobineFacade {
 	protected EntityManagerInterface $entityManager;
 	
-	protected MovieRepository|EntityRepository $repository;
+	protected EntityRepository $repository;
 	
 	public function __construct(EntityManagerInterface $entityManager) {
 		$this->entityManager = $entityManager;

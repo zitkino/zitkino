@@ -2,8 +2,6 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Movie;
 
 /**
  * Rubin parser.
@@ -13,8 +11,6 @@ class Rubin extends Parser {
 	 * @throws ParserException
 	 */
 	public function parse(): void {
-		$movies = [];
-		
 		$xpath = $this->getXpath();
 		
 		$events = $xpath->query("//div[@id='itemListLeading']//div[@class='K2ItemsRow']");
@@ -40,13 +36,8 @@ class Rubin extends Parser {
 				$time = trim($dateArray[2]);
 				$datetime = \DateTime::createFromFormat("d. m Y H:i", $date.$time);
 				
-				$movie = new Movie($name);
-				
-				$screening = new Screening($movie, $this->cinema);
-				$screening->setLink($link)
-					->setShowtimes([$datetime]);
-				
-				$this->parserService->screeningFacade->save($screening);
+				$movie = $this->parserService->builderService->movie(name: $name);
+				$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, link: $link, showtimes: [$datetime]);
 				$this->cinema->addScreening($screening);
 			}
 		}

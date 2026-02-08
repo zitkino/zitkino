@@ -2,11 +2,10 @@
 
 namespace App\Models\Entities;
 
-use App\Models\Repositories\ShowtimeRepository;
 use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ShowtimeRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: "zk_showtimes", indexes: [new ORM\Index(columns: ["screening"], name: "screening")])]
 class Showtime {
 	use Id;

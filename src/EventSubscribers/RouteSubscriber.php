@@ -34,8 +34,8 @@ class RouteSubscriber {
 		if(isset($discovered[$class])) {
 			$routes = $this->entityManager->getRepository(Route::class)
 				->findBy([
-					'entityClass' => $class,
-					'entityId' => $entity->getId(),
+					"entityClass" => $class,
+					"entityId" => $entity->getId(),
 				]);
 			
 			foreach($routes as $route) {
@@ -43,7 +43,7 @@ class RouteSubscriber {
 			}
 			// Note: flush will happen in the original transaction
 			
-			$this->cacheSystem->clear('routing');
+			$this->cacheSystem->clear("routing");
 		}
 	}
 	
@@ -78,9 +78,9 @@ class RouteSubscriber {
 					foreach($entity->getTranslations() as $translation) {
 						/** @var TranslationInterface $translation */
 						$slug = null;
-						if(method_exists($translation, 'getSlug')) {
+						if(method_exists($translation, "getSlug")) {
 							$slug = $translation->getSlug();
-						} else if(method_exists($entity, 'getSlug')) {
+						} else if(method_exists($entity, "getSlug")) {
 							$slug = $entity->getSlug();
 						}
 						
@@ -91,25 +91,25 @@ class RouteSubscriber {
 						$locale = $translation->getLocale();
 						$this->syncRoute($class, $entity, $locale, $slug, $config);
 					}
-				} else if(method_exists($entity, 'getSlug')) {
+				} else if(method_exists($entity, "getSlug")) {
 					$slug = $entity->getSlug();
-					$locale = method_exists($entity, 'getLocale') ? $entity->getLocale() : 'cs';
+					$locale = method_exists($entity, "getLocale") ? $entity->getLocale() : "cs";
 					$this->syncRoute($class, $entity, $locale, $slug, $config);
 				}
 			}
 			
 			$this->entityManager->flush();
-			$this->cacheSystem->clear('routing');
+			$this->cacheSystem->clear("routing");
 		}
 	}
 	
 	private function syncRoute(string $class, object $entity, string $locale, string $slug, array $config): void {
 		$route = $this->entityManager->getRepository(Route::class)
 			->findOneBy([
-				'entityClass' => $class,
-				'entityId' => $entity->getId(),
-				'locale' => $locale,
-				'canonical_route' => $config['route_name_prefix'].(method_exists($entity, 'getIdent') ? $entity->getIdent() : $entity->getId())
+				"entityClass" => $class,
+				"entityId" => $entity->getId(),
+				"locale" => $locale,
+				"canonical_route" => $config["route_name_prefix"].(method_exists($entity, "getIdent") ? $entity->getIdent() : $entity->getId())
 			]);
 		
 		if(!$route) {
@@ -121,15 +121,15 @@ class RouteSubscriber {
 		}
 		
 		$path = "/$slug";
-		if(isset($config['path'][$locale])) {
-			$path = str_replace('{slug}', $slug, $config['path'][$locale]);
+		if(isset($config["path"][$locale])) {
+			$path = str_replace("{slug}", $slug, $config["path"][$locale]);
 		}
 		
 		$route->setSlug($path);
-		$route->setController($config['controller']);
+		$route->setController($config["controller"]);
 		
 		// Assuming entity has getIdent() or use ID
-		$code = method_exists($entity, 'getIdent') ? $entity->getIdent() : $entity->getId();
-		$route->setCanonicalRoute($config['route_name_prefix'].$code);
+		$code = method_exists($entity, "getIdent") ? $entity->getIdent() : $entity->getId();
+		$route->setCanonicalRoute($config["route_name_prefix"].$code);
 	}
 }

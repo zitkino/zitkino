@@ -22,20 +22,20 @@ class PageCrudController extends AbstractCrudController {
 		yield IntegerField::new("order");
 		yield BooleanField::new("visible")
 			->setHelp("Indicates if the page is visible on the site");
-		yield DateTimeField::new('created');
+		yield DateTimeField::new("created");
 		yield DateTimeField::new("updated")
 			->setDisabled();
 		
-		yield TranslationsField::new('translations')
+		yield TranslationsField::new("translations")
 			->addTranslatableField(TextField::new("title")
 				->setRequired(true))
 			->addTranslatableField(SlugField::new("slug")
 				->setRequired(true)
 				->setTargetFieldName("title"))
-			->addTranslatableField(Field::new('perex')
+			->addTranslatableField(Field::new("perex")
 				->setRequired(false)
 				->setFormType(TinymceType::class))
-			->addTranslatableField(Field::new('text')
+			->addTranslatableField(Field::new("text")
 				->setRequired(false)
 				->setFormType(TinymceType::class));
 	}

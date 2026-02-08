@@ -2,12 +2,11 @@
 
 namespace App\Models\Entities;
 
-use App\Models\Repositories\MovieRepository;
 use Dobine\Properties\Ids\Id;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MovieRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: "zk_movies", uniqueConstraints: [new ORM\UniqueConstraint(name: "name", columns: ["name"])])]
 class Movie {
 	use Id;

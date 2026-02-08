@@ -11,7 +11,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class EmailVerifier {
-	public function __construct(private VerifyEmailHelperInterface $verifyEmailHelper, private MailerInterface $mailer, private EntityManagerInterface $entityManager) {
+	public function __construct(private readonly VerifyEmailHelperInterface $verifyEmailHelper, private readonly MailerInterface $mailer, private readonly EntityManagerInterface $entityManager) {
 	}
 	
 	/**
@@ -21,12 +21,11 @@ class EmailVerifier {
 		$signatureComponents = $this->verifyEmailHelper->generateSignature($verifyEmailRouteName, (string)$user->getId(), (string)$user->getEmail());
 		
 		$context = $email->getContext();
-		$context['signedUrl'] = $signatureComponents->getSignedUrl();
-		$context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
-		$context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
+		$context["signedUrl"] = $signatureComponents->getSignedUrl();
+		$context["expiresAtMessageKey"] = $signatureComponents->getExpirationMessageKey();
+		$context["expiresAtMessageData"] = $signatureComponents->getExpirationMessageData();
 		
 		$email->context($context);
-		
 		$this->mailer->send($email);
 	}
 	

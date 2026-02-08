@@ -2,10 +2,7 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Cinema;
-use App\Models\Entities\Movie;
-use App\Models\Entities\ScreeningType;
+use App\Models\Entities\{Cinema};
 use App\Services\ParserService;
 use Nette\Utils\{JsonException, Strings};
 
@@ -35,65 +32,58 @@ abstract class CinemaCity extends Parser {
 			$film = $json["body"]["films"][$key];
 			
 			$name = $film["name"];
+			$length = (int)$film["length"];
+			
 			$link = $event["bookingLink"];
+			$auditorium = $event["auditorium"];
 			
-			$type = "2D";
-			switch(true) {
-				case (in_array("4dx", $event["attributeIds"])):
-					$type = "4DX";
-					break;
-				case (in_array("2d", $event["attributeIds"])):
-					$type = "2D";
-					break;
-				case (in_array("3d", $event["attributeIds"])):
-					$type = "3D";
-					break;
-			}
+			$format = match (true) {
+				in_array("4dx", $event["attributeIds"]) => "4DX",
+				in_array("3d", $event["attributeIds"]) => "3D",
+				in_array("imax", $event["attributeIds"]) => "IMAX",
+				in_array("2d", $event["attributeIds"]) => "2D",
+				default => null
+			};
 			
-			$dubbing = null;
+			$type = match (true) {
+				in_array("laser-barco", $event["attributeIds"]) => "Laserová projekce Barco",
+				default => null
+			};
+			
 			switch(true) {
-				case (in_array("dubbed-lang-cs", $event["attributeIds"])):
-				case (in_array("original-lang-cs", $event["attributeIds"])):
+				case in_array("dubbed-lang-cs", $event["attributeIds"]):
+				case in_array("original-lang-cs", $event["attributeIds"]):
 					$dubbing = "česky";
 					break;
-				case (in_array("original-lang-en-us", $event["attributeIds"])):
+				case in_array("original-lang-en", $event["attributeIds"]):
+				case in_array("original-lang-en-us", $event["attributeIds"]) and !in_array("dubbed", $event["attributeIds"]):
 					$dubbing = "anglicky";
 					break;
-			}
-			
-			$subtitles = null;
-			switch(true) {
-				case (in_array("first-subbed-lang-cs", $event["attributeIds"])):
-					$subtitles = "české";
+				default:
+					$dubbing = null;
 					break;
 			}
 			
-			$key = Strings::webalize($name."-".$type."-".$dubbing."-".$subtitles."-".$event["businessDay"]);
+			$subtitles = match (true) {
+				in_array("first-subbed-lang-cs", $event["attributeIds"]) => "české",
+				default => null,
+			};
+			
+			$price = null;
+			
+			$movie = $this->parserService->builderService->movie(name: $name, length: $length);
+			$place = $this->parserService->builderService->place(name: $auditorium, cinema: $this->cinema);
+			$screeningFormat = $this->parserService->builderService->screeningFormat(name: $format);
+			$screeningType = $this->parserService->builderService->screeningType(name: $type);
+			
+			$this->parserService->builderService->save = false;
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, place: $place, format: $screeningFormat, type: $screeningType, dubbing: $dubbing, subtitles: $subtitles, price: $price, link: $link);
+			$this->parserService->builderService->save = true;
+			
+			$key = Strings::webalize($name."-".$format."-".$dubbing."-".$subtitles."-".$event["businessDay"]);
 			
 			$datetime = \DateTime::createFromFormat("Y-m-d\TH:i:s", $event["eventDateTime"]);
 			$datetimes[$key][] = $datetime;
-			
-			$length = (int)$film["length"];
-			$price = null;
-			
-			$movie = $this->parserService->movieFacade->grabByName($name);
-			if(!isset($movie)) {
-				$movie = new Movie($name);
-				$movie->setLength($length);
-				$this->parserService->movieFacade->save($movie);
-			}
-			
-			$screeningType = $this->parserService->screeningFacade->grabType($type);
-			if(!isset($screeningType)) {
-				$screeningType = new ScreeningType($type);
-			}
-			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setType($screeningType)
-				->setLanguages($dubbing, $subtitles)
-				->setPrice($price)
-				->setLink($link);
-			
 			$screenings[$key] = $screening;
 		}
 		

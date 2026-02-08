@@ -9,26 +9,25 @@ use Monolog\LogRecord;
 class FileHandler extends StreamHandler {
 	private string $baseDir;
 	
-	private string $fileExtension;
+	public string $fileExtension {
+		get {
+			return $this->fileExtension;
+		}
+		set {
+			$this->fileExtension = $value;
+		}
+	}
 	
-	public function __construct(string $baseDir, string $fileExtension = '.log', int|string|Level $level = Level::Debug, bool $bubble = false) {
-		$this->baseDir = rtrim($baseDir, '/');
+	public function __construct(string $baseDir, string $fileExtension = ".log", int|string|Level $level = Level::Debug, bool $bubble = false) {
+		$this->baseDir = rtrim($baseDir, "/");
 		$this->fileExtension = $fileExtension;
 		
 		// Initialize with a temporary path that will be updated later
-		parent::__construct('php://memory', $level, $bubble);
-	}
-	
-	public function getFileExtension(): string {
-		return $this->fileExtension;
-	}
-	
-	public function setFileExtension(string $fileExtension): void {
-		$this->fileExtension = $fileExtension;
+		parent::__construct("php://memory", $level, $bubble);
 	}
 	
 	public function setFilename(string $filename): void {
-		$path = sprintf('%s/%s%s', $this->baseDir, $filename, $this->fileExtension);
+		$path = sprintf("%s/%s%s", $this->baseDir, $filename, $this->fileExtension);
 		
 		// Close the existing stream if any
 		$this->close();
@@ -39,8 +38,8 @@ class FileHandler extends StreamHandler {
 	}
 	
 	protected function write(LogRecord $record): void {
-		if($this->url === 'php://memory') {
-			throw new \RuntimeException('Filename must be set using setFilename() before writing logs');
+		if($this->url === "php://memory") {
+			throw new \RuntimeException("Filename must be set using setFilename() before writing logs");
 		}
 		
 		parent::write($record);

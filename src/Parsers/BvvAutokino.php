@@ -2,10 +2,6 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Place};
-use App\Models\Entities\Movie;
-use App\Models\Entities\Screening;
-use App\Models\Entities\Showtime;
 
 /**
  * BVV parser.
@@ -44,6 +40,12 @@ class BvvAutokino extends Parser {
 				}
 			}
 			
+			if(isset($start) and $start instanceof \DateTime) {
+				$showtime = $start;
+			} else {
+				$showtime = null;
+			}
+			
 			$placeQuery = $xpath->query(".//*[contains(@class, 'accompanying-program-item')]/*[contains(@class, 'info')]/*[contains(@class, 'place')]", $event);
 			$placeName = $placeQuery->item(0)->nodeValue;
 			
@@ -57,39 +59,10 @@ class BvvAutokino extends Parser {
 			$linkQuery = $xpath->query(".//*[contains(@class, 'accompanying-program-item')]/*[contains(@class, 'detail')]//a[contains(@class, 'copy-to-clipboard')]", $event);
 			$link = $linkQuery->item(0)->attributes->getNamedItem("href")->nodeValue;
 			
-			$movie = $this->parserService->movieFacade->grabByName($name);
-			if(!isset($movie)) {
-				$movie = new Movie($name);
-				$movie->setLength($length ? (int)$length : null);
-				$this->parserService->movieFacade->save($movie);
-			}
+			$movie = $this->parserService->builderService->movie(name: $name, length: $length ? (int)$length : null);
+			$place = $this->parserService->builderService->place(name: $placeName, cinema: $this->cinema);
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, place: $place, price: $price, link: $link, showtimes: [$showtime]);
 			
-			if(empty($movie->getLength())) {
-				$movie->setLength($length ? (int)$length : null);
-				$this->parserService->movieFacade->save($movie);
-			}
-			
-			$place = $this->parserService->placeFacade->grabByName($placeName);
-			if(!isset($place)) {
-				$place = new Place($placeName);
-				$place->setCinema($this->cinema);
-				
-				$this->parserService->placeFacade->save($place);
-			}
-			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setPrice($price)
-				->setPlace($place)
-				->setLink($link);
-			
-			if(isset($start) and $start instanceof \DateTime) {
-				$showtime = new Showtime($screening, $start);
-				$screening->addShowtime($showtime);
-			}
-			
-			$movie->addScreening($screening);
-			
-			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		

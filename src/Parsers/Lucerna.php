@@ -2,9 +2,7 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Movie;
-use App\Models\Entities\ScreeningType;
+use Nette\Utils\{Json, JsonException};
 
 /**
  * Lucerna parser.
@@ -14,126 +12,69 @@ class Lucerna extends Parser {
 	 * @throws ParserException
 	 */
 	public function parse(): void {
-		$xpath = $this->getXpath();
+		$data = $this->downloadData();
 		
-		$days = $xpath->query("//div[@class='tabs programtabs']//ul[@id='table_days']//div[@class='scroll-pane-wrapper']//li");
-		foreach($days as $day) {
-			$dayQuery = $xpath->query("./a", $day);
-			/** @var \DOMElement $dayElement */
-			$dayElement = $dayQuery->item(0);
-			$dayId = $dayElement->getAttribute("data-den");
+		$payload = [];
+		preg_match_all('/self\.__next_f\.push\(\[1,"(.*?)"\]\)/s', $data, $matches);
+		foreach($matches[1] as $match) {
+			$payload[] = str_replace(['\\"', '\\\\', '\\/'], ['"', '\\', '/'], $match);
+		}
+		
+		foreach($payload as $jsonPayload) {
+			$eventsData = $this->extractEventsFromPayload($jsonPayload);
+			if($eventsData === null) {
+				continue;
+			}
 			
-			/** @var \DOMElement $dayStringElement */
-			$dayStringElement = $dayQuery->item(0);
-			$dayString = $dayStringElement->getElementsByTagName("span")
-				->item(0)->nodeValue;
+			$prefixes = ["PŘEDPREMIÉRA | ", "THE BEST OF 2025: "];
+			$suffixes = [" | titulky", " | dabing"];
 			
-			$events = $xpath->query("//div[@class='tabs programtabs']//div[@id='den_".$dayId."']//div[@class='item']");
-			foreach($events as $key => $event) {
-				$info = "./div[@class='heading']";
-				
-				$nameQuery = $xpath->query($info."//h2//a", $event);
-				$name = $nameQuery->item(0)->nodeValue;
-				
-				$smallQuery = $xpath->query($info."//h2//a/small", $event);
-				$smallItem = $smallQuery->item(0);
-				if(isset($smallItem)) {
-					$small = $smallItem->nodeValue;
-				} else {
-					$small = "";
-				}
-				$name = str_replace($small, "", $name);
-				
-				$link = "http://www.kinolucerna.info".$nameQuery->item(0)->attributes->getNamedItem("href")->nodeValue;
-				
-				$lengthQuery = $xpath->query($info."//div[@class='eventlenght']", $event);
-				$lengthString = $lengthQuery->item(0)->nodeValue;
-				$length = (int)str_replace("&nbsp;min", "", htmlentities($lengthString, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, "utf-8"));
-				
-				$type = null;
-				$typeQuery = $xpath->query($info."//div[@class='left']/div/span[1]", $event);
-				if($typeQuery->length >= 1) {
-					$typeString = $typeQuery->item(0)->nodeValue;
-					if($typeString == "3D") {
-						$type = $typeString;
-					} else {
-						$type = null;
+			$events = $eventsData["events"];
+			foreach($events as $event) {
+				$name = $event["names"]["cs"] ?? $event["names"]["en"] ?? "";
+				foreach($prefixes as $prefix) {
+					if(str_starts_with($name, $prefix)) {
+						$name = substr($name, strlen($prefix));
+						break; // remove only the first matching prefix
 					}
 				}
+				
+				foreach($suffixes as $suffix) {
+					if(str_ends_with($name, $suffix)) {
+						$name = substr($name, 0, -strlen($suffix));
+						break; // remove only the first matching suffix
+					}
+				}
+				
+				$link = $event["ecommerceEventURL"] ?? null;
+				$startsAt = \DateTime::createFromFormat("Y-m-d\TH:i:s.v\Z", $event["startsAt"], new \DateTimeZone("UTC"));
+				$datetime = $startsAt->setTimezone(new \DateTimeZone("Europe/Prague"));
+				
+				$price = null;
+				
+				$format = $event["formatTranslated"]["cs"] ?? null;
+				if($format === "2D projekce") {
+					$format = "2D";
+				}
+				
+				$type = $event["marketingLabel"]["name"] ?? null;
 				
 				$dubbing = null;
 				$subtitles = null;
-				$languageQuery = $xpath->query($info."//div[@class='left']/div/span[2]", $event);
-				if($languageQuery->length >= 1) {
-					$languageString = $languageQuery->item(0)->nodeValue;
-					switch(true) {
-						case stripos($languageString, "ČD") !== false:
-						case stripos($languageString, "ČV") !== false:
-							$dubbing = "česky";
-							$subtitles = null;
-							break;
-						case stripos($languageString, "ČT") !== false:
-							$dubbing = null;
-							$subtitles = "české";
-							break;
-						case stripos($languageString, "Anglická verze s českými titulky") !== false:
-						case stripos($languageString, "anglicka_verzia_ceske_titulky") !== false:
-							$dubbing = "anglicky";
-							$subtitles = "české";
-							break;
-						default:
-							$dubbing = null;
-							$subtitles = null;
-							break;
-					}
+				$version = $event["versionTranslated"]["cs"] ?? null;
+				switch($version) {
+					case "Český dabing":
+					case "Český dubbing":
+						$dubbing = "česky";
+						break;
+					case "České titulky":
+						$subtitles = "české";
+						break;
 				}
 				
-				$datetimes = [];
-				$price = null;
-				$timesQuery = $xpath->query("./div[@class='times']/div[@class='right']/span", $event);
-				/** @var \DOMElement $timeElement */
-				foreach($timesQuery as $timeElement) {
-					$timeString = $timeElement->nodeValue;
-					$time = explode(":", $timeString);
-					
-					$datetime = \DateTime::createFromFormat("j.m.", $dayString);
-					$datetime->setTime((int)$time[0], (int)$time[1]);
-					$datetimes[] = $datetime;
-					
-					$a = $timeElement->getElementsByTagName("a");
-					if($a->length == 1) {
-						if($a->item(0)
-							->hasAttribute("title")) {
-							$priceString = $a->item(0)
-								->getAttribute("title");
-							$price = (int)str_replace(["Koupit / rezervovat vstupenku (", ",- Kč)\nKino sál"], "", $priceString);
-						}
-					} else {
-						$price = null;
-					}
-				}
+				$movie = $this->parserService->builderService->movie(name: $name);
+				$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, format: $format, type: $type, dubbing: $dubbing, subtitles: $subtitles, price: $price, link: $link, showtimes: [$datetime]);
 				
-				$movie = $this->parserService->movieFacade->grabByName($name);
-				if(!isset($movie)) {
-					$movie = new Movie($name);
-					$movie->setLength($length);
-					$this->parserService->movieFacade->save($movie);
-				}
-				
-				$screeningType = $this->parserService->screeningFacade->grabType($type);
-				if(!isset($screeningType)) {
-					$screeningType = new ScreeningType($type);
-					$this->parserService->screeningFacade->save($screeningType);
-				}
-				
-				$screening = new Screening($movie, $this->cinema);
-				$screening->setType($screeningType)
-					->setLanguages($dubbing, $subtitles)
-					->setPrice($price)
-					->setLink($link)
-					->setShowtimes($datetimes);
-				
-				$this->parserService->screeningFacade->save($screening);
 				$this->cinema->addScreening($screening);
 			}
 		}
@@ -141,4 +82,37 @@ class Lucerna extends Parser {
 		$this->cinema->setParsed(new \DateTime());
 		$this->parserService->cinemaFacade->save($this->cinema);
 	}
+	
+	private function extractEventsFromPayload(string $jsonPayload): ?array {
+		$jsonPayload = trim($jsonPayload);
+		$jsonPayload = preg_replace('/^\w+:/', '"payload":', $jsonPayload, 1);
+		$jsonPayload = preg_replace('/\\\n$/', "", $jsonPayload);
+		
+		try {
+			$decoded = Json::decode("{".$jsonPayload."}", true);
+		} catch(JsonException $e) {
+			return null;
+		}
+		return $this->findEvents($decoded);
+	}
+	
+	private function findEvents(mixed $node): ?array {
+		if(!is_array($node)) {
+			return null;
+		}
+		
+		if(array_key_exists("events", $node) && is_array($node["events"])) {
+			return $node;
+		}
+		
+		foreach($node as $value) {
+			$result = $this->findEvents($value);
+			if($result !== null) {
+				return $result;
+			}
+		}
+		
+		return null;
+	}
 }
+

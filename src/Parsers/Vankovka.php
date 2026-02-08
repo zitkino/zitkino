@@ -1,18 +1,10 @@
 <?php
 namespace App\Parsers;
 
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Movie;
-use Doctrine\ORM\{OptimisticLockException, ORMException};
-
 /**
  * Galerie Vaňkovka parser.
  */
 class Vankovka extends Parser {
-	/**
-	 * @throws OptimisticLockException
-	 * @throws ORMException
-	 */
 	public function parse(): void {
 		$events = [
 			["08.06.2022 10:00", "Croodsovi: Nový věk"],
@@ -30,21 +22,12 @@ class Vankovka extends Parser {
 		];
 		
 		foreach($events as $event) {
-			$movie = $this->parserService->movieFacade->grabByName($event[1]);
-			if(!isset($movie)) {
-				$movie = new Movie($event[1]);
-				$this->parserService->movieFacade->save($movie);
-			}
+			$movie = $this->parserService->builderService->movie(name: $event[1]);
 			
 			$datetime = \DateTime::createFromFormat("d.m.Y H:i", $event[0]);
 			$datetimes = [$datetime];
 			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setPrice(0)
-				->setLink("https://www.galerie-vankovka.cz/novinky-a-akce-centra/letni-kino-e34068/")
-				->setShowtimes($datetimes);
-			
-			$this->parserService->screeningFacade->save($screening);
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, price: 0, link: "https://www.galerie-vankovka.cz/novinky-a-akce-centra/letni-kino-e34068/", showtimes: $datetimes);
 			$this->cinema->addScreening($screening);
 		}
 		

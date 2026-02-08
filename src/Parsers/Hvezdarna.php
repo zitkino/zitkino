@@ -1,9 +1,6 @@
 <?php
 namespace App\Parsers;
 
-use App\Models\Entities\{Screening};
-use App\Models\Entities\Movie;
-
 /**
  * Hvezdarna parser.
  */
@@ -16,23 +13,12 @@ class Hvezdarna extends Parser {
 		];
 		
 		foreach($items as $item) {
-			$movie = $this->parserService->movieFacade->grabByName($item["name"]);
-			if(!isset($movie)) {
-				$movie = new Movie($item["name"]);
-			}
-			$movie->setLength($item["length"])
-				->setCsfd($item["csfd"]);
-			$this->parserService->movieFacade->save($movie);
+			$movie = $this->parserService->builderService->movie(name: $item["name"], length: $item["length"], csfd: $item["csfd"]);
 			
 			$datetime = \DateTime::createFromFormat("Y-m-d H:i", trim($item["showtime"]));
 			
-			$screening = new Screening($movie, $this->cinema);
-			$screening->setLanguages(null, "české")
-				->setPrice(0)
-				->setLink("https://www.facebook.com/events/1235520100491317")
-				->setShowtimes([$datetime]);
+			$screening = $this->parserService->builderService->screening(cinema: $this->cinema, movie: $movie, subtitles: "české", price: 0, link: "https://www.facebook.com/events/1235520100491317", showtimes: [$datetime]);
 			
-			$this->parserService->screeningFacade->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
