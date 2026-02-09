@@ -13,10 +13,16 @@ class CinemaType implements TranslatableInterface {
 	use Id, Identable, Iconable, Sortable, KnpTranslatable;
 	
 	#[ORM\Column(name: "name", type: "string", length: 255, nullable: false)]
-	private string $name;
+	public string $name {
+		get => $this->name;
+		set => $this->name = $value;
+	}
 	
 	#[ORM\OneToMany(mappedBy: "type", targetEntity: "Cinema")]
-	private Collection $cinemas;
+	public Collection $cinemas {
+		get => $this->cinemas;
+		set => $this->cinemas = $value;
+	}
 	
 	public function __construct(string $ident) {
 		$this->ident = $ident;
@@ -24,25 +30,7 @@ class CinemaType implements TranslatableInterface {
 		$this->cinemas = new ArrayCollection();
 	}
 	
-	public function getName(): string {
-		return $this->name;
-	}
-	
-	public function setName(string $name): self {
-		$this->name = $name;
-		return $this;
-	}
-	
-	public function getCinemas(): Collection {
-		return $this->cinemas;
-	}
-	
-	public function setCinemas(Collection $cinemas): self {
-		$this->cinemas = $cinemas;
-		return $this;
-	}
-	
 	public function __toString(): string {
-		return $this->getName();
+		return $this->name;
 	}
 }

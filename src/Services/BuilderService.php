@@ -15,9 +15,9 @@ class BuilderService {
 		$movie = $this->movieFacade->grabByName($name);
 		if(!isset($movie)) {
 			$movie = new Movie($name);
-			$movie->setLength($length)
-				->setCsfd($csfd)
-				->setImdb($imdb);
+			$movie->length = $length;
+			$movie->csfd = $csfd;
+			$movie->imdb = $imdb;
 		}
 		
 		if($this->save) {
@@ -31,8 +31,8 @@ class BuilderService {
 		$place = $this->placeFacade->grabByName($name);
 		if(!isset($place)) {
 			$place = new Place($name);
-			$place->setCinema($cinema)
-				->setLink($link);
+			$place->cinema = $cinema;
+			$place->link = $link;
 		}
 		
 		if($this->save) {
@@ -78,26 +78,26 @@ class BuilderService {
 	
 	public function screening(Cinema $cinema, Movie $movie, ?Place $place = null, ScreeningFormat|string|null $format = null, ScreeningType|string|null $type = null, ?string $dubbing = null, ?string $subtitles = null, ?int $price = null, ?string $link = null, array $showtimes = []): Screening {
 		$screening = new Screening($cinema, $movie);
-		
-		$screening->setPlace($place)
-			->setLanguages($dubbing, $subtitles)
-			->setPrice($price)
-			->setLink($link)
-			->setShowtimes($showtimes);
+		$screening->place = $place;
+		$screening->dubbing = $dubbing;
+		$screening->subtitles = $subtitles;
+		$screening->price = $price;
+		$screening->link = $link;
+		$screening->setShowtimes($showtimes);
 		
 		if($format instanceof ScreeningFormat) {
 			$formatEntity = $format;
 		} else {
 			$formatEntity = $this->screeningFormat($format);
 		}
-		$screening->setFormat($formatEntity);
+		$screening->format = $formatEntity;
 		
 		if($type instanceof ScreeningType) {
 			$typeEntity = $type;
 		} else {
 			$typeEntity = $this->screeningType($type);
 		}
-		$screening->setType($typeEntity);
+		$screening->type = $typeEntity;
 		
 		if($this->save) {
 			$this->screeningFacade->save($screening);

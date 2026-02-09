@@ -17,19 +17,13 @@ class Language implements TranslatableInterface {
 	use Id, Identable, Iconable, KnpTranslatable;
 	
 	#[ORM\Column(name: "name", type: "string", length: 191, nullable: false)]
-	private string $name;
+	public string $name {
+		get => $this->name;
+		set => $this->name = $value;
+	}
 	
 	public function __construct(string $ident) {
 		$this->ident = $ident;
 		$this->translations = new ArrayCollection();
-	}
-	
-	public function getName(): string {
-		return $this->name;
-	}
-	
-	public function setName(string $name): self {
-		$this->name = $name;
-		return $this;
 	}
 }

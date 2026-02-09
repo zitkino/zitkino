@@ -11,7 +11,10 @@ class ScreeningFormat {
 	use Id, Identable;
 	
 	#[ORM\Column(name: "name", type: "string", length: 255, nullable: true)]
-	private ?string $name = null;
+	public ?string $name = null {
+		get => $this->name;
+		set => $this->name = $value;
+	}
 	
 	public function __construct(string $ident) {
 		$this->setIdent($ident);
@@ -19,15 +22,6 @@ class ScreeningFormat {
 	}
 	
 	public function __toString() {
-		return $this->getIdent();
-	}
-	
-	public function getName(): ?string {
-		return $this->name;
-	}
-	
-	public function setName(?string $name): self {
-		$this->name = $name;
-		return $this;
+		return $this->ident;
 	}
 }

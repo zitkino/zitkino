@@ -24,7 +24,7 @@ abstract class Parser {
 	public function __construct(ParserService $parserService, Cinema $cinema) {
 		$this->parserService = $parserService;
 		$this->cinema = $cinema;
-		$this->url = $this->cinema->getParsing();
+		$this->url = $this->cinema->parsing;
 	}
 	
 	public function getUrl(): string {

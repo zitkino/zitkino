@@ -15,14 +15,8 @@ class PageTranslation implements TranslationInterface {
 	use Id, Sluggable, Textable, KnpTranslation;
 	
 	#[ORM\Column(name: "title", type: "string", length: 255, nullable: false)]
-	private string $title;
-	
-	public function getTitle(): string {
-		return $this->title;
-	}
-	
-	public function setTitle(string $title): PageTranslation {
-		$this->title = $title;
-		return $this;
+	public string $title {
+		get => $this->title;
+		set => $this->title = $value;
 	}
 }

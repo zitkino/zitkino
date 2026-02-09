@@ -56,7 +56,7 @@ class Delnak extends Parser {
 				
 				$timeQuery = $xpath->query("//p[@class='start']", $event);
 				$timeString = $timeQuery->item($movieItems)->nodeValue;
-				if(Strings::contains($timeString, "°°")) {
+				if(str_contains($timeString, "°°")) {
 					$time = [str_replace("°°", "", $timeString), "00"];
 				} else {
 					$time = explode(":", $timeString);
@@ -83,7 +83,7 @@ class Delnak extends Parser {
 			$movieItems++;
 		}
 		
-		$this->cinema->setParsed(new \DateTime());
+		$this->cinema->parsed = new \DateTime();
 		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

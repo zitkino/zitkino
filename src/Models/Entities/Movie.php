@@ -12,21 +12,35 @@ class Movie {
 	use Id;
 	
 	#[ORM\Column(name: "name", type: "string", length: 191, nullable: false)]
-	private string $name;
+	public string $name {
+		get => $this->name;
+		set => $this->name = $value;
+	}
 	
 	#[ORM\Column(name: "length", type: "integer", nullable: true)]
-	private ?int $length = null;
+	public ?int $length = null {
+		get => $this->length;
+		set => $this->length = $value;
+	}
 	
 	#[ORM\Column(name: "csfd", type: "string", length: 255, nullable: true)]
-	private ?string $csfd = null;
+	public ?string $csfd = null {
+		get => $this->csfd;
+		set => $this->csfd = $value;
+	}
 	
 	#[ORM\Column(name: "imdb", type: "string", length: 255, nullable: true)]
-	private ?string $imdb = null;
+	public ?string $imdb = null {
+		get => $this->imdb;
+		set => $this->imdb = $value;
+	}
 	
 	private array $databases;
 	
 	#[ORM\OneToMany(mappedBy: "movie", targetEntity: Screening::class, cascade: ["persist", "remove"])]
-	private Collection $screenings;
+	public Collection $screenings {
+		get => $this->screenings;
+	}
 	
 	public function __construct(string $name = '') {
 		if(!empty($name)) {
@@ -41,23 +55,10 @@ class Movie {
 		return $this->name;
 	}
 	
-	public function getName(): string {
-		return $this->name;
-	}
-	
-	public function setName(string $name): self {
-		$this->name = $name;
-		return $this;
-	}
-	
-	public function getScreenings(): Collection {
-		return $this->screenings;
-	}
-	
 	public function addScreening(Screening $screening): self {
 		if(!$this->screenings->contains($screening)) {
 			$this->screenings[] = $screening;
-			$screening->setMovie($this);
+			$screening->movie = $this;
 		}
 		
 		return $this;
@@ -66,38 +67,11 @@ class Movie {
 	public function removeScreening(Screening $screening): self {
 		if($this->screenings->removeElement($screening)) {
 			// set the owning side to null (unless already changed)
-			if($screening->getMovie() === $this) {
-				$screening->setMovie(null);
+			if($screening->movie === $this) {
+				$screening->movie = null;
 			}
 		}
 		
-		return $this;
-	}
-	
-	public function getLength(): ?int {
-		return $this->length;
-	}
-	
-	public function setLength(?int $length): self {
-		$this->length = $length;
-		return $this;
-	}
-	
-	public function getCsfd(): ?string {
-		return $this->csfd;
-	}
-	
-	public function setCsfd(?string $csfd): self {
-		$this->csfd = $csfd;
-		return $this;
-	}
-	
-	public function getImdb(): ?string {
-		return $this->imdb;
-	}
-	
-	public function setImdb(?string $imdb): self {
-		$this->imdb = $imdb;
 		return $this;
 	}
 	

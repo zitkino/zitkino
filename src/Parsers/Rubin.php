@@ -42,7 +42,7 @@ class Rubin extends Parser {
 			}
 		}
 		
-		$this->cinema->setParsed(new \DateTime());
+		$this->cinema->parsed = new \DateTime();
 		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

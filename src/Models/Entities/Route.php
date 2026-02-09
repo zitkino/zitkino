@@ -12,54 +12,30 @@ class Route {
 	use Id, Sluggable, Localable, Dateable;
 	
 	#[ORM\Column(name: "canonical_route", type: "string", length: 255, nullable: false)]
-	private string $canonical_route;
+	public string $canonical_route {
+		get => $this->canonical_route;
+		set => $this->canonical_route = $value;
+	}
 	
 	#[ORM\Column(name: "controller", type: "string", length: 255, nullable: false)]
-	private string $controller;
+	public string $controller {
+		get => $this->controller;
+		set => $this->controller = $value;
+	}
 	
 	#[ORM\Column(name: "entity_id", type: "integer", nullable: true)]
-	private ?int $entityId = null;
+	public ?int $entityId = null {
+		get => $this->entityId;
+		set => $this->entityId = $value;
+	}
 	
 	#[ORM\Column(name: "entity_class", type: "string", length: 255, nullable: true)]
-	private ?string $entityClass = null;
+	public ?string $entityClass = null {
+		get => $this->entityClass;
+		set => $this->entityClass = $value;
+	}
 	
 	public function __construct() {
 		$this->created = new \DateTime();
-	}
-	
-	public function getCanonicalRoute(): string {
-		return $this->canonical_route;
-	}
-	
-	public function setCanonicalRoute(string $canonical_route): self {
-		$this->canonical_route = $canonical_route;
-		return $this;
-	}
-	
-	public function getController(): string {
-		return $this->controller;
-	}
-	
-	public function setController(string $controller): self {
-		$this->controller = $controller;
-		return $this;
-	}
-	
-	public function getEntityId(): ?int {
-		return $this->entityId;
-	}
-	
-	public function setEntityId(?int $entityId): self {
-		$this->entityId = $entityId;
-		return $this;
-	}
-	
-	public function getEntityClass(): ?string {
-		return $this->entityClass;
-	}
-	
-	public function setEntityClass(?string $entityClass): self {
-		$this->entityClass = $entityClass;
-		return $this;
 	}
 }

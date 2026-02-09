@@ -12,10 +12,19 @@ class Showtime {
 	
 	#[ORM\ManyToOne(targetEntity: Screening::class, inversedBy: "showtimes")]
 	#[ORM\JoinColumn(name: "screening", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
-	private Screening $screening;
+	public Screening $screening {
+		get => $this->screening;
+		set => $this->screening = $value;
+	}
 	
 	#[ORM\Column(name: "datetime", type: "datetime", nullable: false)]
-	private \DateTime $datetime;
+	public \DateTime $datetime {
+		get => $this->datetime;
+		set {
+			$this->datetime = $value;
+			$this->fixDatetime();
+		}
+	}
 	
 	public function __construct(?Screening $screening = null, ?\DateTime $datetime = null) {
 		if(isset($screening)) {
@@ -24,26 +33,7 @@ class Showtime {
 		
 		if(isset($datetime)) {
 			$this->datetime = $datetime;
-			$this->fixDatetime();
 		}
-	}
-	
-	public function getScreening(): Screening {
-		return $this->screening;
-	}
-	
-	public function setScreening(Screening $screening): self {
-		$this->screening = $screening;
-		return $this;
-	}
-	
-	public function getDatetime(): \DateTime {
-		return $this->datetime;
-	}
-	
-	public function setDatetime(\DateTime $datetime): self {
-		$this->datetime = $datetime;
-		return $this;
 	}
 	
 	public function fixDatetime(): void {

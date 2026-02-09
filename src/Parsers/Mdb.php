@@ -50,7 +50,7 @@ class Mdb extends Parser {
 				$datetimes = [$datetime];
 				
 				$length = null;
-				if(Strings::endsWith($event->nodeValue, " min")) {
+				if(str_ends_with($event->nodeValue, " min")) {
 					$parts = Strings::split($event->nodeValue, "#/#");
 					$minutes = $parts[array_key_last($parts)];
 					$length = (int)str_replace(" min", "", $minutes);
@@ -65,7 +65,7 @@ class Mdb extends Parser {
 			}
 		}
 		
-		$this->cinema->setParsed(new \DateTime());
+		$this->cinema->parsed = new \DateTime();
 		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

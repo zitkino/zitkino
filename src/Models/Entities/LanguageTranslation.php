@@ -12,26 +12,14 @@ class LanguageTranslation implements TranslationInterface {
 	use Id, KnpTranslation;
 	
 	#[ORM\Column(name: "dubbing", type: "string", length: 191, nullable: false)]
-	protected string $dubbing;
+	public string $dubbing {
+		get => $this->dubbing;
+		set => $this->dubbing = $value;
+	}
 	
 	#[ORM\Column(name: "subtitles", type: "string", length: 191, nullable: false)]
-	protected string $subtitles;
-	
-	public function getDubbing(): string {
-		return $this->dubbing;
-	}
-	
-	public function setDubbing(?string $dubbing): LanguageTranslation {
-		$this->dubbing = $dubbing;
-		return $this;
-	}
-	
-	public function getSubtitles(): string {
-		return $this->subtitles;
-	}
-	
-	public function setSubtitles(?string $subtitles): LanguageTranslation {
-		$this->subtitles = $subtitles;
-		return $this;
+	public string $subtitles {
+		get => $this->subtitles;
+		set => $this->subtitles = $value;
 	}
 }

@@ -82,7 +82,7 @@ class Spilberk extends Parser {
 			$this->cinema->addScreening($screening);
 		}
 		
-		$this->cinema->setParsed(new \DateTime());
+		$this->cinema->parsed = new \DateTime();
 		$this->parserService->cinemaFacade->save($this->cinema);
 	}
 }

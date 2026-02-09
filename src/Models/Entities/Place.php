@@ -12,17 +12,28 @@ class Place {
 	use Id;
 	
 	#[ORM\Column(name: "name", type: "string", length: 255, nullable: false)]
-	private string $name;
+	public string $name {
+		get => $this->name;
+		set => $this->name = $value;
+	}
 	
 	#[ORM\Column(name: "link", type: "string", length: 255, nullable: true)]
-	private ?string $link = null;
+	public ?string $link = null {
+		get => $this->link;
+		set => $this->link = $value;
+	}
 	
 	#[ORM\ManyToOne(targetEntity: Cinema::class, inversedBy: "places")]
 	#[ORM\JoinColumn(name: "cinema", referencedColumnName: "id", nullable: false)]
-	private Cinema $cinema;
+	public Cinema $cinema {
+		get => $this->cinema;
+		set => $this->cinema = $value;
+	}
 	
 	#[ORM\OneToMany(mappedBy: "place", targetEntity: Screening::class)]
-	private Collection $screenings;
+	public Collection $screenings {
+		get => $this->screenings;
+	}
 	
 	public function __construct(string $name = '') {
 		if(!empty($name)) {
@@ -35,41 +46,10 @@ class Place {
 		return $this->name;
 	}
 	
-	public function getName(): string {
-		return $this->name;
-	}
-	
-	public function setName(string $name): self {
-		$this->name = $name;
-		return $this;
-	}
-	
-	public function getLink(): ?string {
-		return $this->link;
-	}
-	
-	public function setLink(?string $link): self {
-		$this->link = $link;
-		return $this;
-	}
-	
-	public function getCinema(): Cinema {
-		return $this->cinema;
-	}
-	
-	public function setCinema(Cinema $cinema): self {
-		$this->cinema = $cinema;
-		return $this;
-	}
-	
-	public function getScreenings(): Collection {
-		return $this->screenings;
-	}
-	
 	public function addScreening(Screening $screening): self {
 		if(!$this->screenings->contains($screening)) {
 			$this->screenings[] = $screening;
-			$screening->setPlace($this);
+			$screening->place = $this;
 		}
 		
 		return $this;

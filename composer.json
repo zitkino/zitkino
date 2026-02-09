@@ -77,11 +77,10 @@
 		"ext-libxml": "*",
 		"ext-pdo_sqlite": "*",
 		"a2lix/translation-form-bundle": "^3.2",
-		"doctrine/annotations": "^1.14.4",
 		"doctrine/dbal": "^3.10.2",
 		"doctrine/doctrine-bundle": "^2.16.2",
 		"doctrine/doctrine-migrations-bundle": "^3.4.2",
-		"doctrine/orm": "^2.20.6",
+		"doctrine/orm": "*",
 		"easycorp/easyadmin-bundle": "^4.25.1",
 		"emileperron/tinymce-bundle": "^3.3",
 		"guzzlehttp/guzzle": "^7.10",
@@ -162,8 +161,7 @@
 	},
 	"extra": {
 		"symfony": {
-			"allow-contrib": true,
-			"require": "7.3.*"
+			"allow-contrib": true
 		}
 	}
 }

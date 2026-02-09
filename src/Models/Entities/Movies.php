@@ -14,8 +14,7 @@ class Movies extends ArrayCollection {
 	public function hasLengths(): bool {
 		/** @var Movie $movie */
 		foreach($this->toArray() as $movie) {
-			$length = $movie->getLength();
-			if(isset($length)) {
+			if(isset($movie->length)) {
 				return true;
 			}
 		}

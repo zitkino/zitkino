@@ -17,65 +17,124 @@ class Cinema implements TranslatableInterface {
 	use Id, Identable, Sluggable, KnpTranslatable, Sortable;
 	
 	#[ORM\Column(name: "name", type: "string", length: 255, nullable: false)]
-	private string $name;
+	public string $name {
+		get => $this->name;
+		set => $this->name = $value;
+	}
 	
 	#[ORM\ManyToOne(targetEntity: "CinemaType", inversedBy: "cinemas")]
 	#[ORM\JoinColumn(name: "type", referencedColumnName: "id", nullable: true)]
-	private ?CinemaType $type = null;
+	public ?CinemaType $type = null {
+		get => $this->type;
+		set => $this->type = $value;
+	}
 	
 	#[ORM\Column(name: "address", type: "string", length: 255, nullable: true)]
-	private ?string $address = null;
+	public ?string $address = null {
+		get => $this->address;
+		set => $this->address = $value;
+	}
 	
 	#[ORM\Column(name: "city", type: "string", length: 255, nullable: false, options: ["default" => "Brno"])]
-	private string $city = "Brno";
+	public string $city = "Brno" {
+		get => $this->city;
+		set => $this->city = $value;
+	}
 	
 	#[ORM\Column(name: "phone", type: "string", length: 100, nullable: true)]
-	private ?string $phone = null;
+	public ?string $phone = null {
+		get => $this->phone;
+		set => $this->phone = $value;
+	}
 	
 	#[ORM\Column(name: "email", type: "string", length: 255, nullable: true)]
-	private ?string $email = null;
+	public ?string $email = null {
+		get => $this->email;
+		set => $this->email = $value;
+	}
 	
 	#[ORM\Column(name: "url", type: "string", length: 1000, nullable: true)]
-	private ?string $url = null;
+	public ?string $url = null {
+		get => $this->url;
+		set => $this->url = $value;
+	}
 	
 	#[ORM\Column(name: "gmaps", type: "string", length: 1000, nullable: true)]
-	private ?string $gmaps = null;
+	public ?string $gmaps = null {
+		get => $this->gmaps;
+		set => $this->gmaps = $value;
+	}
 	
 	#[ORM\Column(name: "programme", type: "string", length: 255, nullable: true)]
-	private ?string $programme = null;
+	public ?string $programme = null {
+		get => $this->programme;
+		set => $this->programme = $value;
+	}
 	
 	#[ORM\Column(name: "facebook", type: "string", length: 255, nullable: true)]
-	private ?string $facebook = null;
+	public ?string $facebook = null {
+		get => $this->facebook;
+		set => $this->facebook = $value;
+	}
 	
 	#[ORM\Column(name: "googlePlus", type: "string", length: 255, nullable: true)]
-	private ?string $googlePlus = null;
+	public ?string $googlePlus = null {
+		get => $this->googlePlus;
+		set => $this->googlePlus = $value;
+	}
 	
 	#[ORM\Column(name: "instagram", type: "string", length: 255, nullable: true)]
-	private ?string $instagram = null;
+	public ?string $instagram = null {
+		get => $this->instagram;
+		set => $this->instagram = $value;
+	}
 	
 	#[ORM\Column(name: "twitter", type: "string", length: 255, nullable: true)]
-	private ?string $twitter = null;
+	public ?string $twitter = null {
+		get => $this->twitter;
+		set => $this->twitter = $value;
+	}
 	
 	#[ORM\Column(name: "active_since", type: "date", nullable: true)]
-	private ?\DateTime $activeSince = null;
+	public ?\DateTime $activeSince = null {
+		get => $this->activeSince;
+		set => $this->activeSince = $value;
+	}
 	
 	#[ORM\Column(name: "active_until", type: "date", nullable: true)]
-	private ?\DateTime $activeUntil = null;
+	public ?\DateTime $activeUntil = null {
+		get => $this->activeUntil;
+		set => $this->activeUntil = $value;
+	}
 	
 	#[ORM\Column(name: "parsable", type: "boolean", nullable: false, options: ["default" => 0])]
-	private bool $parsable = false;
+	public bool $parsable = false {
+		get => $this->parsable;
+		set => $this->parsable = $value;
+	}
 	
 	#[ORM\Column(name: "parsing", type: "string", length: 255, nullable: true)]
-	private ?string $parsing = null;
+	public ?string $parsing = null {
+		get => $this->parsing;
+		set => $this->parsing = $value;
+	}
 	
 	#[ORM\Column(name: "parsed", type: "datetime", nullable: true)]
-	private ?\DateTime $parsed = null;
+	public ?\DateTime $parsed = null {
+		get => $this->parsed;
+		set => $this->parsed = $value;
+	}
 	
 	#[ORM\OneToMany(mappedBy: "cinema", targetEntity: "Screening", cascade: ["persist", "remove"])]
-	private Collection $screenings;
+	public Collection $screenings {
+		get => $this->screenings;
+		set => $this->screenings = $value;
+	}
 	
 	#[ORM\OneToMany(mappedBy: "cinema", targetEntity: "Place")]
-	private Collection $places;
+	public Collection $places {
+		get => $this->places;
+	}
 	
 	public function __construct(string $ident = '') {
 		if(!empty($ident)) {
@@ -88,169 +147,7 @@ class Cinema implements TranslatableInterface {
 	}
 	
 	public function __toString() {
-		return $this->getName();
-	}
-	
-	public function getName(): string {
 		return $this->name;
-	}
-	
-	public function setName(string $name): self {
-		$this->name = $name;
-		return $this;
-	}
-	
-	public function getType(): ?CinemaType {
-		return $this->type;
-	}
-	
-	public function setType(?CinemaType $type): self {
-		$this->type = $type;
-		return $this;
-	}
-	
-	public function getAddress(): ?string {
-		return $this->address;
-	}
-	
-	public function setAddress(?string $address): self {
-		$this->address = $address;
-		return $this;
-	}
-	
-	public function getCity(): string {
-		return $this->city;
-	}
-	
-	public function setCity(string $city): self {
-		$this->city = $city;
-		return $this;
-	}
-	
-	public function getPhone(): ?string {
-		return $this->phone;
-	}
-	
-	public function setPhone(?string $phone): self {
-		$this->phone = $phone;
-		return $this;
-	}
-	
-	public function getEmail(): ?string {
-		return $this->email;
-	}
-	
-	public function setEmail(?string $email): self {
-		$this->email = $email;
-		return $this;
-	}
-	
-	public function getUrl(): ?string {
-		return $this->url;
-	}
-	
-	public function setUrl(?string $url): self {
-		$this->url = $url;
-		return $this;
-	}
-	
-	public function getGmaps(): ?string {
-		return $this->gmaps;
-	}
-	
-	public function setGmaps(?string $gmaps): self {
-		$this->gmaps = $gmaps;
-		return $this;
-	}
-	
-	public function getProgramme(): ?string {
-		return $this->programme;
-	}
-	
-	public function setProgramme(?string $programme): self {
-		$this->programme = $programme;
-		return $this;
-	}
-	
-	public function getFacebook(): ?string {
-		return $this->facebook;
-	}
-	
-	public function setFacebook(?string $facebook): self {
-		$this->facebook = $facebook;
-		return $this;
-	}
-	
-	public function getGooglePlus(): ?string {
-		return $this->googlePlus;
-	}
-	
-	public function setGooglePlus(?string $googlePlus): self {
-		$this->googlePlus = $googlePlus;
-		return $this;
-	}
-	
-	public function getInstagram(): ?string {
-		return $this->instagram;
-	}
-	
-	public function setInstagram(?string $instagram): self {
-		$this->instagram = $instagram;
-		return $this;
-	}
-	
-	public function getTwitter(): ?string {
-		return $this->twitter;
-	}
-	
-	public function setTwitter(?string $twitter): self {
-		$this->twitter = $twitter;
-		return $this;
-	}
-	
-	public function getActiveSince(): ?\DateTime {
-		return $this->activeSince;
-	}
-	
-	public function setActiveSince(?\DateTime $activeSince): self {
-		$this->activeSince = $activeSince;
-		return $this;
-	}
-	
-	public function getActiveUntil(): ?\DateTime {
-		return $this->activeUntil;
-	}
-	
-	public function setActiveUntil(?\DateTime $activeUntil): self {
-		$this->activeUntil = $activeUntil;
-		return $this;
-	}
-	
-	public function isParsable(): bool {
-		return $this->parsable;
-	}
-	
-	public function setParsable(bool $parsable): self {
-		$this->parsable = $parsable;
-		return $this;
-	}
-	
-	public function getParsing(): ?string {
-		return $this->parsing;
-	}
-	
-	public function setParsing(?string $parsing): self {
-		$this->parsing = $parsing;
-		return $this;
-	}
-	
-	public function getParsed(): ?\DateTime {
-		return $this->parsed;
-	}
-	
-	public function setParsed(?\DateTime $parsed): self {
-		$this->parsed = $parsed;
-		return $this;
 	}
 	
 	public function getScreenings(string $type = "all"): Screenings {
@@ -292,12 +189,12 @@ class Cinema implements TranslatableInterface {
 				$nextDate = new \DateTime();
 				$nextDate->modify("+1 days");
 				
-				$showtimes = $screening->getShowtimes();
+				$showtimes = $screening->showtimes;
 				if(!$showtimes->isEmpty()) {
 					/** @var Showtime $showtime */
 					foreach($showtimes as $showtime) {
 						// checks if movie is played from now to +1 day
-						if($currentDate < $showtime->getDatetime() and $showtime->getDatetime() < $nextDate) {
+						if($currentDate < $showtime->datetime and $showtime->datetime < $nextDate) {
 							$soonest[] = $screening;
 							break;
 						}
@@ -309,8 +206,8 @@ class Cinema implements TranslatableInterface {
 				$soonest = [];
 				for($i = 0; $i < count($this->screenings->toArray()); $i++) {
 					if(isset($this->screenings[$i])) {
-						foreach($this->screenings[$i]->getShowtimes() as $showtime) {
-							if($currentDate < $showtime->getDatetime()) {
+						foreach($this->screenings[$i]->showtimes as $showtime) {
+							if($currentDate < $showtime->datetime) {
 								$soonest[] = $this->screenings[$i];
 							}
 						}
@@ -322,18 +219,6 @@ class Cinema implements TranslatableInterface {
 				}
 			}
 		}
-
-//		if(empty($soonest)) {
-//			if(is_null($this->screenings) or empty($this->screenings->toArray())) {
-//				$soonest = [];
-//			} else {
-//				if($this->screenings[0]->getShowtimes()[0]->isActual()) {
-//					$soonest = [$this->screenings[0]];
-//				} else {
-//					$soonest = [];
-//				}
-//			}
-//		}
 		
 		return new Screenings($soonest);
 	}
@@ -345,11 +230,11 @@ class Cinema implements TranslatableInterface {
 			
 			/** @var Screening $screening */
 			foreach($this->screenings as $screening) {
-				$showtimes = $screening->getShowtimes();
+				$showtimes = $screening->showtimes;
 				if(!$showtimes->isEmpty()) {
 					/** @var Showtime $showtime */
 					foreach($showtimes as $showtime) {
-						if($currentDate < $showtime->getDatetime()) {
+						if($currentDate < $showtime->datetime) {
 							$new[] = $screening;
 							break;
 						}
@@ -360,14 +245,10 @@ class Cinema implements TranslatableInterface {
 		return new Screenings($new);
 	}
 	
-	public function getPlaces(): Collection {
-		return $this->places;
-	}
-	
 	public function addPlace(Place $place): self {
 		if(!$this->places->contains($place)) {
 			$this->places[] = $place;
-			$place->setCinema($this);
+			$place->cinema = $this;
 		}
 		
 		return $this;
@@ -376,8 +257,8 @@ class Cinema implements TranslatableInterface {
 	public function removePlace(Place $place): self {
 		if($this->places->removeElement($place)) {
 			// set the owning side to null (unless already changed)
-			if($place->getCinema() === $this) {
-				$place->setCinema(null);
+			if($place->cinema === $this) {
+				$place->cinema = null;
 			}
 		}
 		
