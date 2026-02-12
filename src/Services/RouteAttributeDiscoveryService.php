@@ -41,7 +41,7 @@ class RouteAttributeDiscoveryService {
 			if(!empty($classRouteAttributes)) {
 				/** @var Route $classRoute */
 				$classRoute = $classRouteAttributes[0]->newInstance();
-				$classPrefix = $classRoute->getName() ?? "";
+				$classPrefix = $classRoute->name ?? "";
 			}
 			
 			foreach($reflectionClass->getMethods() as $method) {

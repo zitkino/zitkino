@@ -95,7 +95,7 @@ class Screening {
 	}
 	
 	public function __toString() {
-		return $this->cinema . "-" . $this->movie->id . "-" . $this->type . "-" . $this->dubbing . "-" . $this->subtitles;
+		return $this->cinema . "-" . $this->movie->getId() . "-" . $this->type . "-" . $this->dubbing . "-" . $this->subtitles;
 	}
 	
 	public function fixPrice(): ?string {
