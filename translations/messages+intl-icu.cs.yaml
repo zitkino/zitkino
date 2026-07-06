@@ -27,6 +27,19 @@ cinemas:
         list: 'seznam letních kin'
         programme: 'program letních kin'
         title: 'Letní kina'
+home:
+    soonest:
+        title: 'Nejbližší promítání'
+        subtitle: 'Sledujte, co začíná během příštích hodin'
+        all: 'Celý program'
+    capacity: '{count, plural, =0 {Vyprodáno} other {Dostatek míst}}'
+    types:
+        title: 'Vyberte si svůj zážitek'
+    map:
+        pretitle: 'INTERAKTIVNÍ MAPA'
+        title: 'Najděte nejbližší sedadlo'
+        subtitle: 'Všechna brněnská kina na jedné mapě. Najděte své oblíbené místo a podívejte se, co právě hrají.'
+        open: 'Otevřít mapu'
 contact:
     header: 'Kontaktujte nás'
     title: Kontakt
@@ -48,6 +61,11 @@ map:
     hide: Skrýt
     show: Zobrazit
     title: Mapa
+    subtitle: 'Najděte své nejbližší nezávislé kino.'
+    status:
+        today: 'Dnes hraje'
+        open: 'Otevřeno'
+    footer_info: 'Zobrazujeme nezávislá a klubová kina spolupracující s projektem Žít kino.'
 footer:
     copyright: '© {year} {name}'
 

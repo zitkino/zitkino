@@ -36,9 +36,9 @@ class CinemaController extends BaseController {
 		$cinema = $this->cinemaFacade->grabBySlug($slug);
 		$screenings = $cinema->getNewScreenings();
 		
-		$gmaps = $cinema->getGmaps();
+		$gmaps = $cinema->gmaps;
 		if($gmaps === null) {
-			$address = $cinema->getAddress().", ".$cinema->getCity();
+			$address = $cinema->address.", ".$cinema->city;
 			$param = urlencode($address);
 		} else {
 			$param = "place_id:".$gmaps;

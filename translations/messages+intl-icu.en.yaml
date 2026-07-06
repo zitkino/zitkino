@@ -27,6 +27,19 @@ cinemas:
         list: 'list of summer cinemas'
         programme: 'summer cinemas programme'
         title: 'Summer cinemas'
+home:
+    soonest:
+        title: 'Nearest screenings'
+        subtitle: 'Watch what starts in the next few hours'
+        all: 'Full program'
+    capacity: '{count, plural, =0 {Sold out} other {Plenty of seats}}'
+    types:
+        title: 'Choose your experience'
+    map:
+        pretitle: 'INTERACTIVE MAP'
+        title: 'Find the nearest seat'
+        subtitle: 'All Brno cinemas on one map. Find your favorite place and see what they are playing right now.'
+        open: 'Open map'
 contact:
     header: 'Contact Us'
     title: Contact
@@ -48,6 +61,11 @@ map:
     hide: Hide
     show: Show
     title: Map
+    subtitle: 'Find your nearest independent cinema.'
+    status:
+        today: 'Playing today'
+        open: 'Open'
+    footer_info: 'We display independent and art cinemas cooperating with the Žít kino project.'
 footer:
     copyright: '© {year} {name}'
 

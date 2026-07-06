@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Attributes\DatabaseRoute;
 use App\Models\Facades\{CinemaFacade, PageFacade};
+use App\Services\CinemaService;
 use App\Services\MetaService;
 use Symfony\Component\HttpFoundation\{RequestStack, Response};
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,7 +19,14 @@ class HomeController extends BaseController {
 	
 	private PageFacade $pageFacade;
 	
-	public function __construct(CinemaFacade $cinemaFacade, TranslatorInterface $translator, RequestStack $requestStack, MetaService $metaService, PageFacade $pageFacade) {
+	public function __construct(
+		CinemaFacade $cinemaFacade,
+		TranslatorInterface $translator,
+		RequestStack $requestStack,
+		MetaService $metaService,
+		PageFacade $pageFacade,
+		private readonly CinemaService $cinemaService,
+	) {
 		parent::__construct($translator, $requestStack, $metaService);
 		$this->cinemaFacade = $cinemaFacade;
 		$this->pageFacade = $pageFacade;
@@ -27,13 +35,23 @@ class HomeController extends BaseController {
 	#[Route(path: "/{_locale}", name: "index", defaults: ["_locale" => "cs"])]
 	public function index(): Response {
 		$cinemas = $this->cinemaFacade->gatherWithMovies("current");
+		$soonestScreenings = $this->cinemaService->getSoonestScreenings();
+		$types = $this->cinemaFacade->grabTypes();
 		
-		return $this->render("home/index.html.twig", ["cinemas" => $cinemas]);
+		return $this->render("home/index.html.twig", [
+			"cinemas" => $cinemas,
+			"soonestScreenings" => $soonestScreenings,
+			"types" => $types,
+		]);
 	}
 	
 	#[Route(path: ["cs" => "/mapa", "en" => "/map"], name: "map")]
 	public function map(): Response {
-		return $this->render("home/map.html.twig");
+		$cinemas = $this->cinemaFacade->grabVisible();
+		return $this->render("home/map.html.twig", [
+			"cinemas" => $cinemas,
+			"google_maps_key" => $this->getParameter("google-maps-key"),
+		]);
 	}
 	
 	#[Route(path: ["cs" => "/kontakt", "en" => "/contact"], name: "contact")]

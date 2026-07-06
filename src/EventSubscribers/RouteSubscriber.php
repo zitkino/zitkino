@@ -1,5 +1,23 @@
 <?php
 
+/**
+ * This is a Doctrine event subscriber responsible for managing route synchronization based on entity lifecycle events such as persist, update, and removal.
+ *
+ * On the `postPersist` and `postUpdate` events, the `updateRoutes` method is triggered to ensure that the routes associated with the given entity are correctly created or updated.
+ * On the `preRemove` event, the subscriber removes routes associated with the deleted entity.
+ *
+ * Attributes:
+ * - `RouteAttributeDiscoveryService` is used to fetch routing configurations for entities.
+ * - `EntityManagerInterface` facilitates interaction with the database for entity and route updates.
+ * - `AdapterInterface` is used for cache invalidation after route changes.
+ *
+ * Handled Events:
+ * - `postPersist`: Triggered after an entity is persisted.
+ * - `postUpdate`: Triggered after an entity is updated.
+ * - `preRemove`: Triggered before an entity is removed.
+ *
+ * The subscriber also supports translatable entities, ensuring that translations are properly handled and associated routes are updated accordingly.
+ */
 namespace App\EventSubscribers;
 
 use App\Models\Entities\Route;

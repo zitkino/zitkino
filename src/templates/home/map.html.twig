@@ -1,10 +1,207 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
-{% block title %}{{ "map.title"|trans }}{% endblock %}
-{% block logo %}<div class="logo"><span>🗺️</span></div>{% endblock %}
+{% block title %}{{ 'map.header'|trans }}{% endblock %}
 
 {% block content %}
-	<div class="embed-responsive embed-responsive-16by9 map">
-		<iframe src="https://www.google.com/maps/d/embed?mid=1bGbx0udf8xIA5FhKAZgDhgm0WvY" class="embed-responsive-item"></iframe>
+	<div class="map-page-container d-flex flex-column flex-md-row" style="height: calc(100vh - 100px); margin: -1.5rem;">
+		<div class="sidebar bg-white p-4 shadow-sm overflow-auto" style="width: 100%; max-width: 400px; z-index: 10;">
+			<h2 class="fw-bold mb-1">{{ 'cinemas.default.title'|trans }}</h2>
+			<p class="text-muted mb-4">{{ 'map.subtitle'|trans }}</p>
+			
+			<div class="cinema-list">
+				{% for cinema in cinemas %}
+					<div	class="cinema-card card mb-3 border shadow-sm" data-id="{{ cinema.id }}" data-lat="{{ cinema.gmaps|split(',')|first|trim }}"
+							data-lng="{{ cinema.gmaps|split(',')|last|trim }}">
+						<div class="card-body p-3">
+							<div class="d-flex justify-content-between align-items-start mb-2">
+								<h5 class="card-title fw-bold mb-0 text-danger">{{ cinema.name }}</h5>
+								<span class="badge bg-light text-muted border small rounded-pill">
+								{% if cinema.hasScreenings %}
+									{{ 'map.status.today'|trans }}
+								{% else %}
+									{{ 'map.status.open'|trans }}
+								{% endif %}
+							</span>
+							</div>
+							<p class="card-text small text-muted mb-3">
+								<i class="bi bi-geo-alt"></i> {{ cinema.address }}, {{ cinema.city }}
+							</p>
+							<div class="d-flex gap-2">
+								<a href="{{ path('cinema_profile_' ~ cinema.ident) }}" class="btn btn-danger btn-sm flex-grow-1 rounded-pill">Program</a>
+								<a href="{{ path('cinema_profile_' ~ cinema.ident) }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Detail</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			
+			<div class="mt-auto pt-4 border-top">
+				<p class="small text-muted">{{ 'map.footer_info'|trans }}</p>
+			</div>
+		</div>
+		
+		<div id="map" class="flex-grow-1 bg-light"></div>
 	</div>
+	
+	<style>
+		#main .container-fluid {
+			padding: 0;
+		}
+		
+		header#header {
+			display: none;
+		}
+		
+		.map-page-container {
+			overflow: hidden;
+		}
+		
+		.cinema-card {
+			cursor: pointer;
+			transition: transform 0.2s;
+		}
+		
+		.cinema-card:hover {
+			transform: translateY(-2px);
+			border-color: #dc3545 !important;
+		}
+		
+		.cinema-card.active {
+			border-color: #dc3545 !important;
+			background-color: #fff8f8;
+		}
+		
+		@media (max-width: 767.98px) {
+			.map-page-container {
+				height: auto !important;
+			}
+			
+			.sidebar {
+				max-width: 100%;
+				height: 400px;
+			}
+			
+			#map {
+				height: 400px;
+			}
+		}
+	</style>
+	
+	<script>
+		(g => {
+			var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window;
+			b = b[c] || (b[c] = {});
+			var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async(f, n) => {
+				await (a = m.createElement("script"));
+				e.set("libraries", [...r] + "");
+				for(k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+				e.set("callback", q + ".stat");
+				a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+				b[q] = f;
+				a.onerror = () => h = n(Error(p + " could not load."));
+				a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+				a.async = true;
+				m.head.append(a)
+			}));
+			d[l] ? (console.warn(p + " only loads once. Ignoring:", g), u()) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
+		})({
+			key: "{{ google_maps_key }}",
+			v: "weekly"
+		});
+		
+		window.__ib__ = {
+			stat: function() {
+				// Internal Google Maps status handler
+			}
+		};
+		
+		let map;
+		let markers = [];
+		
+		async function initMap() {
+			const {Map, InfoWindow} = await google.maps.importLibrary("maps");
+			const {AdvancedMarkerElement, PinElement} = await google.maps.importLibrary("marker");
+			
+			map = new Map(document.getElementById("map"), {
+				center: {lat: 49.195060, lng: 16.606837},
+				zoom: 14,
+				mapId: "DEMO_MAP_ID",
+				disableDefaultUI: false,
+				zoomControl: true,
+				mapTypeControl: false,
+				scaleControl: true,
+				streetViewControl: false,
+				rotateControl: false,
+				fullscreenControl: true,
+				styles: [
+					{
+						"featureType": "all",
+						"elementType": "labels.text.fill",
+						"stylers": [{"color": "#7C93A3"}]
+					},
+					{
+						"featureType": "water",
+						"elementType": "geometry",
+						"stylers": [{"color": "#C8D7D4"}]
+					}
+				]
+			});
+			
+			const infoWindow = new InfoWindow();
+			
+			{% for cinema in cinemas %}
+			{% set coords = cinema.gmaps|split(',') %}
+			{% if coords|length == 2 %}
+			(function() {
+				const position = {lat: {{ coords[0]|trim }}, lng: {{ coords[1]|trim }} };
+				
+				const pin = new PinElement({
+					background: "#DC3545",
+					borderColor: "#FFFFFF",
+					glyphColor: "#FFFFFF",
+					scale: 1.2
+				});
+				
+				const marker = new AdvancedMarkerElement({
+					map: map,
+					position: position,
+					title: "{{ cinema.name }}",
+					content: pin.element,
+				});
+				
+				marker.addListener("click", () => {
+					infoWindow.setContent(`
+                            <div class="p-2">
+                                <h6 class="fw-bold mb-1">{{ cinema.name }}</h6>
+                                <p class="small text-muted mb-2">{{ cinema.address }}</p>
+                                <a href="{{ path('cinema_profile_' ~ cinema.ident) }}" class="btn btn-danger btn-sm rounded-pill w-100">Program</a>
+                            </div>
+                        `);
+					infoWindow.open(map, marker);
+				});
+				
+				markers.push({id: {{ cinema.id }}, marker: marker});
+			})();
+			{% endif %}
+			{% endfor %}
+			
+			document.querySelectorAll('.cinema-card').forEach(card => {
+				card.addEventListener('click', () => {
+					const id = card.getAttribute('data-id');
+					const lat = parseFloat(card.getAttribute('data-lat'));
+					const lng = parseFloat(card.getAttribute('data-lng'));
+					
+					if(!isNaN(lat) && !isNaN(lng)) {
+						map.panTo({lat, lng});
+						map.setZoom(16);
+					}
+					
+					document.querySelectorAll('.cinema-card').forEach(c => c.classList.remove('active'));
+					card.classList.add('active');
+				});
+			});
+		}
+		
+		initMap();
+	</script>
 {% endblock %}

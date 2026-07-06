@@ -1,0 +1,36 @@
+<div class="screening-item card mb-3 border-0 shadow-sm">
+    <div class="card-body d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <div class="time me-4 px-3 py-2 bg-light rounded">
+                <h4 class="mb-0 text-danger fw-bold">{{ screening.showtimes.first.datetime|date('H:i') }}</h4>
+            </div>
+            <div>
+                <h5 class="mb-0 fw-bold">
+                    {% if screening.link %}<a href="{{ screening.link }}" class="text-decoration-none text-dark">{% endif %}
+                    {{ screening.movie.name }}
+                    {% if screening.link %}</a>{% endif %}
+                </h5>
+                <small class="text-muted">
+                    <i class="bi bi-geo-alt"></i> {{ screening.cinema.name }}
+                    {% if screening.place %}
+                        <span class="mx-2">•</span> {{ screening.place.name }}
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="text-muted me-3">
+                {% if screening.fixPrice == "zdarma" %}
+                    {{ screening.fixPrice }}
+                {% elseif screening.fixPrice %}
+                    {{ "screenings.capacity"|trans({count: 12})|default('Dostatek míst') }}
+                {% else %}
+                    {{ "screenings.capacity"|trans({count: 100})|default('Dostatek míst') }}
+                {% endif %}
+            </span>
+            <a href="{{ screening.link ?: path('cinema_profile_' ~ screening.cinema.ident) }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                {{ "details.movie.short"|trans }} / {{ "details.price.short"|trans }}
+            </a>
+        </div>
+    </div>
+</div>

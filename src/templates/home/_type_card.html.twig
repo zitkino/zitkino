@@ -1,0 +1,16 @@
+<div class="col-md-4 mb-4">
+    <div class="card h-100 text-white border-0 overflow-hidden shadow-sm rounded-4">
+        <img src="https://placehold.co/600x400/222/fff?text={{ type.name }}" class="card-img" alt="{{ type.name }}" style="aspect-ratio: 3/2; object-fit: cover;">
+        <div class="card-img-overlay d-flex flex-column justify-content-end bg-dark bg-opacity-25 p-4">
+            <h3 class="card-title fw-bold mb-1">{{ type.name }}</h3>
+            <p class="card-text small opacity-75">
+                {% set cinemaNames = [] %}
+                {% for cinema in type.cinemas|slice(0, 3) %}
+                    {% set cinemaNames = cinemaNames|merge([cinema.name]) %}
+                {% endfor %}
+                {{ cinemaNames|join(', ') }}{% if type.cinemas|length > 3 %}...{% endif %}
+            </p>
+            <a href="{{ path('cinema_programme_' ~ type.ident) }}" class="stretched-link"></a>
+        </div>
+    </div>
+</div>

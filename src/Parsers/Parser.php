@@ -27,11 +27,11 @@ abstract class Parser {
 		$this->url = $this->cinema->parsing;
 	}
 	
-	public function getUrl(): string {
+	public function getUrl(): ?string {
 		return $this->url;
 	}
 	
-	public function setUrl(string $url): Parser {
+	public function setUrl(?string $url): Parser {
 		$this->url = $url;
 		return $this;
 	}

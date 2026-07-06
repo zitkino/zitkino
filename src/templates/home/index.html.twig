@@ -3,6 +3,39 @@
 {% block title %}{{ 'default.title'|trans }}{% endblock %}
 
 {% block content %}
+	<section class="home-soonest mb-5">
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<div>
+				<h2 class="fw-bold mb-0">{{ 'home.soonest.title'|trans }}</h2>
+				<p class="text-muted">{{ 'home.soonest.subtitle'|trans }}</p>
+			</div>
+			<a href="{{ path('cinema_default') }}" class="text-danger text-decoration-none fw-bold">
+				{{ 'home.soonest.all'|trans }} <i class="bi bi-box-arrow-up-right"></i>
+			</a>
+		</div>
+		
+		<div class="soonest-list">
+			{% for screening in soonestScreenings|slice(0, 3) %}
+				{% include 'home/_screening_item.html.twig' with {'screening': screening} %}
+			{% else %}
+				<p class="text-muted">{{ 'screenings.empty.todays'|trans }}</p>
+			{% endfor %}
+		</div>
+	</section>
+	
+	<section class="home-types mb-5">
+		<h2 class="fw-bold mb-4">{{ 'home.types.title'|trans }}</h2>
+		<div class="row">
+			{% for type in types %}
+				{% include 'home/_type_card.html.twig' with {'type': type} %}
+			{% endfor %}
+		</div>
+	</section>
+
+	{% include 'home/_map_box.html.twig' %}
+
+	<hr class="my-5">
+
 	{% from 'cinema/list.html.twig' import cinemaMovieList %}
 	
 	{# {% cache 'homepage' ~ app.request.locale %} #}

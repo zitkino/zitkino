@@ -5,6 +5,11 @@ namespace App\Services;
 use App\Attributes\DatabaseRoute;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * Discovers route attributes in controller classes within a specified directory.
+ *
+ * This service scans all PHP files in the controllers directory, recursively checks for  classes, and identifies route attributes associated with methods. It organizes and returns discovered routes along with route metadata, including the controller method, route name prefixes, HTTP methods, class names, and paths.
+ */
 class RouteAttributeDiscoveryService {
 	private string $controllersDir;
 	
