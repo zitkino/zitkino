@@ -3,7 +3,8 @@
 namespace App\Controllers;
 
 use App\Attributes\DatabaseRoute;
-use App\Models\Facades\CinemaFacade;
+use App\Models\Cinema\CinemaRepository;
+use App\Models\CinemaType\CinemaTypeRepository;
 use App\Services\MetaService;
 use Symfony\Component\HttpFoundation\{RequestStack, Response};
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,26 +15,29 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 #[Route(name: "cinema_")]
 class CinemaController extends BaseController {
-	private CinemaFacade $cinemaFacade;
+	private CinemaRepository $cinemaRepository;
 	
-	public function __construct(CinemaFacade $cinemaFacade, TranslatorInterface $translator, RequestStack $requestStack, MetaService $metaService) {
+	private CinemaTypeRepository $cinemaTypeRepository;
+	
+	public function __construct(CinemaRepository $cinemaRepository, CinemaTypeRepository $cinemaTypeRepository, TranslatorInterface $translator, RequestStack $requestStack, MetaService $metaService) {
 		parent::__construct($translator, $requestStack, $metaService);
-		$this->cinemaFacade = $cinemaFacade;
+		$this->cinemaRepository = $cinemaRepository;
+		$this->cinemaTypeRepository = $cinemaTypeRepository;
 	}
 	
 	#[Route(path: ["cs" => "/kina", "en" => "/cinemas"], name: "default")]
 	public function index(): Response {
 		return $this->render("cinema/default.html.twig", [
-			"types" => $this->cinemaFacade->grabTypes(),
-			"classicCinemas" => $this->cinemaFacade->grabByType("classic"),
-			"multiplexCinemas" => $this->cinemaFacade->grabByType("multiplex"),
-			"summerCinemas" => $this->cinemaFacade->grabByType("summer")
+			"types" => $this->cinemaTypeRepository->grabTypes(),
+			"classicCinemas" => $this->cinemaRepository->grabByType("classic"),
+			"multiplexCinemas" => $this->cinemaRepository->grabByType("multiplex"),
+			"summerCinemas" => $this->cinemaRepository->grabByType("summer")
 		]);
 	}
 	
-	#[DatabaseRoute(path: ["cs" => "/kino/{slug}", "en" => "/cinema/{slug}"], name: "profile_", entityClass: "App\Models\Entities\Cinema")]
+	#[DatabaseRoute(path: ["cs" => "/kino/{slug}", "en" => "/cinema/{slug}"], name: "profile_", entityClass: "App\Models\Cinema\Cinema")]
 	public function profile($slug): Response {
-		$cinema = $this->cinemaFacade->grabBySlug($slug);
+		$cinema = $this->cinemaRepository->grabBySlug($slug);
 		$screenings = $cinema->getNewScreenings();
 		
 		$gmaps = $cinema->gmaps;
@@ -52,21 +56,21 @@ class CinemaController extends BaseController {
 		]);
 	}
 	
-	#[DatabaseRoute(path: ["cs" => "/{slug}", "en" => "/{slug}"], name: "type_", entityClass: "App\Models\Entities\CinemaType")]
+	#[DatabaseRoute(path: ["cs" => "/{slug}", "en" => "/{slug}"], name: "type_", entityClass: "App\Models\CinemaType\CinemaType")]
 	public function type(?string $slug = null): Response {
-		$type = $this->cinemaFacade->grabTypeBySlug($slug);
+		$type = $this->cinemaTypeRepository->grabTypeBySlug($slug);
 		return $this->render("cinema/type.html.twig", [
-			"cinemas" => $this->cinemaFacade->grabByType($type->getIdent()),
+			"cinemas" => $this->cinemaRepository->grabByType($type->getIdent()),
 			"type" => $type
 		]);
 	}
 	
-	#[DatabaseRoute(path: ["cs" => "/{slug}/program", "en" => "/{slug}/programme"], name: "programme_", entityClass: "App\Models\Entities\CinemaType")]
+	#[DatabaseRoute(path: ["cs" => "/{slug}/program", "en" => "/{slug}/programme"], name: "programme_", entityClass: "App\Models\CinemaType\CinemaType")]
 	public function programme(?string $slug = null): Response {
-		$type = $this->cinemaFacade->grabTypeBySlug($slug);
+		$type = $this->cinemaTypeRepository->grabTypeBySlug($slug);
 		
 		return $this->render("cinema/programme.html.twig", [
-			"cinemas" => $this->cinemaFacade->gatherWithMovies($type->getIdent()),
+			"cinemas" => $this->cinemaRepository->gatherWithMovies($type->getIdent()),
 			"type" => $type
 		]);
 	}

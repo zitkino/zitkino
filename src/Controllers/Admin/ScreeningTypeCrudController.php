@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\Entities\ScreeningType;
+use App\Models\ScreeningType\ScreeningType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class ScreeningTypeCrudController extends AbstractCrudController {

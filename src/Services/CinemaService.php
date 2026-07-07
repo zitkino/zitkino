@@ -2,14 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Entities\{Cinema, Screening, Showtime};
-use App\Models\Facades\CinemaFacade;
+use App\Models\Cinema\Cinema;
+use App\Models\Screening\Screening;
+use App\Models\Showtime\Showtime;
+use App\Models\Cinema\CinemaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CinemaService {
 	public function __construct(
 		private readonly EntityManagerInterface $entityManager,
-		private readonly CinemaFacade $cinemaFacade,
+		private readonly CinemaRepository $cinemaRepository,
 	) {}
 
 	/**
@@ -20,7 +22,7 @@ class CinemaService {
 		$now = new \DateTime();
 		$nextFourHours = (new \DateTime())->modify("+4 hours");
 
-		$cinemas = $this->cinemaFacade->grabVisible();
+		$cinemas = $this->cinemaRepository->grabVisible();
 		if (empty($cinemas)) {
 			return [];
 		}

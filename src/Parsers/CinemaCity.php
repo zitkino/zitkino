@@ -2,7 +2,7 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Cinema};
+use App\Models\Cinema\Cinema;
 use App\Services\ParserService;
 use Nette\Utils\{JsonException, Strings};
 
@@ -89,12 +89,12 @@ abstract class CinemaCity extends Parser {
 		
 		foreach($screenings as $key => $screening) {
 			$screening->setShowtimes($datetimes[$key]);
-			$this->parserService->screeningFacade->save($screening);
+   $this->parserService->screeningRepository->save($screening);
 			$this->cinema->addScreening($screening);
 		}
 		
 		$this->cinema->parsed = new \DateTime();
-		$this->parserService->cinemaFacade->save($this->cinema);
+  $this->parserService->cinemaRepository->save($this->cinema);
 		
 		return true;
 	}

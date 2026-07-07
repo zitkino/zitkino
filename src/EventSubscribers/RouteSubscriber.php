@@ -20,7 +20,7 @@
  */
 namespace App\EventSubscribers;
 
-use App\Models\Entities\Route;
+use App\Models\Route\Route;
 use App\Services\RouteAttributeDiscoveryService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;

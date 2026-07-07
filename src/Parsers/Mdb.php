@@ -2,7 +2,8 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Movie, Screening};
+use App\Models\Movie\Movie;
+use App\Models\Screening\Screening;
 use Nette\Utils\Strings;
 
 /**
@@ -66,6 +67,6 @@ class Mdb extends Parser {
 		}
 		
 		$this->cinema->parsed = new \DateTime();
-		$this->parserService->cinemaFacade->save($this->cinema);
+  $this->parserService->cinemaRepository->save($this->cinema);
 	}
 }

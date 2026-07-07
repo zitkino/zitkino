@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\Entities\Screening;
+use App\Models\Screening\Screening;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, IdField, MoneyField, TextField, UrlField};
 

@@ -2,7 +2,15 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\Entities\{Cinema, CinemaType, Language, Movie, Page, Place, Screening, ScreeningType, Showtime};
+use App\Models\Cinema\Cinema;
+use App\Models\CinemaType\CinemaType;
+use App\Models\Language\Language;
+use App\Models\Movie\Movie;
+use App\Models\Page\Page;
+use App\Models\Place\Place;
+use App\Models\Screening\Screening;
+use App\Models\ScreeningType\ScreeningType;
+use App\Models\Showtime\Showtime;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Assets, Crud, Dashboard, MenuItem};
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;

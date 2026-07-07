@@ -2,7 +2,10 @@
 namespace App\Parsers;
 
 use App\Exceptions\ParserException;
-use App\Models\Entities\{Cinema, Movie, Screening, Showtime};
+use App\Models\Cinema\Cinema;
+use App\Models\Movie\Movie;
+use App\Models\Screening\Screening;
+use App\Models\Showtime\Showtime;
 use App\Services\ParserService;
 
 /**
@@ -130,6 +133,6 @@ class Bvv extends Parser {
 		}
 		$this->cinema->parsed = new \DateTime();
 		
-		$this->parserService->cinemaFacade->save($this->cinema);
+  $this->parserService->cinemaRepository->save($this->cinema);
 	}
 }

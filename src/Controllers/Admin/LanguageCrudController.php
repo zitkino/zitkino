@@ -3,7 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\EasyAdmin\Translations\TranslationsField;
-use App\Models\Entities\Language;
+use App\Models\Language\Language;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, SlugField, TextField};
 

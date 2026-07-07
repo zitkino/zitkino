@@ -2,7 +2,7 @@
 
 namespace App\Routing;
 
-use App\Models\Entities\Route;
+use App\Models\Route\Route;
 use App\Services\RouteAttributeDiscoveryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Config\Loader\Loader;

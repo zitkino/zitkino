@@ -107,6 +107,6 @@ class Art extends Parser {
 		}
 		
 		$this->cinema->parsed = new \DateTime();
-		$this->parserService->cinemaFacade->save($this->cinema);
+  $this->parserService->cinemaRepository->save($this->cinema);
 	}
 }

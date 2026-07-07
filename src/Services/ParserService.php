@@ -2,8 +2,9 @@
 namespace App\Services;
 
 use App\Logging\FileLoggerFactory;
-use App\Models\Entities\Cinema;
-use App\Models\Facades\{CinemaFacade, ScreeningFacade};
+use App\Models\Cinema\Cinema;
+use App\Models\Cinema\CinemaRepository;
+use App\Models\Screening\ScreeningRepository;
 use App\Parsers\Parser;
 use Monolog\Attribute\WithMonologChannel;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -16,23 +17,23 @@ class ParserService {
 		}
 	}
 	
-	public CinemaFacade $cinemaFacade {
+	public CinemaRepository $cinemaRepository {
 		get {
-			return $this->cinemaFacade;
+			return $this->cinemaRepository;
 		}
 	}
 	
-	public ScreeningFacade $screeningFacade {
+	public ScreeningRepository $screeningRepository {
 		get {
-			return $this->screeningFacade;
+			return $this->screeningRepository;
 		}
 	}
 	
 	private FileLoggerFactory $logger;
 	
-	public function __construct(public readonly HttpClientInterface $httpClient, public readonly BuilderService $builderService, CinemaFacade $cinemaFacade, ScreeningFacade $screeningFacade, FileLoggerFactory $logger) {
-		$this->cinemaFacade = $cinemaFacade;
-		$this->screeningFacade = $screeningFacade;
+	public function __construct(public readonly HttpClientInterface $httpClient, public readonly BuilderService $builderService, CinemaRepository $cinemaRepository, ScreeningRepository $screeningRepository, FileLoggerFactory $logger) {
+		$this->cinemaRepository = $cinemaRepository;
+		$this->screeningRepository = $screeningRepository;
 		$this->logger = $logger;
 	}
 	
@@ -45,7 +46,7 @@ class ParserService {
 			$parserClass = "\App\Parsers\\".$parserName;
 			if(class_exists($parserClass)) {
 				$this->parser = new $parserClass($this, $cinema);
-				$this->screeningFacade->removeScreenings($cinema);
+				$this->screeningRepository->removeScreenings($cinema);
 				$this->parser->parse();
 			} else {
 				$cinemaLogger->warning(sprintf("Parser class %s does not exist for cinema %s", $parserClass, $parserName));

@@ -2,7 +2,7 @@
 
 namespace App\Forms;
 
-use App\Models\Entities\User;
+use App\Models\User\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\{CheckboxType, PasswordType};
 use Symfony\Component\Form\FormBuilderInterface;

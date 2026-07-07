@@ -2,17 +2,26 @@
 
 namespace App\Services;
 
-use App\Models\Entities\{Cinema, Movie, Place, Screening, ScreeningFormat, ScreeningType};
-use App\Models\Facades\{MovieFacade, PlaceFacade, ScreeningFacade};
+use App\Models\Cinema\Cinema;
+use App\Models\Movie\Movie;
+use App\Models\Place\Place;
+use App\Models\Screening\Screening;
+use App\Models\ScreeningFormat\ScreeningFormat;
+use App\Models\ScreeningType\ScreeningType;
+use App\Models\Movie\MovieRepository;
+use App\Models\Place\PlaceRepository;
+use App\Models\ScreeningFormat\ScreeningFormatRepository;
+use App\Models\Screening\ScreeningRepository;
+use App\Models\ScreeningType\ScreeningTypeRepository;
 
 class BuilderService {
 	public bool $save = true;
 	
-	public function __construct(private readonly MovieFacade $movieFacade, private readonly PlaceFacade $placeFacade, private readonly ScreeningFacade $screeningFacade) {
+	public function __construct(private readonly MovieRepository $movieRepository, private readonly PlaceRepository $placeRepository, private readonly ScreeningRepository $screeningRepository, private readonly ScreeningFormatRepository $screeningFormatRepository, private readonly ScreeningTypeRepository $screeningTypeRepository) {
 	}
 	
 	public function movie(string $name, ?int $length = null, ?string $csfd = null, ?string $imdb = null): Movie {
-		$movie = $this->movieFacade->grabByName($name);
+		$movie = $this->movieRepository->grabByName($name);
 		if(!isset($movie)) {
 			$movie = new Movie($name);
 			$movie->length = $length;
@@ -21,14 +30,14 @@ class BuilderService {
 		}
 		
 		if($this->save) {
-			$this->movieFacade->save($movie);
+			$this->movieRepository->save($movie);
 		}
 		
 		return $movie;
 	}
 	
 	public function place(string $name, Cinema $cinema, ?string $link = null): Place {
-		$place = $this->placeFacade->grabByName($name);
+		$place = $this->placeRepository->grabByName($name);
 		if(!isset($place)) {
 			$place = new Place($name);
 			$place->cinema = $cinema;
@@ -36,7 +45,7 @@ class BuilderService {
 		}
 		
 		if($this->save) {
-			$this->placeFacade->save($place);
+			$this->placeRepository->save($place);
 		}
 		
 		return $place;
@@ -47,13 +56,13 @@ class BuilderService {
 			return null;
 		}
 		
-		$format = $this->screeningFacade->grabFormat($name);
+		$format = $this->screeningFormatRepository->grabFormat($name);
 		if(!isset($format)) {
 			$format = new ScreeningFormat($name);
 		}
 		
 		if($this->save) {
-			$this->screeningFacade->save($format);
+			$this->screeningFormatRepository->save($format);
 		}
 		
 		return $format;
@@ -64,13 +73,13 @@ class BuilderService {
 			return null;
 		}
 		
-		$type = $this->screeningFacade->grabType($name);
+		$type = $this->screeningTypeRepository->grabType($name);
 		if(!isset($type)) {
 			$type = new ScreeningType($name);
 		}
 		
 		if($this->save) {
-			$this->screeningFacade->save($type);
+			$this->screeningTypeRepository->save($type);
 		}
 		
 		return $type;
@@ -100,7 +109,7 @@ class BuilderService {
 		$screening->type = $typeEntity;
 		
 		if($this->save) {
-			$this->screeningFacade->save($screening);
+			$this->screeningRepository->save($screening);
 		}
 		
 		return $screening;

@@ -80,7 +80,7 @@ class Lucerna extends Parser {
 		}
 		
 		$this->cinema->parsed = new \DateTime();
-		$this->parserService->cinemaFacade->save($this->cinema);
+  $this->parserService->cinemaRepository->save($this->cinema);
 	}
 	
 	private function extractEventsFromPayload(string $jsonPayload): ?array {

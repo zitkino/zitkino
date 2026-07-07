@@ -3,7 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\EasyAdmin\Translations\TranslationsField;
-use App\Models\Entities\Cinema;
+use App\Models\Cinema\Cinema;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, BooleanField, DateTimeField, Field, FormField, IdField, IntegerField, SlugField, TelephoneField, TextField, UrlField};
 use EmilePerron\TinymceBundle\Form\Type\TinymceType;
