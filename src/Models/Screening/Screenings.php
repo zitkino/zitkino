@@ -1,6 +1,7 @@
 <?php
 namespace App\Models\Screening;
 
+use App\Models\Movie\Movies;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Screenings extends ArrayCollection {

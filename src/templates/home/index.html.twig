@@ -15,7 +15,7 @@
 		</div>
 		
 		<div class="soonest-list">
-			{% for screening in soonestScreenings|slice(0, 3) %}
+			{% for screening in soonestScreenings %}
 				{% include 'home/_screening_item.html.twig' with {'screening': screening} %}
 			{% else %}
 				<p class="text-muted">{{ 'screenings.empty.todays'|trans }}</p>

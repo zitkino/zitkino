@@ -13,14 +13,13 @@ use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ScreeningRepository::class)]
-#[ORM\Table(name: "zk_screenings", indexes: [
-	new ORM\Index(name: "movie", columns: ["movie"]),
-	new ORM\Index(name: "cinema", columns: ["cinema"]),
-	new ORM\Index(name: "format", columns: ["format"]),
-	new ORM\Index(name: "type", columns: ["type"]),
-	new ORM\Index(name: "dubbing", columns: ["dubbing"]),
-	new ORM\Index(name: "subtitles", columns: ["subtitles"])
-])]
+#[ORM\Table(name: "zk_screenings")]
+#[ORM\Index(name: "movie", columns: ["movie"])]
+#[ORM\Index(name: "cinema", columns: ["cinema"])]
+#[ORM\Index(name: "format", columns: ["format"])]
+#[ORM\Index(name: "type", columns: ["type"])]
+#[ORM\Index(name: "dubbing", columns: ["dubbing"])]
+#[ORM\Index(name: "subtitles", columns: ["subtitles"])]
 class Screening {
 	use Id;
 	

@@ -8,7 +8,8 @@ use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
-#[ORM\Table(name: "zk_movies", uniqueConstraints: [new ORM\UniqueConstraint(name: "name", columns: ["name"])])]
+#[ORM\Table(name: "zk_movies")]
+#[ORM\UniqueConstraint(name: "name", columns: ["name"])]
 class Movie {
 	use Id;
 	

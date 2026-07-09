@@ -106,7 +106,7 @@ class DatabaseSlugLoader extends Loader {
 				"entityClass" => $class,
 				"entityId" => $entity->getId(),
 				"locale" => $locale,
-				"canonical_route" => $canonicalRouteName
+				"canonicalRoute" => $canonicalRouteName
 			]);
 		
 		if(!$route) {

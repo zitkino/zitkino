@@ -3,12 +3,12 @@
 namespace App\Models\Showtime;
 
 use App\Models\Screening\Screening;
-
 use Dobine\Properties\Ids\Id;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "zk_showtimes", indexes: [new ORM\Index(columns: ["screening"], name: "screening")])]
+#[ORM\Table(name: "zk_showtimes")]
+#[ORM\Index(name: "screening", columns: ["screening"])]
 class Showtime {
 	use Id;
 	

@@ -15,7 +15,8 @@ use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
  * Cinema
  */
 #[ORM\Entity(repositoryClass: CinemaRepository::class)]
-#[ORM\Table(name: "zk_cinemas", indexes: [new ORM\Index(name: "type", columns: ["type"])])]
+#[ORM\Table(name: "zk_cinemas")]
+#[ORM\Index(name: "type", columns: ["type"])]
 class Cinema implements TranslatableInterface {
 	use Id, Identable, Sluggable, KnpTranslatable, Sortable;
 	

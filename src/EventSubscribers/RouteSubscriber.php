@@ -127,7 +127,7 @@ class RouteSubscriber {
 				"entityClass" => $class,
 				"entityId" => $entity->getId(),
 				"locale" => $locale,
-				"canonical_route" => $config["route_name_prefix"].(method_exists($entity, "getIdent") ? $entity->getIdent() : $entity->getId())
+				"canonicalRoute" => $config["route_name_prefix"].(method_exists($entity, "getIdent") ? $entity->getIdent() : $entity->getId())
 			]);
 		
 		if(!$route) {
